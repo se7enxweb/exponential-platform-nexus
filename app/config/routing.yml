@@ -44,6 +44,24 @@ ezplatform.httpcache:
 _ezpublishLegacyRoutes:
     resource: '@EzPublishLegacyBundle/Resources/config/routing.yml'
 
+#
+# Netgen TagsBundle
+#
+
+netgen_tags_admin:
+    resource: '@NetgenTagsBundle/Resources/config/routing/admin.yml'
+    prefix: /tags
+    defaults:
+        siteaccess_group_whitelist: '%admin_group_name%'
+
+netgen_tags_internal:
+    resource: '@NetgenTagsBundle/Resources/config/routing/internal.yml'
+    prefix: /_tagsbundle
+
+netgen_tags_rest:
+    resource: '@NetgenTagsBundle/Resources/config/routing/rest.yml'
+    prefix: '%ezpublish_rest.path_prefix%'
+
 # Custom redirection from /ez to /admin, feel free to adjust to your needs or remove if you don't need it
 platform1_admin_route:
     path: /ez
