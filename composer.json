@@ -16,7 +16,9 @@
     },
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle/"
+            "Cjw\\": "src/Cjw/",
+            "AppBundle\\": "src/AppBundle/",
+            "CJW\\CJWConfigProcessor\\": "vendor/cjw-network/cjw-config-processor/"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -94,7 +96,9 @@
         "se7enxweb/twig": "^2.5",
         "white-october/pagerfanta-bundle": "^1.2.2",
         "willdurand/js-translation-bundle": "^2.6.6",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "se7enxweb/tagsbundle": "v3.4.14",
+        "se7enxweb/admin-ui-bundle": "v2.9.11"
     },
     "require-dev": {
         "behat/behat": "^3.7.0",
