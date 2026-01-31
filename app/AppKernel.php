@@ -59,6 +59,7 @@ class AppKernel extends Kernel
             new Netgen\Bundle\RichTextDataTypeBundle\NetgenRichTextDataTypeBundle(),
             // Netgen Tags
             new Lolautruche\EzCoreExtraBundle\EzCoreExtraBundle(),
+            new Netgen\Bundle\AdminUIBundle\NetgenAdminUIBundle(),
             new Netgen\TagsBundle\NetgenTagsBundle(),
             // Netgen Site Bundles
             new Netgen\Bundle\EzPlatformSiteApiBundle\NetgenEzPlatformSiteApiBundle(),

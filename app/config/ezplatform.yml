@@ -13,19 +13,21 @@ ezpublish:
 
     # Siteaccess configuration, with one siteaccess per default
     siteaccess:
-        list: [site, admin, legacy_admin]
+        list: [site, admin, legacy_admin, editor, edit, nga, alt]
         groups:
-            site_group: [site legacy_admin]
+            site_group: [site, alt]
 
             # WARNING: Do not remove or rename this group.
             # It's used to distinguish common siteaccesses from admin ones.
             # In case of multisite with multiple admin panels, remember to add any additional admin siteaccess to this group.
-            admin_group: [admin]
+            admin_group: [admin, legacy_admin, edit, editor, nga]
         default_siteaccess: site
         match:
             Map\Host:
                 platform.alpha.se7enx.com: site
                 edit.platform.alpha.se7enx.com: admin
+                editor.platform.alpha.se7enx.com: edit
+                nga.platform.alpha.se7enx.com: nga
             # URIElement: 1
 
     # System settings, read in following order: `default`, <siteaccess-group>, <siteacces>, and `global`
@@ -77,8 +79,8 @@ ezpublish:
                 media: /1/43/
         site:
             languages: [eng-GB]
-            default_page: "/test"
-            index_page: "/test"
+            default_page: "/content/view/full/2"
+            index_page: "/content/view/full/2"
 
     url_alias:
         slug_converter:
@@ -96,3 +98,9 @@ ez_publish_legacy:
            legacy_mode: false
         legacy_admin:
            legacy_mode: true
+        edit:
+           legacy_mode: true
+        editor:
+           legacy_mode: true
+imports:
+    - { resource: ngadminui.yml }

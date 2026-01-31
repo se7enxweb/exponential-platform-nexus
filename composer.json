@@ -31,7 +31,7 @@
         "doctrine/doctrine-bundle": "^1.9.1",
         "doctrine/orm": "^2.6.3",
         "se7enxweb/doctrine-dbal-schema": "^1.0.10",
-        "se7enxweb/ez-support-tools": "1.0.15",
+        "se7enxweb/ez-support-tools": "^1.0.16",
         "se7enxweb/ezplatform-admin-ui": "~1.5.33",
         "se7enxweb/ezplatform-admin-ui-assets": "^v4.2.3",
         "se7enxweb/ezplatform-admin-ui-modules": "~1.5.0",
@@ -48,7 +48,7 @@
         "se7enxweb/ezpublish-kernel": "~7.5.33",
         "se7enxweb/exponential": "^6.0.10",
         "se7enxweb/legacy-bridge": "^2.1",
-        "se7enxweb/repository-forms": "^2.5.17",
+        "se7enxweb/repository-forms": "v2.5.20",
         "se7enxweb/richtext-datatype-bundle": "^2.0.1",
         "se7enxweb/symfony": "^3.4.50",
 	    "se7enxweb/symfony-tools": "1.0.5",
@@ -97,7 +97,7 @@
         "symfony/http-client": "*",
         "se7enxweb/admin-ui-bundle": "^2.9.11",
         "se7enxweb/site-bundle": "^1.7.3",
-        "se7enxweb/doctrine-bundle": "1.12.14"
+        "se7enxweb/doctrine-bundle": "^1.12.14"
     },
     "require-dev": {
         "behat/behat": "^3.7.0",
