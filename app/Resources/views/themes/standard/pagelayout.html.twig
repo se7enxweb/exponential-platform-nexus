@@ -2,13 +2,143 @@
 <html>
 <head>
     {% block head %}
-        <title>{% block title %}Exponential Platform 2.5 GPLv2 Stable Site{% endblock %}</title>
+        <title>{% block title %}Exponential Platform Nexus 1.0.0.0.1 GPLv2 Stable Site{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     {% endblock %}
 </head>
 <body>
     {% block content %}
-        {{ content|raw }}
+        {# Render parent content #}
+        {% if content is defined %}
+            <div class="content-fields">
+                <div class="field field-name">
+                    {% set shortNameRendered = ez_render_field(content, 'short_name')|striptags|trim %}
+                    {% if shortNameRendered is not empty %}
+                        <h1>{{ ez_render_field(content, 'short_name') }}</h1>
+                    {% else %}
+                        <h1>{{ content.contentInfo.name }}</h1>
+                    {% endif %}
+                </div>
+
+                <div class="field field-short_description">
+                    <strong>Short Description:</strong>
+                    <div>{{ ez_render_field(content, 'short_description') }}</div>
+                </div>
+
+                <div class="field field-description">
+                    <strong>Description:</strong>
+                    <div>{{ ez_render_field(content, 'description') }}</div>
+                </div>
+            </div>
+        {% else %}
+            <p>No content object found</p>
+        {% endif %}
+
+        {# Render child nodes using get_children Twig function - only if location exists #}
+        {% if location is defined %}
+            {% set children = get_children(location) %}
+            {% set showChildrenFullView = app.request.query.get('showChildrenDetails') == '1' %}
+
+            {% if children is defined and children|length > 0 %}
+                <section class="children">
+                    <div class="children-header">
+                        <h2>Child Items ({{ children|length }})</h2>
+                        <button onclick="toggleChildrenView()" style="margin-left: 20px; padding: 8px 16px; cursor: pointer;">
+                            {% if showChildrenFullView %}Hide Full Details{% else %}Show Full Details{% endif %}
+                        </button>
+                    </div>
+
+                    {% if showChildrenFullView %}
+                        {# FULL ATTRIBUTE DISPLAY VIEW #}
+                        {% for childItem in children %}
+                            {% set childContent = childItem.content %}
+                            <article class="child-item child-item-full" style="border: 1px solid #ccc; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                                {% set childShortNameRendered = ez_render_field(childContent, 'short_name')|striptags|trim %}
+                                {% if childShortNameRendered is not empty %}
+                                    <h3>{{ ez_render_field(childContent, 'short_name') }}</h3>
+                                {% else %}
+                                    <h3>{{ childContent.contentInfo.name }}</h3>
+                                {% endif %}
+
+                                <div class="child-fields">
+                                    {% if childContent.fields.name is defined %}
+                                        <div class="field field-name">
+                                            <strong>Name:</strong>
+                                            <div>{{ ez_render_field(childContent, 'name') }}</div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if childContent.fields.short_name is defined %}
+                                        <div class="field field-short_name">
+                                            <strong>Short Name:</strong>
+                                            <div>{{ ez_render_field(childContent, 'short_name') }}</div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if childContent.fields.title is defined %}
+                                        <div class="field field-title">
+                                            <strong>Title:</strong>
+                                            <div>{{ ez_render_field(childContent, 'title') }}</div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if childContent.fields.body is defined %}
+                                        <div class="field field-body">
+                                            <strong>Body:</strong>
+                                            <div>{{ ez_render_field(childContent, 'body') }}</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if childContent.fields|length > 0 %}
+                                    <div class="child-fields-additional">
+                                        {% for fieldIdentifier, fieldValue in childContent.fields %}
+                                            {% if fieldIdentifier not in ['name', 'short_name', 'title', 'body'] %}
+                                                <div class="field field-{{ fieldIdentifier }}" style="margin-top: 10px;">
+                                                    <strong>{{ fieldIdentifier }}:</strong>
+                                                    <div>{{ ez_render_field(childContent, fieldIdentifier) }}</div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    {% else %}
+                        {# LINK LIST VIEW (DEFAULT) #}
+                        <ul class="children-list" style="list-style: none; padding: 0;">
+                            {% for childItem in children %}
+                                {% set childContent = childItem.content %}
+                                {% set childLocation = childItem.location %}
+                                {% set childShortNameRendered = ez_render_field(childContent, 'short_name')|striptags|trim %}
+                                {% set displayName = childShortNameRendered is not empty ? ez_render_field(childContent, 'short_name')|striptags : childContent.contentInfo.name %}
+
+                                <li class="children-list-item" style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                                    <a href="{{ path('ez_urlalias', {'locationId': childLocation.id}) }}" style="text-decoration: none; color: #0066cc; font-size: 16px;">
+                                        → {{ displayName }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </section>
+            {% endif %}
+        {% endif %}
+
+        <script>
+            function toggleChildrenView() {
+                const currentUrl = new URL(window.location);
+                const isShowingDetails = currentUrl.searchParams.get('showChildrenDetails') === '1';
+
+                if (isShowingDetails) {
+                    currentUrl.searchParams.delete('showChildrenDetails');
+                } else {
+                    currentUrl.searchParams.set('showChildrenDetails', '1');
+                }
+
+                window.location = currentUrl.toString();
+            }
+        </script>
     {% endblock %}
 </body>
 </html>
