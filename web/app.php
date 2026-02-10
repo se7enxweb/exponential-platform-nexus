@@ -1,17 +1,5 @@
 <?php
 
-// ##########
-// 7x Exponential Platform : app.php - Front Index
-// ##########
-
-ini_set('display_errors', 'On');
-ini_set('display_startup_errors', 1);
-ini_set('error_reporting', "E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR" );
-
-// phpinfo();
-
-// ##########
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
@@ -22,20 +10,16 @@ if (in_array('phar', stream_get_wrappers())) {
 
 // Ensure UTF-8 is used in string operations
 setlocale(LC_CTYPE, 'C.UTF-8');
-
-// ##########
-// Autoloads
-
 require __DIR__ . '/../vendor/autoload.php';
 
-// ##########
-// Problematic Composer Based Package Autoloads Fail above to detect this class
+// PATCH JAC -  example.com =>  dev.example.com or example-dev.com  => enabled DEV mode
+if ( str_contains( $_SERVER['HTTP_HOST'], 'dev.' ) ) {
+    putenv( 'SYMFONY_ENV=dev' );
+}
 
-require_once __DIR__ . '/../vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/Data.php';
-
-// var_dump(class_exists('Symfony\\Component\\VarDumper\\Cloner\\Data', true));
-
-// ##########
+// PATCH JAC - LOAD ENV VARIABLES - #11002
+if( file_exists( __DIR__ . '/../.env.php' ) )
+    require_once __DIR__ . '/../.env.php';
 
 // Environment is taken from "SYMFONY_ENV" variable, if not set, defaults to "prod"
 $environment = getenv('SYMFONY_ENV');
@@ -52,6 +36,8 @@ if (($useDebugging = getenv('SYMFONY_DEBUG')) === false || $useDebugging === '')
 if ($useDebugging) {
     Debug::enable();
 }
+
+$request = Request::createFromGlobals();
 
 $kernel = new AppKernel($environment, $useDebugging);
 
@@ -70,7 +56,13 @@ if ($useHttpCache) {
     Request::enableHttpMethodParameterOverride();
 }
 
-$request = Request::createFromGlobals();
+// Deny request if it contains the frontcontroller script ie. http://example.com/app.php
+$frontControllerScript = preg_quote(basename($request->server->get('SCRIPT_FILENAME')));
+if (preg_match("<^/([^/]+/)?$frontControllerScript([/?#]|$)>", $request->getRequestUri(), $matches) === 1) {
+    http_response_code(400);
+    echo('<html><head><title>400 Bad Request</title></head><body><h1>400 Bad Request</h1></center></body></html>');
+    die;
+}
 
 // If behind one or more trusted proxies, you can set them in SYMFONY_TRUSTED_PROXIES environment variable.
 // !! Proxies here refers to load balancers, TLS/Reverse proxies and so on. Which Symfony need to know about to

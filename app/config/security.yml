@@ -14,6 +14,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        # NOTE: REMOVED Feb 5 2026 - This firewall was blocking POST /login from reaching form_login
+        # The ezpublish_front firewall with form_login handles both GET (show form) and POST (process auth)
+        # login:
+        #     pattern: ^/login$
+        #     security: false
+
         ezpublish_forgot_password:
             pattern: /user/(forgot-password|reset-password)
             security: false
@@ -24,7 +30,13 @@ security:
             ezpublish_rest_session: ~
             form_login:
                 require_previous_session: false
-                csrf_token_generator: security.csrf.token_manager
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /
+                always_use_default_target_path: false
+                # success_handler: netgen_admin_ui.security.authentication_success_handler
+                # CSRF token removed: causes session initialization on login GET
+                # Login form doesn't need CSRF since it's the unauthenticated entry point
             logout: ~
 
         main:
@@ -35,4 +47,3 @@ security:
             #http_basic: ~
 
             # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~

@@ -1,0 +1,21 @@
+netgen_information_collection:
+    system:
+        default:
+            captcha:
+                enabled: false
+                secret: "%env(GOOGLE_RECAPTCHA_SECRET)%"
+                site_key: "%env(GOOGLE_RECAPTCHA_SITE_KEY)%"
+            action_config:
+                email:
+                    attachments:
+                        enabled: true
+                    templates:
+                        default: "@ibexadesign/emails/info_collection/email.html.twig"
+                    default_variables:
+                        sender: "%collected_info_sender%"
+                        recipient: "%collected_info_recipient%"
+            actions:
+                default:
+                    - database
+                    - email
+                    - newsletter

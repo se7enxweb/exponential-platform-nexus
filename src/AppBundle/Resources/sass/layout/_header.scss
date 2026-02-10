@@ -1,0 +1,182 @@
+.site-header {
+    .container-fluid {
+        padding: 0;
+
+        .background-container {
+            &::before {
+                z-index: 999;
+                content: " ";
+                display: block;
+                position: absolute;
+                height: 19px;
+                width: 100%;
+                pointer-events: none;
+                -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 3px 3px rgba(0, 0, 0, 0.5);
+            }
+
+            &::before {
+                top: -19px;
+            }
+
+            position: relative;
+            height: 28.063rem;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            @include media-breakpoint-down(lg) {
+                height: 14.032rem;
+            }
+
+            .speechbubble-icon {
+                position: absolute;
+                bottom: 1rem;
+                right: 1rem;
+                display: none;
+
+                @include media-breakpoint-down(lg) {
+                    display: block;
+                }
+            }
+
+            .speechbubble {
+                background-color: rgba(222, 138, 59, 0.85);
+                padding: 1.5rem 3.5rem 1rem 2rem;
+                position: absolute;
+                bottom: 3rem;
+                right: 3rem;
+                border-radius: 1rem;
+                color: #fff;
+
+                h3 {
+                    color: #fff;
+                    font-weight: normal;
+                    font-size: $font-size-box-headings;
+                }
+
+                a, .ezxmltext-field p {
+                    color: #fff;
+                }
+
+                .ezxmltext-field p {
+                    margin-bottom: 1rem;
+                }
+
+                .close-link {
+                    position: absolute;
+                    top: 0.5rem;
+                    right: 1rem;
+
+                    img {
+                        display: inline-block;
+                    }
+                }
+
+                @include media-breakpoint-down(lg) {
+                    right: 1rem;
+                    bottom: 1rem;
+                    display: none;
+                    padding: 1rem 3rem 0.5rem 1.5rem;
+                    max-width: 90%;
+
+                    h3 {
+                        font-size: $font-size-event-headings;
+                    }
+                }
+            }
+
+            .head-image-slider {
+                padding: 0;
+                margin: 0;
+                border: 0;
+
+                .slick-slide img.img-fluid {
+                    height: 28.063rem;
+                    object-fit: cover;
+                    object-position: top;
+                    width: 100%;
+
+                    @include media-breakpoint-down(lg) {
+                        height: 14.032rem;
+                    }
+                }
+            }
+
+            &.large {
+                height: 37.5rem;
+
+                .head-image-slider {
+                    .slick-slide img.img-fluid {
+                        height: 37.5rem;
+
+                        @include media-breakpoint-down(lg) {
+                            height: 14.032rem;
+                        }
+                    }
+                }
+
+                @include media-breakpoint-down(lg) {
+                    height: 14.032rem;
+                }
+            }
+
+            .header-text {
+                position: absolute;
+                inset: auto 3.5% 7.5% auto;
+                font-size: $font-size-header-text;
+                font-style: italic;
+
+                p {
+                    margin: inherit;
+                    color: #fff;
+                }
+
+                @include media-breakpoint-down(sm) {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    $page-header-color-row--outer-color: #343218;
+    $page-header-color-row--color-1: #062845;
+    $page-header-color-row--color-2: #f38624;
+    $page-header-color-row--color-3: #c84e0b;
+    $page-header-color-row--margin: 2.25rem;
+    $page-header-color-row-height: 0.938rem;
+
+    .page-header-color-row {
+        background-color: $page-header-color-row--outer-color;
+        //height: 15px;
+        margin-bottom: $page-header-color-row--margin;
+
+        @include media-breakpoint-down(md) {
+            margin-bottom: 1.5rem;
+        }
+
+        .container {
+            padding: 0;
+        }
+
+        .row {
+            margin: 0;
+            position: relative;
+        }
+
+        .color {
+            height: $page-header-color-row-height;
+        }
+
+        .color-1 {
+            background-color: $page-header-color-row--color-1;
+        }
+
+        .color-2 {
+            background-color: $page-header-color-row--color-2;
+        }
+
+        .color-3 {
+            background-color: $page-header-color-row--color-3;
+        }
+    }
+}

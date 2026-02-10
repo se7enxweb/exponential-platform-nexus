@@ -1,0 +1,33 @@
+# cjwtranslation # src/AppBundle/Resources/translations/ngsite_mail.de.yml
+ngsite.user.welcome.subject: "Willkommen"
+ngsite.user.welcome.text: "Vielen Dank, dass Sie sich bei uns registriert haben."
+
+ngsite.user.activate.subject: "Aktivierung des Kontos"
+ngsite.user.activate.text: "Klicken Sie auf den folgenden Link, um Ihr Konto zu aktivieren:"
+ngsite.user.activate.already_active.subject: "Kontoaktivierungsversuch"
+ngsite.user.activate.already_active.text: "Ihr Konto ist bereits aktiv."
+ngsite.user.activate.disabled.subject: "Versuch der Kontoaktivierung"
+ngsite.user.activate.disabled.text: "Sie haben versucht, Ihr Konto zu aktivieren, aber Ihr Konto wurde zuvor deaktiviert."
+ngsite.user.activate.not_registered.subject: "Kontoaktivierungsversuch"
+ngsite.user.activate.not_registered.text: "Sie (oder eine andere Person) haben diese E-Mail-Adresse eingegeben, um einen Link zur Kontoaktivierung zu erhalten. Diese E-Mail-Adresse ist jedoch nicht auf unserer Website registriert. Wenn Sie das waren, haben Sie wahrscheinlich eine andere E-Mail-Adresse bei der Registrierung verwendet. Falls nicht, ignorieren Sie bitte diese E-Mail."
+
+ngsite.user.activate.admin_activation_pending.subject: "Kontoaktivierung steht noch aus"
+ngsite.user.activate.admin_activation_pending.text: "Ihr Konto wartet auf die Aktivierung"
+
+ngsite.user.activate.admin_activation_required.subject: "Kontoaktivierung erforderlich"
+ngsite.user.activate.admin_activation_required.text: "Dieses Konto wartet auf Ihre Aktivierung"
+
+ngsite.user.forgot_password.subject: "Passwort zurücksetzen"
+ngsite.user.forgot_password.text: "Klicken Sie auf den folgenden Link, um Ihr Passwort zurückzusetzen:"
+ngsite.user.forgot_password.disabled.subject: "Passwortrücksetzversuch"
+ngsite.user.forgot_password.disabled.text: "Sie haben versucht, Ihr Passwort zurückzusetzen, aber Ihr Konto wurde zuvor deaktiviert."
+ngsite.user.forgot_password.not_active.subject: "Passwortrücksetzversuch"
+ngsite.user.forgot_password.not_active.text: "Sie haben versucht, Ihr Passwort zurückzusetzen, aber Ihr Konto ist noch nicht aktiv."
+ngsite.user.forgot_password.not_registered.subject: "Passwortrücksetzversuch"
+ngsite.user.forgot_password.not_registered.text: "Sie (oder jemand anderes) haben diese E-Mail-Adresse eingegeben, um einen Link zum Zurücksetzen des Passworts zu erhalten. Diese E-Mail-Adresse ist jedoch nicht auf unserer Website registriert. Wenn Sie das waren, haben Sie wahrscheinlich eine andere E-Mail-Adresse bei der Registrierung verwendet. Wenn nicht, ignorieren Sie bitte diese E-Mail."
+ngsite.user.forgot_password.password_changed.subject: "Passwort geändert"
+ngsite.user.forgot_password.password_changed.text: "Ihr Passwort wurde erfolgreich geändert."
+
+ngsite.user.account_information: "Ihre Kontoinformationen"
+ngsite.user.username: "Benutzername"
+ngsite.user.email: "E-Mail"

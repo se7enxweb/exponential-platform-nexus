@@ -1,0 +1,11 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    {% set image_path = block.dynamicParameter('image_path') %}
+
+    {% if image_path is not null and image_path != 'no_image_defined' %}
+        <div class="spacer">
+            <img src="{{ asset( image_path ) }}" alt="" />
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,9 +1,23 @@
 login:
     path: /login
+    methods: [GET]
     defaults: { _controller: ezpublish.security.controller:loginAction }
+
+# Form login POST handler - let the form_login firewall handle this
+# The firewall is configured with check_path: /login_check but the form actually posts to /login
+# This route will only match GET, POST will be handled by the security firewall
+login_post:
+    path: /login
+    methods: [POST]
+    # No controller - this will be intercepted by the form_login firewall
 
 login_check:
     path: /login_check
+    methods: [POST]
+    # This route is handled by the security firewall, not by a controller
+    # The form_login listener will intercept POST /login_check and process authentication
+    # If authentication succeeds, the success_handler will be called
+    # This route should never actually execute
 
 logout:
     path: /logout
@@ -23,7 +37,7 @@ kernel.rest.options:
 ezplatform.admin_ui:
     resource: '@EzPlatformAdminUiBundle/Resources/config/routing.yml'
     defaults:
-        siteaccess_group_whitelist: '%admin_group_name%'
+        siteaccess_group_whitelist: ['%admin_group_name%', 'ngadmin_group']
 
 ezplatform.admin_ui.rest:
     resource: '@EzPlatformAdminUiBundle/Resources/config/routing_rest.yml'
@@ -41,49 +55,6 @@ fos.js_routing:
 ezplatform.httpcache:
     resource: '@EzSystemsPlatformHttpCacheBundle/Resources/config/routing.yml'
 
-_ezpublishLegacyRoutes:
-    resource: '@EzPublishLegacyBundle/Resources/config/routing.yml'
-
-_netgen_admin_ui:
-    resource: '@NetgenAdminUIBundle/Resources/config/routing.yml'
-
-#
-# Netgen TagsBundle
-#
-
-netgen_tags_admin:
-    resource: '@NetgenTagsBundle/Resources/config/routing/admin.yml'
-    prefix: /tags
-    defaults:
-        siteaccess_group_whitelist: '%admin_group_name%'
-
-netgen_tags_internal:
-    resource: '@NetgenTagsBundle/Resources/config/routing/internal.yml'
-    prefix: /_tagsbundle
-
-netgen_tags_rest:
-    resource: '@NetgenTagsBundle/Resources/config/routing/rest.yml'
-    prefix: '%ezpublish_rest.path_prefix%'
-
-# Custom redirection from /ez to /admin, feel free to adjust to your needs or remove if you don't need it
-platform1_admin_route:
-    path: /ez
-    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
-    defaults:
-        path: /admin
-        permanent: true
-
-
-_ezpublishLocation:
-    path: /content/location/{locationId}/{languageCode}/{viewType}/{layout}
-    options:
-        expose: true
-    defaults:
-        _controller: ez_content:viewLocation
-        viewType: full
-        layout: true
-        languageCode: null
-
 #
 # GraphQL
 #
@@ -96,3 +67,66 @@ overblog_graphql_endpoint:
     defaults:
         _controller: Overblog\GraphQLBundle\Controller\GraphController::endpointAction
         _format: json
+
+prime_translations:
+    resource: '@PrimeTranslationsBundle/Resources/config/routing.yml'
+
+ezpublish_legacy:
+    resource: '@EzPublishLegacyBundle/Resources/config/routing.yml'
+
+netgen_tags:
+    resource: '@NetgenTagsBundle/Resources/config/routing.yml'
+
+netgen_information_collection:
+    resource: '@NetgenInformationCollectionBundle/Resources/config/routing.yml'
+
+netgen_layouts:
+    resource: '@NetgenLayoutsBundle/Resources/config/routing.yaml'
+    prefix: '%netgen_layouts.route_prefix%'
+
+netgen_layouts_ezplatform:
+    resource: '@NetgenLayoutsEzPlatformBundle/Resources/config/routing.yaml'
+
+netgen_content_browser:
+    resource: '@NetgenContentBrowserBundle/Resources/config/routing.yaml'
+    prefix: '%netgen_content_browser.route_prefix%'
+
+# Admin UI routes - must come BEFORE Site routes to take precedence on /content/search
+netgen_admin_ui:
+    resource: '@NetgenAdminUIBundle/Resources/config/routing.yml'
+
+# Frontend app routes - must come BEFORE Site routes for search precedence
+app:
+    resource: '@AppBundle/Resources/config/routing.yml'
+
+# Siteaccess-aware search route - routes to legacy for admin, ngsite for users
+_ezpublishSearchRoute:
+    path: /content/search
+    defaults:
+        _controller: "netgen_admin_ui.controller.search_router:search"
+    methods: [GET, POST]
+
+# Netgen Site routes follow. It is recommended to keep them at the end of file
+
+netgen_site:
+    resource: '@NetgenSiteBundle/Resources/config/routing.yml'
+
+cjw_config_processor_bundle:
+    resource: '@CJWConfigProcessorBundle/Resources/config/routing.yaml'
+
+# Catch-all fallback for legacy content URL aliases
+#_legacy_fallback:
+#    path: /{path}
+#    defaults:
+#        _controller: ezpublish_legacy.controller:indexAction
+#    requirements:
+#        path: '.+'
+
+# Catch-all fallback for legacy content URL aliases
+#_legacy_fallback:
+#    path: /{path}
+#    defaults:
+#        _controller: ezpublish_legacy.controller:indexAction
+#    requirements:
+#        path: '^(?!api/|admin/|_wdt/|_profiler/|_error/|bundles/).*'
+#

@@ -1,0 +1,7 @@
+
+services:
+    cjw_publishtools.service.functions:
+        class: Cjw\PublishToolsBundle\Services\PublishToolsService
+        # arguments: ['@ezpublish.api.repository', '@ezpublish.config.resolver', '@ezpublish.translation_helper' , '@?logger' ]
+        #  enable siteApi for publishtools
+        arguments: ['@ezpublish.api.repository', '@ezpublish.config.resolver', '@ezpublish.translation_helper' , '@?logger', '@eztags.api.service.tags.inner', '@netgen.ezplatform_site.site' ]

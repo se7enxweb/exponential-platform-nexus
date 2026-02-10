@@ -1,0 +1,86 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+
+{# {% set show_path = true %} #}
+
+{% block content %}
+
+    <article class="view-type view-type-{{ view_type }} ng-article vl11">
+
+{#        {% if not content.fields.pre_title.empty %}#}
+{#            <div class="pre-title">#}
+{#                {{ ng_render_field(content.fields.pre_title) }}#}
+{#            </div>#}
+{#        {% endif %}#}
+
+        {% block title %}
+            <h1 class="title">{{ ng_render_field(content.fields.title) }}</h1>
+        {% endblock %}
+
+        {% block content_body %}
+
+{#            <div class="container">#}
+
+                <div class="col-full-article-images">
+                    {% block image %}
+                        {% if not content.fields.image.empty or not content.fields.related_multimedia.empty %}
+                            <div class="full-article-image">
+                                {{ render(
+                                    controller(
+                                        'ngsite.controller.parts:viewRelatedMultimediaItems', {
+                                        'locationId': location.id,
+                                        'includeChildren': true,
+                                        'contentTypeIdentifiers': ['image', 'ng_video'],
+                                        'template': '@ezdesign/parts/related_multimedia.html.twig'
+                                    }
+                                    )
+                                ) }}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block additional_image %}
+                        {% if not content.fields.additional_image.empty or not content.fields.related_multimedia.empty %}
+                            <div class="full-article-image">
+                                {{ render(
+                                    controller(
+                                        'ngsite.controller.parts:viewRelatedMultimediaItems', {
+                                        'locationId': location.id,
+                                        'includeChildren': true,
+                                        'contentTypeIdentifiers': ['image', 'ng_video'],
+                                        'template': '@ezdesign/parts/related_multimedia/image_additional.html.twig'
+                                    }
+                                    )
+                                ) }}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+
+                <div class="full-article-content">
+                    {% block body %}
+                        {% if not content.fields.body.empty %}
+                            <div class="article-intro">
+                                {{ ng_render_field(content.fields.body) }}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+
+                <div style="clear: both"></div>
+
+{#                {% if not content.fields.body.empty %}#}
+{#                    <div class="attribute-link">#}
+{#                        <a href="{{ path(location) }}">{{ 'cjwsite.content.links.read_more'|trans }}</a>#}
+{#                    </div>#}
+{#                {% endif %}#}
+{#            </div>#}
+
+        {% endblock %}
+
+    </article>
+
+{% endblock %}

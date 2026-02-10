@@ -85,15 +85,7 @@
 
         RewriteRule ^/var/([^/]+/)?storage/images(-versioned)?/.* - [L]
 
-        # Legacy rewrite rules
-        RewriteRule ^/var/([^/]+/)?cache/(texttoimage|public)/.* - [L]
-        RewriteRule ^/design/[^/]+/(stylesheets|images|javascript|fonts)/.* - [L]
-        RewriteRule ^/share/icons/.* - [L]
-        RewriteRule ^/extension/[^/]+/design/[^/]+/(stylesheets|flash|images|lib|javascripts?)/.* - [L]
-        RewriteRule ^/packages/styles/.+/(stylesheets|images|javascript)/[^/]+/.* - [L]
-        RewriteRule ^/packages/styles/.+/thumbnail/.* - [L]
-        RewriteRule ^/var/storage/packages/.* - [L]
-
+        # Makes it possible to placed your favicon and robots.txt at the root of your web folder
         RewriteRule ^/favicon\.ico - [L]
         RewriteRule ^/robots\.txt - [L]
 
@@ -107,7 +99,7 @@
         RewriteRule ^/(css|js|fonts?)/.*\.(css|js|otf|eot|ttf|svg|woff) - [L]
 
         # Prevent access to website with direct usage of app.php in URL
-        RewriteRule ^/(.+/)?app\.php - [R=404,L]
+        RewriteRule ^/([^/]+/)?app\.php([/?#]|$) - [R=404,L]
 
         RewriteRule .* /app.php
     </IfModule>

@@ -1,0 +1,86 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{# -- Get settings from YAML files --- #}
+{% set initial_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_zoom', 'cjwsite' ) %}
+{% set initial_min_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_min_zoom', 'cjwsite' ) %}
+{% set initial_max_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_max_zoom', 'cjwsite' ) %}
+{% set initial_latitude = ezpublish.configResolver.getParameter( 'leaflet.initial_latitude', 'cjwsite' ) %}
+{% set initial_longitude = ezpublish.configResolver.getParameter( 'leaflet.initial_longitude', 'cjwsite' ) %}
+{% set tile_layer = ezpublish.configResolver.getParameter( 'leaflet.tile_layer', 'cjwsite' ) %}
+
+{# -- Initialize dynamic parameters -- #}
+{% set map_id = 'leaflet_map' ~ location.id|default( content.mainLocationId )|default %}
+{% set address_field = null %}
+{% set address_field_identifier = address_field_identifier|default( 'location' ) %}
+
+{% if location.content.hasField( address_field_identifier ) and not location.content.fields[address_field_identifier].empty %}
+    {% set address_field = location.content.fields[address_field_identifier] %}
+{% endif %}
+
+{% set marker_content = '<h1>' ~ location.content.fields.title.value.text ~ '</h1><p>' ~ address_field.value.address ~ '</p>' %}
+
+{% if address_field %}
+    {% set map_link_url = "//www.openstreetmap.org/?mlat=" ~ address_field.value.latitude ~ "&mlon=" ~ address_field.value.longitude ~ "&zoom=" ~ initial_zoom %}
+
+    <div id="{{ map_id }}"
+         class="leaflet-map map-content embed-responsive embed-responsive-16by9"
+         data-map-id="{{ location.id }}"
+         data-address="{{ address_field.value.address }}"
+         data-latitude="{{ address_field.value.latitude }}"
+         data-longitude="{{ address_field.value.longitude }}">
+
+        {#
+        <div class="submit">
+            <a class="hidden-xs" href="{{ map_link_url }}" target="_blank">
+                <input class="btn btn-primary" type="button" name="OSM" value="Karte in einem neuem Fenster öffnen" />
+            </a>
+
+            <a class="visible-xs" href="{{ map_link_url }}" target="_blank">
+                <input class="btn btn-primary" type="button" name="OSM" value="Öffnen" />
+            </a>
+        </div> #}
+    </div>
+
+    <script type="text/javascript">
+        (function ( $ ) {
+            let obj, map;
+
+            $( function() {
+
+                obj = jQuery( '#' + '{{ map_id }}' );
+
+                mapOptions = { 'zoom': {{ initial_zoom }}, 'center': [ obj.attr( 'data-latitude' ), obj.attr( 'data-longitude' ) ] }
+                map = L.map( {{ map_id }}, mapOptions );
+
+                markerIcon = L.icon({ iconUrl: '{{ asset( 'bundles/app/images/grafiken/kartensymbol-allgemein.png' ) }}',
+                                      iconSize: [38, 58],
+                                      iconAnchor: [22, 54],
+                                      popupAnchor: [0, -56]
+                });
+
+                markerPopup = L.popup().setContent( '{{ marker_content|raw }}' );
+
+                markerOptions = { 'icon': markerIcon };
+
+                L.tileLayer( "{{ app.request.schemeAndHttpHost ~ '/' ~ tile_layer }}?x={x}{and}y={y}{and}z={z}", {
+                    and: '&',
+                    attribution: '&copy; <a href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+                    minZoom: {{ initial_min_zoom }},
+                    maxZoom: {{ initial_max_zoom }}
+                } ).addTo( map );
+
+                var marker = L.marker( [
+                    obj.attr( 'data-latitude' ),
+                    obj.attr( 'data-longitude' )
+                ], markerOptions ).addTo( map );
+
+                marker.bindPopup( markerPopup );
+            } );
+
+            // Expose object and map to the global scope
+            window['obj_{{ map_id }}'] = obj;
+            window['map_{{ map_id }}'] = map;
+        })( jQuery );
+    </script>
+{% endif %}

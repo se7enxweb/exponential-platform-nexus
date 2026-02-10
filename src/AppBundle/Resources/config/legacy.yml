@@ -1,0 +1,221 @@
+netgen_site_legacy:
+    system:
+        frontend_group:
+            injected_settings:
+                site.ini:
+                    # The following parameter need to be "false" string
+                    # since eZ legacy config uses string as config, as opposed to booleans
+                    SiteAccessSettings/RequireUserLogin: "false"
+                    DesignSettings/SiteDesign: "app_user"
+            injected_merge_settings:
+                site.ini:
+                    SiteAccessRules/Rules:
+                        - access;disable
+                        - module;content/advancedsearch
+                        - module;visual
+
+        ngadminui:
+            injected_settings:
+                site.ini:
+                    DesignSettings/SiteDesign: ngadminui
+                    
+            injected_merge_settings:
+                site.ini:
+                    SiteAccessRules/Rules:
+                        - access;enable
+                        - moduleall
+                        - module;visual
+
+#                    DebugSettings/DebugOutput: enabled
+#                    TemplateSettings/Debug: enabled
+#                    TemplateSettings/ShowXHTMLCode: disabled
+#                    TemplateSettings/ShowUsedTemplates: enabled
+#                    TemplateSettings/DevelopmentMode: disabled
+#                    TemplateSettings/TemplateCache: enabled
+
+
+        legacy_admin:
+            injected_settings:
+                site.ini:
+                    DesignSettings/SiteDesign: admin
+                    
+            injected_merge_settings:
+                site.ini:
+                    SiteAccessRules/Rules:
+                        - access;enable
+                        - moduleall
+                        - module;visual
+
+        default:
+            injected_merge_settings:
+                browse.ini:
+                    MoveNodeAssignment/StartNode_classgroup: { 2: "content" }
+                    MoveNode/StartNode_classgroup: { 2: "content" }
+                    AddNodeAssignment/StartNode_classgroup: { 2: "content" }
+                    AddPrimaryNodeAssignment/StartNode_classgroup: { 2: "content" }
+
+                content.ini:
+                    link/AvailableClasses:
+                        - button_hellblau
+                        - button_blau
+                        - button_gruen
+
+                    embed/AvailableClasses:
+                        - button_hellblau
+                        - button_blau
+                        - button_gruen
+
+                    CustomTagSettings/AvailableCustomTags:
+                        - Ausklappbarer_Textabschnitt
+                        - Ausklappbarer_Abschnitt_mobil
+                        - Umfliessen_beenden
+
+                    ClassAttributeSettings/CategoryList:
+                        timing: 'Timing'
+                        event: 'Event'
+                        design: 'Design'
+                        link: 'Links'
+                        input: 'Inputs'
+
+                site.ini:
+                    ExtensionSettings/ActiveExtensions:
+                        - app
+                        - nglayouts
+                        - ezplatformsearch
+                        - ezrichtext
+                        - jactools
+                        - ngadminui
+                        - ngsymfonytools
+                        - ngsite
+                        - ngclasslist
+                        - xrowmetadata
+                        - birthday
+                        - hideuntildate
+                        - ezclasslists
+                        - ezchangeclass
+                        - enhancedselection2
+                        - ezmultiupload
+                        - eztags
+                        - ezjscore
+                        - ezstarrating
+                        - ezgmaplocation
+                        - ezdemo
+                        - ezoe
+                        - ezie
+                        - jac_admin
+                        - cjw_newsletter
+                        - cjw_osm_proxy
+                        - jac_piwik
+                        - jacmultihandler
+                        - cjw_pdfjs
+                        - cjw_tmv_veranstdb
+
+            injected_settings:
+                ezoe_attributes.ini:
+                    CustomAttribute_gallery_view_mode/Name: "Galeriedarstellung"
+                    CustomAttribute_gallery_view_mode/Type: select
+                    CustomAttribute_gallery_view_mode/Required: false
+                    CustomAttribute_gallery_view_mode/AllowEmpty: true
+                    CustomAttribute_gallery_view_mode/Selection: { slider: "Slider", grid: "Raster" }
+
+                content.ini:
+                    ClassGroupIDs/Media: 2
+                    ClassGroupIDs/Users: 3
+                    # Setup class group was deleted long ago, this makes sure
+                    # it doesn't mess up custom groups that have its' old ID
+                    ClassGroupIDs/Setup: -1
+
+                    Ausklappbarer_Abschnitt_mobil/CustomAttributes:
+                        - Name
+
+                    embed/CustomAttributes:
+                        - gallery_view_mode
+
+                gmaplocation.ini:
+                    # in-mv.co
+                    # GMapSettings/ApiKey: AIzaSyAF9RElqGCGHkpTY4GwXlIayRmwe3WmFyY
+                    # live
+                    GMapSettings/ApiKey: AIzaSyDrg-eyR9nYOiYHMN_f2syAJ0kldkA4iu4
+                    # jac-hosting.de
+                    #GMapSettings/ApiKey: AIzaSyBqHliv-8wXYWG5bv0kFfQUIhfGkp5xaPQ
+
+                site.ini:
+                    DatabaseSettings/Charset: "utf8mb4"
+                    SiteSettings/DefaultAccess: "%ezpublish.siteaccess.default%"
+                    SiteSettings/SiteList: "%ezpublish.siteaccess.list%"
+                    SiteSettings/RootNodeDepth: 1
+                    SiteSettings/SiteURL: "%ngsite.default.site_domain%"
+                    SiteSettings/MetaDataArray: "%ngsite.default.site_settings.meta_data%"
+
+                    SiteSettings/RootNode: "%ngsite.default.locations.tree_root.id%"
+
+                    SiteAccessSettings/AvailableSiteAccessList: "%ezpublish.siteaccess.list%"
+                    SiteAccessSettings/RemoveSiteAccessIfDefaultAccess: enabled
+                    # The following two parameters need to be "true" and "false" strings
+                    # since eZ legacy config uses those, as opposed to booleans
+                    SiteAccessSettings/ForceVirtualHost: "true"
+                    SiteAccessSettings/CheckValidity: "false"
+
+                    Session/SessionNameHandler: custom
+                    UserSettings/LogoutRedirect: /
+
+                    SiteAccessRules/Rules:
+                        - access;disable
+                        - module;user/register
+                        - module;user/activate
+                        - module;user/unactivated
+                        - module;user/success
+                        - module;user/forgotpassword
+                        - module;ezinfo/about
+                        - module;ezinfo/copyright
+                        - module;content/tipafriend
+                        - module;settings/edit
+                        - module;layout
+                        - module;visual
+                        - module;shop
+
+                    DesignSettings/SiteDesign: standard
+                    DesignSettings/DesignLocationCache: enabled
+
+                    MailSettings/Transport: "%mailer_transport%"
+                    MailSettings/TransportServer: "%mailer_host%"
+                    MailSettings/TransportPort: "%mailer_port%"
+                    MailSettings/TransportUser: "%mailer_user%"
+                    MailSettings/TransportPassword: "%mailer_password%"
+                    MailSettings/AdminEmail: "%ngsite.default.mail.sender_email%"
+                    MailSettings/EmailSender: "%ngsite.default.mail.sender_email%"
+
+                jac_piwik.ini:
+                    PiwikSettings/UserLogin: "%cjwsite.default.piwik.user%"
+                    PiwikSettings/PasswordHash: "%cjwsite.default.piwik.password_hash%"
+                    PiwikSettings/TrackingId: "%cjwsite.default.piwik.tracking_id%"
+                    PiwikSettings/TrackingUrl: "%cjwsite.default.piwik.tracking_url%"
+
+                cronjob.ini:
+                    CronjobPart-frequently/Scripts:
+                        - hide_unhide_by_date.php
+
+                    CronjobPart-frequent/Scripts:
+                        - hide_unhide_by_date.php
+
+                jacmultihandler.ini:
+                    MultiHandlerSettings/ActiveSettingArray:
+                        - hide_by_date_on_publish
+
+                    setting_hide_by_date_on_publish/ClassIdentifierArray:
+                        - ng_article
+                        - ng_news
+                        - cjw_banner_head
+
+                    setting_hide_by_date_on_publish/FetchLimit: 1500
+                    setting_hide_by_date_on_publish/Function: hide_by_date
+
+                    setting_hide_by_date_on_publish/ParameterArray:
+                        attribute_publish_date_from_identifier: published_from
+                        attribute_publish_date_until_identifier: published_to
+                        attribute_automated_published: automated_published
+
+                cjw_tmv_veranstdb.ini:
+                    TMV/User: ws.baederverband-mv
+                    TMV/Password: YtBGF8E0D9
+                    TMV/Host: https://tmv.infomaxnet.de/imxplatformj/api?imxFormat=json

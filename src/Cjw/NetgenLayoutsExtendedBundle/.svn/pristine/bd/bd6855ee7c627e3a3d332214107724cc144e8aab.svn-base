@@ -1,0 +1,7 @@
+# backend
+
+block.spacer.image: Images
+block.spacer.align: Align
+block.spacer.align.left: Left
+block.spacer.align.center: Center
+block.spacer.align.right: Right

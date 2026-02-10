@@ -1,0 +1,6 @@
+services:
+    cjw.tmv.block.block_definition.handler.tmv_events:
+        class: Cjw\TmvBundle\Block\BlockDefinition\Handler\TmvEventsHandler
+        arguments: [ '@ezpublish.api.repository', '@ezpublish.api.storage_engine.legacy.dbhandler', '@request_stack' ]
+        tags:
+            - { name: netgen_layouts.block_definition_handler, identifier: tmv_events }

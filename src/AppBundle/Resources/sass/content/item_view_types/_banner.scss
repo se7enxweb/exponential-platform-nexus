@@ -1,0 +1,47 @@
+/* banner layout*/
+
+.banner {
+    min-height: 26rem;
+    position: relative;
+    text-align: center;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @include media-breakpoint-down(sm) {
+        min-height: 18rem;
+    }
+
+    .article-content {
+        width: 100%;
+        position: absolute;
+        top: 25%;
+        color: #fff;
+
+        .article-header {
+            margin-bottom: 0.5rem;
+
+            .title {
+                font-size: $font-size-banner-title;
+
+                @include media-breakpoint-down(sm) {
+                    font-size: 2rem;
+                }
+
+                a {
+                    color: inherit;
+                }
+            }
+        }
+
+        .short {
+            font-size: $font-size-banner-short;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 1rem;
+            }
+        }
+    }
+}

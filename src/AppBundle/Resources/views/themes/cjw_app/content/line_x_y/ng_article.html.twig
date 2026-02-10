@@ -1,0 +1,20 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+<article class="view-type view-type-{{ view_type }} ng-article vl4">
+{#    <div class="row">#}
+
+        {{ content_fields.image(content, location, 'i770_16-9') }}
+
+        <div class="article-content">
+            <header class="article-header">
+                <h2 class="title"><a href="{{ path(location) }}">{{ content_fields.title(content) }}</a></h2>
+            </header>
+
+            {{ content_fields.intro(content) }}
+        </div>
+{#    </div>#}
+
+</article>

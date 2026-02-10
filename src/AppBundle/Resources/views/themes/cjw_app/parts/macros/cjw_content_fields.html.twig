@@ -1,0 +1,143 @@
+{# --- Renders the `image` field of a content; additionally surrounded by an `<a>` element --- #}
+{% macro image(content, location, alias_name, lazy_loading, link_class, use_container = true) %}{% apply spaceless %}
+    {% set alias_name = alias_name ?? 'i480' %}
+    {% set lazy_loading = lazy_loading ?? ezpublish.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
+
+    {% set image_field = false %}
+    {% set image_field_identifiers = ezpublish.configResolver.getParameter( 'content.image_fields', 'cjwsite' ) %}
+
+    {% for identifier in image_field_identifiers if not image_field %}
+        {% if content.hasField( identifier ) and not content.fields[identifier].empty %}
+            {% set image_field = content.fields[identifier] %}
+        {% endif %}
+    {% endfor %}
+
+    {% if use_container %}
+    <figure class="image cjw-image">
+    {% endif %}
+
+        {% if image_field %}
+            {{ ng_render_field(
+                image_field, {
+                    'parameters': {
+                        'alias': alias_name,
+                        'link_href': location is not empty ? path(location) : null,
+                        'lazy_loading': lazy_loading,
+                        'link_class': link_class ?? null,
+                    }
+                }
+            ) }}
+        {% endif %}
+
+    {% if use_container %}
+    </figure>
+    {% endif %}
+{% endapply %}{% endmacro %}
+
+{# --- Renders the `image` field of the first child element found; uses the `image` macro for rendering --- #}
+{% macro child_image( location, image_content_class_list, alias_name, lazy_loading, link_class ) %}
+    {% from _self import image %}
+
+    {% set image_content_class_list = image_content_class_list ?: ezpublish.configResolver.getParameter( 'content.image_content_types', 'cjwsite' ) %}
+
+    {% set child_image = cjw_fetch_content( [[location.id]], {
+        'depth' : 1,
+        'include' : image_content_class_list
+    } ).0.children|default %}
+
+    <figure class="image cjw-image">
+    {% if child_image %}
+{#        <a href="{{ location is not empty ? path(location) : null }}">#}
+            {{ image( child_image.0.content|default, false, alias_name, lazy_loading, link_class, false ) }}
+{#        </a>#}
+    {% endif %}
+    </figure>
+{% endmacro %}
+
+{# --- Renders the `title` (by trying multiple fields) of a content; falls back to `content.name` --- #}
+{% macro title( content, fields = false ) %}
+{% apply spaceless %}
+    {% set title = '' %}
+    {% set fields = fields ?: ezpublish.configResolver.parameter( 'content.title_fields', 'cjwsite' ) %}
+
+    {% for field in fields if not title %}
+        {% if content.hasField( field ) and not content.fields[field].empty %}
+            {% set title = content.fields[field].value.text %}
+{#            {% set title = ng_render_field( content.fields[field] ) %}#}
+        {% endif %}
+    {% endfor %}
+
+    {% if not title %}
+        {% set title = content.name %}
+    {% endif %}
+
+    {{ title }}
+{% endapply %}
+{% endmacro %}
+
+{# --- Renders the `short_description` (by trying multiple fields) of a content --- #}
+{% macro short_description( content, fields = false ) %}
+{% apply spaceless %}
+    {% from _self import _field_output as output %}
+
+    {% set fields = fields ?: ezpublish.configResolver.parameter( 'content.short_description_fields', 'cjwsite' ) %}
+
+    {{ output( content, fields )|raw }}
+{% endapply %}
+{% endmacro %}
+
+{#--- Alias macro for 'short_description' --- #}
+{% macro intro( content, fields ) %}
+{% apply spaceless %}
+    {% from _self import short_description %}
+    {{ short_description( content, fields ) }}
+{% endapply %}
+{% endmacro %}
+
+{% macro description( content, fields = false ) %}
+{% apply spaceless %}
+    {% from _self import _field_output as output %}
+
+    {% set fields = fields ?: ezpublish.configResolver.parameter( 'content.description_fields', 'cjwsite' ) %}
+
+    {{ output( content, fields )|raw }}
+{% endapply %}
+{% endmacro %}
+
+{# --- Alias macro for 'description' --- #}
+{% macro body( content, fields ) %}
+{% apply spaceless %}
+    {% from _self import description %}
+
+    {{ description( content, fields ) }}
+{% endapply %}
+{% endmacro %}
+
+
+
+{% macro accommodation_features( location ) %}
+
+{% endmacro %}
+
+
+
+{# === INTERNAL MACROS === #}
+
+{# --- Renders the first field of `field_list`, which is defined in `content` --- #}
+{% macro _field_output( content, field_list = [] ) %}
+{% apply spaceless %}
+    {% if field_list is iterable %}
+        {% set output = '' %}
+
+        {% set break = false %}
+        {% for field in field_list if not output %}
+            {% if content.hasField( field ) and not content.fields[field].empty %}
+{#                {{ ng_render_field( content.fields[field] ) }}#}
+                {% set output = ng_render_field( content.fields[field] ) %}
+            {% endif %}
+        {% endfor %}
+
+        {{ output|raw }}
+    {% endif %}
+{% endapply %}
+{% endmacro %}

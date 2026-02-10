@@ -1,0 +1,4 @@
+block_types:
+    spacer:
+        name: 'Trenner'
+        definition_identifier: spacer

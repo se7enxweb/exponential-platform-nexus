@@ -1,0 +1,30 @@
+# Development security override - ensures Symfony 3.4 compatibility
+# Firewalls defined here replace those in base security.yml
+# Do NOT redefine encoders or providers - only override firewalls
+
+security:
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        ezpublish_forgot_password:
+            pattern: /user/(forgot-password|reset-password)
+            security: false
+
+        ezpublish_front:
+            pattern: ^/
+            anonymous: ~
+            ezpublish_rest_session: ~
+            form_login:
+                require_previous_session: false
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /
+                always_use_default_target_path: false
+                csrf_token_generator: security.csrf.token_manager
+                csrf_token_id: authenticate
+            logout: ~
+
+        main:
+            anonymous: ~

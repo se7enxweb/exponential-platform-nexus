@@ -1,0 +1,55 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    {% set column_css_class = {
+        '1': 'col-12',
+        '2': 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-6',
+        '3': 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-4',
+        '4': 'col-xs-12 col-sm-6 col-md-3 col-lg-3 col-3',
+        '6': 'col-xs-12 col-sm-6 col-md-2 col-lg-2 col-2'
+    } %}
+
+    {% set list_events = block.dynamicParameter('list_events') %}
+    {% set view_type = block.dynamicParameter('view_type') %}
+    {% set number_of_columns = block.dynamicParameter('number_of_columns') %}
+    {% set list_categories = block.dynamicParameter('list_categories') %}
+    {% set list_places = block.dynamicParameter('list_places') %}
+    {% set filter_params = block.dynamicParameter('filter_params') %}
+    {% set parent = block.dynamicParameter('parent') %}
+
+    <div class="row">
+        <div class="col-12">
+            <h2>
+                {{ 'block.tmv_events.list.title'|trans|desc( 'Events' ) }}
+
+                <a href="{{ path( parent ) }}" class="float-right">
+                    [ {{ 'block.tmv_events.list.link.all'|trans|desc( 'See all' ) }} ]
+                </a>
+            </h2>
+        </div>
+    </div>
+
+    {% if list_events.list is defined and list_events.list is not empty %}
+        <div class="{% if view_type == 'grid' %}grid-row row{% else %}list-row{% endif %}">
+            {% for event in list_events.list %}
+                <div class="{% if view_type == 'grid' %}grid-item cols-{{ number_of_columns }} {{ column_css_class[number_of_columns] }}{% else %}list-item{% endif %}">
+                    {% if view_type == 'grid' %}
+                        {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                            content: event.content,
+                            location: event,
+                            view_type: 'standard_with_intro'
+                        } only %}
+                    {% else %}
+                        {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                            content: event.content,
+                            location: event,
+                            view_type: 'line'
+                        } only %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h3>{{ 'block.tmv_events.list.notice.no_result'|trans|desc( 'No events found!' ) }}</h3>
+    {% endif %}
+{% endblock %}

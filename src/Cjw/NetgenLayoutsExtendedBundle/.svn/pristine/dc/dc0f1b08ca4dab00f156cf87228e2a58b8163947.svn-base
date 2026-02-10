@@ -1,0 +1,7 @@
+# backend
+
+block.spacer.image: Bilder
+block.spacer.align: Ausrichtung
+block.spacer.align.left: Linksbündig
+block.spacer.align.center: Zentriert
+block.spacer.align.right: Rechtsbündig

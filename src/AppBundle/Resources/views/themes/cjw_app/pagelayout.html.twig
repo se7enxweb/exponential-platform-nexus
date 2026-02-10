@@ -1,0 +1,122 @@
+{% extends '@ezdesign/pagelayout_variables.html.twig' %}
+
+{% block pagelayout_content %}
+{% if app.request.query.get( 'overlay' ) == 'yes' %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
+<head>
+    <meta charset="utf-8" />
+        {% include '@ezdesign/page_head_style.html.twig' %}
+        {% include '@ezdesign/page_head_script.html.twig' %}
+</head>
+<body>
+{{ block('content') }}
+</body>
+</html>
+{% elseif app.request.attributes.get('semanticPathinfo') starts with '/content/view/pdfjs' %}
+    {{ block('content') }}
+{% else %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="google-site-verification" content="Beh4wKvKIOKE6NCI7n51S3QT9vZGwXS90t1KEfCwln8" />
+    <meta name="google-site-verification" content="4kVVA4IldzpEHHOAAXqFU4W2oVpVuo2kpNa-yQa2OsQ" />
+
+    {% block page_head %}
+        {% include '@ezdesign/page_head.html.twig' %}
+    {% endblock %}
+
+    {% block page_head_style %}
+        {% if app.request.attributes.get('semanticPathinfo') starts with '/content/view/pdfjs' %}
+            {% include '@ezdesign/page_head_style_pdfjs.html.twig' %}
+        {% else %}
+            {% include '@ezdesign/page_head_style.html.twig' %}
+            {% include '@ezdesign/page_head_style_language_filter.html.twig' %}
+        {% endif %}
+    {% endblock %}
+
+    {% block page_head_script %}
+        {% include '@ezdesign/page_head_script.html.twig' %}
+    {% endblock %}
+
+    {% block open_graph %}
+        {% include '@NetgenSite/parts/opengraph.html.twig' %}
+    {% endblock %}
+
+    {% include '@NetgenSite/parts/jwplayer.html.twig' %}
+
+    {% include '@NetgenSite/parts/google_tag_manager_code.html.twig' %}
+
+    {% block structuredData %}{% endblock %}
+</head>
+<body>
+
+{% include '@NetgenSite/parts/facebook_api.html.twig' %}
+
+<div id="page"{% if location.contentInfo.contentTypeIdentifier is defined and ( location.contentInfo.contentTypeIdentifier == 'ng_landing_page' or location.contentInfo.contentTypeIdentifier == 'ng_frontpage' ) %} class="landing"{% endif %}>
+    {% block layout %}
+        {% block header %}
+            {% include '@ezdesign/page_header.html.twig' %}
+        {% endblock %}
+
+        {% block breadcrumb %}
+            {% include '@ezdesign/page_path.html.twig' %}
+
+            {#
+            {% if location.contentInfo.contentTypeIdentifier is defined and ( location.contentInfo.contentTypeIdentifier == 'ng_landing_page' or location.contentInfo.contentTypeIdentifier == 'ng_frontpage' ) %}
+                {% include '@ezdesign/parts/bookingbar.html.twig' %}
+            {% endif %}
+             #}
+        {% endblock %}
+
+        <div id="main" class="clearfix">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% block pre_footer %}
+            {% include '@ezdesign/page_pre_footer.html.twig' %}
+        {% endblock %}
+
+        {% block footer %}
+            {% include '@ezdesign/page_footer.html.twig' %}
+        {% endblock %}
+    {% endblock %}
+</div>
+
+{% block page_footer_script %}
+    {% include '@ezdesign/page_footer_script.html.twig' %}
+    {% include 'CjwPublishToolsBundle:includes:piwik_ezp25.html.twig' %}
+{% endblock %}
+
+{# Renders additional elements used by JS for displaying and processing client
+   data #}
+{% block page_user_elements %}
+    {% include '@ezdesign/page_user_elements.html.twig' %}
+{% endblock %}
+
+{# We don't need no cookie control element for now #}
+{% include '@ezdesign/parts/cookie_control.html.twig' %}
+
+</body>
+</html>
+{% endif %}
+{% endblock %}
+
+
+{# --- Additional function blocks --- #}
+
+{# Renders a simple separator; you can add the class "orange" or "brown" to any
+   parent element to render the orange/brown version of the image rendered above
+   the `<hr>` element. #}
+{% block global__separator %}
+    <hr class="separator">
+{% endblock %}
+
+{# Renders the weather widget #}
+{% block global__weather_widget %}
+    {# Get the weather widget's sensor key from configuration files #}
+    {% set sensor = ezpublish.configResolver.parameter( 'weather.sensor', 'cjwsite' ) %}
+
+    <a href="https://www.fortamedia.de#sensor" target="_blank" alt="[KJ] online - fortamedia.de" title="[KJ] online - fortamedia.de"><img style="padding-left:0px;padding-top:0px;height:240px;" src="https://monitor.fortamedia.de/getwasser.php?v=b&sensor={{ sensor }}" border="0" alt="[KJ] online - fortamedia.de" title="[KJ] online - fortamedia.de"></a>
+{% endblock %}

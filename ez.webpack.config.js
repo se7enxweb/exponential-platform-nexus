@@ -17,10 +17,7 @@ module.exports = (Encore) => {
         })
         .enableSassLoader()
         .enableReactPreset()
-        .enableSingleRuntimeChunk()
-	.configureCssLoader(function(config) {
-	    config.url = false;
-	});
+        .enableSingleRuntimeChunk();
 
     bundles.forEach((configPath) => {
         const addEntries = require(configPath);

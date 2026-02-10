@@ -1,0 +1,11 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% extends nglayouts.layoutTemplate %}
+
+{% block content %}
+    {% if content.fields.file is defined %}
+        {% set file = ez_field_value( content, 'file' ) %}
+        {{cjw_content_download_file( file )}}
+    {% endif %}
+{% endblock %}

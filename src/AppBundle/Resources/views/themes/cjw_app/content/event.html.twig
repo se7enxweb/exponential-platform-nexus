@@ -1,0 +1,76 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+{% set use_link = true %}
+
+{% if content.fields.body is defined and content.fields.body.empty %}
+    {% set use_link = false %}
+{% endif %}
+
+{% if content.fields.related_object is defined and not content.fields.related_object.empty %}
+    {% set use_link = true %}
+{% endif %}
+
+{% set image_field = content.fields.image %}
+
+{% if content.fields.teaser_image is defined and not content.fields.teaser_image.empty %}
+    {% set image_field = content.fields.teaser_image %}
+{% endif %}
+
+<article class="view-type view-type-{{ view_type }} {{ content.contentInfo.contentTypeIdentifier|replace({'_': '-'}) }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 col-sm-4 col-md-4 col-lg-4 article-image">
+                {% if content.fields.publish_date is defined and not content.fields.publish_date.empty %}
+                    <div class="date">
+                        <span class="day">{{ content.fields.publish_date.value|date( 'd' ) }}</span>
+                        {{ content.fields.publish_date.value|date( 'M' ) }}
+                    </div>
+                {% elseif content.fields.published_from is defined and not content.fields.published_from.empty %}
+                    <div class="date">
+                        <span class="day">{{ content.fields.published_from.value|date( 'd' ) }}</span>
+                        {{ content.fields.published_from.value|date( 'M' ) }}
+                    </div>
+                {% else %}
+                    <div class="date">
+                        <span class="day">{{ content.contentInfo.publishedDate|date( 'd' ) }}</span>
+                        {{ content.contentInfo.publishedDate|date( 'M' ) }}
+                    </div>
+                {% endif %}
+
+                <figure class="image">
+                    {% if not image_field.empty and ng_image_alias(image_field, 'i480').uri is defined  %}
+                        {% if use_link %}
+
+                        <a {{ cjw_macros.content_relation_parameters( location, content ) }}>
+                            <img src="{{ ng_image_alias(image_field, 'i480').uri }}" alt="{{ image_field.value.alternativeText }}" />
+                        </a>
+
+                        {% else %}
+                            <img src="{{ ng_image_alias(image_field, 'i480').uri }}" alt="{{ image_field.value.alternativeText }}" />
+                        {% endif %}
+                    {% endif %}
+                </figure>
+            </div>
+
+            <div class="col-8 article-content">
+                <header class="article-header">
+                    <h2 class="title">
+                        {% if use_link %}
+                            <a {{ cjw_macros.content_relation_parameters( location, content ) }}>{{ content_fields.title(content) }}</a>
+                        {% else %}
+                            {{ content_fields.title(content) }}
+                        {% endif %}
+                    </h2>
+                </header>
+
+                <div class="short">
+                    {{ content_fields.intro(content) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

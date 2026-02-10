@@ -1,0 +1,133 @@
+$cjw-event-grid--event-bg-color-1: #b48760;
+$cjw-event-grid--event-bg-color-2: #2b4861;
+$cjw-event-grid--article-content-padding: 1rem;
+
+.item-view-event {
+    margin-bottom: 1.875rem;
+
+    @include media-breakpoint-down(xs) {
+        margin-bottom: 1.5rem;
+    }
+}
+/*
+.row {
+    > .col-event {
+        // Each odd indexed cell (which is indeed the left one in a
+        // two-column layout)
+        &:nth-child( odd ) {
+            article{
+                background-color: $cjw-event-grid--event-bg-color-1;
+            }
+        }
+        // Each evenly indexed cell (which is indeed the right one in a
+        // two-column layout)
+        &:nth-child( even ) {
+            article {
+                background-color: $cjw-event-grid--event-bg-color-2;
+            }
+        }
+    }
+}
+*/
+
+
+.row {
+    > .col-event {
+        // Create style definitions for automatic background color looping
+        @each $color in $matrix-event-color-list {
+            $list-index: index( $matrix-event-color-list, $color );
+            &:nth-of-type(#{$list-index}n) {
+                article {
+                    background-color: $color;
+                }
+            }
+        }
+    }
+}
+
+.col-event {
+    margin-bottom: 1.875rem;
+
+    .view-type-event {
+        height: 100%;
+        color: #fff;
+
+        .container,
+        .row {
+            height: 100%;
+        }
+
+        .article-image {
+            padding-left: 0;
+            position: relative;
+
+            .date {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 0 0.5rem 0.25rem 0;
+                text-transform: uppercase;
+                z-index: 1;
+                background-color: #fff;
+                color: $font-color;
+                font-size: $font-size-date-event-month;
+                line-height: 1.5rem;
+                font-weight: bold;
+
+                .day {
+                    font-size: $font-size-date-event-number;
+                    color: $headings-color;
+                    display: block;
+                    font-weight: bold;
+                }
+
+                 @include media-breakpoint-down(md) {
+                     left: -1px;
+                     top: -1px;
+                 }
+            }
+
+            .image {
+                width: 100%;
+
+                img {
+                    object-fit: cover;
+                    object-position: center;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                a {
+                    padding-bottom: 102%;
+                }
+            }
+        }
+
+        .article-content {
+            padding: 2rem 1rem 2rem 1.5rem;
+
+            h2 {
+                font-size: $font-size-event-headings;
+                margin-bottom: 0.8rem;
+                color: #fff;
+
+                a {
+                    color: #fff;
+                }
+            }
+
+            p {
+                line-height: 1.5rem;
+            }
+
+             @include media-breakpoint-down(xs) {
+                 padding: 1.5rem 0rem 1.5rem 1rem;
+             }
+        }
+    }
+
+     @include media-breakpoint-down(md) {
+         margin-bottom: 1.5rem;
+     }
+}

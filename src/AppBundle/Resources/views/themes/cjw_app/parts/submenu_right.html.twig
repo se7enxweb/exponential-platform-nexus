@@ -1,0 +1,46 @@
+{% from '@ezdesign/parts/macros/cjw_macros.html.twig' import
+    cjw_nav_item as nav_item
+%}
+
+{% trans_default_domain "cjwsite" %}
+
+{% set menu_title    = menu_title|default %}
+{% set menu_location = menu_location|default( location|default ) %}
+{#{% set menu_entry_name = menu_entry_name|default( 'fields.title' ) %}#}
+{% set menu_entry_name = menu_entry_name|default( 'name' ) %}
+
+{# Only display the right submenu, if the menu location is available and there
+   is at least one element to display. #}
+{% if menu_location and menu_entries|length %}
+    <div class="sub-menu-right">
+        <div class="sub-menu-right-header">{% apply spaceless %}
+            {% if menu_title %}
+                {{ menu_title|raw }}
+            {% else %}
+                {{ 'cjwsite.navigation.right.header'|trans }}
+                <strong>»{{ menu_location.parent.content.name }}«</strong>
+            {% endif %}
+        {% endapply %}</div>
+        <ul class="nav flex-column sub-menu-right-nav">
+
+            {% for entry in menu_entries %}
+                {% if menu_entry_name == 'fields.title' %}
+                    {% set entry_name = entry.content.fields.title.value %}
+                {% else %}
+                    {% set entry_name = entry.content.name %}
+                {% endif %}
+
+                {{ nav_item( {
+                    'content' : entry.content,
+                    'location' : entry,
+                    'name' : entry_name
+                } ) }}
+{#                {{ dump( entry.content ) }}#}
+
+
+            {% endfor %}
+        </ul>
+    </div>
+
+{#    'name_short' : entry.content.name, #}
+{% endif %}

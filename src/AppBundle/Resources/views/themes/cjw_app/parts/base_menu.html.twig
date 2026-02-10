@@ -1,0 +1,119 @@
+{% import "@ezdesign/parts/macros.html.twig" as macros %}
+{% import "@ezdesign/parts/macros/cjw_content_fields.html.twig" as cjw_content_fields %}
+
+{% trans_default_domain 'cjwsite' %}
+
+
+{% set is_homepage = is_homepage|default( 'home' in content.contentInfo.contentTypeIdentifier|default ) %}
+
+{# We want the `nav_items` parameter to be able to completely override the
+   children behaviour, e.g. by completely removing all additional nav_items. To
+   accomplish this behaviour it's necessary to only check whether the
+   `nav_items` variable is already defined rather than using the `default()`
+   filter. #}
+{% set nav_items = (nav_items is defined)
+    ? nav_items : ngsite.siteInfoContent.fields.main_menu.value.destinationContentIds|default([]) %}
+
+{# If we are on a homepage, we're going to merge the "main_menu" items with the
+   "additional_menu" items. #}
+{% if is_homepage %}
+    {% set nav_items = nav_items|merge( ngsite.siteInfoContent.fields.additional_menu.value.destinationContentIds|default([]) ) %}
+{% endif %}
+
+{% set show_logo = show_logo|default( false ) %}
+{% set show_gallery_controls = show_gallery_controls|default( false ) %}
+
+{% set show_logo = true %}
+
+{# Navigation container #}
+<div class="base-navigation">
+
+    {# Vertical main navigation #}
+    <nav class="navbar">
+
+        {# Navigation links #}
+        <ul class="navbar-nav d-flex flex-row">
+
+            {# Offcanvas menu toggle #}
+            <li class="nav-item desktop-link offcanvas-toggle-container">
+                <a class="nav-link" href="#" data-toggle="offcanvas" title="{{ 'cjwsite.navigation.open.title'|trans }}">
+                    <div class="nav-icon">
+                        <img src="{{ asset( 'bundles/app/images/grafiken/menue.png' ) }}" alt="">
+                    </div>
+
+                    <span class="nav-text">
+                        {{ 'cjwsite.navigation.open'|trans }}
+                    </span>
+                </a>
+            </li>
+
+            {% if show_logo %}
+                <li class="nav-item {#desktop-link#}">
+                    <a class="nav-link" href="/" {# title=""#}>
+                        <div class="logo">
+                            <img
+                                src="{{ asset('bundles/app/images/logos/small.png') }}"
+                                height="40"
+                                alt="">
+
+                            {#
+                            <span class="nav-icon-text d-none d-lg-inline-block">
+                                <strong>JAC</strong> Example
+                            </span>
+
+                            <span class="nav-icon-text d-inline-block d-lg-none">
+                                JAC<br /><strong>Example</strong>
+                            </span>
+                            #}
+                        </div>
+
+{#                        {{ 'cjwsite.navigation.open'|trans }}#}
+                    </a>
+                </li>
+            {% endif %}
+
+            {#
+            {% for nav_item in nav_items %}
+                {% set nav_item_content = cjw_load_content_by_id( nav_item ) %}
+
+                {% set title = nav_item_content.fields.teaser_intro.empty|default ?
+                    '' : "title=\"" ~ ng_render_field( nav_item_content.fields.teaser_intro )|striptags|trim ~ "\"" %}
+
+                <li class="nav-item">
+                    <a class="nav-link" {{ macros.content_link_parameters( nav_item_content ) }} {{ nav_item.attribute|default|raw }}
+                       {{ title|raw }}>
+                        {% if nav_item_content.fields.image is defined and not nav_item_content.fields.image.empty %}
+                            <div class="nav-icon">
+                                {{ cjw_content_fields.image( nav_item_content, false, false, false ) }}
+                            </div>
+                        {% endif %}
+
+                        <span class="nav-text">
+                            {{ nav_item_content.name }}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}#}
+        </ul>
+
+        {% set list_top_links = cjw_fetch_content( [ ezpublish.configResolver.getParameter( 'header.top_link_container_location', 'cjwsite' ) ], {
+            'depth': 1,
+            'include': [ 'ng_shortcut' ],
+            'limit' : 10,
+            'datamap': false,
+            'count': false
+        } )[ ezpublish.configResolver.getParameter( 'header.top_link_container_location', 'cjwsite' ) ][ 'children' ] %}
+
+        {% if list_top_links[ 0 ] is defined %}
+            <span class="top-link d-none d-md-block">
+                {% for top_link in list_top_links %}
+                    {% if not loop.first %}|{% endif %}
+
+                    <a {{ macros.content_link_parameters( top_link.content ) }}>
+                        {{ ng_render_field(top_link.content.fields.title) }}
+                    </a>
+                {% endfor %}
+            </span>
+        {% endif %}
+    </nav>
+</div>

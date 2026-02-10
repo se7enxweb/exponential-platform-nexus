@@ -1,0 +1,76 @@
+.item-view-line_x,
+.item-view-line_h_x {
+    .list-row {
+        > .list-item {
+            // Each odd indexed cell (which is indeed the left one in a
+            // two-column layout)
+            &:nth-child( odd ) {
+                .image-left {
+                    display: none;
+                }
+
+                .image-right {
+                    display: block;
+                }
+            }
+            // Each evenly indexed cell (which is indeed the right one in a
+            // two-column layout)
+            &:nth-child( even ) {
+                .image-right {
+                    display: none;
+                }
+
+                .image-left {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+//.ngl-list {
+//    .list-row {
+//        .list-item {
+//            &:last-child {
+//                margin-bottom: 6rem;
+//
+//                @include media-breakpoint-down(sm) {
+//                    margin-bottom: 2rem;
+//                }
+//            }
+//        }
+//    }
+//}
+
+.view-type-line,
+.view-type-line_il,
+.view-type-line_x,
+.view-type-line_h,
+.view-type-line_h_il,
+.view-type-line_h_x {
+    //margin-left: -$gutter;
+    //margin-right: -$gutter;
+    margin-left: auto;
+    margin-right: auto;
+
+    .article-image {
+        .image {
+            @extend %image-zoom-effect;
+
+            @include media-breakpoint-down(sm) {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+
+    .article-content {
+        h2 {
+            font-weight: normal;
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        margin-top: 2rem;
+        padding-bottom: 0;
+    }
+}

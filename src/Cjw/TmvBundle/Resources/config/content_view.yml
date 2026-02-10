@@ -1,0 +1,35 @@
+default:
+    ngcontent_view:
+        full:
+            tmv_container:
+                template: "@ezdesign/content/full/tmv_container.html.twig"
+                match:
+                    Identifier\ContentType: tmv_container
+
+            tmv_event:
+                template: "@ezdesign/content/full/tmv_event.html.twig"
+                match:
+                    Identifier\ContentType: tmv_event
+
+        line:
+            tmv_event:
+                template: "@ezdesign/content/line/tmv_event.html.twig"
+                match:
+                    Identifier\ContentType: tmv_event
+
+            tmv_date:
+                template: "@ezdesign/content/line/tmv_date.html.twig"
+                match:
+                    Identifier\ContentType: tmv_date
+
+        standard:
+            tmv_event:
+                template: "@ezdesign/content/standard/tmv_event.html.twig"
+                match:
+                    Identifier\ContentType: tmv_event
+
+        standard_with_intro:
+            tmv_event:
+                template: "@ezdesign/content/standard/tmv_event.html.twig"
+                match:
+                    Identifier\ContentType: tmv_event

@@ -1,0 +1,71 @@
+{#  default email template for infocollection #}
+{#
+    Variables present in this template
+    @see Cjw\PublishToolsBundle\Services\FormHandlerService::sendEmailHandler()
+
+        array( 'form' => $form->createView(),
+               'form_data_array' => $formDataArr,
+               'form_data_object' => $formDataObj,
+               'content' => $content,
+               'location' => $location,
+               'app' => $app );
+#}
+{#
+    body_text_html
+    - content for email Part text/html
+#}
+{% block body_text_html %}
+    <style>
+        table
+        {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                border: solid #cccccc 1.0pt;
+            color: #666666;
+        }
+
+        h1
+        {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 15.0pt;
+            color: #666666;
+        }
+
+        td
+        {
+            vertical-align: top;
+            font-size: 9.0pt;
+            padding: 5pt 10pt 0;
+            border: none;
+        }
+    </style>
+    <h1>Informationssammler</h1>
+
+    <table border=1 cellspacing=0 cellpadding=0 width=550>
+
+        {% for data in form_data_array %}
+            {#LABEL: {{ form_label(form.children[data.form_identifier]) }}#}
+            <tr>
+                <td style="width:160pt"><b>{{ form.children[data.form_identifier].vars.label|trans }}</b></td>
+                <td style="width:200pt">
+                    {# get translated label from selection: #}
+                    {% if data.content_type == 'ezselection' %}
+                        {{ form.children[data.form_identifier].vars.choices[data.value].label }}
+                    {% else %}
+                        {{ data.value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{#
+    body_text_plain
+    - content for the email part text/plain
+#}
+{% block body_text_plain %}{% spaceless %}
+    {% for data in form_data_array %}{{ form.children[data.form_identifier].vars.label|trans }}:   {% if data.content_type == 'ezselection' %}{{ form.children[data.form_identifier].vars.choices[data.value].label }}
+    {% else %}{{ data.value }}{% endif %}
+
+    {% endfor %}
+{% endspaceless %}{% endblock %}

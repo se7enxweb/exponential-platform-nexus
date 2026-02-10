@@ -1,0 +1,42 @@
+%main-title {
+    font-weight: normal;
+    font-size: $font-size-main-headings;
+
+    small {
+        margin-top: 0.5rem;
+
+        display: block;
+        //color: $black;
+
+        font-size: $font-size-text;
+    }
+}
+
+//.landing-page-title-container {
+//    padding-top: 2rem;
+//    padding-bottom: 2rem;
+//}
+
+.landing-page-title,
+.full-page-title,
+.full-page-header .full-page-title,
+h1.title {
+    @extend %main-title;
+}
+
+.landing-page-home-title {
+    //text-align: center;
+
+    small {
+        margin-top: 1rem;
+    }
+}
+
+.full-page-header {
+    padding: 0;
+    text-align: left;
+
+    .full-page-intro {
+        opacity: 1;
+    }
+}

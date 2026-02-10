@@ -1,0 +1,38 @@
+parameters:
+    ezpublish.persistence.legacy.external_storage_handler.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+
+    ### CjwGeoAddress ###
+    ezpublish.fieldType.cjwgeoaddress.storage_gateway.class: Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\CjwGeoAddressStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.cjwgeoaddress.externalStorage.class: Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\CjwGeoAddressStorage
+
+    ### EzMatrix ###
+    ezpublish.fieldType.ezmatrix.storage.class: Cjw\FieldTypesBundle\FieldType\EzMatrix\EzMatrixStorage
+
+services:
+    ezpublish.persistence.legacy.external_storage_handler:
+        class: '%ezpublish.persistence.legacy.external_storage_handler.class%'
+        arguments:
+            - '@ezpublish.persistence.external_storage_registry'
+            -
+                identifier: "LegacyStorage"
+                connection: '@ezpublish.api.storage_engine.legacy.dbhandler'
+
+    ### CjwGeoAddress ###
+    ezpublish.fieldType.cjwgeoaddress.storage_gateway:
+        class: '%ezpublish.fieldType.cjwgeoaddress.storage_gateway.class%'
+        calls:
+            - [setConnection, ['@ezpublish.api.storage_engine.legacy.dbhandler']]
+
+    ezpublish.fieldType.cjwgeoaddress.externalStorage:
+        class: '%ezpublish.fieldType.cjwgeoaddress.externalStorage.class%'
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: cjwgeoaddress}
+
+    ezpublish.fieldType.externalStorageHandler.cjwgeoaddress.gateway:
+        class: '%ezpublish.fieldType.cjwgeoaddress.storage_gateway.class%'
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: cjwgeoaddress, identifier: LegacyStorage}
+
+    ### EzMatrix ###
+    ezpublish.fieldType.ezmatrix.storage:
+        class: '%ezpublish.fieldType.ezmatrix.storage.class%'

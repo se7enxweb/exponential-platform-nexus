@@ -1,0 +1,21 @@
+{% apply spaceless %}
+    {% set _location_list = cjw_fetch_content( location_id_list ) %}
+    {% set location_list = [] %}
+    {% for location in _location_list %}
+    {% set location_list = location_list|merge( [location.0] ) %}
+    {% endfor %}
+
+[
+{% for location in location_list %}
+    {
+        "title" : "{{ location.content.fields.title.value.text }}",
+        "name" : "{{ location.content.name }}",
+        "location_id" : "{{ location.id }}",
+        "price_matrix" : {{ create_price_matrix( location.id )|json_encode|raw }}
+    }
+    {% if not loop.last %}
+    ,
+    {% endif %}
+{% endfor %}
+]
+{% endapply %}

@@ -1,0 +1,214 @@
+{
+    "google/recaptcha": {
+        "version": "1.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.1",
+            "ref": "e5a4aa21f2e98d7440ae9aab6b56e307f99dd084"
+        },
+        "files": [
+            "config/packages/google_recaptcha.yaml"
+        ]
+    },
+    "ibexa/oss": {
+        "version": "4.6",
+        "recipe": {
+            "repo": "github.com/ibexa/recipes",
+            "branch": "master",
+            "version": "4.6",
+            "ref": "8dd55364e8103f84ff04dcd013458e3f0ba55576"
+        },
+        "files": [
+            "config/packages/cache_pool/cache.memcached.yaml",
+            "config/packages/cache_pool/cache.redis.yaml",
+            "config/packages/cache_pool/cache.tagaware.filesystem.yaml",
+            "config/packages/dfs/dfs.yaml",
+            "config/packages/graphql.yaml",
+            "config/packages/ibexa.yaml",
+            "config/packages/ibexa_admin_ui.yaml",
+            "config/packages/ibexa_assets.yaml",
+            "config/packages/ibexa_doctrine_schema.yaml",
+            "config/packages/ibexa_http_cache.yaml",
+            "config/packages/ibexa_jms_translation.yaml",
+            "config/packages/ibexa_richtext.yaml",
+            "config/packages/ibexa_solr.yaml",
+            "config/packages/ibexa_twig_components.yaml",
+            "config/packages/ibexa_welcome_page.yaml",
+            "config/packages/security.yaml",
+            "config/routes/graphql.yaml",
+            "config/routes/ibexa.yaml",
+            "config/routes/ibexa_admin_ui.yaml",
+            "config/routes/ibexa_content_forms.yaml",
+            "config/routes/ibexa_fieldtype_query.yaml",
+            "config/routes/ibexa_http_cache.yaml",
+            "config/routes/ibexa_rest.yaml",
+            "config/routes/ibexa_search.yaml",
+            "config/routes/ibexa_system_info.yaml",
+            "config/routes/ibexa_user.yaml",
+            "ibexa.webpack.config.js",
+            "ibexa.webpack.config.manager.js",
+            "ibexa.webpack.custom.configs.js",
+            "package.json",
+            "webpack.config.js",
+            "templates/themes/standard/full/welcome_page.html.twig",
+            "templates/themes/standard/pagelayout.html.twig",
+            "translations/ibexa_welcome_page.en.xlf",
+            "assets/images/caret-down.svg",
+            "assets/images/development.svg",
+            "assets/images/documentation.svg",
+            "assets/images/header-background.png",
+            "assets/images/oss.png",
+            "assets/images/php-api.svg",
+            "assets/images/rest-api.svg",
+            "assets/images/support-background.png",
+            "assets/images/support.png",
+            "assets/images/training-background.png",
+            "assets/images/training.svg",
+            "assets/images/tutorials-icon.svg",
+            "assets/images/tutorials.svg",
+            "assets/images/user.svg",
+            "assets/js/welcome.page.js",
+            "assets/scss/_contact.scss",
+            "assets/scss/_custom-normalize.scss",
+            "assets/scss/_documentation.scss",
+            "assets/scss/_footer.scss",
+            "assets/scss/_header.scss",
+            "assets/scss/_main.scss",
+            "assets/scss/_training.scss",
+            "assets/scss/_tutorials.scss",
+            "assets/scss/normalize.css",
+            "assets/scss/variables.scss",
+            "assets/scss/welcome-page.scss"
+        ]
+    },
+    "php-cs-fixer/shim": {
+        "version": "3.49",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "16422bf8eac6c3be42afe07d37e2abc89d2bdf6b"
+        },
+        "files": [
+            ".php-cs-fixer.dist.php"
+        ]
+    },
+    "phpstan/phpstan": {
+        "version": "1.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
+        },
+        "files": [
+            "phpstan.dist.neon"
+        ]
+    },
+    "phpunit/phpunit": {
+        "version": "9.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "9.6",
+            "ref": "7364a21d87e658eb363c5020c072ecfdc12e2326"
+        },
+        "files": [
+            ".env.test",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
+    "symfony/framework-bundle": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.4",
+            "ref": "3cd216a4d007b78d8554d44a5b1c0a446dab24fb"
+        },
+        "files": [
+            "config/packages/cache.yaml",
+            "config/packages/framework.yaml",
+            "config/preload.php",
+            "config/routes/framework.yaml",
+            "config/services.yaml",
+            "public/index.php",
+            "src/Controller/.gitignore",
+            "src/Kernel.php"
+        ]
+    },
+    "symfony/messenger": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.4",
+            "ref": "8bd5f27013fb1d7217191c548e340f0bdb11912c"
+        },
+        "files": [
+            "config/packages/messenger.yaml"
+        ]
+    },
+    "symfony/phpunit-bridge": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "07ce01a897311647520b43d4ddddad9537b99ba6"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
+    "symfony/routing": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "85de1d8ae45b284c3c84b668171d2615049e698f"
+        },
+        "files": [
+            "config/packages/routing.yaml",
+            "config/routes.yaml"
+        ]
+    },
+    "symfony/twig-bundle": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.4",
+            "ref": "bb2178c57eee79e6be0b297aa96fc0c0def81387"
+        },
+        "files": [
+            "config/packages/twig.yaml",
+            "templates/base.html.twig"
+        ]
+    },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.17",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "6642c5eeebbd06268826e7f9fbee721cba1d7d77"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/bootstrap.js",
+            "assets/controllers.json",
+            "assets/controllers/hello_controller.js",
+            "assets/styles/app.css",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
+        ]
+    }
+}

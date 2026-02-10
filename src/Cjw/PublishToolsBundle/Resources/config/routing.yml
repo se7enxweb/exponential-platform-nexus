@@ -1,0 +1,24 @@
+cjwpublishtools_get_weather:
+    path: /get_weather
+    defaults:
+        _controller: CjwPublishToolsBundle:AsyncWeather:getWeather
+        # TODO ins theme legen
+
+cjwpublishtools_get_current_air_temp:
+    path: /get_current_air_temp
+    defaults:
+        _controller: CjwPublishToolsBundle:AsyncWeather:getCurrentAirTemp
+        # TODO ins theme legen
+
+#cjwpublishtools_get_current_water_temp:
+#    path: /get_current_water_temp
+#    defaults:
+#        _controller: CjwPublishToolsBundle:AsyncWeather:getCurrentWaterTemp
+#        # TODO ins theme legen
+#
+#cjwpublishtools_get_current_air_and_water_temp:
+#    path: /get_current_air_and_water_temp
+#    defaults:
+#        _controller: CjwPublishToolsBundle:AsyncWeather:getCurrentAirAndWaterAction
+#        # TODO ins theme legen
+

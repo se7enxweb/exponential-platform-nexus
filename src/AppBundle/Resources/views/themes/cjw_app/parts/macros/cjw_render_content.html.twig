@@ -1,0 +1,134 @@
+{# @var content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{% macro feature_icon( content, column_size = false ) %}{# <| The `content` parameter can be either a `Content` or a `Location` object. #}
+{% apply spaceless %}
+    {% from '@ezdesign/parts/macros/cjw_content_fields.html.twig' import _field_output %}
+{#    {% if content is instanceof( '\Netgen\EzPlatformSiteApi\API\Values\Location' ) %}#}
+{#        {% set content = content.content %}#}
+{#    {% endif %}#}
+
+    {% set field_list = [ 'icon', 'image' ] %}
+
+    {% set field_container_class = "col" %}
+{#    {% if column_size is numeric %}#}
+    {% if column_size > 0 %}
+        {% set field_container_class = field_container_class ~ '-' ~ column_size %}
+    {% endif %}
+    <div class="{{ field_container_class }}">
+        {{ _field_output( content, field_list ) }}
+    </div>
+{% endapply %}
+{% endmacro %}
+
+{% macro price_matrix_table( price_matrix, table_class ) %}
+{% apply spaceless %}
+    {% if price_matrix|length %}
+        <table class="renderedtable matrix table matrix-table {{ table_class|default() }}">
+            {% for key, item in price_matrix %}
+                {# Header #}
+                {% if key == 'header' %}
+                    <thead>
+                        <tr>
+                            <th>Zeitraum</th>
+                            <th>Saison</th>
+
+                        {% if item|length > 1 %}
+                            {% for node_id, header in item %}
+                                <th style="line-height: 16px;" class="price">
+                                    {{ ng_render_field( header ) }}
+                                </th>
+                            {% endfor %}
+                        {% else %}
+                            <th class="price">Preis</th>
+                        {% endif %}
+                        </tr>
+                    </thead>
+                {% else %}
+                    {% if item.standard is defined %}
+                        {% for id, season in item.standard %}
+                            <tr>
+                                <td class="date">
+                                    {{ season.start|date( 'd.m.y' ) }}
+                                    –
+                                    {{ season.end|date( 'd.m.y' ) }}
+                                </td>
+                                <td>
+                                    <label>
+                                        {{ season.public_id }}
+                                    </label>
+                                </td>
+                                {% for price in season.content %}
+                                    <td class="price">
+                                        {{ price }}&nbsp;&euro;
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endapply %}
+{% endmacro %}
+
+{% macro price_matrix_table_2( price_matrix, table_class ) %}
+{% apply spaceless %}
+    {% if price_matrix|length %}
+        <table class="renderedtable matrix table matrix-table price-table {{ table_class|default() }}">
+            {% for key, item in price_matrix %}
+                {# Header #}
+                {% if key == 'header' %}
+                    <thead>
+                        <tr>
+                            <th><strong>Zeitraum|Saison</strong></th>
+
+                        {% if item|length > 1 %}
+                            {% for node_id, header in item %}
+                                <th style="line-height: 16px;" class="price">
+                                    {{ ng_render_field( header ) }}
+                                </th>
+                            {% endfor %}
+                        {% else %}
+                            <th class="price">Preis</th>
+                        {% endif %}
+                        </tr>
+                    </thead>
+                {% else %}
+                    {% if item.standard is defined %}
+                        {% for id, season in item.standard %}
+                            <tr>
+                                <td class="date">
+                                    {{ season.start|date( 'd.m.y' ) }}
+                                    –
+                                    {{ season.end|date( 'd.m.y' ) }}
+                                    |
+                                    <strong>
+                                        {{ season.public_id }}
+                                    </strong>
+                                </td>
+                                {% for price in season.content %}
+                                    <td class="price">
+                                        {{ price }}&nbsp;&euro;
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endapply %}
+{% endmacro %}
+
+{% macro gallery_item( item, add_to_gallery = true ) %}
+{% apply spaceless %}
+    <a href="{{ item.content.fields.image.value.uri }}"
+       {% if add_to_gallery %}data-gallery{% endif %}
+    >
+        {{ ng_render_field( item.content.fields.image ) }}
+    </a>
+{% endapply %}
+{% endmacro %}

@@ -1,0 +1,94 @@
+// Typography style file
+html {
+    font-size: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased; // sass-lint:disable-line no-vendor-prefixes
+    -moz-osx-font-smoothing: grayscale; // sass-lint:disable-line no-vendor-prefixes
+    overflow-wrap: break-word;
+    hyphens: auto;
+    color: $font-color;
+    font-size: $font-size-text;
+    line-height: 1.4;
+}
+
+#page {
+}
+
+a {
+    color: $link-color;
+    transition: background 150ms, color 150ms;
+    &,
+    &:hover,
+    &:focus {
+        color: $link-color;
+        outline: none;
+        text-decoration: none;
+    }
+}
+
+p {
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+    font-kerning: normal;
+    margin: 0 0 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+    font-kerning: normal;
+}
+
+h1 {
+    margin-bottom: 1rem;
+
+    &.title {
+        color: $font-color;
+    }
+}
+
+.ezxmltext-field h2,
+.ezxmltext-field h3,
+.ezxmltext-field h4,
+.ezxmltext-field h5,
+.ezxmltext-field h6 {
+    color: $font-color;
+}
+
+.ezxmltext-field h2 {
+    font-weight: normal;
+}
+
+img {
+    max-width: 100%;
+    opacity: 1;
+    transition: opacity .3s;
+}
+
+img[data-src] {
+    opacity: 0;
+    width: 100%;
+}
+
+figure {
+    margin: 0;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+hr {
+    border-color: $border-color;
+    clear: both;
+}

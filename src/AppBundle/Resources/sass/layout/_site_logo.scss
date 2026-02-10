@@ -1,0 +1,26 @@
+.site-logo {
+    position: absolute;
+    bottom: 2rem;
+    left: 1rem;
+    display: block;
+    background-color: rgba( 255, 255, 255, 0.8 );
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+
+    // Let the icon stay on top of it's flex column
+    place-self: flex-start;
+
+    // Create a gap between the logo and the main navigation
+    margin-left: 1.5rem;
+
+    //width: 14rem;
+    img {
+        max-width: 100%;
+    }
+    //@include media-breakpoint-down(lg) {
+    //    width: 12rem;
+    //}
+    //@include media-breakpoint-down(md) {
+    //    width: 10rem;
+    //}
+}

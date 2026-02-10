@@ -1,0 +1,4 @@
+block_type_groups:
+    cjw:
+        name: 'CJW'
+        block_types: [tmv_events]

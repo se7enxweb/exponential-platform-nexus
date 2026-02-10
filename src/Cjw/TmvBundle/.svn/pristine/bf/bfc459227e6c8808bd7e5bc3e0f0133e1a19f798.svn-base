@@ -1,0 +1,4 @@
+block.tmv_events.parent: Event container
+block.tmv_events.limit: Limit
+block.tmv_events.view_type: View type
+block.tmv_events.number_of_columns: Count columns ( grid )

@@ -1,0 +1,109 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/macros.html.twig' as ng_macros %}
+
+{# -- Get settings from YAML files --- #}
+{% set initial_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_zoom', 'cjwsite' ) %}
+{% set initial_min_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_min_zoom', 'cjwsite' ) %}
+{% set initial_max_zoom = ezpublish.configResolver.getParameter( 'leaflet.initial_max_zoom', 'cjwsite' ) %}
+{% set initial_latitude = ezpublish.configResolver.getParameter( 'leaflet.initial_latitude', 'cjwsite' ) %}
+{% set initial_longitude = ezpublish.configResolver.getParameter( 'leaflet.initial_longitude', 'cjwsite' ) %}
+{% set tile_layer = ezpublish.configResolver.getParameter( 'leaflet.tile_layer', 'cjwsite' ) %}
+
+{# -- Initialize dynamic parameters -- #}
+{% set map_id = 'leaflet_map' ~ location.id|default( content.mainLocationId )|default %}
+
+{% set list_marker = cjw_fetch_content( [[location.contentInfo.mainLocationId]], {
+    'depth' : 1,
+    'include' : [ 'ng_shortcut' ]
+} ).0.children|default() %}
+
+{% if list_marker[0] is defined %}
+    <div id="{{ map_id }}"
+         class="leaflet-map map-content{% if app.request.query.get( 'overlay' ) == 'yes' %}{% else %} embed-responsive embed-responsive-16by9{% endif %}"
+         data-map-id="{{ location.id }}"
+         data-latitude="{{ initial_latitude }}"
+         data-longitude="{{ initial_longitude }}">
+    </div>
+
+    <script type="text/javascript">
+        (function ( $ ) {
+            let obj, map;
+
+            $( function() {
+                obj = jQuery( '#' + '{{ map_id }}' );
+
+                mapOptions = { 'zoom': {{ initial_zoom }}, 'center': [ obj.attr( 'data-latitude' ), obj.attr( 'data-longitude' ) ] }
+                map = L.map( {{ map_id }}, mapOptions );
+
+                L.tileLayer( "{{ app.request.schemeAndHttpHost ~ '/' ~ tile_layer }}?x={x}{and}y={y}{and}z={z}", {
+                    and: '&',
+                    attribution: '&copy; <a href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+                    minZoom: {{ initial_min_zoom }},
+                    maxZoom: {{ initial_max_zoom }}
+                } ).addTo( map );
+
+                latLngs = [];
+
+                {% for marker in list_marker %}
+                    {% if marker.content.fields.location is defined and not marker.content.fields.location.empty %}
+                        {% set marker_content = '<h1>' ~ marker.content.fields.title.value.text ~ '</h1>' %}
+
+                        {% set text = '' %}
+                        {% if marker.content.fields.teaser_intro is defined and not marker.content.fields.teaser_intro.empty %}
+                            {% set text = ng_render_field( marker.content.fields.teaser_intro ) %}
+                        {% elseif marker.content.fields.full_intro is defined and not marker.content.fields.full_intro.empty %}
+                            {% set text = ng_render_field( marker.content.fields.full_intro ) %}
+                        {% endif %}
+
+                        {% if text != '' %}
+                            {% set marker_content = marker_content ~ text %}
+                        {% endif %}
+
+                        {% if marker.content.fields.location.value.address != '' %}
+                            {% set marker_content = marker_content ~ '<p>' ~ marker.content.fields.location.value.address ~ '</p>' %}
+                        {% endif %}
+
+                        {% set link_params = ng_macros.content_link_parameters( marker.content ) %}
+                        {% if link_params|trim !=  'href="#"' %}
+                            {% set marker_content = marker_content ~ '<a ' ~ ng_macros.content_link_parameters( marker.content ) ~ ' target="blank">' ~ 'Mehr' ~ '</a>' %}
+                        {% endif %}
+
+                        {% if marker.content.fields.image is defined and not marker.content.fields.image.empty %}
+                            markerIcon = L.icon({ iconUrl: '{{ ng_image_alias( marker.content.fields.image, 'i480' ).uri }}',
+                                                  iconSize: [38, 58],
+                                                  iconAnchor: [22, 54],
+                                                  popupAnchor: [0, -56]
+                            });
+                        {% else %}
+                            markerIcon = L.icon({ iconUrl: '{{ asset( 'bundles/app/images/grafiken/kartensymbol-allgemein.png' ) }}',
+                                                  iconSize: [38, 58],
+                                                  iconAnchor: [22, 54],
+                                                  popupAnchor: [0, -56]
+                            });
+                        {% endif %}
+
+                        markerPopup = L.popup().setContent( '{{ marker_content|replace({"\n":' ', "\r":' '})|raw }}' );
+                        markerOptions = { 'icon': markerIcon };
+
+                        marker = L.marker( [
+                            {{ marker.content.fields.location.value.latitude }},
+                            {{ marker.content.fields.location.value.longitude }}
+                        ], markerOptions ).addTo( map );
+
+                        marker.bindPopup( markerPopup );
+
+                        latLngs.push( marker.getLatLng() );
+                    {% endif %}
+                {% endfor %}
+
+                map.fitBounds( latLngs );
+            } );
+
+            // Expose object and map to the global scope
+            window['obj_{{ map_id }}'] = obj;
+            window['map_{{ map_id }}'] = map;
+        })( jQuery );
+    </script>
+{% endif %}

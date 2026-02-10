@@ -70,8 +70,15 @@ if [[ -n "${DEPENDENCY_PACKAGE_NAME}" ]]; then
     cd -
 
     # use local checkout path relative to docker volume
+    # create the directory for non-container commands to pass
+    if [ ! -d /var/www/${BASE_PACKAGE_NAME} ]; then
+        sudo mkdir -p /var/www/${BASE_PACKAGE_NAME}
+    fi
     echo "> Make composer use tested dependency local checkout ${TMP_TRAVIS_BRANCH} of ${BASE_PACKAGE_NAME}"
-    composer config repositories.localDependency git /var/www/${BASE_PACKAGE_NAME}
+    REPOSITORY_PROPERTIES=$( jq -n \
+                  --arg basePackageName "/var/www/$BASE_PACKAGE_NAME" \
+                  '{"type": "path", "url": $basePackageName, "options": { "symlink": false }}' )
+    composer config repositories.localDependency "$REPOSITORY_PROPERTIES"
 
     echo "> Require ${DEPENDENCY_PACKAGE_NAME}:dev-${TMP_TRAVIS_BRANCH} as ${BRANCH_ALIAS}"
     if ! composer require --no-update "${DEPENDENCY_PACKAGE_NAME}:dev-${TMP_TRAVIS_BRANCH} as ${BRANCH_ALIAS}"; then
@@ -79,6 +86,11 @@ if [[ -n "${DEPENDENCY_PACKAGE_NAME}" ]]; then
         exit 3
     fi
 
+fi
+
+if [[ -n "${DOCKER_PASSWORD}" ]]; then
+    echo "> Set up Docker credentials"
+    echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
 fi
 
 echo "> Install DB and dependencies"

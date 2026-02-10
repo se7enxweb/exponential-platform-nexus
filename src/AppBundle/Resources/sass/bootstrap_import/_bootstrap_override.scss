@@ -1,0 +1,71 @@
+/* btn overrides */
+.btn {
+    font-weight: 900;
+    font-size: 1.125rem;
+    border-width: 2px;
+    line-height: 1;
+}
+
+.btn-primary {
+    background: $black;
+    color: $white;
+    border-color: $black;
+    &:active,
+    &.active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    &:hover {
+        background-color: $black;
+        border-color: $black;
+    }
+}
+
+.btn-secondary {
+    background: transparent;
+    border-color: $black;
+    color: $black;
+    &:active,
+    &.active,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    &:hover {
+        background-color: $black;
+        border-color: $black;
+        color: $white;
+    }
+}
+
+.container {
+    &-wide {
+        max-width: 1500px;
+        padding-left: 2 * $gutter;
+        padding-right: 2 * $gutter;
+    }
+    &-narrow {
+        max-width: 768px;
+    }
+    @include media-breakpoint-down(md) {
+        &-narrow {
+            max-width: 600px;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        &-narrow {
+            max-width: 460px;
+        }
+    }
+    @include media-breakpoint-down(xs) {
+        &-wide {
+            padding-left: $gutter;
+            padding-right: $gutter;
+        }
+    }
+
+    //@include media-breakpoint-up( sm ) {
+    //    padding-left: $container--padding;
+    //    padding-right: $container--padding;
+    //}
+
+    //background: $white;
+    //@extend %container-box-shadow;
+}

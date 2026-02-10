@@ -1,0 +1,120 @@
+.slick-slider {
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+
+    /* the parent */
+    .slick-list {
+        margin: 0 -0.5rem;
+    }
+
+    .slick-prev,
+    .slick-next {
+        background-color: rgba(0, 0, 0, 0.5);
+        background-repeat: no-repeat;
+        background-position: center;
+        top: 45%;
+        width: 1.5rem;
+        height: 4rem;
+        z-index: 10;
+    }
+
+    .slick-prev::before,
+    .slick-next::before {
+        content: " ";
+    }
+
+    .slick-prev {
+        background-image: url($icon-arrow_left_white);
+        left: 0;
+    }
+
+    .slick-prev.slick-disabled {
+        background-image: url($icon-arrow_left_trans);
+        background-size: 18px 26px;
+    }
+
+    .slick-next {
+        background-image: url($icon-arrow_right_white);
+        right: 0;
+    }
+
+    .slick-next.slick-disabled {
+        background-image: url($icon-arrow_right_trans);
+        background-size: 18px 26px;
+    }
+
+    /* the slides */
+    .slick-slide {
+        margin: 0 0.5rem;
+
+        .ezxmltext-field {
+            p {
+                color: $font-color;
+                margin: 0.5rem 0 0 0;
+            }
+        }
+    }
+}
+
+/* View type Karussell */
+
+.carousel {
+    border: 0;
+    padding-bottom: 0;
+
+    .slick-prev,
+    .slick-next {
+        background-color: inherit;
+        background-repeat: no-repeat;
+        background-position: center;
+        top: 50%;
+        width: 4.188rem;
+        height: 5.25rem;
+        z-index: 10;
+    }
+
+    .slick-prev {
+        background-image: url($icon-carousel-arrow-left);
+        left: 10%;
+
+        @include media-breakpoint-down(lg) {
+            left: 6%;
+        }
+    }
+
+    .slick-next {
+        background-image: url($icon-carousel-arrow-right);
+        right: 10%;
+
+        @include media-breakpoint-down(lg) {
+            right: 6%;
+        }
+    }
+
+    .slick-list {
+        margin: 0;
+
+        .slick-slide {
+            opacity: 0.7;
+            margin: 0;
+            padding: 0 0.25rem;
+
+            @include media-breakpoint-down(xs) {
+                padding: 0;
+            }
+
+            img {
+                width: 100%;
+            }
+
+            &.slick-center {
+                opacity: 1;
+
+                .slick-slide {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

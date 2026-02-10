@@ -1,0 +1,38 @@
+{% if not block.parameters[ 'link' ].empty %}
+    {% set value = block.parameters[ 'link' ].value %}
+
+    {% set link = null %}
+    {% set content = content|default('') %}
+
+    {% if value.linkType is constant('LINK_TYPE_URL', value) %}
+        {% set link = value.link ~ value.linkSuffix %}
+    {% elseif value.linkType is constant('LINK_TYPE_EMAIL', value) %}
+        {% set link = 'mailto:' ~ value.link ~ value.linkSuffix %}
+    {% elseif value.linkType is constant('LINK_TYPE_PHONE', value) %}
+        {% set link = 'tel:' ~ value.link ~ value.linkSuffix %}
+    {% elseif value.linkType is constant('LINK_TYPE_INTERNAL', value) %}
+        {% set link = nglayouts_item_path(value.link) ~ value.linkSuffix %}
+    {% endif %}
+
+    {% if link is not empty and link != 'tel:0' %}
+        {% set attr = attr|default({}) %}
+
+        <article class="view-type view-type-button custom-button">
+            <a href="{{ link }}" class="btn {{ block.viewType}}"
+                {% for name, value in attr %}
+                    {% if name != 'target' %} {{ name }}="{{ value }}" {% endif %}
+                {% endfor %}
+
+                {% if value.newWindow %} target="_blank" rel="noopener noreferrer" {% endif %}
+            >
+                {{ block.parameters[ 'text' ].value }}
+            </a>
+        </article>
+    {% else %}
+        <article class="view-type view-type-button custom-button">
+            <span class="btn {{ block.viewType}}" style="cursor: default;">
+                {{ block.parameters[ 'text' ].value }}
+            </span>
+        </article>
+    {% endif %}
+{% endif %}

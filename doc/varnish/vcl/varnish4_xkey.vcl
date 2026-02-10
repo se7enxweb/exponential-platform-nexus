@@ -1,7 +1,9 @@
 // Varnish VCL for:
-// - Varnish 5.1 or higher with xkey vmod (via varnish-modules package, or via Varnish Plus)
-// - eZ Platform 2.x or higher (with bundled ezplatform-http-cache package)
-// DEPRECATED; please use VCL from https://github.com/ezsystems/ezplatform-http-cache/blob/0.8/docs/varnish/vcl/varnish5.vcl
+// - Varnish 5.0 or higher (6.0LTS recommended, and is what we mainly test against)
+//   - Varnish xkey vmod (via varnish-modules package 0.10.2 or higher, or via Varnish Plus)
+// - eZ Platform 2.5LTS or higher with ezplatform-http-cache (this) bundle
+//
+// Make sure to at least adjust default parameters.vcl, defaults there reflect our testing needs with docker.
 
 vcl 4.0;
 import std;
@@ -116,6 +118,19 @@ sub vcl_backend_response {
 
     // Make Varnish keep all objects for up to 1 hour beyond their TTL, see vcl_hit for Request logic on this
     set beresp.grace = 1h;
+
+    // Compressing the content
+    if (beresp.http.Content-Type ~ "application/javascript"
+        || beresp.http.Content-Type ~ "application/json"
+        || beresp.http.Content-Type ~ "application/vnd.ms-fontobject"
+        || beresp.http.Content-Type ~ "application/vnd.ez.api"
+        || beresp.http.Content-Type ~ "application/x-font-ttf"
+        || beresp.http.Content-Type ~ "image/svg+xml"
+        || beresp.http.Content-Type ~ "text/css"
+        || beresp.http.Content-Type ~ "text/plain"
+    ) {
+        set beresp.do_gzip = true;
+    }
 }
 
 // Handle purge
@@ -156,13 +171,11 @@ sub ez_purge {
 }
 
 sub ez_purge_acl {
-//    if (req.http.x-purge-token) {
-//        #  Won't work on Varnish <= 5.1, if needed in 4.1 you can hardcode a secret token here instead of std.getenv() usage
-//        if (req.http.x-purge-token != std.getenv("HTTPCACHE_VARNISH_INVALIDATE_TOKEN")) {
-//            return (synth(405, "Method not allowed"));
-//        }
-//    } else if  (!client.ip ~ invalidators) {
-    if  (!client.ip ~ invalidators) {
+    if (req.http.x-invalidate-token) {
+        if (req.http.x-invalidate-token != req.http.x-backend-invalidate-token) {
+            return (synth(405, "Method not allowed"));
+        }
+    } else if  (!client.ip ~ invalidators) {
         return (synth(405, "Method not allowed"));
     }
 }
@@ -296,8 +309,7 @@ sub vcl_deliver {
         if (obj.hits > 0) {
             set resp.http.X-Cache = "HIT";
             set resp.http.X-Cache-Hits = obj.hits;
-            // For Varnihs 5.1+ you can uncomment this to get debug of remaining TTL
-            //set resp.http.X-Cache-TTL = obj.ttl;
+            set resp.http.X-Cache-TTL = obj.ttl;
         } else {
             set resp.http.X-Cache = "MISS";
         }

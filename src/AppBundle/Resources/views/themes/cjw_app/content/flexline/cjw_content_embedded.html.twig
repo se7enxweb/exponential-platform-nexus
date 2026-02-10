@@ -1,0 +1,158 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{# cjw_content_embedded #}
+{% from '@ezdesign/parts/macros/cjw_macros.html.twig' import cjw_css_content_class as css_class %}
+
+{% set render_links = render_links|default( true ) %}
+{% set link_location = content.mainLocation %}
+
+{% if not content.fields.fetch_parent_list.empty %}
+    {% set link_location = cjw_fetch_content( [[content.fields.fetch_parent_list.value.destinationLocationIds.0]] )[0][0] %}
+{% endif %}
+
+<div class="view-type view-type-{{ view_type }} cjw_content_embedded {{ css_class( content ) }} {{ content.fields.css_class.value }}">
+
+    {% if not content.fields.title.empty %}
+        <h2 class="content-embedded-title {{ css_class( content ) }}-title">
+            {% if render_links %}
+                <a href="{{ path( link_location ) }}">
+            {% endif %}
+
+            {{ ng_render_field(content.fields.title) }}
+
+            {% if render_links %}
+                </a>
+            {% endif %}
+        </h2>
+    {% endif %}
+
+    {% if not content.fields.body.empty %}
+        <div class="content-embedded-body {{ css_class( content ) }}-body">
+            {{ ng_render_field( content.fields.body ) }}
+        </div>
+    {% endif %}
+
+
+    {% if content.fields.show_children.value.bool %}
+
+        {# set mainlocation id so we can use the childs from mainlocation - if the content_embedded object has different places #}
+        {% set fetch_parent_loacation_id_list = [location.contentInfo.mainLocationId] %}
+        {% set fetch_depth = 1 %}
+        {% set fetch_limit = 10 %}
+
+        {% set fetch_subtree = content.fields.fetch_subtree.value %}
+
+        {# fetch in subtree #}
+        {% if fetch_subtree  %}
+            {% set fetch_depth = 20 %}
+        {% endif %}
+
+        {% set page_limit = content.fields.page_limit.value.value %}
+
+
+        {# if -1 than use default page_limit #}
+        {% if page_limit >= -1 %}
+            {% set fetch_limit = page_limit %}
+        {% endif %}
+
+        {# get parent location ids #}
+        {% if not content.fields.fetch_parent_list.empty %}
+            {% set fetch_parent_loacation_id_list = content.fields.fetch_parent_list.value.destinationLocationIds %}
+        {% endif %}
+
+
+{#        {{ dump( fetch_parent_loacation_id_list ) }}#}
+
+        {% set list_children = cjw_fetch_content( [fetch_parent_loacation_id_list],
+            { 'depth': fetch_depth,
+              'limit': fetch_limit,
+              'offset': 0,
+              'datamap': false,
+              'count': true } )[ 0 ] %}
+        {% set children_count = list_children['count'] %}
+        {% set children = list_children['children'] %}
+
+
+        <div class="content-embedded-children {{ css_class( content ) }}-children">
+
+            {% if children_count > 0 %}
+
+
+                {% set children_view_type = content.fields.view_type.value.identifiers[0]|default('standard') %}
+                {% set columns = content.fields.grid_columns.value.identifiers[0]|default('3') %}
+
+{#                <div>count : {{ children_count }} / {{ columns }} / {{ children_view_type }}</div>#}
+
+
+                {% set column_css_class = {
+                    '1': 'col-12',
+                    '2': 'col-sm-6',
+                    '3': 'col-md-4 col-sm-6',
+                    '4': 'col-lg-3 col-md-4 col-sm-6',
+                    '6': 'col-lg-2 col-md-4 col-sm-6',
+                } %}
+
+                {% if children_view_type == 'listitem' %}
+                    <ul class="listitem-list">
+                        {% for child in children %}
+                            <li>
+                                {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                                    content: child.content,
+                                    location: child,
+                                    view_type: children_view_type
+                                } only %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+
+                    <div class="row">
+                        {% for child in children %}
+                            <div class="{{ column_css_class[columns] }}">
+                                {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                                    content: child.content,
+                                    location: child,
+                                    view_type: children_view_type
+                                } only %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+
+        {% if not content.fields.post_body.empty %}
+            <div class="content-embedded-post_body {{ css_class( content ) }}-post_body">
+                {{ ng_render_field(content.fields.post_body) }}
+            </div>
+        {% endif %}
+
+{# @see examples https://github.com/netgen/ezplatform-site-api/blob/master/EXAMPLES.md #}
+
+{#        <p>Parent name: {{ location.parent.content.name }}<p>#}
+
+{#        <!-- 'children' variable is full Pagerfanta instance -->#}
+{#        <p>Total blog posts: {{ children.nbResults }}</p>#}
+{#        <p>Blog posts per page: {{ children.maxPerPage }}</p>#}
+{#        <p>Page: {{ children.currentPage }}</p>#}
+
+{#        <ul>#}
+{#            {% for child in children %}#}
+{#                <li>{{ child.content.name }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+
+{#        {{ pagerfanta( children, 'twitter_bootstrap' ) }}#}
+
+{#        {% if 0 and pager.haveToPaginate() %}#}
+{#            {{ pagerfanta(pager, 'ngsite') }}#}
+{#        {% endif %}#}
+
+
+    {% endif %}
+
+
+</div>

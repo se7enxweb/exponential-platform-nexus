@@ -1,0 +1,175 @@
+html,
+body {
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+.noscroll {
+    position: fixed;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+//body {
+//    padding-top: 56px;
+//}
+
+$navigation-offcanvas--navbar-height: 0;
+
+$navigation-offcanvas--width: 35%;
+$navigation-offcanvas--width: 22%;
+
+$navigation-offcanvas--width-xl: 22%;
+$navigation-offcanvas--width-lg: 30%;
+$navigation-offcanvas--width-md: 36%;
+$navigation-offcanvas--width-sm: 60%;
+
+$navigation-offcanvas--transition-time: .3s;
+$navigation-offcanvas--transition-type: ease-in-out;
+//$navigation-offcanvas--bgcolor: rgba( 185, 205, 222, 0.95 );
+//$navigation-offcanvas--bgcolor: rgba( 43, 72, 97, 0.8 );
+$navigation-offcanvas--bgcolor: rgba( 116, 156, 190, 0.9 );
+
+$navigation-offcanvas--navbar-bgcolor: $white;
+
+$navigation-offcanvas--box-shadow: rgba(0,0,0,0.5) 0 0 5px;
+
+$navigation-offcanvas--z-index: 1000;
+
+.offcanvas-collapse {
+    font-size: $font-size-offcanvas-menu;
+
+    position: fixed;
+    //top: 56px; /* Height of navbar */
+    top: 0;
+    bottom: 0;
+
+    //@include media-breakpoint-down( xl ) {
+        width: $navigation-offcanvas--width;
+    //}
+    @include media-breakpoint-down( xl ) {
+        width: $navigation-offcanvas--width-lg;
+    }
+    @include media-breakpoint-down( lg ) {
+        width: $navigation-offcanvas--width-md;
+    }
+    @include media-breakpoint-down( md ) {
+        width: $navigation-offcanvas--width-sm;
+        left: 0;
+    }
+    @include media-breakpoint-down( sm ) {
+        width: 100%;
+        left: 0;
+    }
+
+
+    overflow-y: auto;
+    background-color: $navigation-offcanvas--bgcolor;
+    //transition: -webkit-transform #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type};
+    //transition: transform #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type};
+    //transition: transform #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type}, -webkit-transform #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type};
+    //-webkit-transform: translateX(-100%);
+    //transform: translateX(-100%);
+
+    //-- Hide navigation by default
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type},
+        visibility #{$navigation-offcanvas--transition-time} #{$navigation-offcanvas--transition-type};
+
+    z-index: $navigation-offcanvas--z-index;
+    box-shadow: $navigation-offcanvas--box-shadow;
+
+    display: flex;
+    flex-direction: column;
+
+    &.open {
+        //-webkit-transform: translateX(-$navigation-offcanvas--padding);
+        //transform: translateX(-$navigation-offcanvas--padding); /* Account for horizontal padding on navbar */
+
+        //-- Fade in navigation when opened
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-link, a {
+        color: $font-color;
+
+        &.highlight {
+            font-weight: bold;
+        }
+    }
+
+    //-- Child elements --//
+
+    .navbar-header {
+        @extend .align-items-center;
+
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        background-color: $navigation-offcanvas--navbar-bgcolor;
+
+        padding-top: 0.5rem;
+        padding-left: 1.875rem; // ~30px
+        padding-right: 1.875rem; // ~30px
+
+        .navbar-brand, .navbar-toggler {
+            padding: 0;
+        }
+
+        .navbar-toggler {
+            align-self: flex-end;
+            font-size: $font-size-text;
+
+            > a {
+                display: block;
+            }
+        }
+    }
+
+    // Dynamic and fixed navbars inside the offcanvas navigation
+    .navbar-nav {
+        width: 100%;
+
+        padding-top: 1.25rem;
+
+        // Set the padding to each .nav-item rather than the .navbar-nav itself
+        // so the bottom borders will be rendered in full width
+        .nav-item {
+            padding-right: 1.875rem; // ~30px
+            padding-left: 1.875rem; // ~30px
+        }
+    }
+
+    // Navbar containing dynamic content items
+    .cjw-nav-offcanvas-top {
+        background-color: $navigation-offcanvas--navbar-bgcolor;
+
+        .nav-item {
+            border-bottom: 1px solid $border-color;
+        }
+    }
+
+    // Navbar containing fixed items
+    .cjw-nav-offcanvas-bottom {
+        padding-top: 0;
+
+        .nav-item {
+            border-bottom: 1px solid #fff;
+            opacity: 0.8;
+
+            a {
+                color: #fff;
+            }
+        }
+
+        // Put styles for fixed items navbar here
+        //background-color: $navigation-offcanvas--bgcolor;
+
+        //flex-grow: 1;
+    }
+}

@@ -1,0 +1,144 @@
+.ngl-list {
+    clear: both;
+    // whitespace sizes
+    $sizes: (
+        mini: 1rem,
+        small: 2rem,
+        medium: 3rem,
+        large: 6rem,
+        max: 8rem,
+    );
+    $sm-sizes: (
+        mini: 0.5rem,
+        small: 1rem,
+        medium: 1.5rem,
+        large: 3rem,
+        max: 4rem
+    );
+
+    @each $keyMap, $valueMap in $sizes {
+        &.whitespace-top-#{$keyMap} {
+            padding-top: $valueMap;
+        }
+        &.whitespace-bottom-#{$keyMap} {
+            padding-bottom: $valueMap;
+        }
+    }
+
+    &.ngl-vt-grid_tiles {
+        &.item-view-tile {
+            .row {
+                margin: -$padding-tile;
+
+                .col-single,
+                .col-nested {
+                    width: 50%;
+
+                    @include media-breakpoint-down(md) {
+                        width: 100%;
+                    }
+                }
+
+                .col-nested {
+                    display: flex;
+                }
+
+                .col-single {
+                    @include media-breakpoint-down(md) {
+                        height: 22.563rem;
+                    }
+                }
+            }
+        }
+    }
+
+    &.ngl-vt-grid {
+        &.item-view-teaser_bg_matrix, &.item-view-teaser_bg_white {
+            .row {
+                gap: 2rem 0;
+
+                @include media-breakpoint-down(md) {
+                    gap: 1.5rem 0;
+                }
+
+                div {
+                    // Create style definitions for automatic background color looping
+                    @each $color in $box-matrix-color-list {
+                        $list-index: index($box-matrix-color-list, $color);
+                        &:nth-of-type(#{$list-index}n) {
+                            > .view-type-teaser_bg_matrix.chess {
+                                background-color: $color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.item-view-standard_with_intro {
+            .row {
+                gap: 1.5rem 0;
+
+                @include media-breakpoint-down(md) {
+                    gap: 1rem 0;
+                }
+
+                @include media-breakpoint-down(xs) {
+                    gap: 0;
+                }
+            }
+        }
+    }
+
+    &.ngl-vt-list {
+
+        .list-row {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem 0;
+
+            @include media-breakpoint-down(md) {
+                gap: 1rem 0;
+            }
+
+            .row {
+
+                .col-lg-4dot8 {
+                    -ms-flex: 0 0 40%;
+                    flex: 0 0 40%;
+                    max-width: 40%;
+
+                    h1, h3 {
+                        padding-right: 1rem;
+                    }
+
+                    @include media-breakpoint-down(md) {
+                        flex-basis: 100%;
+                        max-width: 100%;
+                    }
+                }
+
+                .col-lg-7dot2 {
+                    -ms-flex: 0 0 60%;
+                    flex: 0 0 60%;
+                    max-width: 60%;
+
+                    @include media-breakpoint-down(md) {
+                        flex-basis: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+
+            .list-item {
+                &:first-child {
+                    border-top: 0;
+                    padding-top: 0;
+                }
+
+                border-top: 1px solid #c9d8e9;
+                padding-top: 1.5rem;
+            }
+        }
+    }
+}

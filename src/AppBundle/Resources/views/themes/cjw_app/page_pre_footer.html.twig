@@ -1,0 +1,11 @@
+{% set site_info = ngsite.siteInfoContent %}
+
+<div class="site-footer">
+    <div class="container">
+        <div class="footer-info">
+            {% if not site_info.fields.footer_block.empty %}
+                {{ ng_render_field(site_info.fields.footer_block) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

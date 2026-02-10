@@ -1,0 +1,82 @@
+{% trans_default_domain "cjwsite" %}
+
+{% set breadcrumb_location_id = breadcrumb_location_id|default( location.id|default ) %}
+{% set breadcrumb_class       = breadcrumb_class|default( 'breadcrumb' ) %}
+{% set breadcrumb_offset      = breadcrumb_offset|default( 1 ) %}
+{% set breadcrumb_root_name   = breadcrumb_root_name|default( 'cjwsite.breadcrumb.home'|trans ) %}
+{% set breadcrumb_separator   = breadcrumb_separator|default( '' ) %}
+{% set breadcrumb_path_array  = breadcrumb_path_array|default( path_array|default( [] ) ) %}
+{% set list_content_type_identifier  = [] %}
+
+{% if show_path and breadcrumb_path_array|length > 0 %}
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            {% if breadcrumb_location_id %}
+                {% set breadcrumb = cjw_breadcrumb( breadcrumb_location_id, {
+                    'offset': breadcrumb_offset,
+                    'rootName': breadcrumb_root_name,
+                    'separator': breadcrumb_separator
+                } ) %}
+
+                {% if ezpublish.configResolver.hasParameter( 'breadcrumb.content_type_id', 'cjwsite' ) %}
+                    {% set list_content_type_identifier = ezpublish.configResolver.getParameter( 'breadcrumb.content_type_id', 'cjwsite' ) %}
+                {% endif %}
+
+                <ul id="breadcrumb" class="{{ breadcrumb_class }}">
+                    {% for item in breadcrumb.items %}
+                        {% if loop.first %}
+{#                            <li class="breadcrumb-item go-back">#}
+{#                                <a href="{% if location is defined %}{{ path( location.parent ) }}{% else %}javascript:window.history.back();{% endif %}">#}
+{#                                    <img src="{{ asset( 'bundles/app/images/grafiken/symbol-pfeil-nach-oben.png' ) }}"#}
+{#                                         alt=""/> zurück#}
+{#                                </a>#}
+{#                            </li>#}
+                            <li class="breadcrumb-item inline">
+                                <a href="/">
+                                    {{ 'cjwsite.breadcrumb.home'|trans }}
+                                </a>
+                            </li>
+
+                        {% else %}
+                            {% if item.location.contentInfo.contentTypeId in list_content_type_identifier %}
+                                {% set title = 'cjwsite.breadcrumb.title.base'|trans|format( item.name ) %}
+
+                                <li class="breadcrumb-item inline{% if loop.last %} active{% else %} d-none d-sm-block{% endif %}"
+                                    {% if not loop.last %}title="{{ title }}"{% endif %}>
+                                    {% if not loop.first and breadcrumb.separator is not empty %}
+                                        <span class="breadcrumb-sep">{{ breadcrumb.separator }}</span>
+                                    {% endif %}
+
+                                    {% if loop.last %}
+                                        {{ item.name|truncate( 15 ) }}
+                                    {% else %}
+                                        <a href="{{ path( item.location ) }}">{{ item.name }}</a>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% elseif ezpublish.systemUriString == '/login' %}
+                <ul id="breadcrumb">
+                    <li class="breadcrumb-item inline">
+                        <a href="/">
+                            {{ 'cjwsite.breadcrumb.home'|trans }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item inline">
+                        {% if breadcrumb_separator is not empty %}
+                            <span class="breadcrumb-sep">{{ breadcrumb_separator }}</span>
+                        {% endif %}
+
+                        {{ 'cjwsite.breadcrumb.login'|trans }}
+                    </li>
+                </ul>
+            {% else %}
+                <ul id="breadcrumb">
+                    <li class="breadcrumb-item inline">&nbsp;</li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,216 @@
+// dimensions
+$header-height: 5.9375rem;
+$header-height-sm: 4rem;
+//$gutter: .9375rem;
+$gutter: 1rem;
+$gap: 2 * $gutter;
+
+/* tiles */
+$padding-tile: 0.156rem; // ~2.5px
+$tile-feature-bg: rgba(0, 0, 0, 0.3);
+$tile-title-color: #fff;
+$height-tile: 11.281rem; // Kachelhoehe ~180.5px
+$height-1tile-row: 2 * ($height-tile + $padding-tile);
+
+/// Common base directories for using images and other assets
+$app--base-directory: '/bundles/app';
+$app--base-image-directory: '#{$app--base-directory}/images';
+$app--base-icon-directory: "#{$app--base-image-directory}/icons";
+$app--navigation-icon-directory: "#{$app--base-icon-directory}/navigation";
+
+$hover-img-scale: 1.1;
+%image-zoom-effect {
+    overflow: hidden;
+
+    img {
+        transition: transform 333ms ease-out;
+        transform: scale3d(1, 1, 1);
+        will-change: transform;
+
+        // This ensures the image won't alias when scaling or scaled. It's like
+        // a simple (slighty blurring) anti-aliasing filter when used like this.
+        filter: blur(.0px);
+    }
+
+    &:hover {
+        img {
+            transform: scale3d($hover-img-scale, $hover-img-scale, 1);
+        }
+    }
+}
+
+/* images */
+$icon-toggle_open: "#{$app--base-image-directory}/grafiken/symbol-oeffnen.png";
+$icon-toggle_close: "#{$app--base-image-directory}/grafiken/symbol-schliessen.png";
+
+$icon-menu-close: "#{$app--base-image-directory}/icons/close.png";
+$icon-menu-close_white: "#{$app--base-image-directory}/icons/close_white.png";
+
+$icon-menu-open_speechbubble: "#{$app--base-image-directory}/icons/open-speechbubble.png";
+
+$icon-toggle-arrow_open: "#{$app--base-image-directory}/grafiken/symbol-pfeil-orange.png";
+$icon-toggle-arrow_close: "#{$app--base-image-directory}/grafiken/symbol-pfeil-orange-nach-oben.png";
+
+$icon-arrow_right_white: "#{$app--base-image-directory}/grafiken/icon-arrow_right_white.png";
+$icon-arrow_left_white: "#{$app--base-image-directory}/grafiken/icon-arrow_left_white.png";
+
+$icon-arrow_right_trans: "#{$app--base-image-directory}/grafiken/icon-arrow_right_trans.png";
+$icon-arrow_left_trans: "#{$app--base-image-directory}/grafiken/icon-arrow_left_trans.png";
+
+$icon-carousel-arrow-right: "#{$app--base-image-directory}/grafiken/icon-arrow_right_57x74.png";
+$icon-carousel-arrow-left: "#{$app--base-image-directory}/grafiken/icon-arrow_left_57x74.png";
+
+$icon-link_blue: "#{$app--base-image-directory}/icons/icon-link_blue.png";
+$icon-link_blue_left: "#{$app--base-image-directory}/icons/icon-link_blue_left.png";
+
+/* colors */
+$headings-color: #c84e0b;
+$font-color: #062845;
+$site-title-color: #487092;
+$btn-text-color: #c84e0b;
+
+$background-nav-color: #b9cdde;
+$background-speechbubble: #de8a3b;
+$link-color: $headings-color;
+
+//$border-color: #607688;
+$border-spacer: #b4bec7;
+$border-color: #b4bec7;
+
+$footer-bg-color-light: #b9cdde;
+$footer-bg-color-dark: #749cbe;
+
+$color-ocean: #2e4f56;
+$color-corall: #ca3e31;
+$color-pastel: #488db2;
+$color-yellow: #f39925;
+$color-green: #5a9650;
+
+$matrix-color-list:
+    #9ebbe6,
+    #749cbe,
+    #e4a785;
+
+$matrix-color-list-tags:
+    $color-corall,
+    $color-yellow,
+    $color-pastel,
+    $color-ocean,
+    $color-green;
+
+$matrix-event-color-list:
+    #b48760,
+    #2b4861,
+    #ff975b,
+    #cf574c,
+    #38728f,
+    #8d988c,
+    #dd9470,
+    #6b94b8;
+
+$table-row-odd-color: #dce6ee;
+
+$box-matrix-color-list:
+    #858585,
+    #9da4b6,
+    #9f9f9f,
+    #85a36d;
+
+/* Kacheln */
+$matrix-color-list-rgba:
+    rgba(198, 92, 76, 0.85),
+    rgba(101, 146, 186, 0.85),
+    rgba(223, 172, 44, 0.85),
+    rgba(45, 146, 113, 0.85),
+    rgba(59, 111, 137, 0.85),
+    rgba(140, 173, 203, 0.85);
+
+$color-bkg-tile-empty: #C2dff1;
+$color-bkg-tile-empty_rgba: rgba(194, 223, 241, 0.8);
+
+//- Font sizes -//
+$font-family-sans-serif: "Open Sans", sans-serif;
+
+$font-size-main-headings: 1.875rem;
+$font-size-box-headings: 1.5rem;
+$font-size-event-headings: 1.375rem;
+$font-size-text: 1.125rem;
+$font-size-box-text: 1.063rem;
+$font-size-find-apartment: 1.063rem;
+$font-size-toolbar-top: 1rem;
+$font-size-footer: 1rem;
+
+$font-size-offcanvas-menu: 1.188rem;
+
+$font-size-date-event-number: 1.875rem;
+$font-size-date-event-month: 1rem;
+
+$font-size-banner-title: 2.222rem;
+$font-size-banner-short: 1.333rem;
+$font-size-header-text: 1.778rem;
+
+// This variable is added to the desktop font size to create the correct
+// smartphone font size.
+$font-size-diff-smartphone: -0.063rem;
+
+
+// colours
+$sunglow: hsl(49, 99%, 59%);
+$catskill-white: hsl(220, 33%, 98%);
+$scooter: #2AA9C0;
+$white: hsl(0, 0%, 100%);
+$black: hsl(0, 0%, 0%);
+$gray-87: hsl(0, 0%, 13%);
+$gray-54: hsl(0, 0%, 46%);
+$gray-38: hsl(0, 0%, 62%);
+$gray-12: hsl(0, 0%, 88%);
+$gray-7: hsl(0, 0%, 93%);
+
+$color-light-gray: #c8c8c8;
+$color-medium-gray: #656565;
+$color-dark-gray: #515151;
+
+$body-bg: $white;
+$footer-bg: $black;
+
+%clearfix {
+    &::after {
+        clear: both;
+        display: table;
+        content: '';
+    }
+}
+
+%fontawesome {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-family: 'Font Awesome 5 Free', sans-serif;
+    font-weight: 900;
+}
+
+%hover-underline {
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: .5rem;
+        transform: scaleY(0);
+        transform-origin: bottom;
+        background: $sunglow;
+        transition: transform .2s;
+    }
+    &:hover,
+    &:focus {
+        &::after {
+            transform: scaleY(1);
+        }
+    }
+}

@@ -1,0 +1,39 @@
+view:
+    block_view:
+        default:
+            tmv_events\list:
+                template: "@TmvBundle/Resources/blocks/tmv_events/list.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: list
+
+            tmv_events\toolbar:
+                template: "@TmvBundle/Resources/blocks/tmv_events/toolbar.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: toolbar
+
+            tmv_events\recent:
+                template: "@TmvBundle/Resources/blocks/tmv_events/recent.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: recent
+
+        app:
+            tmv_events\list:
+                template: "@TmvBundle/Resources/blocks/app/tmv_events/list.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: list
+
+            tmv_events\toolbar:
+                template: "@TmvBundle/Resources/blocks/app/tmv_events/toolbar.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: toolbar
+
+            tmv_events\recent:
+                template: "@TmvBundle/Resources/blocks/app/tmv_events/recent.html.twig"
+                match:
+                    block\definition: tmv_events
+                    block\view_type: recent

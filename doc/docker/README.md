@@ -1,14 +1,17 @@
 # Docker blueprints
 
+Unsupported docker building blocks used for some of our automated functional testing infrastructure at eZ, feel free to
+copy it for own use or look to it for some recommended settings.
+
 **NOTE**: If you are just looking to get easily up and running and developing with eZ Platform, rather look towards
-[eZ Launchpad](https://ezsystems.github.io/launchpad/) which is tailored for Project Development use cases. _If not, be
+community supported [eZ Launchpad](https://ezsystems.github.io/launchpad/) which is tailored for Project Development use cases. _If not, be
 aware of the following limitations:_
 
 > **WARNING, made mainly for automation:** The tools within this directory are meant for use for test automation, QA,
 Support and demo use cases. And with time as a blueprint for how to best configure your own setup. You are free to use
 and adopt this for your needs, and we more than welcome contributions to improve it.
 
-> **WARNING, low performance on MacOS and Windows:** For reasons mentioned above, unlike eZ Launchpad these tools are not
+> **WARNING, low performance on MacOS and Windows:** For reasons mentioned above, these tools are not
 optimized for use as development environment with Mac or Windows, and are affected by known I/O performance issues caused
 by Docker for Mac/Windows use of shared folders. This is a know issue and nothing we intend to add complexity to workaround here.
 
@@ -40,7 +43,9 @@ The current Docker Compose files are made to be mixed and matched together for Q
 - redis-session.yml _(optional, stores sessions in a separate redis instance)_
 - varnish.yml _(optional, adds varnish service and appends config to app)_
 - solr.yml _(optional, add solr service and configure app for it)_
+- db-postgresql.yml _(optional, switches the DB engine to PostgreSQL - experimental)_
 - selenium.yml _(optional, always needs to be last, adds selenium service and appends config to app)_
+- multihost.yml _(optional, adds multihost config to app container network)_
 
 
 These can be used with `-f` argument on docker-compose, like:
@@ -104,6 +109,8 @@ docker-compose up -d --force-recreate
 
 After some 5-10 seconds you should be able to browse the site on `localhost:8080` and the backend on `localhost:8080/admin`.
 
+
+_TIP: If you are seeing 500 errors, or in the case of `SYMFONY_ENV=dev` Database exceptions, then make sure to comment out `database_*` params in `app/config/parameters.yml` to make sure env variables are used correctly._
 
 ### Behat and Selenium use
 

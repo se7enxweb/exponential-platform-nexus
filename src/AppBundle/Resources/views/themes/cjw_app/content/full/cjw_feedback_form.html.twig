@@ -1,0 +1,89 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% extends nglayouts.layoutTemplate %}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+{% form_theme form '@ezdesign/forms/theme.html.twig' %}
+
+{% block success %}
+    <div class="message-feedback">
+        {% if content.fields.success_text is defined and not content.fields.success_text.empty %}
+            {{ ng_render_field(content.fields.success_text) }}
+        {% else %}
+            <p>{{ 'ngsite.collected_info.success_text'|trans }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <article class="view-type view-type-{{ view_type }} ng-article vf1">
+        {% block content_header %}
+            {% block title %}
+                <h1 class="title{#full-page-title#}">{{ ng_render_field(content.fields.title) }}</h1>
+            {% endblock %}
+
+            {% block intro %}
+                {% if not content.fields.full_intro.empty %}
+                    <div class="article-intro">
+                        {{ ng_render_field(content.fields.full_intro) }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        {% endblock %}
+
+        {% block content_body %}
+            <div class="container">
+                {% block image %}
+                    {% if content.fields.image is defined and not content.fields.image.empty %}
+                        <div class="full-article-image">
+                            {{ render(
+                                controller(
+                                    'ngsite.controller.parts:viewRelatedMultimediaItems', {
+                                        'locationId': location.id,
+                                        'includeChildren': true,
+                                        'contentTypeIdentifiers': ['image', 'ng_video'],
+                                        'template': '@ezdesign/parts/related_multimedia.html.twig'
+                                    }
+                                )
+                            ) }}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+                <div class="full-article-content">
+                    {% block body %}
+                        {% if not content.fields.body.empty %}
+                            <div class="full-article-body">
+                                {{ ng_render_field(content.fields.body) }}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+
+                <div class="full-form-response text-left">
+                    {% if not is_valid %}
+                        {{ form_start( form ) }}
+                        {{ form_errors( form ) }}
+
+                        {{ form_rest(form) }}
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">{{ 'ngsite.collected_info.button.send'|trans }}</button>
+                        </div>
+
+                        {{ form_end(form) }}
+
+                        <p>
+                            * {{ 'ngsite.collected_info.mandority'|trans }}
+                        </p>
+                    {% else %}
+                        {{ block('success') }}
+                    {% endif %}
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        {% endblock %}
+    </article>
+{% endblock %}

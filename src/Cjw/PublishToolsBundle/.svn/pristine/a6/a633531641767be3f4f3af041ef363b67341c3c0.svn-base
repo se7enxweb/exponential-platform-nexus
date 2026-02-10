@@ -1,0 +1,6 @@
+{# this is an usage example, use an override for customizing #}
+
+{% if content.fields.file is defined %}
+    {% set file = ez_field_value( content, 'file' ) %}
+    {{cjw_content_download_file( file )}}
+{% endif %}

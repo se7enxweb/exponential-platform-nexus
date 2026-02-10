@@ -1,0 +1,51 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+{% set with_intro = true %}
+
+{% set date_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'limit' : 1,
+    'include' : [ 'tmv_date' ],
+    'sortby' :  [ 'tmv_date', 'start', 'ASC' ]
+} ).0.children|default() %}
+
+{% set next_date = false %}
+{% if date_list.0 is defined %}
+    {% set next_date = date_list.0 %}
+{% endif %}
+
+{% set image_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'limit' : 1,
+    'include' : [ 'tmv_image' ]
+} ).0.children|default() %}
+
+{% set image = false %}
+{% if image_list.0 is defined %}
+    {% set image = image_list.0 %}
+{% endif %}
+
+<article class="view-type view-type-{{ view_type }} {{ content.contentInfo.contentTypeIdentifier|replace({'_': '-'}) }} vl1">
+    {% if image %}
+        {{ content_fields.image(image.content, location, 'i770') }}
+    {% endif %}
+
+    <header class="article-header">
+        <h2 class="title">
+            {% if next_date %}
+                <small>
+                    {{ next_date.content.fields.start.value|date( 'd.m.Y' ) }}
+                </small>
+                <br />
+            {% endif %}
+            <a href="{{ path(location) }}">{{ content_fields.title(content) }}</a>
+        </h2>
+    </header>
+
+    {% if with_intro|default(false) %}
+        {{ content_fields.intro(content) }}
+    {% endif %}
+</article>

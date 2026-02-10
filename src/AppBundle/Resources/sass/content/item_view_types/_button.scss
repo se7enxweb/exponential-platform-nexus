@@ -1,0 +1,106 @@
+.row {
+    > .col-button {
+        // Create style definitions for automatic background color looping
+        @each $color in $matrix-color-list {
+            $list-index: index( $matrix-color-list, $color );
+            &:nth-of-type(#{$list-index}n) {
+                .btn {
+                    background-color: $color;
+                }
+            }
+        }
+    }
+}
+
+.item-view-button {
+    margin-bottom: 2rem;
+
+    .col-button {
+        article {
+            margin-bottom: 1rem;
+
+            .btn {
+                width: 100%;
+                text-align: left;
+            }
+
+            @include media-breakpoint-down(xs) {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.custom-button {
+    margin-bottom: 3rem;
+
+    .btn {
+        width: 100%;
+        text-align: left;
+
+        &.button_lightblue {
+            background-color: #9ebbe6;
+        }
+
+        &.button_blue {
+            background-color: #749cbe;
+        }
+
+        &.button_green {
+            background-color: #e4a785;
+        }
+    }
+
+    @include media-breakpoint-down(xs) {
+        margin-bottom: 2rem;
+    }
+}
+
+.ezxmltext-field {
+    a[href=""], a[href="#leer"] {
+      cursor: default;
+    }
+
+    .button_hellblau,
+    .button_blau,
+    .button_gruen {
+        @extend .btn;
+
+        text-align: left !important;
+        color: #fff !important;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .button_hellblau {
+        background-color: #9ebbe6;
+    }
+
+    .button_blau {
+        background-color: #749cbe;
+    }
+
+    .button_gruen {
+        background-color: #e4a785;
+    }
+}
+
+.ngl-button {
+    .btn {
+        display: inline-block;
+        width: 100%;
+        text-align: left;
+        color: #fff;
+
+        background-color: $btn-text-color;
+    }
+}
+
+.btn.btn-primary,
+button {
+    display: inline-block;
+    text-align: left;
+    color: #fff;
+    border: 0 solid;
+    background-color: $btn-text-color;
+}

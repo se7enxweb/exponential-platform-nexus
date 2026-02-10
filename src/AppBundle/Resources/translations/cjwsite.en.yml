@@ -1,0 +1,12 @@
+cjwsite.navigation.close : "close"
+cjwsite.navigation.close.title: "Close the navigation"
+cjwsite.navigation.home.title: "Go to home page"
+cjwsite.navigation.open: "All topics"
+cjwsite.navigation.open.title: "Open the menu containing all topics"
+
+cjwsite.breadcrumb.home: "Start"
+cjwsite.breadcrumb.login: "Login"
+cjwsite.breadcrumb.title.base: "Go to \"%s\""
+cjwsite.navigation.right.header: "All topics in section"
+
+cjwsite.offer.more: "read more"

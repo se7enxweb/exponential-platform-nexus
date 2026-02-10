@@ -1,0 +1,26 @@
+# backend
+
+block.tmv_events.parent: Veranstaltungscontainer
+block.tmv_events.limit: Maximale Anzahl der Veranstaltungen je Seite
+block.tmv_events.view_type: Darstellung der Veranstaltungen
+block.tmv_events.number_of_columns: Spaltenanzahl ( Grid )
+
+# frontend
+
+block.tmv_events.list.title: Veranstaltungen
+block.tmv_events.list.notice.no_resul: Keine Veranstaltungen gefunden!
+block.tmv_events.list.link.all: Alle
+
+block.tmv_events.full.dates.title: Termine
+block.tmv_events.full.dates.clock: Uhr
+block.tmv_events.full.dates.at: am
+block.tmv_events.full.dates.to: bis
+block.tmv_events.full.contact.title: Kontakt / Adresse
+
+block.tmv_events.list.filter.title: Veranstaltungen einschränken
+block.tmv_events.list.filter.start.label: Von
+block.tmv_events.list.filter.end.label: Bis
+block.tmv_events.list.filter.category.label: Kategorie
+block.tmv_events.list.filter.place.label: Ort
+block.tmv_events.list.filter.keyword.placeholder: Suchwort
+block.tmv_events.list.filter.search.button: Suchen

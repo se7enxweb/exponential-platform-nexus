@@ -1,0 +1,1497 @@
+<?php
+/**
+ * File containing the PublishToolsService class
+ *
+ * @copyright Copyright (C) 2007-2015 CJW Network - Coolscreen.de, JAC Systeme GmbH, Webmanufaktur. All rights reserved.
+ * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
+ * @version //autogentag//
+ * @filesource
+ *
+ */
+
+namespace Cjw\PublishToolsBundle\Services;
+
+use Cjw\PublishToolsBundle\Services\Search\Legacy\Content\Common\Gateway\CriterionHandler;
+
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\REST\Server\Input\Parser\Criterion\LogicalNot;
+use Psr\Log\LoggerInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+
+use \Netgen\EzPlatformSiteApi\API\Values\Content as SiteApiContent;
+use eZ\Publish\API\Repository\Values\Content\Content as EzContent;
+
+/**
+ * PublishToolsService class.
+ *
+ * This class contains the main functionality for the PublishToolsService, which is bundled with the
+ * PublishToolsBundle.
+ */
+class PublishToolsService
+{
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ObjectStateService
+     */
+    protected $stateService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\SearchService
+     */
+    protected $searchService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\LanguageService
+     */
+    protected $languageService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    protected $userService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $translationHelper;
+
+
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
+
+
+    protected $cacheContentTypeByIdentifier = array();
+
+    /** @var \Netgen\EzPlatformSiteApi\API\Site */
+    protected $siteApiService;
+
+
+    /**
+     * @param \eZ\Publish\API\Repository\Repository            $repository
+     * @param ConfigResolverInterface|\Psr\Log\LoggerInterface $resolver
+     * @param TranslationHelper                                $translationHelper
+     */
+    public function __construct( Repository $repository,
+                                 ConfigResolverInterface $resolver,
+                                 TranslationHelper $translationHelper,
+                                 LoggerInterface $logger = null,
+                                 $siteApiService = null )
+    {
+        $this->repository = $repository;
+        $this->stateService = $this->repository->getObjectStateService();
+        $this->searchService = $this->repository->getSearchService();
+        $this->locationService = $this->repository->getLocationService();
+        $this->contentService = $this->repository->getContentService();
+        $this->languageService = $this->repository->getContentLanguageService();
+        $this->userService = $this->repository->getUserService();
+        $this->contentTypeService = $this->repository->getContentTypeService();
+        $this->configResolver = $resolver;
+        $this->translationHelper = $translationHelper;
+        $this->logger = $logger;
+        $this->siteApiService = $siteApiService;
+    }
+
+    /**
+     * Fetches a list of locations for a given parent location and returns them ready to be used for
+     * a breadcrumb navigation.
+     *
+     * @param integer $locationId ID of the location, whose children should be included in the
+     *                            returned path array.
+     * @param array $params The fetching parameters, which should be used to fetch the path arrays
+     *                      children from the location service – given as an array.
+     *
+     * The following default parameters are set:
+     * <pre>
+     *  array(
+     *      'offset'    => 0,
+     *      'rootName'  => false,
+     *      'separator' => ''
+     *  )
+     * </pre>
+     *
+     * @return array Path array containing the given (or default) separator and the fetched items.
+     *
+     * The array is defined like so:
+     * <pre>
+     *  array(
+     *      'items'     => array( ... !TODO! .. ),
+     *      'separator' => ''
+     *  );
+     * </pre>
+     */
+    public function getPathArr( $locationId = 0, array $params = array() )
+    {
+        $pathArr   = array();
+        $offset    = 0;
+        $rootName  = false;
+        $separator = '';
+
+        if ( isset( $params['offset'] ) )
+        {
+            $offset = $params['offset'];
+        }
+
+        if ( isset( $params['rootName'] ) && trim( $params['rootName'] ) != '' )
+        {
+            $rootName = $params['rootName'];
+        }
+
+        if ( isset( $params['separator'] ) )
+        {
+            $separator = $params['separator'];
+        }
+
+        $location = $this->locationService->loadLocation( $locationId );
+
+        $counter = 0;
+        foreach ( $location->path as $key => $parentLocationId )
+        {
+            if ( $parentLocationId > 1 )
+            {
+                if ( $key > $offset )
+                {
+                    $counter++;
+                    $parentLocation = $this->locationService->loadLocation( $parentLocationId );
+
+                    if ( $counter == 1 && $rootName !== false )
+                    {
+                        $name = $rootName;
+                    }
+                    else
+                    {
+                        $contentId = $parentLocation->contentInfo->id;
+                        $content   = $this->loadContentById( $contentId );
+
+                        $name = $this->getContentName( $content );
+                    }
+
+                    $pathArr[$parentLocationId] = array(
+                        'name' => $name,
+                        'locationId' => $parentLocationId,
+                        'location' => $parentLocation
+                    );
+
+                    unset( $parentLocation );
+                }
+            }
+        }
+
+        $result = array( 'items' => $pathArr, 'separator' => $separator );
+
+        return $result;
+    }
+
+    /**
+     * Return the user object of the current user as well as an information, whether the user is
+     * logged in.
+     *
+     * @return array Array containing the user object and a boolean, whether the user is logged in.
+     * <pre>
+     *  array(
+     *      'content'  => Values\User\User object,
+     *      'isLogged' => false
+     *  )
+     * </pre>
+     */
+    public function getCurrentUser()
+    {
+        $currentUser = $this->repository->getCurrentUser();
+
+        $result = array();
+//        $result['versionInfo'] = $currentUser->versionInfo;
+        $result['content'] = $currentUser;
+        $result['isLogged'] = false;
+
+        // TODO => deprecated function call *loadAnonymousUser()*
+        $anonymousUserId = $this->userService->loadAnonymousUser()->content->versionInfo->contentInfo->id;
+
+        if ( $anonymousUserId && $anonymousUserId != $currentUser->id )
+        {
+            $result['isLogged'] = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the current language object
+     *
+     * @return string
+     */
+    public function getDefaultLangCode()
+    {
+        return $this->languageService->getDefaultLanguageCode();
+    }
+
+    /**
+     * Fetch content by contentId.
+     *
+     * @param integer $contentId ID of the content object
+     *
+     * @return Content|SiteApiContent|bool
+     */
+    public function loadContentById( $contentId, $languages = null )
+    {
+        if ( $this->siteApiService )
+        {
+            try
+            {
+                return $this->siteApiService->getLoadService()->loadContent( $contentId, null, $languages );
+            }
+            catch ( UnauthorizedException $error )
+            {
+                return false;
+            }
+            catch ( NotFoundException $error )
+            {
+                return false;
+            }
+        }
+
+        try
+        {
+            return $this->contentService->loadContent( $contentId, $languages );
+        }
+        catch ( UnauthorizedException $error )
+        {
+            return false;
+        }
+        catch ( NotFoundException $error )
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Load contentInfo by contentId.
+     *
+     * @param integer $contentId ID of the content object
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo | bool
+     */
+    public function loadContentInfoById( $contentId )
+    {
+        try {
+            return $this->contentService->loadContentInfo( $contentId );
+        } catch( UnauthorizedException $error ) {
+            return false;
+        } catch( NotFoundException $error ) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns list of locations under given parent location
+     *
+     * Note, that you have to set the *depth* parameter to "1" or higher, if you want to fetch
+     * children of objects.
+     *
+     * @param array $locationIdArr Plain array of location ID's, which should be used to fetch the
+     *                             location list array.
+     * @param array $params Parameters to control the fetch for the location list.
+     * <pre>
+     *  array(
+     *      'depth'   => integer,
+     *      'datamap' => boolean
+     *  )
+     * </pre>
+     *
+     *
+     * NOTE: if use an array as a single locationParam [ [currentLocationId,2] ] => the result uses the index 0,1
+     * if use an array of node ids [ currentLocationId, 333 ] => the result has 2 key currentLocationId and 333 with the fetch results
+     *
+     * @return array
+     */
+    public function fetchLocationListArr( array $locationIdArr = array(), array $params = array() )
+    {
+        $locationListArr = array();
+
+        $useParamIndexAsReturnValueArrayKey = false;
+
+        foreach ( $locationIdArr as $index => $locationIdParam )
+        {
+            // if the locationId is an array of ids we want to get object which ar in one of the subtrees ....
+            if ( is_array( $locationIdParam ) )
+            {
+                $locationObjectMixed = [];
+                foreach ( $locationIdParam as $locationIdMultiple )
+                {
+                    if ( $this->siteApiService )
+                    {
+                        $locationObjectMixed[] = $this->siteApiService->getLoadService()->loadLocation( $locationIdMultiple );
+                    }
+                    else
+                    {
+                        $locationObjectMixed[] = $this->locationService->loadLocation( $locationIdMultiple );
+                    }
+                }
+                // use 1st locationId as key
+                $useParamIndexAsReturnValueArrayKey = true;
+
+                if ( \count( $locationObjectMixed ) > 1 )
+                {
+                    $locationObj = $locationObjectMixed;
+                }
+                else
+                {
+                    $locationObj = $locationObjectMixed[0];
+                }
+            }
+            else
+            {
+                $locationId = $locationIdParam;
+
+                if ( $this->siteApiService )
+                {
+                    $locationObj = $locationObjectMixed = $this->siteApiService->getLoadService()->loadLocation( $locationId );
+                }
+                else
+                {
+                    $locationObj = $locationObjectMixed = $this->locationService->loadLocation( $locationId );
+                }
+            }
+
+            // if we fetch in multiple subtrees for one result use not loctionId as index
+            if (  $useParamIndexAsReturnValueArrayKey )
+                $returnKey = $index;
+            else
+                $returnKey = $locationId;
+
+            if ( isset( $params['depth'] ) && $params['depth'] > 0 )
+            {
+                $locationList = $this->fetchSubtree( $locationObjectMixed, $params );
+
+                $locationListArr[$returnKey] = array();
+
+                $locationListArr[$returnKey]['parent'] = false;
+                $locationListArr[$returnKey]['children'] = $locationList['searchResult'];
+                $locationListArr[$returnKey]['count'] = $locationList['searchCount'];
+
+                unset( $locationList );
+            }
+            else
+            {
+                if ( isset( $params['datamap'] ) && $params['datamap'] === true )
+                {
+                    $locationListArr[$returnKey] = array( $this->contentService->loadContent( $locationObj->contentInfo->id ) );
+                }
+                else
+                {
+                    if ( !\is_array( $locationObj ) )
+                    {
+                        $locationListArr[$returnKey] = [$locationObj];
+                    }
+                    else
+                    {
+                        $locationListArr[$returnKey] = $locationObj;
+                    }
+                }
+            }
+        }
+
+        return $locationListArr;
+    }
+
+    /**
+     * Fetches a subtree for a given location object.
+     *
+     * @param mixed $locationArrayOrObject  object or array of locationObjects
+     *              if array of locationObjects, the fetch will be search in Subtree1 OR Subtree1
+     * @param array $params
+     *
+     * @return array
+     */
+    private function fetchSubtree( $locationArrayOrObject, array $params = array() )
+    {
+
+        if ( !is_array( $locationArrayOrObject  ) )
+        {
+            // MainLocation for key and Sort
+            //$locationObj = $locationObject;
+            $locationObjectArray[] = $locationArrayOrObject;
+        }
+        else
+        {
+            // MainLocation for key and Sort
+            //$locationObj = $locationObject[0];
+            $locationObjectArray = $locationArrayOrObject;
+        }
+
+        $criterion = array();
+
+        // If the 'ignore_visibility' parameter is set and true, we're going to
+        // ignore the visibility of the locations by using a logical or
+        // criterion in conjunction with the visibility here.
+        if ( isset( $params['ignore_visibility'] ) && $params['ignore_visibility'] )
+        {
+            $criterion[] = new Criterion\LogicalOr( [
+                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                new Criterion\Visibility( Criterion\Visibility::HIDDEN )
+            ] );
+        }
+        else
+        {
+            $criterion[] = new Criterion\Visibility( Criterion\Visibility::VISIBLE );
+        }
+
+        $locationList = array();
+
+        // List fetch direct children
+        $paramDepth = 1;
+
+        if ( isset( $params['depth'] ) )
+        {
+            $paramDepth = (int) $params['depth'];
+        }
+
+
+        $criterionSubtree = [];
+
+        foreach ( $locationObjectArray as $index => $locationObj )
+        {
+            $nodeId = $locationObj->id;
+            // list fetch use parentNodeId for faster fetch
+            if ($paramDepth <= 1) {
+                // $depth = $locationObj->depth + $paramDepth;
+                // http://share.ez.no/blogs/thiago-campos-viana/ez-publish-5-tip-search-cheat-sheet
+                $criterionSubtree[$index][] = new Criterion\ParentLocationId($locationObj->id);
+            }
+            /*
+                        // idee um 1 + 2 ebene ohne einen like fetch zu erhalten
+                            //        elseif( $paramDepth == 2 )
+                            //        {
+                            //            $params2 = array();
+                            //            $params2['depth'] = 1;
+                            //            $params2['count'] = false;
+                            //            $params2['datamap'] = false;
+                            //
+                            //            $locationDepth1Result = $this->fetchSubtree( $locationObj, $params2 );
+                            //
+                            //            $location1List = $locationDepth1Result['searchResult'];
+                            //
+                            //            $location1IdList = array();
+                            //            foreach( $location1List as $location1 )
+                            //            {
+                            //                $location1IdList[] = $location1->id;
+                            //            }
+                            //          //  var_dump( $locationList );
+                            //
+                            //            $depth = $locationObj->depth + $paramDepth;
+                            //            // http://share.ez.no/blogs/thiago-campos-viana/ez-publish-5-tip-search-cheat-sheet
+                            //            $criterion = array(
+                            //                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                            //                new Criterion\ParentLocationId( $location1IdList ),
+                            //            );
+                            //
+                            //        }
+            */
+            // use pathsting with like statement
+            else {
+                $depth = $locationObj->depth + $paramDepth;
+                // http://share.ez.no/blogs/thiago-campos-viana/ez-publish-5-tip-search-cheat-sheet
+                $criterionSubtree[$index][] = new Criterion\Subtree($locationObj->pathString);
+                $criterionSubtree[$index][] = new Criterion\Location\Depth(Criterion\Operator::GT, $locationObj->depth);
+                $criterionSubtree[$index][] = new Criterion\Location\Depth(Criterion\Operator::LTE, $depth);
+            }
+        }
+
+        // if multiple locationObjects are set for fetch => OR
+        if ( isset( $criterionSubtree[1] ) )
+        {
+            $criterionSubtreeAND = [];
+            foreach ( $criterionSubtree as $subtreeCriterions )
+            {
+                $criterionSubtreeAND[] =  new Criterion\LogicalAnd( $subtreeCriterions );
+            }
+            // all subtree criterions combine in Or so we get objects from both trees
+            $criterion[] = new Criterion\LogicalOr( $criterionSubtreeAND );
+        }
+        else
+        {
+            // if only ony locationObject is set for fetch => AND
+            $criterion = array_merge( $criterion,  $criterionSubtree[0] );
+        }
+
+
+        // main_node_only => true => only include mainlocatione
+        if ( isset( $params['main_location_only'] ) )
+        {
+            // true, 1, '1'
+            if ( (int) $params['main_location_only'] === 1 )
+            {
+                // only include mainLocations
+                $criterion[] = new Criterion\Location\IsMainLocation( Criterion\Location\IsMainLocation::MAIN );
+            }
+        }
+
+        // priority ==> [ [ OPERATOR, VALUE ], ... ]
+        if ( isset( $params['priority'] ) )
+        {
+            // true, 1, '1'
+            if ( is_array( $params['priority'] ) && !empty( $params['priority'] ) )
+            {
+                foreach ( $params['priority'] as $priorityCriterion )
+                {
+                    if ( is_array( $priorityCriterion ) && count( $priorityCriterion ) == 2 ) {
+                        $criterion[] = new Criterion\Location\Priority( $priorityCriterion[0], $priorityCriterion[1] );
+                    }
+                }
+            }
+        }
+
+        if ( isset( $params['include'] ) && is_array( $params['include'] ) && count( $params['include'] ) > 0 )
+        {
+            //$criterion[] = new Criterion\ContentTypeIdentifier( $params['include'] );
+            $criterion[] = new Criterion\ContentTypeIdentifier( $this->checkClassIdentifierArray( $params['include'] ) );
+
+// TODO get ID for Identifier and use this for search so we save a subrequest and its lots faster
+//            if ( in_array( 'article', $params['include'] ) )
+//            {
+//                $criterion[] = new Criterion\ContentTypeId( array( 16 ) );
+//            }
+//            else
+//            {
+//                $criterion[] = new Criterion\ContentTypeIdentifier( $params['include'] );
+//            }
+        }
+
+// ToDo: role and rights, visibility, date, object states criterion
+
+        $offset = 0;
+        if ( isset( $params['offset'] ) && $params['offset'] > 0 )
+        {
+            $offset = (int) $params['offset'];
+        }
+
+        // default limit 1000  - 0 geht nicht mehr in ezplatform ist dann wirklich 0
+//        $limit = 0;
+        $limit = 0;
+        if ( isset( $params['limit'] ) && $params['limit'] > 0 )
+        {
+            $limit = (int) $params['limit'];
+        }
+
+        $sortClauses = array();
+        if ( isset( $params['sortby'] ) && is_array( $params['sortby'] ) && count( $params['sortby'] ) > 0 )
+        {
+            foreach ( $params['sortby'] as $sortKey => $sortArray )
+            {
+                // deprecated, for backwards compability (sort by content meta / attribute)
+                if ( is_array( $sortArray ) === false )
+                {
+                    $newSortClause = $this->generateSortClauseFromString( $sortKey, $sortArray );
+
+                    if ( $newSortClause !== false )
+                    {
+                        $sortClauses[] = $newSortClause;
+                    }
+                }
+
+                // 2 array items means sorts by content meta / attribute
+                if ( is_array( $sortArray ) && count( $sortArray ) == 2 )
+                {
+                    $newSortClause = $this->generateSortClauseFromString( $sortArray['0'], $sortArray['1'] );
+
+                    if ( $newSortClause !== false )
+                    {
+                        $sortClauses[] = $newSortClause;
+                    }
+                }
+
+                // 4 array items means sorts by content field
+                if ( is_array( $sortArray ) && count( $sortArray ) == 4 )
+                {
+                    $sortOrder = 'ascending';
+                    if ( $sortArray['2'] == 'DESC' || $sortArray['2'] == 'descending' )
+                    {
+                        $sortOrder = 'descending';
+                    }
+
+//                    $lang = $this->getPrioritizedLanguages();
+                    $sortClauses[] = new SortClause\Field( $sortArray['0'], $sortArray['1'], $sortOrder, $sortArray['3'] );
+                }
+            }
+        }
+        else
+        {
+            // default sort by parent object sort clause
+            $sortClauses[] = $this->generateSortClauseFromId( $locationObjectArray[0]->sortField, $locationObjectArray[0]->sortOrder );
+        }
+
+        /* vendor/ezsystems/ezpublish-kernel/eZ/Publish/API/Repository/Values/Content/Query/Criterion/Operator.php
+        abstract class Operator
+        {
+            const EQ = "=";
+            const GT = ">";
+            const GTE = ">=";
+            const LT = "<";
+            const LTE = "<=";
+            const IN = "in";
+            const BETWEEN = "between";
+            const LIKE = "like";
+            const CONTAINS = "contains";
+        }
+        */
+
+        if ( isset( $params['filter_relations'] ) && is_array( $params['filter_relations'] ) && count( $params['filter_relations'] ) > 0 )
+        {
+            foreach ( $params['filter_relations'] as $fieldCriterion )
+            {
+// todo check valid syntax
+                if ( is_array( $fieldCriterion ) && count( $fieldCriterion ) == 3 )
+                {
+                    $criterion[] = new Criterion\FieldRelation( $fieldCriterion['0'], $fieldCriterion['1'], $fieldCriterion['2'] );
+                }
+            }
+        }
+
+        /**
+         * this tag expects the filter_eztags
+         */
+        if ( isset( $params['filter_eztags'] ) && is_array( $params['filter_eztags'] ) && count( $params['filter_eztags'] ) > 0 )
+        {
+            $criterion[] = new \Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId($params['filter_eztags']);
+        }
+
+        if ( isset( $params['filter_fields'] ) && is_array( $params['filter_fields'] ) && count( $params['filter_fields'] ) > 0 )
+        {
+            foreach ( $params['filter_fields'] as $fieldCriterion )
+            {
+// todo check valid syntax
+                if ( is_array( $fieldCriterion ) && count( $fieldCriterion ) == 3 )
+                {
+                    // Attention! criterion field must set to be searchable
+                    $criterion[] = new Criterion\Field( $fieldCriterion['0'], $fieldCriterion['1'], $fieldCriterion['2'] );
+                }
+            }
+        }
+
+        if ( isset( $params['language'] ) && is_array( $params['language'] ) && count( $params['language'] ) > 0 )
+        {
+// ToDo: combine with and, always available?
+            $criterion[] = new Criterion\LanguageCode( $params['language'] );
+        }
+        else
+        {
+            // only include languages which are defined in siteaccess config  system default|siteaccess languages
+            // if more than on a correct bitmask is build to include all object where one of the language is set
+            $criterion[] = new Criterion\LanguageCode( $this->getPrioritizedLanguages() );
+        }
+
+        // in ezplatform $limit must be an integer so to get all items we do not add the limit parameter to the querySearch
+        if ( $limit > 0 )
+            $querySearch = new LocationQuery( array( 'offset' => $offset, 'limit' => $limit ) );
+        else
+            $querySearch = new LocationQuery( array( 'offset' => $offset ) );
+
+//        $querySearch->criterion = new Criterion\LogicalAnd( $criterion );
+
+//        // http://www.dasspielzeug.de.mb1411-v1dev.fw2.lokal/?BOOSTQUERYDateMetadata=1
+//        if( isset( $_GET['BOOSTQUERYDateMetadata'] ))
+//        {
+//
+//
+//        // modified in last 360 hours
+//        $criterion[] =  new Criterion\DateMetadata(
+//            Criterion\DateMetadata::MODIFIED,
+//            Operator::GTE,
+//            time() - (86400 * 360 * 1 ) );
+//
+//        }
+
+
+        //
+        // ### Custom Criterions ### START ###  #10522 PublishToolsService - Custom Criterion
+        //
+
+        //  Example of using with twig cjw_fetch_content:
+        //
+        //  - get all Locations which are not assigned to a Flow Block Type (ContentGrid or CntentSlider) of the current Page (BlockNodeId)
+        //
+        //        {% set listChildren = cjw_fetch_content( [ currentLocationId ], { 'depth': '3',
+        //                                                                  'main_location_only': true,
+        //                                                                  'limit': listLimit,
+        //                                                                  'offset': listOffset,
+        //                                                                  'include': listContenttypes,
+        //                                                                  'language': [ cjw_lang_get_default_code() ],
+        //                                                                  'sortby': [ [ 'DatePublished', 'DESC' ] ],
+        //                                                                  'custom_criterion': [
+        //                                                                                        [ '\\Cjw\\PublishToolsBundle\\PublishToolsService\\CustomCriterion\\FlowBlockType',
+        //                                                                                            {'block_types': [  'ContentGrid', 'ContentSlider' ],
+        //                                                                                                'block_node_id': blockNodeId,
+        //                                                                                                'operator': 'not in'}
+        //                                                                                        ],
+        //
+        //                                                                                      ],
+        //
+        //                                                                  'count': true } ) %}
+
+
+        if ( isset( $params['custom_criterion'] ) )
+        {
+            foreach ( $params['custom_criterion'] as $customCriterion )
+            {
+                $customCriterionClassName = $customCriterion[0];
+                $customCriterionParameters = $customCriterion[1];
+
+                if ( class_exists( $customCriterionClassName ) )
+                {
+//                    $customCriterionObject = new \Cjw\PublishToolsBundle\PublishToolsService\CustomCriterion\FlowBlockType();
+                    $customCriterionObject = new $customCriterionClassName();
+                    $customCriterionResult = $customCriterionObject->getCriterion( $customCriterionParameters );
+
+                    if ( is_object( $customCriterionResult ) )
+                        $criterion[] = $customCriterionResult;
+
+                }
+            }
+
+        }
+
+        // ### Custom Criterion ### ENDS ###
+
+
+
+        try
+        {
+//        // new ezplatform syntax: criterion => filter
+            if ( property_exists( $querySearch, 'filter' )  )
+                $querySearch->filter = new Criterion\LogicalAnd( $criterion );
+            // old style
+            else
+                $querySearch->criterion = new Criterion\LogicalAnd( $criterion );
+
+        }
+        catch( \Exception $error )
+        {
+             var_dump( $error );
+            return false;
+        }
+
+        $querySearch->sortClauses = $sortClauses;
+
+        // todo cjwpublish tools ohne siteapi nutzbar machen? apiservice per yaml steuerbar machen?
+
+        if ( is_object( $this->siteApiService ) )
+        {
+            // siteApi Objects
+            //        $searchResult = $this->siteApiService->getFindService()->findLocations( $querySearch );
+
+            // filterService => is legacySearch
+            $searchResult = $this->siteApiService->getFilterService()->filterLocations( $querySearch );
+
+        }
+        else
+        {
+            $searchResult = $this->searchService->findLocations( $querySearch );
+        }
+
+
+
+
+        $searchCount = false;
+        // only if count parameter is set return count
+        // in newer ez version > 5.4 and in 5.3.5 the count is optional so you can
+        // save 1 sql query
+        if ( isset( $params['count'] ) && $params['count'] === true )
+        {
+            // use count from searchResult => the fastest way :-)
+            $searchCount = $searchResult->totalCount;
+        }
+
+        foreach ( $searchResult->searchHits as $searchItem )
+        {
+            $childLocationId = $searchItem->valueObject->id;
+
+            if ( isset( $params['datamap'] ) && $params['datamap'] === true )
+            {
+                $childContentId = $searchItem->valueObject->contentInfo->id;
+                $locationList[] = $this->contentService->loadContent( $childContentId );
+            }
+            else
+            {
+                $locationList[] = $searchItem->valueObject;
+            }
+        }
+
+        return array( 'searchResult' => $locationList, 'searchCount' => $searchCount );
+    }
+
+
+
+    /**
+     * Generate a sort clause depending on the location's sort fields (adapted from Donat's
+     * AbstractController.php)
+     *
+     * @param integer $sortField Numerous representation of the sort field (use "SORT_FIELD_…"
+     *                           constants)
+     * @param string $sortOrder LocationQuery::SORT_ASC or LocationQuery::SORT_DESC
+     *
+     * @return SortClause\ContentId|SortClause\ContentName|SortClause\DateModified|SortClause\DatePublished|SortClause\Location\Depth|SortClause\Location\Path|SortClause\Location\Priority|SortClause\LocationDepth|SortClause\LocationPathString|SortClause\LocationPriority|SortClause\SectionIdentifier
+     */
+    private function generateSortClauseFromId( $sortField, $sortOrder )
+    {
+        $sortOrder = ( $sortOrder ) ? LocationQuery::SORT_ASC : LocationQuery::SORT_DESC;
+
+        /*
+            const SORT_FIELD_PATH = 1;
+            const SORT_FIELD_PUBLISHED = 2;
+            const SORT_FIELD_MODIFIED = 3;
+            const SORT_FIELD_SECTION = 4;
+            const SORT_FIELD_DEPTH = 5;
+            const SORT_FIELD_CLASS_IDENTIFIER = 6;
+            const SORT_FIELD_CLASS_NAME = 7;
+            const SORT_FIELD_PRIORITY = 8;
+            const SORT_FIELD_NAME = 9;
+            const SORT_FIELD_MODIFIED_SUBNODE = 10;
+            const SORT_FIELD_NODE_ID = 11;
+            const SORT_FIELD_CONTENTOBJECT_ID = 12;
+        */
+
+        switch ( $sortField )
+        {
+            case Location::SORT_FIELD_PATH:
+                return new SortClause\Location\Path( $sortOrder );
+            case Location::SORT_FIELD_PUBLISHED:
+                return new SortClause\DatePublished( $sortOrder );
+            case Location::SORT_FIELD_MODIFIED:
+                return new SortClause\DateModified( $sortOrder );
+            case Location::SORT_FIELD_SECTION:
+                return new SortClause\SectionIdentifier( $sortOrder );
+            case Location::SORT_FIELD_DEPTH:
+                return new SortClause\Location\Depth( $sortOrder );
+            case Location::SORT_FIELD_PRIORITY:
+                return new SortClause\Location\Priority( $sortOrder );
+            case Location::SORT_FIELD_NAME:
+                return new SortClause\ContentName( $sortOrder );
+            case Location::SORT_FIELD_CONTENTOBJECT_ID:
+                return new SortClause\ContentId( $sortOrder );
+            // No matching sort clause available, create default
+            case Location::SORT_FIELD_CLASS_IDENTIFIER:
+            case Location::SORT_FIELD_CLASS_NAME:
+            case Location::SORT_FIELD_MODIFIED_SUBNODE:
+            case Location::SORT_FIELD_NODE_ID:
+            default:
+                return new SortClause\ContentName( Query::SORT_ASC );
+        }
+    }
+
+    /**
+     * Generates a sort clause, depending on the given sort field and sort order parameters.
+     *
+     * @param string $sortField Sort field, which should be used for sorting. Can be one of the
+     *                          following:
+     * <pre>
+     *  - 'LocationPath'
+     *  - 'LocationDepth'
+     *  - 'LocationPriority'
+     *  - 'ContentName'
+     *  - 'ContentId'
+     *  - 'DateModified'
+     *  - 'DatePublished'
+     * </pre>
+     * @param string $sortOrder Sort order, which should be used for sorting. Can be <b>'ASC'</b> or
+     *                          <b>'DESC'</b>.
+     *
+     * @return SortClause\ContentId|SortClause\ContentName|SortClause\DateModified|SortClause\DatePublished|SortClause\LocationDepth|SortClause\LocationPathString|SortClause\LocationPriority|SortClause\SectionIdentifier
+     */
+    private function generateSortClauseFromString( $sortField, $sortOrder = 'ASC' )
+    {
+        $result = false;
+
+        // Ensure the $sortOrder is capitalized
+        $sortOrder = \strtoupper( $sortOrder );
+
+        if ( $sortOrder === 'DESC' )
+        {
+            $sortOrder = LocationQuery::SORT_DESC;
+        }
+        else
+        {
+            $sortOrder = LocationQuery::SORT_ASC;
+        }
+
+        switch ( $sortField )
+        {
+            case 'LocationPath':
+                $result = new SortClause\Location\Path( $sortOrder );
+                break;
+            case 'LocationDepth':
+                $result = new SortClause\Location\Depth( $sortOrder );
+                break;
+            case 'LocationPriority':
+                $result = new SortClause\Location\Priority( $sortOrder );
+                break;
+            case 'ContentName':
+                $result = new SortClause\ContentName( $sortOrder );
+                break;
+            case 'ContentId':
+                $result = new SortClause\ContentId( $sortOrder );
+                break;
+            case 'DateModified':
+                $result = new SortClause\DateModified( $sortOrder );
+                break;
+            case 'DatePublished':
+                $result = new SortClause\DatePublished( $sortOrder );
+                break;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Fetches the string representation of a given content type ID (content type identifier).
+     *
+     * @param integer $contentTypeId Numerous ID of the content type
+     * @return bool|string False on error or a string representation of the given content type ID.
+     */
+    public function getContentTypeIdentifier( $contentTypeId )
+    {
+        $cs = $this->contentTypeService;
+
+        try
+        {
+            $ct = $cs->loadContentType($contentTypeId);
+            $contentTypeIdentifier = $ct->identifier;
+            return $contentTypeIdentifier;
+        }
+        catch( NotFoundException $error )
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Fetches the string representation of a given content type ID (content type identifier).
+     *
+     * @param integer $contentTypeId Numerous ID of the content type
+     * @return bool|string False on error or a string representation of the given content type ID.
+     */
+    public function getContentTypeName( $contentTypeId )
+    {
+        $cs = $this->contentTypeService;
+
+        try
+        {
+            $ct = $cs->loadContentType($contentTypeId);
+            $contentTypeName = $ct->getName( $this->getDefaultLangCode() );
+            return $contentTypeName;
+        }
+        catch( NotFoundException $error )
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Returns an array of the priorized languages codes defined in YAML settings.
+     *
+     * <pre>
+     *  system:
+     *     default|siteaccess:
+     *        languages: [ger-DE,eng-GB]
+     * </pre>
+     * @return array An array containing the proriozed languages code from YAML as follows:
+     * <pre>
+     *  array(
+     *      'languageCode1',
+     *      'languageCode2'
+     *  )
+     * </pre>
+     */
+    public function getPrioritizedLanguages()
+    {
+        $languages = $this->configResolver->getParameter( 'languages' );
+
+        return $languages;
+    }
+
+    /**
+     * @return string example  /var/app
+     */
+    public function getVarDir()
+    {
+        $varDir = $this->configResolver->getParameter( 'var_dir' );
+
+        return $varDir;
+    }
+
+    /**
+     * @return string example  /var/app/storage
+     */
+    public function getStorageDir()
+    {
+        $storageDir = $this->configResolver->getParameter( 'storage_dir' );
+
+        $dir = $this->getVarDir() .'/'. $storageDir;
+
+        return $dir;
+    }
+
+
+    /**
+     * Returns the true asset path, which can be used directly for accessing
+     * a bundle's assets in a template.
+     *
+     * @param string $subPath [OPTIONAL]
+     *
+     * @return string
+     */
+    public function getAssetPath( $subPath = "" )
+    {
+        // {% set web_path = '/bundles/' ~ site_bundle_name|replace({'Bundle':''})|lower %}
+        $bundleName    = $this->configResolver->getParameter( "bundle", "cjwsite", "name" );
+        $webBundleName = strtolower( str_replace( "Bundle", "", $bundleName ) );
+        $webPath       = rtrim( "/bundles/$webBundleName/$subPath", "/" ) . "/";
+
+        return $webPath;
+    }
+
+    /**
+     * Loads all content relations of the passed $contentOrVersionInfo object.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrId
+     * @param bool $asContent If true the resulting {@see Relation} list will be
+     *                        converted to a list of ready-to-use {@see Content}
+     *                        objects.
+     *
+     * @return Relation[]|Content[] A list of {@see Relation} objects, if
+     *             $asContent has been set to `false`, a list of {@see Content}
+     *             object if $asContent is set to `true`.
+     *
+     * @throws UnauthorizedException
+     */
+    public function loadContentRelations( $objectOrId, $asContent = false )
+    {
+        // Normalze the argument to a `VersionInfo` object!
+        $objectOrId = $this->getVersionInfo( $objectOrId );
+
+        // Load/Fetch relations
+        $relations = $this->contentService->loadRelations( $objectOrId );
+
+        // If $asContent is `true` we're going to return the result of the
+        // `getContentListFromRelationList` function.
+        // This should be the defalt behaviour, when used from Twig.
+        if ( $asContent ) {
+            return $this->getContentListFromRelationList( $relations );
+        }
+
+        return $relations;
+    }
+
+    /**
+     * Loads all content reverse relations of the passed $contentOrVersionInfo
+     * object.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrId
+     * @param bool $asContent If true the resulting {@see Relation} list will be
+     *                        converted to a list of ready-to-use {@see Content}
+     *                        objects.
+     *
+     * @return Relation[]|Content[] A list of {@see Relation} objects, if
+     *             $asContent has been set to `false`, a list of {@see Content}
+     *             object if $asContent is set to `true`.
+     *
+     * @throws UnauthorizedException
+     */
+    public function loadContentReverseRelations( $objectOrId, $asContent = false )
+    {
+        // Normalze the argument to a `ContentInfo` object!
+        $objectOrId = $this->getContentInfo( $objectOrId );
+
+        // Load/Fetch reverse relations
+        $relations = $this->contentService->loadReverseRelations( $objectOrId );
+
+        // If $asContent is `true` we're going to return the result of the
+        // `getContentListFromRelationList` function.
+        // This should be the defalt behaviour, when used from Twig.
+        if ( $asContent ) {
+            return $this->getContentListFromRelationList( $relations );
+        }
+
+        return $relations;
+    }
+
+    /**
+     * Loads all locations which correspond to the passed $objectOrID.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrID
+     *
+     * @return Location[]
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function loadContentLocationList( $objectOrID )
+    {
+        // Normalize the argument to a `Content` object
+        $contentInfo = $this->getContentInfo( $objectOrID );
+
+        return $this->locationService->loadLocations( $contentInfo );
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// HELPER FUNCTIONS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Gets a list of {@see Content} objects from a list of {@see Relation}
+     * objects.
+     *
+     * This is a helper function, mostly designed to be used, when fetching via
+     * a twig template. It loads all corresponding (destination) {@see Content}
+     * objects for each of the relations in the $relationList an returns a list
+     * containing them. They are added as traversed, so the order should stay
+     * the same.
+     *
+     * @param Relation[] $relationList
+     *
+     * @return Content[] array
+     */
+    public function getContentListFromRelationList( $relationList )
+    {
+        $contentList = [];
+        foreach ( $relationList as $relation )
+        {
+            $contentList[] = $this->loadContentById( $relation->getDestinationContentInfo()->id );
+        }
+
+        return $contentList;
+    }
+
+    public function getContentListFromRelationField( $relationList )
+    {
+        $contentList = [];
+        foreach( $relationList->destinationContentIds as $destinationContentId )
+        {
+            $contentList[] = $this->loadContentById( $destinationContentId );
+        }
+
+        return $contentList;
+    }
+
+    /**
+     * Tries to fetch the corresponding `Content` of the passed $object.
+     *
+     * This is a helper function, which tries to normalize the passed object or
+     * integer to a {@see Content} object.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrId
+     *
+     * @return bool|Content
+     */
+    public function getContent( $objectOrId )
+    {
+        // Because we need a `VersionInfo` object here, we're going to check for
+        // this at first and if not try to get the corresponding `VersionInfo`
+        // object from the object we've got.
+        if ( !($objectOrId instanceof Content) )
+        {
+            if ( is_numeric( $objectOrId ) )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId );
+            }
+            // `Location` and `VersionInfo` objects use the exact same way to
+            // retrieve the corresponding `Content` object; so they're merged
+            // into one branch.
+            else if ( $objectOrId instanceof Location || $objectOrId instanceof VersionInfo )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId->getContentInfo()->id );
+            }
+            else if ( $objectOrId instanceof ContentInfo )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId->id );
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return $objectOrId;
+    }
+
+    /**
+     * Tries to fetch the corresponding `VersionInfo` of the passed $object.
+     *
+     * This is a helper function, which tries to normalize the passed object or
+     * integer to a {@see VersionInfo} object.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrId
+     *
+     * @return bool|VersionInfo
+     */
+    public function getVersionInfo( $objectOrId )
+    {
+        // Because we need a `VersionInfo` object here, we're going to check for
+        // this at first and if not try to get the corresponding `VersionInfo`
+        // object from the object we've got.
+        if ( !($objectOrId instanceof VersionInfo) )
+        {
+            if ( is_numeric( $objectOrId ) )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId )->getVersionInfo();
+            }
+            else if ( $objectOrId instanceof Content )
+            {
+                $objectOrId = $objectOrId->getVersionInfo();
+            }
+            else if ( $objectOrId instanceof Location )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId->getContentInfo()->id )->getVersionInfo();
+            }
+            else if ( $objectOrId instanceof ContentInfo )
+            {
+                $objectOrId = $this->loadContentById( $objectOrId->id )->getVersionInfo();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return $objectOrId;
+    }
+
+    /**
+     * Tries to fetch the corresponding `ContentInfo` of the passed $object.
+     *
+     * This is a helper function, which tries to normalize the passed object or
+     * integer to a {@see ContentInfo} object.
+     *
+     * @param int|Content|VersionInfo|Location|ContentInfo $objectOrId
+     *
+     * @return bool|ContentInfo
+     */
+    public function getContentInfo( $objectOrId )
+    {
+        // Because we need a `ContentInfo` object here, we're going to check for
+        // this at first and if not try to get the corresponding `ContentInfo`
+        // object from the object we've got.
+        if ( !($objectOrId instanceof ContentInfo) )
+        {
+            if ( is_numeric( $objectOrId ) )
+            {
+                $objectOrId = $this->loadContentInfoById( (int) $objectOrId );
+            }
+            else if ( $objectOrId instanceof Content )
+            {
+                $objectOrId = $this->loadContentInfoById( $objectOrId->id );
+            }
+            // `Location` and `VersionInfo` objects use the exact same way to
+            // retrieve the corresponding `ContentInfo` object; so they're
+            // merged into one branch.
+            else if ( $objectOrId instanceof Location || $objectOrId instanceof VersionInfo )
+            {
+                $objectOrId = $objectOrId->getContentInfo();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return $objectOrId;
+    }
+
+
+
+
+
+    /**
+     * Verifies that a content type with $identifier exists
+     *
+     * @param string $identifier
+     * @return boolean
+     */
+    function getContentTypeIdByIdentifier( $identifier )
+    {
+        // @see ensureContentTypeWithIdentifier
+        $identifier = strtolower($identifier);
+
+        $contentType = $this->loadContentTypeByIdentifier($identifier, false );
+
+        if ( is_object( $contentType ) )
+            return $contentType->id;
+        else
+            return false;
+
+    }
+
+
+    /**
+     * Load and return a content type by its identifier
+     *
+     * @param  string  $identifier       content type identifier
+     * @param  boolean $throwIfNotFound  if true, throws an exception if it is not found.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup|null
+     */
+    protected function loadContentTypeByIdentifier( $identifier, $throwIfNotFound = true, $useCache = true )
+    {
+
+        if ( isset( $this->cacheContentTypeByIdentifier[$identifier] ) && $useCache === true )
+        {
+            return $this->cacheContentTypeByIdentifier[$identifier];
+        }
+
+
+        $contentType = null;
+        try {
+            $contentType = $this->contentTypeService->loadContentTypeByIdentifier($identifier);
+//        } catch (ApiExceptions\NotFoundException $e) {
+//            $notFoundException = $e;
+            if ( $useCache === true )
+                $this->cacheContentTypeByIdentifier[$identifier] = $contentType;
+
+        } catch ( \Exception $e ) {
+            $notFoundException = $e;
+
+            // TODO if DEBUG
+            //echo $e->getMessage();
+        }
+
+        if (!$contentType && $throwIfNotFound) {
+            throw $notFoundException;
+        }
+
+        return $contentType;
+    }
+
+    /**
+     * Verifies that a content type with $identifier exists
+     *
+     * @param string $identifier
+     * @return boolean
+     */
+    protected function checkContentTypeExistenceByIdentifier($identifier, $groupIdentifier = null)
+    {
+        // @see ensureContentTypeWithIdentifier
+        $identifier = strtolower($identifier);
+
+        $contentType = $this->loadContentTypeByIdentifier($identifier, false);
+        if ($contentType && $groupIdentifier) {
+            $contentTypeGroups = $contentType->getContentTypeGroups();
+            foreach ($contentTypeGroups as $contentTypeGroup) {
+                if ($contentTypeGroup->identifier == $groupIdentifier) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return $contentType ? true : false;
+    }
+
+
+
+    /**
+     * function check all contentType Identifiers (classIdentifers) if they exists
+     * if not remove it from array
+     * => to avoid exception
+     * @param $classIdentfierArray
+     * @return array
+     */
+    private function checkClassIdentifierArray( $classIdentfierArray )
+    {
+        $newArrayWithValidClassIdentifers = [];
+        foreach ( $classIdentfierArray as $classIdentifier )
+        {
+            $classExists = $this->checkContentTypeExistenceByIdentifier( $classIdentifier );
+            if ( $classExists )
+            {
+                $newArrayWithValidClassIdentifers[] = $classIdentifier;
+            }
+            else
+            {
+                //echo "error $classIdentifier not exist";
+                if ( isset( $this->logger ) )
+                {
+//                    $this->logger->info( "ContentType '$classIdentifier' not exists, remove it from your include array in cjw_fetch!", [ __METHOD__ => $classIdentfierArray ] );
+                    $this->logger->info( "ContentType '$classIdentifier' not exists, remove it from your contentType include array to avoid this message! " . __METHOD__, [ 'include' => $classIdentfierArray ] );
+                }
+
+            }
+        }
+        return $newArrayWithValidClassIdentifers;
+    }
+
+    /**
+     * Returns the name of a content object – compatible with eZ and Netgen.
+     *
+     * @param SiteApiContent|EzContent $content
+     *
+     * @return string
+     */
+    public function getContentName( $content )
+    {
+        $name = "";
+
+        // use TranslationHelper to get the correct name
+        if ( $content instanceof SiteApiContent )
+        {
+            $name = $content->name;
+        }
+        else if ( $content instanceof EzContent )
+        {
+            $name = $this->translationHelper->getTranslatedContentName( $content );
+        }
+
+        return $name;
+    }
+
+    /**
+     * Returns array with object states by ez content.
+     *
+     * @param EzContent $content
+     * @return array
+     */
+    public function getObjectStatesByContent( $content )
+    {
+        $stateArray = array();
+        $stateGroups = $this->stateService->loadObjectStateGroups();
+
+        foreach( $stateGroups as $group )
+        {
+            $group = $this->stateService->loadObjectStateGroup(
+                $group->id
+            );
+            $stateArray[] = $this->stateService->getContentState( $content->versionInfo->contentInfo, $group );
+        }
+
+        return $stateArray;
+    }
+}

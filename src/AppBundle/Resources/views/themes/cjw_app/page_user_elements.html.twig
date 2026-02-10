@@ -1,0 +1,83 @@
+<div id="user-basket">
+
+</div>
+
+{% if app.environment == 'dev' %}
+    {% if 'jac-hosting' in app.request.host %}
+        {% set change_to_server_name = 'in-mv.co' %}
+        {% set current_server_name = 'jac-hosting' %}
+        {% set change_to_server_url = '//www.erholungsort-wieck-darss.de.ezp25-wieck-dev.in-mv.co' %}
+    {% else %}
+        {% set change_to_server_name = 'jac-hosting' %}
+        {% set current_server_name = 'in-mv.co' %}
+        {% set change_to_server_url = '//ezp25-wieck-p090101.jac-hosting.de' %}
+    {% endif %}
+
+    <style>
+        .server-changer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 1rem 1rem 1.25rem 2rem;
+            color: white;
+            border-bottom-left-radius: 3rem;
+            /* padding-left: 2rem; */
+            box-shadow: -1px 1px 5px 1px rgba(0,0,0,.5);
+        }
+
+        .change-server-link {
+            line-height: 1;
+        }
+
+        .change-server-link .remote-server {
+            display: none;
+        }
+
+        .change-server-link:hover .remote-server {
+            display: inline;
+        }
+
+        .change-server-link:hover .current-server {
+            display: none;
+        }
+
+        .change-server-link:hover > span > span {
+            width: auto;
+            transition: width 333ms;
+        }
+
+
+        /*.change-server-link > span {
+             width: 0;
+            !* height: 0; *!
+            !* height: 1.5em; *!
+            !*line-height: 1;*!
+            !* position: relative; *!
+            display: inline-block;
+            overflow: hidden;
+            word-break: keep-all;
+            word-break: break-word;
+            white-space: nowrap;
+        }*/
+    </style>
+
+    <div class="server-changer">
+        <div class="current-server"></div>
+        <div class="change-server-container">
+            <a class="change-server-link" href="{{ change_to_server_url }}{{ ezpublish.requestedUriString }}">
+                <span class="current-server">
+                    <strong>
+                        {{ current_server_name }}
+                    </strong>
+                </span>
+
+                <span class="remote-server">
+                    <span>Zu</span>
+                    <strong>{{ change_to_server_name }}</strong>
+                    <span>wechseln</span>
+                </span>
+            </a>
+        </div>
+    </div>
+{% endif %}

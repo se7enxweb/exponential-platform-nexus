@@ -1,0 +1,347 @@
+{%- block subject -%}
+    {% if content.fields.subject is defined %}
+        {% set subject = ez_field_value(content, 'subject') %}
+    {% else %}
+        {% set site_name = ngsite.siteInfoContent.fields.site_name.value.text|trim %}
+        {% set subject = site_name ~ ' - ' ~ ez_content_name(content) %}
+    {% endif %}
+{{- subject -}}
+{%- endblock -%}
+
+{%- block cc -%}
+    {% set cc = '' %}
+    {% if content.fields.recipients_cc is defined %}
+        {% set cc = ez_field_value(content, 'recipients_cc') %}
+    {% endif %}
+{{- cc -}}
+{%- endblock -%}
+
+{%- block bcc -%}
+    {% set bcc = '' %}
+    {% if content.fields.recipients_bcc is defined %}
+        {% set bcc = ez_field_value(content, 'recipients_bcc') %}
+    {% endif %}
+{{- bcc -}}
+{%- endblock -%}
+
+{%- block recipient -%}
+    {#% block sender %}{{ collected_fields.email }}{% endblock %#}
+    {% set recipient = 'default-recipient@test.lokal' %}
+
+    {% if content.fields.recipient is defined %}
+        {% set recipient = ez_field_value(content, 'recipient') %}
+    {% elseif content.fields.email_reciever is defined %}
+        {% set recipient = ez_field_value(content, 'email_reciever') %}
+    {% elseif content.fields.email_receiver is defined %}
+        {% set recipient = ez_field_value(content, 'email_receiver') %}
+    {% endif %}
+
+{{- recipient -}}
+
+{%- endblock -%}
+
+{%- block content_type -%}
+    {% set content_type = 'text/html' %}
+{{- content_type -}}
+{%- endblock -%}
+
+{% block email %}
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="initial-scale=1.0">    <!-- So that mobile webkit will display zoomed in -->
+            <meta name="format-detection" content="telephone=no"> <!-- disable auto telephone linking in iOS -->
+
+            <style type="text/css">
+                body {-webkit-text-size-adjust:none; -ms-text-size-adjust:none;}
+                body {margin:0; padding:0;}
+
+                body
+                {
+                    margin: 0pt;
+                    padding: 0pt;
+                    background-color: #ffffff;
+                    color: #3e3e3e;
+                    font-family: Helvetica,"Helvetica Neue",Arial,sans-serif;
+                }
+                hr {
+                    border-top: 1px solid #3e3e3e;
+                    border-right: 0px solid #ffffff;
+                    border-bottom: 0px solid #ffffff;
+                    border-left: 0px solid #ffffff;
+                    margin: 0 0 15px 0;
+                    height: 1px;
+                }
+
+                h1, h2, h3, h4, h5, h6
+                {
+                    margin: 0 0 0 0;
+                    padding: 0pt;
+                    font-weight: 500;
+                    font-family: Helvetica,"Helvetica Neue",Arial,sans-serif;
+                    color: #3e3e3e;
+                    font-size: 14px;
+                }
+
+                h1 {
+                    font-weight: bold;
+                    font-size: 16px;
+                    margin-bottom: 0.5em;
+                }
+
+                h2 {
+                    font-weight: bold;
+                    margin-bottom: 0.3em;
+                }
+
+                p
+                {
+                    margin: 0.8em 0;
+                    line-height: 1.8;
+                    color: #3e3e3e;
+                }
+                a
+                {
+                    color: #2f4d14;
+                    text-decoration: underline;
+                }
+                a:hover
+                {
+                    cursor: pointer;
+                }
+                table
+                {
+                    margin: 0pt;
+                    padding: 0pt;
+                    font-size: 14px;
+                }
+                th, td
+                {
+                    padding: 0pt;
+                    color: #3e3e3e;
+                    vertical-align: top;
+                }
+                ul, ol
+                {
+                    margin: 0.75em 0pt 1em 2em;
+                    padding: 0pt;
+                    color: #3e3e3e;
+                }
+                ul, ul ul
+                {
+                    list-style-type: disc;
+                }
+                li
+                {
+                    margin: 0pt 0pt 0.3em;
+                    padding: 0pt;
+                    line-height: 1.25em;
+                }
+                td.short-description,
+                td#description {
+                    background-color: #fff;
+                    border-top: 1.5em solid #fff;
+                    border-left: 1.5em solid #fff;
+                    border-right: 1.5em solid #fff;
+                    border-bottom: 1em solid #fff;
+                }
+                .border {
+                    width: 120px;
+                    background-color: #fff;
+                }
+                .border-dark {
+                    width: 120px;
+                    background-color: #69af23;
+                }
+                td#notice {
+                    height: 4em;
+                    line-height: 4em;
+                    color: #3e3e3e;
+                    font-size: 10px;
+                    height: 40px;
+                }
+                td#title {
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-align: right;
+                    height: 50px;
+                    vertical-align: middle;
+                    background-color: #69af23;
+                }
+                td.middle-spacer {
+                    white-space: nowrap;
+                }
+                td#footer {
+                    background-color: #69af23;
+                    font-size: 10px;
+                    color: #ffffff;
+                }
+                td#footer-logo p {
+                    margin: 0;
+                }
+                td#footer a {
+                    color: #ffffff;
+                    text-decoration: underline;
+                }
+                td#footer p {
+                    margin: 0;
+                    color: #ffffff;
+                }
+                .object-left {
+                    margin: 0em 1em 0 0;
+                    float: left;
+                }
+                .object-right {
+                    margin: 0em 0 0 1em;
+                    float: right;
+                }
+                .object-center {
+                    margin: 0em 0;
+                    text-align: center;
+                }
+
+                @media print
+                {
+                    .no-print, .no-print *
+                    {
+                        display: none !important;
+                    }
+
+                    td.border {
+                        width: 0 !important;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <table width="750" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+                <tr class="no-print">
+                    <td class="border-dark" colspan="4">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr class="no-print">
+                    <td width="120" class="border dark" style="background-color: #69af23;">
+                        &nbsp;
+                    </td>
+                    <td id="title" height="50" colspan="2" style="" align="right" valign="middle" style="background-color: #69af23;">
+                        LOGO
+                    </td>
+                    <td width="120" class="border dark" style="background-color: #69af23;">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr class="no-print">
+                    <td class="border-dark" colspan="4">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                    <td class="short-description" valign="top" colspan="2" style="border-top: 1.5em solid #ffffff; border-left: 1.5em solid #ffffff; border-right: 1.5em solid #ffffff; border-bottom: 1em solid #ffffff; background-color: #ffffff;">
+                        <h1>{{ ez_content_name(content) }}</h1>
+                    </td>
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                    <td id="description" valign="top" colspan="2" style="border-left: 1.5em solid #ffffff; background-color: #ffffff;">
+                        {% set content_type = event.contentType %}
+
+                        {% for collected_field, collected_field_value in collected_fields %}
+                            <h2>{{ ez_field_name(content, collected_field) }}</h2>
+
+                            <p>
+                                {%- if content_type.fieldDefinitionsByIdentifier[collected_field].fieldTypeIdentifier == 'ezselection' -%}
+                                    {% set selectionArray=collected_field_value|split('-') %}
+                                    {% if selectionArray|length > 1 %}<ul>{% endif %}
+                                    {% for selected_key, selected_value in selectionArray %}
+                                        {% if loop.length == 1 %}
+                                            {% if content_type.fieldDefinitionsByIdentifier[collected_field].fieldSettings.options[selected_value] is defined %}
+                                                {{ content_type.fieldDefinitionsByIdentifier[collected_field].fieldSettings.options[selected_value] }}
+                                            {% else %}
+                                                Ohne Angabe
+                                            {% endif %}
+                                        {% else %}
+                                            <li>{{ content_type.fieldDefinitionsByIdentifier[collected_field].fieldSettings.options[selected_value] }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if selectionArray|length > 1 %}</ul>{% endif %}
+                                {%- elseif content_type.fieldDefinitionsByIdentifier[collected_field].fieldTypeIdentifier == 'ezboolean' -%}
+                                    {% if collected_field_value == '1' %}
+                                        Ja
+                                    {% else %}
+                                        Nein
+                                    {% endif %}
+                                {%- else -%}
+                                    {{ collected_field_value }}
+                                {%- endif -%}
+                            </p>
+                        {% endfor %}
+                    </td>
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                </tr>
+                {#<tr>
+                    <td class="empty" colspan="4">
+                        &nbsp;
+                    </td>
+                </tr>#}
+
+                <tr class="no-print">
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                    <td class="short-description" valign="top" colspan="2" style="border-top: 1.5em solid #ffffff; border-left: 1.5em solid #ffffff; border-right: 1.5em solid #ffffff; border-bottom: 1em solid #ffffff; background-color: #ffffff;">
+                        <h2>Bitte beachten Sie</h2>
+
+                        <p>Das ist eine automatisch generierte E-Mail. Bitte Antworten Sie nicht hierauf.
+                        Besuchen Sie http://www.jac-example.de für mehr Informationen und Kontaktmöglichkeiten.</p>
+                    </td>
+                    <td width="120" class="border" style="background-color: #ffffff;">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr class="no-print">
+                    <td class="empty" colspan="4">
+                        &nbsp;
+                    </td>
+                </tr>
+
+                <tr class="no-print">
+                    <td width="120" class="border-dark" style="background-color: #69af23;">
+                        &nbsp;
+                    </td>
+                    <td id="footer" colspan="2" valign="top" style="color: #ffffff; border-left: 2em solid #69af23; background-color: #69af23;">
+                        <br />
+                        <p id="impressum" style="color: #ffffff;">
+                            JAC-Systeme GmbH<br />
+                            Seestraße 4, 18439 Stralsund<br />
+                            <br />
+                            <br />
+                            Email: <a href="mailto:info@jac-systeme.de" style="color: #ffffff;">info@jac-systeme.de</a>
+                            <br />
+                            Web: <a href="http://www.jac-systeme.de" style="color: #ffffff;">www.jac-systeme.de</a><br>
+                        </p>
+                        <br />
+                    </td>
+                    <td width="120" class="border-dark" style="background-color: #69af23;">
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+        </body>
+    </html>
+{% endblock %}

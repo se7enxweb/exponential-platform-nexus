@@ -1,0 +1,347 @@
+<?php
+
+namespace Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\CjwGeoAddressStorage\Gateway;
+
+use Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\CjwGeoAddressStorage\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+
+class LegacyStorage extends Gateway
+{
+    /**
+     * Connection
+     *
+     * @var mixed
+     */
+    protected $dbHandler;
+
+    /**
+     * Set database handler for this gateway
+     *
+     * @param mixed $dbHandler
+     *
+     * @return void
+     * @throws \RuntimeException if $dbHandler is not an instance of
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
+     */
+    public function setConnection( $dbHandler )
+    {
+        // This obviously violates the Liskov substitution Principle, but with
+        // the given class design there is no sane other option. Actually the
+        // dbHandler *should* be passed to the constructor, and there should
+        // not be the need to post-inject it.
+        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler )
+        {
+            throw new \RuntimeException( "Invalid dbHandler passed" );
+        }
+
+        $this->dbHandler = $dbHandler;
+    }
+
+    /**
+     * Returns the active connection
+     *
+     * @throws \RuntimeException if no connection has been set, yet.
+     *
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     */
+    protected function getConnection()
+    {
+        if ( $this->dbHandler === null )
+        {
+            throw new \RuntimeException( "Missing database connection." );
+        }
+        return $this->dbHandler;
+    }
+
+    /**
+     * Stores the data stored in the given $field
+     *
+     * Potentially rewrites data in $field and returns true, if the $field
+     * needs to be updated in the database.
+     *
+     * @param VersionInfo $versionInfo
+     * @param Field $field
+     *
+     * @return boolean If restoring of the internal field data is required
+     */
+    public function storeFieldData( VersionInfo $versionInfo, Field $field )
+    {
+        if ( $field->value->externalData === null )
+        {
+            // Store empty value and return
+            $this->deleteFieldData( $versionInfo, array( $field->id ) );
+            $field->value->data = array(
+                'sortKey' => null,
+                'hasData' => false,
+            );
+            return;
+        }
+
+        if ( $this->hasFieldData( $field->id, $versionInfo->versionNo ) )
+        {
+            $this->updateFieldData( $versionInfo, $field );
+        }
+        else
+        {
+            $this->storeNewFieldData( $versionInfo, $field );
+        }
+
+        $field->value->data = array(
+            'sortKey' => $field->value->externalData['address'],
+            'hasData' => true,
+        );
+        return true;
+    }
+
+    /**
+     * todo: updateFieldData
+     *
+     * Performs an update on the field data
+     *
+     * @param VersionInfo $versionInfo
+     * @param Field $field
+     *
+     * @return boolean
+     */
+    protected function updateFieldData( VersionInfo $versionInfo, Field $field )
+    {
+        $connection = $this->getConnection();
+
+        $updateQuery = $connection->createUpdateQuery();
+        $updateQuery->update( $connection->quoteTable( 'ezgmaplocation' ) )
+            ->set(
+                $connection->quoteColumn( 'latitude' ),
+                $updateQuery->bindValue( $field->value->externalData['latitude'] )
+            )->set(
+                $connection->quoteColumn( 'longitude' ),
+                $updateQuery->bindValue( $field->value->externalData['longitude'] )
+            )->set(
+                $connection->quoteColumn( 'country' ),
+                $updateQuery->bindValue( $field->value->externalData['country'] )
+            )->set(
+                $connection->quoteColumn( 'address' ),
+                $updateQuery->bindValue( $field->value->externalData['address'] )
+            )->where(
+                $updateQuery->expr->lAnd(
+                    $updateQuery->expr->eq(
+                        $connection->quoteColumn( 'contentobject_attribute_id' ),
+                        $updateQuery->bindValue( $field->id, null, \PDO::PARAM_INT )
+                    ),
+                    $updateQuery->expr->eq(
+                        $connection->quoteColumn( 'contentobject_version' ),
+                        $updateQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+
+        $updateQuery->prepare()->execute();
+    }
+
+    /**
+     * Stores new field data
+     *
+     * @param VersionInfo $versionInfo
+     * @param Field $field
+     *
+     * @return void
+     */
+    protected function storeNewFieldData( VersionInfo $versionInfo, Field $field )
+    {
+        $connection = $this->getConnection();
+
+        $insertQuery = $connection->createInsertQuery();
+        $insertQuery->insertInto( $connection->quoteTable( 'ezgmaplocation' ) )
+            ->set(
+                $connection->quoteColumn( 'latitude' ),
+                $insertQuery->bindValue( $field->value->externalData['latitude'] )
+            )->set(
+                $connection->quoteColumn( 'longitude' ),
+                $insertQuery->bindValue( $field->value->externalData['longitude'] )
+            )->set(
+                $connection->quoteColumn( 'address1' ),
+                $insertQuery->bindValue( $field->value->externalData['address1'] )
+            )->set(
+                $connection->quoteColumn( 'country' ),
+                $insertQuery->bindValue( $field->value->externalData['country'] )
+            )->set(
+                $connection->quoteColumn( 'contentobject_attribute_id' ),
+                $insertQuery->bindValue( $field->id, null, \PDO::PARAM_INT )
+            )->set(
+                $connection->quoteColumn( 'contentobject_version' ),
+                $insertQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+            );
+
+        $insertQuery->prepare()->execute();
+    }
+
+    /**
+     * Sets the loaded field data into $field->externalData.
+     *
+     * @param VersionInfo $versionInfo
+     * @param Field $field
+     *
+     * @return array
+     */
+    public function getFieldData( VersionInfo $versionInfo, Field $field )
+    {
+        $field->value->externalData = $this->loadFieldData( $field->id, $versionInfo->versionNo );
+    }
+
+    /**
+     * Returns the data for the given $fieldId
+     *
+     * If no data is found, null is returned.
+     *
+     * @param int $fieldId
+     *
+     * @return array|null
+     */
+    protected function loadFieldData( $fieldId, $versionNo )
+    {
+        $connection = $this->getConnection();
+
+//        $selectQuery = $connection->createSelectQuery();
+//        $selectQuery->select(
+//            $connection->quoteColumn( 'latitude' ),
+//            $connection->quoteColumn( 'longitude' ),
+//            $connection->quoteColumn( 'address' )
+//        )->from(
+//            $connection->quoteTable( 'ezgmaplocation' )
+//        )->where(
+//            $selectQuery->expr->lAnd(
+//                $selectQuery->expr->eq(
+//                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+//                    $selectQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+//                ),
+//                $selectQuery->expr->eq(
+//                    $connection->quoteColumn( 'contentobject_version' ),
+//                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+//                )
+//            )
+//        );
+//
+//        $statement = $selectQuery->prepare();
+//        $statement->execute();
+//
+//        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+//
+//        if ( !isset( $rows[0] ) )
+//        {
+//            return null;
+//        }
+//
+//        // Cast coordinates as the DB can return them as strings
+//        $rows[0]["latitude"] = (float)$rows[0]["latitude"];
+//        $rows[0]["longitude"] = (float)$rows[0]["longitude"];
+
+
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn( 'latitude' ),
+            $connection->quoteColumn( 'longitude' ),
+            $connection->quoteColumn( 'altitude' ),
+            $connection->quoteColumn( 'country' ),
+            $connection->quoteColumn( 'contact' ),
+            $connection->quoteColumn( 'adress1' ),
+            $connection->quoteColumn( 'adress2' ),
+            $connection->quoteColumn( 'zip' ),
+            $connection->quoteColumn( 'town' ),
+            $connection->quoteColumn( 'province' ),
+            $connection->quoteColumn( 'subregion' ),
+            $connection->quoteColumn( 'properties' )
+        )->from(
+            $connection->quoteTable( 'cjwgeoaddress_data' )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $selectQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                ),
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_attribute_version' ),
+                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+
+        if ( !isset( $rows[0] ) )
+        {
+            return null;
+        }
+
+        // Cast coordinates as the DB can return them as strings
+        $rows[0]["latitude"] = (float)$rows[0]["latitude"];
+        $rows[0]["longitude"] = (float)$rows[0]["longitude"];
+        $rows[0]["altitude"] = (float)$rows[0]["altitude"];
+        $rows[0]["country"] = (string)$rows[0]["country"];
+        $rows[0]["contact"] = (string)$rows[0]["contact"];
+        $rows[0]["adress1"] = (string)$rows[0]["adress1"];
+        $rows[0]["adress2"] = (string)$rows[0]["adress2"];
+        $rows[0]["zip"] = (string)$rows[0]["zip"];
+        $rows[0]["town"] = (string)$rows[0]["town"];
+        $rows[0]["province"] = (string)$rows[0]["province"];
+        $rows[0]["subregion"] = (string)$rows[0]["subregion"];
+        $rows[0]["properties"] = (string)$rows[0]["properties"];
+
+        return $rows[0];
+    }
+
+    /**
+     * Returns if field data exists for $fieldId
+     *
+     * @param int $fieldId
+     * @param int $versionNo
+     *
+     * @return boolean
+     */
+    protected function hasFieldData( $fieldId, $versionNo )
+    {
+        return ( $this->loadFieldData( $fieldId, $versionNo ) !== null );
+    }
+
+    /**
+     * Deletes the data for all given $fieldIds
+     *
+     * @param VersionInfo $versionInfo
+     * @param array $fieldIds
+     *
+     * @return void
+     */
+    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds )
+    {
+        if ( empty( $fieldIds ) )
+        {
+            // Nothing to do
+            return;
+        }
+
+        $connection = $this->getConnection();
+
+        $deleteQuery = $connection->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $connection->quoteTable( 'ezgmaplocation' )
+        )->where(
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->in(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $fieldIds
+                ),
+                $deleteQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_version' ),
+                    $deleteQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $deleteQuery->prepare()->execute();
+    }
+}
+

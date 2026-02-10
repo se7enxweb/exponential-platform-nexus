@@ -1,0 +1,10 @@
+# working for ez1411
+# custom eZ API search criterion for legacy search - FlowBlockType #10523
+services:
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.flow_block_type:
+        #parent: ezpublish.persistence.legacy.search.gateway.criterion_handler.base
+        class: Cjw\PublishToolsBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FlowBlockType
+        arguments: ['@ezpublish.api.storage_engine.legacy.dbhandler']
+        tags:
+            - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.content}
+            - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.location}

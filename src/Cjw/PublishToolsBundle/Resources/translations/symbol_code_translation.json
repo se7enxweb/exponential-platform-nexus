@@ -1,0 +1,166 @@
+{
+"clearsky":{
+"ger-DE":"klarer Himmel",
+"eng-GB":"clear sky"
+},
+"cloudy":{
+"ger-DE":"bewölkter Himmel",
+"eng-GB":"cloudy sky"
+},
+"fair":{
+"ger-DE":"heiterer Himmel",
+"eng-GB":"fair sky"
+},
+"fog":{
+"ger-DE":"Nebel",
+"eng-GB":"fog"
+},
+"heavyrain":{
+"ger-DE":"starker Regen",
+"eng-GB":"heavy rain"
+},
+"heavyrainandthunder":{
+"ger-DE":"starker Regen und Gewitter",
+"eng-GB":"heavy rain and thunder"
+},
+"heavyrainshowers":{
+"ger-DE":"heftige Regenschauer",
+"eng-GB":"heavy rain showers"
+},
+"heavyrainshowersandthunder":{
+"ger-DE":"starke Regenschauer und Gewitter",
+"eng-GB":"heavy rain showers and thunderstorms"
+},
+"heavysleet":{
+"ger-DE":"heftiger Graupel",
+"eng-GB":"heavy sleet"
+},
+"heavysleetandthunder":{
+"ger-DE":"starke Graupel und Gewitter",
+"eng-GB":"heavy sleet and thunderstorms"
+},
+"heavysleetshowers":{
+"ger-DE":"heftige Graupelschauer",
+"eng-GB":"heavy sleet showers"
+},
+"heavysleetshowersandthunder":{
+"ger-DE":"heftige Graupelschauer und Gewitter",
+"eng-GB":"heavy sleet showers and thunderstorms"
+},
+"heavysnow":{
+"ger-DE":"starker Schnee",
+"eng-GB":"heavy snow"
+},
+"heavysnowandthunder":{
+"ger-DE":"starker Schnee und Gewitter",
+"eng-GB":"heavy snow and thunderstorms"
+},
+"heavysnowshowers":{
+"ger-DE":"heftige Schneeschauer",
+"eng-GB":"heavy snow showers"
+},
+"heavysnowshowersandthunder":{
+"ger-DE":"heftige Schneeschauer und Gewitter",
+"eng-GB":"heavy snow showers and thunderstorms"
+},
+"lightrain":{
+"ger-DE":"leichter Regen",
+"eng-GB":"light rain"
+},
+"lightrainandthunder":{
+"ger-DE":"leichter Regen und Gewitter",
+"eng-GB":"light rain and thunderstorms"
+},
+"lightrainshowers":{
+"ger-DE":"leichter Regenschauer",
+"eng-GB":"light rain shower"
+},
+"lightrainshowersandthunder":{
+"ger-DE":"leichter Regenschauer und Gewitter",
+"eng-GB":"light rain and thunderstorm"
+},
+"lightsleet":{
+"ger-DE":"leichter Graupel",
+"eng-GB":"light sleet"
+},
+"lightsleetandthunder":{
+"ger-DE":"leichter Graupel und Gewitter",
+"eng-GB":"light sleet and thunderstorm"
+},
+"lightsleetshowers":{
+"ger-DE":"leichter Graupelschauer",
+"eng-GB":"light sleet shower"
+},
+"lightsnow":{
+"ger-DE":"leichter Schnee",
+"eng-GB":"light snow"
+},
+"lightsnowandthunder":{
+"ger-DE":"leichter Schnee und Gewitter",
+"eng-GB":"light snow and thunderstorm"
+},
+"lightsnowshowers":{
+"ger-DE":"leichter Schneeschauer und Gewitter",
+"eng-GB":"light snow shower and thunderstorm"
+},
+"lightssleetshowersandthunder":{
+"ger-DE":"leichter Graupelschauer und Gewitter",
+"eng-GB":"light sleet shower and thunderstorm"
+},
+"lightssnowshowersandthunder":{
+"ger-DE":"leichter Schneeschauer und Gewitter",
+"eng-GB":"light snow shower and thunderstorm"
+},
+"partlycloudy":{
+"ger-DE":"teilweise bewölkter Himmel",
+"eng-GB":"partly cloudy sky"
+},
+"rain":{
+"ger-DE":"Regen",
+"eng-GB":"rain"
+},
+"rainandthunder":{
+"ger-DE":"Regen und Gewitter",
+"eng-GB":"rain and thunderstorm"
+},
+"rainshowers":{
+"ger-DE":"Regenschauer",
+"eng-GB":"Rain shower"
+},
+"rainshowersandthunder":{
+"ger-DE":"Regenschauer und Gewitter",
+"eng-GB":"Rain shower and thunderstorm"
+},
+"sleet":{
+"ger-DE":"Graupel",
+"eng-GB":"Sleet"
+},
+"sleetandthunder":{
+"ger-DE":"Graupel und Gewitter",
+"eng-GB":"Sleet and thunderstorms"
+},
+"sleetshowers":{
+"ger-DE":"Graupelschauer",
+"eng-GB":"Sleet showers"
+},
+"sleetshowersandthunder":{
+"ger-DE":"Graupelschauer und Gewitter",
+"eng-GB":"Sleet showers and thunderstorms"
+},
+"snow":{
+"ger-DE":"Schnee",
+"eng-GB":"Snow"
+},
+"snowandthunder":{
+"ger-DE":"Schnee und Gewitter",
+"eng-GB":"Snow and thunderstorm"
+},
+"snowshowers":{
+"ger-DE":"Schneeschauer",
+"eng-GB":"Snow shower"
+},
+"snowshowersandthunder":{
+"ger-DE":"Schneeschauer und Gewitter",
+"eng-GB":"Snow showers and thunderstorms"
+}
+}

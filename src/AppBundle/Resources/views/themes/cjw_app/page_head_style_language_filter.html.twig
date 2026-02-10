@@ -1,0 +1,18 @@
+{% if ezpublish.availableLanguages is defined %}
+    {% set current_lang = current_content_language|default(content.contentInfo.mainLanguageCode|default(null)) %}
+    <style type="text/css">
+        {% for language in ezpublish.availableLanguages %}
+            {% set translation_site_access = ezpublish.translationSiteAccess(language) %}
+
+            .{{ translation_site_access }} {
+                display: none !important;
+            }
+
+            {% if current_lang is not empty and current_lang == language %}
+                .{{ translation_site_access }} {
+                    display: block !important;
+                }
+            {% endif %}
+        {% endfor %}
+    </style>
+{% endif %}

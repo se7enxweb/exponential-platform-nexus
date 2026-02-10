@@ -1,0 +1,75 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% from '@ezdesign/parts/macros/cjw_macros.html.twig' import
+    cjw_toggle_target_id,
+    cjw_toggle_toggler_attr,
+    cjw_css_content_class as css_class
+%}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_content_fields.html.twig' as cjw_content_fields %}
+
+{# -- Get parameters -- #}
+{% set use_link = true %}
+
+{# -- Compatibility for differing classes -- #}
+{% set intro_field = content.fields.teaser_intro|default %}
+{% set body_field  = content.fields.full_intro|default %}
+
+{% if content.fields.body is defined and content.fields.body.empty %}
+    {% set use_link = false %}
+{% endif %}
+
+<article class="view-type view-type-{{ view_type }} {{ css_class( content ) }} vl1">
+
+    {% if not use_link %}
+        {{ content_fields.image(content, null, 'i770') }}
+    {% else %}
+        {{ content_fields.image(content, location, 'i770') }}
+    {% endif %}
+
+    <header class="article-header">
+        <h2 class="title">
+            {% if use_link %}<a href="{{ path(location) }}">{% endif %}
+                {{ content_fields.title(content) }}
+            {% if use_link %}</a>{% endif %}
+        </h2>
+        <div class="info">
+            {% if not content.fields.authors.empty %}
+                {% for author in content.fieldRelations('authors') %}
+                    <a href="{{ path(author) }}" class="article-author">{{ author.name }}</a>
+                {% endfor %}
+            {% endif %}
+            {% if not content.fields.sponsored_content_disclosure.empty %}
+                <span class="sponsored-tag">{{ 'ngsite.layout.sponsored'|trans }}</span>
+            {% elseif not content.fields.main_topic.empty %}
+                <a href="{{ ngsite_topic_path(content.fields.main_topic.value.tags[0]) }}">
+                    {{ content.fields.main_topic.value.tags[0].keyword }}
+                </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="article-body">
+        {% with %}
+            {% set target_prefix = 'offer-body' %}
+
+            {% if intro_field and not intro_field.empty %}
+                {{ ng_render_field( intro_field ) }}
+            {% endif %}
+
+            {% if with_intro|default( false ) %}
+                {% if body_field and not body_field.empty %}
+
+{#                    <div class="collapse" id="{{ target_prefix }}{{ content.id }}">#}
+                    <div class="collapse" id="{{ cjw_toggle_target_id( content.id, target_prefix ) }}">
+                        {{ ng_render_field( body_field ) }}
+                    </div>
+
+                    <a class="arrow collapsed"
+                       {{ cjw_toggle_toggler_attr( content.id, target_prefix ) }}></a>
+                {% endif %}
+            {% endif %}
+        {% endwith %}
+    </section>
+</article>

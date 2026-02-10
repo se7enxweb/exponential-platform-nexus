@@ -1,0 +1,23 @@
+{% extends '@NetgenLayoutsAdmin/app/block/block.html.twig' %}
+
+{% import '@NetgenLayoutsAdmin/app/parts/macros.html.twig' as macros %}
+
+{% block content %}
+    {% set list_events = block.dynamicParameter('list_events') %}
+    {% set view_type = block.dynamicParameter('view_type') %}
+    {% set number_of_columns = block.dynamicParameter('number_of_columns') %}
+
+    {% if list_events.list is defined and list_events.list is not empty %}
+        <div class="{% if view_type == 'grid' %}grid-row{% else %}list-row{% endif %}">
+            {% for event in list_events.list %}
+                <div class="{% if view_type == 'grid' %}grid-item cols-{{ number_of_columns }}{% else %}list-item{% endif %}">
+                    {% if view_type == 'grid' %}
+                        {{ render( controller( "ez_content:viewLocation", {'locationId': event.contentInfo.mainLocationId, 'viewType': 'line'} ) ) }}
+                    {% else %}
+                        {{ render( controller( "ez_content:viewLocation", {'locationId': event.contentInfo.mainLocationId, 'viewType': 'line'} ) ) }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

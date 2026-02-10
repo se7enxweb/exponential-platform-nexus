@@ -1,0 +1,38 @@
+# cjwtranslation # src/AppBundle/Resources/translations/messages.de.yml
+ngsite.layout.search: "Suche"
+ngsite.layout.search.button: "Los"
+ngsite.layout.search_site: "Suche %site_name%"
+ngsite.layout.site_frontpage: "%site_name% Titelseite"
+ngsite.layout.meta_generator: "eZ Platform powered by JAC Systeme"
+ngsite.layout.powered_by: "Powered by"
+ngsite.layout.cookie_settings: "Cookie Einstellungen"
+ngsite.layout.sponsored: 'Gesponsert'
+
+ngsite.search.title: 'Suche'
+ngsite.search.placeholder: 'Suchen'
+ngsite.search.button: 'Suchen'
+
+ngsite.search.results: 'Suche nach "%searchText%" ergab %searchCount% Treffer'
+ngsite.search.no_results: 'Es wurden keine Ergebnisse bei der Suche nach "%searchText%" gefunden.'
+
+ngsite.search.no_results.check_spelling: 'Prüfen Sie die Schreibweise der Schlüsselwörter.'
+ngsite.search.no_results.change_keywords: 'Versuchen Sie, einige Schlüsselwörter zu ändern (z. B. "Auto" anstelle von "Autos").'
+ngsite.search.no_results.less_specific_keywords: 'Versuchen Sie, mit weniger spezifischen Schlüsselwörtern zu suchen.'
+ngsite.search.no_results.reduce_keywords: 'Reduzieren Sie die Anzahl der Schlüsselwörter, um mehr Ergebnisse zu erhalten.'
+
+ngsite.collected_info.success_text: 'Vielen Dank für Ihr Feedback.'
+ngsite.collected_info.return_to_site: 'Zurück zur Startseite'
+ngsite.collected_info.button.send: 'Senden'
+ngsite.collected_info.information_collected: 'Die folgenden Informationen wurden gesammelt'
+ngsite.collected_info.mandority: 'Pflichtfelder'
+
+ngsite.layout.recipe.min: 'Min'
+ngsite.layout.recipe.cal: 'Kal'
+ngsite.layout.recipe.preparation_time: 'Zubereitungszeit'
+ngsite.layout.recipe.fat: 'Fett'
+ngsite.layout.recipe.carbs: 'Kohl'
+ngsite.layout.recipe.protein: 'Prot'
+
+ngsite.layout.event.at: 'um'
+ngsite.layout.event.clock: 'Uhr'
+ngsite.layout.event.to: 'bis'

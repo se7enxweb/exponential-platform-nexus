@@ -1,0 +1,106 @@
+#should be in site bundle!!!
+parameters:
+#    # override default ez ViewController - set TTL from twig template possible
+#    ezpublish.controller.content.view.class: Cjw\PublishToolsBundle\Controller\Content\CjwPublishToolsViewController
+
+    # Default error template, which will be loaded if the ExceptionListener catches an exception
+    # Siteaccess aware so we can define a custom error tpl
+    # cjw_publishtools.{SiteAccess}.eventlistener.exception.template: MyBundle:Folder:errer.html.twig
+    cjw_publishtools.default.eventlistener.exception.template: CjwPublishToolsBundle:exception:error.html.twig
+
+    # Filepath + -name for formbuilder Config, from EZROOT directory
+    cjw_publishtools.default.formbuilder.config_file: src/Cjw/PublishToolsBundle/Resources/config/formbuilder.example.yml
+
+
+
+
+services:
+
+
+# @see src/Cjw/PublishToolsBundle/Resources/config/services/publish_tools_service_use_ez_objects.yml
+# @see src/Cjw/PublishToolsBundle/Resources/config/services/publish_tools_service_use_netgen_siteapi_objects.yml
+#    cjw_publishtools.service.functions:
+#        class: Cjw\PublishToolsBundle\Services\PublishToolsService
+#        arguments: ['@ezpublish.api.repository', '@ezpublish.config.resolver', '@ezpublish.translation_helper' , '@?logger' ]
+# enable siteApi for publishtools
+#        arguments: ['@ezpublish.api.repository', '@ezpublish.config.resolver', '@ezpublish.translation_helper' , '@?logger', '@netgen.ezplatform_site.site' ]
+
+
+    cjw_publishtools.twig.functions:
+        class: Cjw\PublishToolsBundle\Services\TwigFunctionsService
+        arguments: ['@service_container', '@cjw_publishtools.service.functions']
+        tags:
+            - { name: twig.extension }
+
+    cjw_publishtools.twig.content.functions:
+        class: Cjw\PublishToolsBundle\Services\TwigContentFunctionsService
+        arguments: ['@service_container', '@ezpublish.api.repository', '@ezpublish.config.resolver', '@?logger']
+        tags:
+            - { name: twig.extension }
+
+    cjw_publishtools.twig.config.functions:
+        class: Cjw\PublishToolsBundle\Services\TwigConfigFunctionsService
+        arguments: ['@service_container', '@ezpublish.config.resolver']
+        tags:
+            - { name: twig.extension }
+
+# in ezplatform 2.5 nicht gebraucht
+#    twig.extension.text:
+#        class: Twig_Extensions_Extension_Text
+#        tags:
+#            - { name: twig.extension }
+
+    cjw_publishtools.formbuilder.functions:
+        class: Cjw\PublishToolsBundle\Services\FormBuilderService
+        arguments: ['@service_container', "$formbuilder.config_file;cjw_publishtools$"]
+    cjw_publishtools.formhandler.functions:
+        class: Cjw\PublishToolsBundle\Services\FormHandlerService
+        arguments: ['@service_container','@doctrine.orm.entity_manager','@mailer','@templating','@cjw_publishtools.formbuilder.functions']
+
+#    # define a dummy form type for symfony 3.4, I'm shur there is a better way - maybe
+#    # in symfony 4.x this will be changed again
+#    cjw_publishtools.formbuildertype:
+#        class: Cjw\PublishToolsBundle\Form\Type\FormBuilderType
+#        tags:
+#            - { name: form.type, alias: form_builder_type }
+
+    # define db tables as services
+    db_table_ezinfocollection:
+        class: Cjw\PublishToolsBundle\Entity\Ezinfocollection
+    db_table_ezinfocollection_attribute:
+        class: Cjw\PublishToolsBundle\Entity\EzinfocollectionAttribute
+
+#    cjw_publishtools.mobiledetect.library:
+#        class: Cjw\PublishToolsBundle\Services\MobileDetectService
+
+    # Show exceptions/errors in self defined template
+#    cjw_publishtools.eventlistener.exception:
+#        class: Cjw\PublishToolsBundle\EventListener\ExceptionListener
+#        arguments: [@templating, @kernel, "$eventlistener.exception.template;cjw_publishtools$"]
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+
+    ezpublish.fieldType.cjwnewsletterlist:
+        class: "%ezpublish.fieldType.eznull.class%"
+        parent: ezpublish.fieldType
+        arguments: [ "cjwnewsletterlist" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: cjwnewsletterlist}
+
+    ezpublish.fieldType.cjwnewsletteredition:
+        class: "%ezpublish.fieldType.eznull.class%"
+        parent: ezpublish.fieldType
+        arguments: [ "cjwnewsletteredition" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: cjwnewsletteredition}
+
+    ezpublish.fieldType.cjwnewsletterlist.converter:
+        class: "%ezpublish.fieldType.eznull.converter.class%"
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: cjwnewsletterlist}
+
+    ezpublish.fieldType.cjwnewsletteredition.converter:
+        class: "%ezpublish.fieldType.eznull.converter.class%"
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: cjwnewsletteredition}

@@ -1,0 +1,6 @@
+services:
+    cjw.netgen_layouts_extended.block.block_definition.handler.spacer:
+        class: Cjw\NetgenLayoutsExtendedBundle\Block\BlockDefinition\Handler\SpacerHandler
+        arguments: ['@ezpublish.config.resolver']
+        tags:
+            - { name: netgen_layouts.block_definition_handler, identifier: spacer }

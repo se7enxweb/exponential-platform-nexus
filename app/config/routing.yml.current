@@ -1,0 +1,112 @@
+_users_lower:
+    path: /users
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+        path: /Users
+        permanent: true
+
+_Users:
+    path: /Users
+    defaults:
+        _controller: ezpublish_legacy.controller:indexAction
+
+login:
+    path: /login
+    defaults: { _controller: ezpublish.security.controller:loginAction }
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
+
+kernel.internal:
+    resource: '@EzPublishCoreBundle/Resources/config/routing/internal.yml'
+
+kernel.rest:
+    resource: '@EzPublishRestBundle/Resources/config/routing.yml'
+    prefix: '%ezpublish_rest.path_prefix%'
+
+kernel.rest.options:
+    resource: '@EzPublishRestBundle/Resources/config/routing.yml'
+    prefix: '%ezpublish_rest.path_prefix%'
+    type: rest_options
+
+ezplatform.admin_ui:
+    resource: '@EzPlatformAdminUiBundle/Resources/config/routing.yml'
+    defaults:
+        siteaccess_group_whitelist: ['%admin_group_name%', 'ngadmin_group']
+
+ezplatform.admin_ui.rest:
+    resource: '@EzPlatformAdminUiBundle/Resources/config/routing_rest.yml'
+    prefix: '%ezpublish_rest.path_prefix%'
+
+ezplatform.user:
+    resource: '@EzPlatformUserBundle/Resources/config/routing.yml'
+
+_ezplatformRepositoryFormsRoutes:
+    resource: '@EzSystemsRepositoryFormsBundle/Resources/config/routing.yml'
+
+fos.js_routing:
+    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
+
+ezplatform.httpcache:
+    resource: '@EzSystemsPlatformHttpCacheBundle/Resources/config/routing.yml'
+
+#
+# GraphQL
+#
+
+overblog_graphql:
+    resource: "@OverblogGraphQLBundle/Resources/config/routing/graphql.yml"
+
+overblog_graphql_endpoint:
+    path: /graphql
+    defaults:
+        _controller: Overblog\GraphQLBundle\Controller\GraphController::endpointAction
+        _format: json
+
+prime_translations:
+    resource: '@PrimeTranslationsBundle/Resources/config/routing.yml'
+
+ezpublish_legacy:
+    resource: '@EzPublishLegacyBundle/Resources/config/routing.yml'
+
+netgen_tags:
+    resource: '@NetgenTagsBundle/Resources/config/routing.yml'
+
+netgen_information_collection:
+    resource: '@NetgenInformationCollectionBundle/Resources/config/routing.yml'
+
+netgen_layouts:
+    resource: '@NetgenLayoutsBundle/Resources/config/routing.yaml'
+    prefix: '%netgen_layouts.route_prefix%'
+
+netgen_layouts_ezplatform:
+    resource: '@NetgenLayoutsEzPlatformBundle/Resources/config/routing.yaml'
+
+netgen_content_browser:
+    resource: '@NetgenContentBrowserBundle/Resources/config/routing.yaml'
+    prefix: '%netgen_content_browser.route_prefix%'
+
+# Netgen Site routes follow. It is recommended to keep them at the end of file
+
+netgen_site:
+    resource: '@NetgenSiteBundle/Resources/config/routing.yml'
+
+netgen_admin_ui:
+    resource: '@NetgenAdminUIBundle/Resources/config/routing.yml'
+
+cjw_config_processor_bundle:
+    resource: "@CJWConfigProcessorBundle/Resources/config/routing.yaml"
+
+app:
+    resource: '@AppBundle/Resources/config/routing.yml'
+
+# Catch-all fallback for legacy content URL aliases
+_legacy_fallback:
+    path: /{path}
+    defaults:
+        _controller: ezpublish_legacy.controller:indexAction
+    requirements:
+        path: '^(?!api/|admin/|_wdt/|_profiler/|_error/|bundles/).*'

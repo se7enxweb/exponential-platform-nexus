@@ -1,0 +1,281 @@
+{% macro content_relation_parameters(location, content, link_name, link_class) %}
+{% apply spaceless %}
+    {% set url = path( location ) %}
+    {% set open_in_new_window = false %}
+    {% set link_class = link_class|default %}
+
+    {% if content.fields.url is defined and not content.fields.url.empty %}
+        {% set url = content.fields.url.value.link %}
+
+        {% if content.fields.target_blank is defined and content.fields.target_blank.value.bool %}
+            {% set open_in_new_window = true %}
+        {% endif %}
+    {% elseif content.fields.related_object is defined and not content.fields.related_object.empty %}
+        {% set related_content = content.fieldRelation('related_object') %}
+
+        {% if related_content is not null and related_content.id != content.id %} {# dead loop #}
+            {% set url = path(related_content) %}
+        {% endif %}
+    {% endif %}
+
+    {% if url %}
+        href="{{ url }}"
+        {% if link_class is not empty %}class="{{ link_class }}"{% endif %}
+        {% if open_in_new_window %}target="_blank" rel="nofollow noopener noreferrer" {% endif %}
+    {% endif %}
+{% endapply %}
+{% endmacro %}
+
+{# Creates a standardized `nav-item` element used in navigations #}
+{% macro cjw_nav_item( nav_item, debug = false ) %}
+    {% import "@ezdesign/parts/macros.html.twig" as macros %}
+
+    {% set use_link_parameter_macro = false %}
+
+    {# If the item has been fetched by using the `cjw_fetch_content` function,
+       rather than the `cjw_treemenu` function, we're going to create an object
+       with the same properties as retured by the `cjw_treemenu` operator. #}
+    {% if nav_item.location is not defined %}
+        {% set location = nav_item %}
+        {% set content = nav_item.content %}
+
+        {% set nav_item = {
+            'location' : location,
+            'content' : content,
+            'name' : content.name
+        }%}
+    {% endif %}
+
+    {% set nav_item_css_class =
+        nav_item.selected|default( nav_item.is_active|default ) ? ' active' ~
+        nav_item.highlight|default                              ? ' highlight' %}
+
+    {% if nav_item.content.contentInfo.contentTypeIdentifier in [ 'ng_shortcut' ] %}
+        {% set use_link_parameter_macro = true %}
+    {% endif %}
+
+    <li class="nav-item{{ nav_item_css_class }}">
+        {% if debug %}[{{ nav_item.location.priority }}]{% endif %}
+        <a class="nav-link"
+           {% if use_link_parameter_macro %}{{ macros.content_link_parameters( nav_item.content ) }}{% else %}href="{{ nav_item.location is defined ? path( nav_item.location ) : '#' }}{% endif %}">
+            {{ nav_item.name|default( nav_item.content.name|default ) }}
+        </a>
+    </li>
+{% endmacro %}
+
+{# Renders an element id for toggling functionality #}
+{% macro cjw_toggle_target_id( id, prefix = '' ) %}
+{% apply spaceless %}
+    {{ prefix }}-{{ id }}
+{% endapply %}
+{% endmacro %}
+
+{# Renders the HTML attributes for the element, which initiates the toggling #}
+{% macro cjw_toggle_toggler_attr( id, prefix ) %}
+{% apply spaceless %}
+    {% from _self import cjw_toggle_target_id as target_id %}
+
+    data-toggle="collapse"
+    data-target="#{{ target_id( id, prefix ) }}"
+{% endapply %}
+{% endmacro %}
+
+{# Renders the content_type of a content #}
+{% macro cjw_css_content_class( content, prefix = '' ) %}
+{% apply spaceless %}
+    {% set prefix = (prefix is not empty) ? prefix ~ '-' : ''  %}
+    {{ prefix }}{{ content.contentInfo.contentTypeIdentifier|replace({'_': '-'}) }}
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_get_head_image( location, head_image_classes = [ 'cjw_image_head' ], fallback_image ) %}
+{% apply spaceless %}
+    {% set path_array = [] %}
+    {% set image_head_node_list = [] %}
+    {% set fallback_image = fallback_image ?? ezpublish.configResolver.getParameter( 'header.fallback_image', 'cjwsite')  %}
+
+    {# --- Initialize path array --- #}
+    {% if location.id is defined %}
+        {% set path_array_tmp = cjw_breadcrumb( location.id, { 'offset': '1', 'rootName': '', 'separator': '' } ) %}
+        {% set path_array     = [] %}
+
+        {% for location_id, item in path_array_tmp.items|reverse(true) %}
+            {% set path_array = path_array|merge( [location_id] ) %}
+        {% endfor %}
+
+{#        {% if cjw_get_content_type_identifier( location.contentInfo.contentTypeId ) == 'cjw_image_head' %}#}
+        {% if cjw_get_content_type_identifier( location.contentInfo.contentTypeId ) in head_image_classes %}
+            {% if not ez_is_field_empty( content, 'image' ) and content.getFieldValue( 'image' ).uri is defined %}
+                {% set image_head_path = content.getFieldValue( 'image' ).uri %}
+            {% endif %}
+
+            {% set path_array = [ location.id ] %}
+            {% set image_head_node_list = [location] %}
+        {% endif %}
+    {% endif %}
+
+    {# --- Initialize "head images" --- #}
+    {% set image_head_node_arr = cjw_fetch_content( path_array, {
+        'depth': 1,
+        'include': head_image_classes,
+        'limit' : 10,
+        'datamap': false,
+        'count': false
+    } ) %}
+
+    {% set break = false %}
+    {# Get the first `children` array, which isn't empty #}
+    {% for node_id, node_result in image_head_node_arr if not break %}
+        {# If there are children underneath the current node/location #}
+        {% if node_result.children|length %}
+            {# Store children of the current node in the `image_head_node_list`
+               variable. #}
+            {% set image_head_node_list = node_result.children %}
+            {# Break on next cycle #}
+            {% set break = true %}
+        {% endif %}
+    {% endfor %}
+
+    {{ image_head_node_list.0.content.fields.image.value.uri|default( fallback_image ) }}
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_embed_video( content ) %}
+{% apply spaceless %}
+    {% set use_external_embed = true %}
+
+    {% set video_types = content.fields.video_type.value.identifiers %}
+    {% set autoplay = content.fields.autoplay.value.bool %}
+
+    {% set image_path = asset('bundles/app/images/video_poster.png') %}
+    {% if not content.fields.poster.empty %}
+        {% set poster_alias = ng_image_alias(content.fields.poster, 'i1200') %}
+
+        {% if poster_alias %}
+            {% set image_path = asset(poster_alias.uri) %}
+        {% endif %}
+    {% endif %}
+
+    {% if 'upload' in video_types %}
+        {% if not content.fields.video_file.empty or not content.fields.video_file_hd.empty %}
+            {% set field_name = content.fields.video_file_hd.empty ? 'video_file' : 'video_file_hd' %}
+
+            <div class="embed-responsive embed-video embed-responsive-16by9">
+                <video class="embed-responsive-item" src="{{ path('ngsite_download', {'contentId': content.id, 'fieldId': content.fields[field_name].id}) }}"{% if autoplay %} autoplay="autoplay"{% endif %} poster="{{ image_path }}">
+                    {# <source type="video/mp4" src="{{ path('ngsite_download', {'contentId': content.id, 'fieldId': content.fields[field_name].id}) }}" /> #}
+                    Your browser does not support html5 video.
+                </video>
+            </div>
+
+            {#
+            <div class="video-config video-local-{{ content.id }}"
+                 data-video_player_id="video-local-{{ content.id }}"
+                 data-width="770"
+                 data-height="433"
+                 data-autostart="{% if autoplay %}true{% else %}false{% endif %}"
+                 data-image="{{ image_path }}"
+                 data-file="{{ path('ngsite_download', {'contentId': content.id, 'fieldId': content.fields[field_name].id}) }}"
+                 data-videotype="local"
+                 data-mimetype="{{ content.fields[field_name].value.mimeType }}">
+            </div>
+
+            <div class="video-container" id="video-local-{{ content.id }}">Loading the player ...</div>
+            #}
+        {% endif %}
+    {% elseif not content.fields.video_identifier.empty %}
+        {% set video_identifier = content.fields.video_identifier.value.text %}
+
+        {% if 'youtube' in video_types %}
+            {% if use_external_embed %}
+                <div class="video-youtube embed-responsive embed-video embed-responsive-16by9">
+                    <iframe {# frameborder="0" #} class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video_identifier }}{% if autoplay %}?autoplay=1{% endif %}" allowfullscreen></iframe>
+                </div>
+            {% else %}
+                <div class="video-youtube">
+                    <div class="video-config video-external-{{ content.id }}"
+                         data-video_player_id="video-external-{{ content.id }}"
+                         data-width="770"
+                         data-height="433"
+                         data-autostart="{% if autoplay %}true{% else %}false{% endif %}"
+                         data-image="{{ image_path }}"
+                         data-file="https://www.youtube.com/watch?v={{ video_identifier }}"
+                         data-videotype="youtube">
+                    </div>
+
+                    <div class="video-container" id="video-external-{{ content.id }}">Loading the player ...</div>
+                </div>
+            {% endif %}
+        {% elseif 'vimeo' in video_types %}
+            {# JW Player does not support Vimeo so only embed is available #}
+            <div class="video-vimeo embed-responsive embed-video embed-responsive-16by9">
+                <iframe {# frameborder="0" #} class="embed-responsive-item" src="https://player.vimeo.com/video/{{ video_identifier }}{% if autoplay %}?autoplay=1{% endif %}" allowfullscreen></iframe>
+            </div>
+        {% elseif 'dailymotion' in video_types %}
+            {# JW Player does not support Daily Motion so only embed is available #}
+            <div class="video-dailymotion embed-responsive embed-video embed-responsive-16by9">
+                <iframe {# frameborder="0" #} class="embed-responsive-item" src="https://www.dailymotion.com/embed/video/{{ video_identifier }}{% if autoplay %}?autoplay=1{% endif %}" allowfullscreen></iframe>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_location_anchor( location ) %}
+{% apply spaceless %}
+    location-{{ location.id }}
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_content_anchor( content ) %}
+{% apply spaceless %}
+    content-{{ content.id }}
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_location_anchor_element( location ) %}
+{% apply spaceless %}
+    {% from _self import cjw_location_anchor %}
+    <a href="#" id="{{ cjw_location_anchor( location ) }}"></a>
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_content_anchor_element( content ) %}
+{% apply spaceless %}
+    {% from _self import cjw_content_anchor %}
+    <a href="#" id="{{ cjw_content_anchor( content ) }}"></a>
+{% endapply %}
+{% endmacro %}
+
+{% macro cjw_event_dates( content ) %}
+{% apply spaceless %}
+    {% if content.fields.event_start is defined and not content.fields.event_start.empty %}
+        <div class="event-dates">
+            {{ content.fields.event_start.value|date( 'd.m.Y' ) }} {{ 'ngsite.layout.event.at'|trans }} {{ content.fields.event_start.value|date( 'H:i' ) }} {{ 'ngsite.layout.event.clock'|trans }}
+
+            {% if content.fields.event_end is defined and not content.fields.event_end.empty %}
+                {{ 'ngsite.layout.event.to'|trans }}
+                {{ content.fields.event_end.value|date( 'd.m.Y' ) }} {{ 'ngsite.layout.event.at'|trans }} {{ content.fields.event_end.value|date( 'H:i' ) }} {{ 'ngsite.layout.event.clock'|trans }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endapply %}
+{% endmacro %}
+
+{% macro collection_list(block, collections, identifier, item_view_type, view_context) %}
+    {% if collections[identifier] is defined and collections[identifier] is not empty %}
+        <div class="list-row">
+            {% for result in collections[identifier] %}
+                <div class="list-item">
+                    {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                        content: result.item.object.content,
+                        location: result.item.object,
+                        view_type: block.itemViewType,
+                        params: { children_submenu: block.parameter('children_submenu').value }
+                    } only %}
+
+                    {# {{ nglayouts_render_result(result, item_view_type, block.itemViewType, { children_submenu: block.parameter('children_submenu').value }, view_context) }} #}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}

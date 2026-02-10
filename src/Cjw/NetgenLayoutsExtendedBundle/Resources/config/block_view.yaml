@@ -1,0 +1,33 @@
+view:
+    block_view:
+        default:
+            spacer\line:
+                template: "@NetgenLayoutsExtendedBundle/Resources/blocks/spacer/line.html.twig"
+                match:
+                    block\definition: spacer
+                    block\view_type: line
+
+            spacer\image:
+                template: "@NetgenLayoutsExtendedBundle/Resources/blocks/spacer/image.html.twig"
+                match:
+                    block\definition: spacer
+                    block\view_type: image
+
+            gallery\carousel:
+                template: "@nglayouts/block/gallery/carousel.html.twig"
+                match:
+                    block\definition: gallery
+                    block\view_type: carousel
+
+        app:
+            spacer\line:
+                template: "@NetgenLayoutsExtendedBundle/Resources/blocks/app/spacer/line.html.twig"
+                match:
+                    block\definition: spacer
+                    block\view_type: line
+
+            spacer\image:
+                template: "@NetgenLayoutsExtendedBundle/Resources/blocks/app/spacer/image.html.twig"
+                match:
+                    block\definition: spacer
+                    block\view_type: image

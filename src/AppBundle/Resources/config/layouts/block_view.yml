@@ -1,0 +1,92 @@
+system:
+    frontend_group:
+        view:
+            block_view:
+                default:
+                    button\button_lightblue:
+                        template: "@nglayouts/block/button/button_custom.html.twig"
+                        match:
+                            block\definition: button
+                            block\view_type: button_lightblue
+
+                    button\button_blue:
+                        template: "@nglayouts/block/button/button_custom.html.twig"
+                        match:
+                            block\definition: button
+                            block\view_type: button_blue
+
+                    button\button_green:
+                        template: "@nglayouts/block/button/button_custom.html.twig"
+                        match:
+                            block\definition: button
+                            block\view_type: button_green
+
+                    title\boat_blue:
+                        template: "@nglayouts/block/title/boat_blue.html.twig"
+                        match:
+                            block\definition: title
+                            block\view_type: boat_blue
+
+                    title\boat_brown:
+                        template: "@nglayouts/block/title/boat_brown.html.twig"
+                        match:
+                            block\definition: title
+                            block\view_type: boat_brown
+
+                    title\centered:
+                        template: "@nglayouts/block/title/centered.html.twig"
+                        match:
+                            block\definition: title
+                            block\view_type: title_centered
+
+                    title\section:
+                        template: "@nglayouts/block/title/section.html.twig"
+                        match:
+                            block\definition: title
+                            block\view_type: section
+
+                    title\section_centered:
+                        template: "@nglayouts/block/title/section_centered.html.twig"
+                        match:
+                            block\definition: title
+                            block\view_type: section_centered
+
+                    list\numbered:
+                        template: "@nglayouts/block/list/numbered.html.twig"
+                        match:
+                            block\definition: list
+                            block\view_type: list_numbered
+
+                    list\grid_featured:
+                        template: "@nglayouts/block/list/grid_featured.html.twig"
+                        match:
+                            block\definition: list
+                            block\view_type: grid_featured
+
+                    list\grid_tiles:
+                        template: "@nglayouts/block/list/grid_tiles.html.twig"
+                        match:
+                            block\definition: list
+                            block\view_type: grid_tiles
+
+                ajax:
+                    list\numbered:
+                        template: "@nglayouts/block/list/list_ajax.html.twig"
+                        match:
+                            block\definition: list
+                            block\view_type: list_numbered
+
+view:
+    block_view:
+        app:
+            list\numbered:
+                template: "@NetgenLayoutsStandard/app/block/list/list.html.twig"
+                match:
+                    block\definition: list
+                    block\view_type: list_numbered
+
+            list\grid_featured:
+                template: "@NetgenLayoutsStandard/app/block/list/grid.html.twig"
+                match:
+                    block\definition: list
+                    block\view_type: grid_featured

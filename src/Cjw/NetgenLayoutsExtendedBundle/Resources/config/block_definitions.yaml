@@ -1,0 +1,23 @@
+block_definitions:
+    spacer:
+        name: 'Trenner'
+        view_types:
+            line:
+                name: 'Linie'
+                valid_parameters: ['!image']
+            image:
+                name: 'Bild'
+
+    gallery:
+        name: 'Gallery'
+        collections: ~
+        view_types:
+            carousel:
+                name: 'Karussell'
+                valid_parameters:
+                    - '!autoplay_time'
+                    - '!number_of_thumbnails'
+                    - '!thumbnails_to_move'
+                    - '!show_details'
+                    - '!show_details_on_hover'
+                    - '!enable_lightbox'

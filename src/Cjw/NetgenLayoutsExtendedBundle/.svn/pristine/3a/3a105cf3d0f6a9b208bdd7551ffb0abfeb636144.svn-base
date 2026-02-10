@@ -1,0 +1,16 @@
+{% extends '@NetgenLayoutsAdmin/app/block/block.html.twig' %}
+
+{% import '@NetgenLayoutsAdmin/app/parts/macros.html.twig' as macros %}
+
+{% block content %}
+    {% set image_path = block.dynamicParameter('image_path') %}
+    {% set align = block.dynamicParameter('align') %}
+
+    {% if image_path is not null and image_path != 'no_image_defined' %}
+        <div class="spacer {{ align }}">
+            <img src="{{ asset( image_path ) }}" alt="" />
+        </div>
+    {% else %}
+        Keine Bilder in der "netgen_layouts_extended.yaml" definiert!
+    {% endif %}
+{% endblock %}

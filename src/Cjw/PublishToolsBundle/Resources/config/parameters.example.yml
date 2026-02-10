@@ -1,0 +1,6 @@
+parameters:
+    cjwsite.anonymous_user_id: 10
+    cjwsite.default.anonymous_user_id: 10
+
+    sitemaps.default.protocol: http
+    sitemaps.default.include: [ cjw_article, cjw_folder, cjw_frontpage, cjw_folder_site ]

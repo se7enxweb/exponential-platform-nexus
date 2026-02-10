@@ -1,0 +1,140 @@
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+{% import '@ezdesign/parts/macros.html.twig' as ng_macros %}
+
+{% set site_info = ngsite.siteInfoContent %}
+
+{% set site_logo = ezpublish.configResolver.getParameter( 'header.logo_image', 'cjwsite' ) %}
+{% if site_info.fields.site_logo is defined and not site_info.fields.site_logo.empty %}
+    {% set site_logo = path('ngsite_download', {'contentId': site_info.id, 'fieldId': site_info.fields.site_logo.id}) %}
+{% endif %}
+
+{% set is_landing = is_landing|default( 'ng_frontpage' in content.contentInfo.contentTypeIdentifier|default ) %}
+
+{% set fallback_head_image = ezpublish.configResolver.getParameter( 'header.fallback_image', 'cjwsite') %}
+{% if is_landing %}
+    {% set fallback_head_image = ezpublish.configResolver.getParameter( 'header.fallback_image_landing', 'cjwsite') %}
+{% endif %}
+
+{% set list_banner = [] %}
+{% set list_shortcut = [] %}
+
+{% if location is defined %}
+    {% set list_banner = cjw_fetch_content( [ location.id ], {
+        'depth': 1,
+        'include': [ 'ng_banner', 'cjw_banner_head' ],
+        'limit' : 10,
+        'datamap': false,
+        'count': true
+    } )[ location.id ] %}
+
+    {% if list_banner.count == 1 %}
+        {% set list_shortcut = cjw_fetch_content( [ list_banner.children[ 0 ].id ], {
+            'depth': 1,
+            'include': [ 'ng_shortcut' ],
+            'limit' : 1,
+            'datamap': false,
+            'count': false
+        } )[ list_banner.children[ 0 ].id ] %}
+    {% endif %}
+{% endif %}
+
+<header class="site-header">
+    <div class="container">
+        {% include '@ezdesign/parts/base_menu.html.twig' %}
+        {#        {% include '@ezdesign/parts/site_logo.html.twig' %} #}
+    </div>
+    <div class="container-fluid">
+        <div class="background-container{% if is_landing %} large{% endif %}"
+             {% if location is not defined or list_banner.count < 2 %}style="background-image: url({{ cjw_macros.cjw_get_head_image( location|default, [ 'ng_banner' ], fallback_head_image ) }})"{% endif %}>
+
+            {% if list_shortcut.children[ 0 ] is defined %}
+                <div class="speechbubble">
+                    <a {{ ng_macros.content_link_parameters( list_shortcut.children[ 0 ].content ) }}>
+                        <h3>{{ ng_render_field(list_shortcut.children[ 0 ].content.fields.title) }}</h3>
+
+                        {% if list_shortcut.children[ 0 ].content.fields.teaser_intro is defined and not list_shortcut.children[ 0 ].content.fields.teaser_intro.empty %}
+                            {{ ng_render_field(list_shortcut.children[ 0 ].content.fields.teaser_intro) }}
+                        {% endif %}
+                    </a>
+
+                    <a href="javascript:closeBubble()" class="close-link">
+                        <img src="{{ asset('bundles/app/images/icons/close_white.png') }}" alt="Schließen"/>
+                    </a>
+                </div>
+
+                <a href="javascript:showBubble()" class="speechbubble-icon">
+                    <img src="{{ asset('bundles/app/images/icons/open-speechbubble.png') }}" alt="Schließen"/>
+                </a>
+            {% endif %}
+
+            {% if location is defined and list_banner.count > 1 %}
+                <div class="head-image-slider slick-slider no-arrows"
+                     data-slick='{ "arrows" : {% if list_banner.count == 1 %}false{% else %}true{% endif %}, "autoplay" : false, "autoplaySpeed" : 6000, "fade": true, "speed" : 1000 }'>
+                    {% for image_node in list_banner.children %}
+                        <div class="slick-content-container">
+                            {% set list_shortcut = cjw_fetch_content( [ image_node.id ], {
+                                'depth': 1,
+                                'include': [ 'ng_shortcut' ],
+                                'limit' : 1,
+                                'datamap': false,
+                                'count': false
+                            } )[ image_node.id ] %}
+
+                            {% if list_shortcut.children[ 0 ] is defined %}
+                                <div class="speechbubble">
+                                    <a {{ ng_macros.content_link_parameters( list_shortcut.children[ 0 ].content ) }}>
+                                        <h3>{{ ng_render_field(list_shortcut.children[ 0 ].content.fields.title) }}</h3>
+
+                                        {% if list_shortcut.children[ 0 ].content.fields.teaser_intro is defined and not list_shortcut.children[ 0 ].content.fields.teaser_intro.empty %}
+                                            {{ ng_render_field(list_shortcut.children[ 0 ].content.fields.teaser_intro) }}
+                                        {% endif %}
+                                    </a>
+
+                                    <a href="javascript:closeBubble()" class="close-link">
+                                        <img src="{{ asset('bundles/app/images/icons/close_white.png') }}"
+                                             alt="Schließen"/>
+                                    </a>
+                                </div>
+
+                                <a href="javascript:showBubble()" class="speechbubble-icon">
+                                    <img src="{{ asset('bundles/app/images/icons/open-speechbubble.png') }}"
+                                         alt="Schließen"/>
+                                </a>
+                            {% endif %}
+
+                            {% if image_node.content.fields.video is defined and not image_node.content.fields.video.empty %}
+                                {{ cjw_macros.cjw_embed_video( image_node.content.fieldRelation( 'video' ) ) }}
+                            {% else %}
+                                <img class="img-responsive img-fluid"
+                                     src="{{ image_node.content.fields.image.value.uri }}" alt=""/>
+                            {% endif %}
+
+                            {% if image_node.content.fields.header_text is defined and not image_node.content.fields.header_text.empty %}
+                                <div class="header-text">
+                                    {{ ng_render_field(image_node.content.fields.header_text) }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% include '@ezdesign/parts/offcanvas_menu.html.twig' %}
+        </div>
+    </div>
+    <div class="page-header-color-row">
+        <div class="container">
+            <div class="row">
+                <span class="d-none d-xl-block">
+                {% include '@ezdesign/parts/site_logo.html.twig' with {
+                    site_logo : site_logo
+                } %}</span>
+
+                {% for color_no in range( 1, 3 ) %}
+                    <div class="col-4 color color-{{ color_no }}"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</header>

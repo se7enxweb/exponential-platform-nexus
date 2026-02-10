@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="accommodation-group">
+        <h2>
+            Meine Merkliste
+            <span data-basket-item-count></span>
+        </h2>
+        <span class="close" data-toggle="close" data-target="#user-basket"></span>
+
+        {% if location_list|length %}
+            <div class="row no-gutters">
+            {% for appartement in location_list %}
+                {% set data_attributes = [] %}
+
+                {# ToDo: Create macro, which converts an array
+                         of defined data-* attributes to valid
+                         HTML attributes, which can be rendered
+                         for this `<div>` element. #}
+                <div class="col-md-3 col-sm-6">
+                    {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                        content: appartement.content,
+                        location: appartement,
+                        view_type: 'standard_with_intro'
+                    } only %}
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p>Sie haben keine Objekte auf ihrer Merkliste.</p>
+        {% endif %}
+    </div>
+</div>

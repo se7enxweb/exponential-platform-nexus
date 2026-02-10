@@ -1,0 +1,212 @@
+{{ encore_entry_script_tags('app', null, 'app') }}
+<script type="text/javascript" src="{{ asset('app.js', 'nglayouts_' ~ (nglayouts.debug ? 'dev_' : '') ~ 'js') }}"></script>
+<script type="text/javascript" src="{{ asset('app.js', 'nglayouts_standard_' ~ (nglayouts.debug ? 'dev_' : '') ~ 'js') }}"></script>
+<script type="text/javascript" src="https://ssl.optimale-praesentation.de/frontend/js/bin/boot?secratoid=3c91464ce"></script>
+
+<script>
+    jQuery(document).ready(function(){
+
+        jQuery( '.toggle-block.hide-me.state-opened' ).removeClass( 'state-opened' ).addClass( 'state-closed' );
+
+        //jQuery( '.hide-me' ).hide();
+
+      jQuery( '.toggle-block .control' ).on( 'click', function() {
+          block = jQuery( this ).parent();
+
+          isOpen      = false;
+          closeOthers = false;
+
+          if ( block.hasClass( 'close-others' ) ) {
+              closeOthers = true;
+          }
+
+          if ( block.hasClass( 'state-opened' ) ) {
+              isOpen = true;
+          }
+
+          if ( isOpen ) {
+              block.removeClass( 'state-opened' );
+              block.addClass( 'state-closed' );
+          } else {
+              if ( closeOthers ) {
+                  jQuery( '.toggle-block' ).removeClass( 'state-opened' ).addClass( 'state-closed' );
+                  // jQuery( '.toggle-block' ).addClass( 'state-closed' );
+              }
+
+              block.removeClass( 'state-closed' );
+              block.addClass( 'state-opened' );
+          }
+      });
+
+      jQuery( '.toggle-block .control-section' ).on( 'click', function() {
+            block = jQuery( this ).parent();
+
+            isOpen      = false;
+            closeOthers = false;
+
+            if ( block.hasClass( 'close-others' ) ) {
+                closeOthers = true;
+            }
+
+            if ( block.hasClass( 'state-opened' ) ) {
+                isOpen = true;
+            }
+
+            if ( isOpen ) {
+                block.removeClass( 'state-opened' );
+                block.addClass( 'state-closed' );
+            } else {
+                if ( closeOthers ) {
+                    jQuery( '.toggle-block' ).removeClass( 'state-opened' ).addClass( 'state-closed' );
+                    // jQuery( '.toggle-block' ).addClass( 'state-closed' );
+                }
+
+                block.removeClass( 'state-closed' );
+                block.addClass( 'state-opened' );
+            }
+        });
+
+      jQuery( '.view-type-teaser_bg_matrix.chess .bottom, .view-type-teaser_bg_white.chess .bottom' ).each( function() {
+            jQuery( this ).css( 'height', '10rem' );
+        });
+
+      jQuery( '.view-type-teaser_bg_matrix.chess, .view-type-teaser_bg_white.chess' ).on( 'mouseenter', function() {
+            if ( !jQuery( this ).hasClass( 'ng-author' ) ) {
+                jQuery( this ).find( '.bottom' ).addClass( 'full-size' );
+            }
+        });
+
+      jQuery('.view-type-teaser_bg_matrix.chess, .view-type-teaser_bg_white.chess').on('mouseleave', function() {
+            jQuery(this).find('.bottom').removeClass('full-size');
+        });
+
+      if ( jQuery().fancybox ) {
+          jQuery( "a.fancybox-pdf" ).fancybox( { iframe : {
+                                                        preload : false
+                                                    }
+                                             }
+          );
+      }
+
+      if ( jQuery().datepicker ) {
+            var dateDisplayFormat = 'dd.mm.yy';
+            var today = new Date();
+            var travelDate = new Date( today.getFullYear(), today.getMonth(), today.getDate());
+
+            // Standard "Bis"-Zeit
+            var nextWeek = new Date( travelDate.getFullYear(), travelDate.getMonth(), travelDate.getDate()+7);
+
+            // datepicker Sprache setzen
+            jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "de" ] );
+
+            formatedDateToday    = jQuery.datepicker.formatDate( dateDisplayFormat, today );
+            formatedDateNextWeek = jQuery.datepicker.formatDate( dateDisplayFormat, nextWeek );
+
+            lastOpenDatePicker         = 'from';
+            showOtherDatepickerCounter = 0;
+
+            jQuery('.datepicker').datepicker({
+                dateFormat:        dateDisplayFormat,
+                showOn:            'both',
+                buttonImage:       '{{ asset('bundles/app/images/grafiken/symbol-kalender.png') }}',
+                buttonImageOnly:   true,
+                minDate:           0,
+                showWeek:          true,
+                showOtherMonths:   true,
+                selectOtherMonths: true,
+                beforeShow:        function( input, obj ) {
+                                        //jQuery( input ).addClass( 'datepicker-open' );
+                                   },
+                onClose:           function( value, obj ) {
+                                        showOtherDatepickerCounter = showOtherDatepickerCounter + 1;
+
+                                        id   = obj.id;
+                                        jObj = jQuery( '#' + id );
+                                        form = jQuery( jObj.parents( 'form' ).get( 0 ) );
+
+                                        jObj.removeClass( 'datepicker-open' );
+
+                                        if ( showOtherDatepickerCounter < 2 ) {
+                                            selectedDate = new Date( value.split( '.' ).reverse().join( '-' ) );
+
+                                            if ( jObj.hasClass( 'from' ) ) {
+                                                jObjTo = jQuery( form.find( '.to' ).get( 0 ) );
+                                                to     = jObjTo.val();
+
+                                                selectedToDate = new Date( to.split( '.' ).reverse().join( '-' ) );
+
+                                                if ( selectedToDate.getTime() <= selectedDate.getTime() ) {
+                                                    newTo = selectedDate.addDays( 1 );
+                                                    newTo = jQuery.datepicker.formatDate( dateDisplayFormat, newTo );
+
+                                                    jObjTo.datepicker( 'setDate', newTo );
+                                                }
+
+                                                jObjTo.datepicker( 'option', 'minDate', selectedDate.addDays( 1 ) );
+                                                jObjTo.datepicker( 'show' );
+
+                                                lastOpenDatePicker = 'from';
+                                            } else if ( jObj.hasClass( 'to' ) ) {
+                                                jObjFrom = jQuery( form.find( '.from' ).get( 0 ) );
+                                                from     = jObjFrom.val();
+
+                                                selectedFromDate = new Date( from.split( '.' ).reverse().join( '-' ) );
+
+                                                if ( selectedFromDate.getTime() >= selectedDate.getTime() ) {
+                                                    newFrom = selectedDate.subDays( 1 );
+                                                    newFrom = jQuery.datepicker.formatDate( dateDisplayFormat, newFrom );
+
+                                                    jObjFrom.datepicker( 'setDate', newFrom );
+                                                }
+
+                                                jObjFrom.datepicker( 'option', 'maxDate', selectedDate.subDays( 1 ) );
+                                                jObjFrom.datepicker( 'show' );
+
+                                                lastOpenDatePicker = 'to';
+                                            }
+                                        } else {
+                                            showOtherDatepickerCounter = 0;
+
+                                            jQuery( '.datepicker.from' ).datepicker( 'option', 'minDate', 0 );
+                                            jQuery( '.datepicker.from' ).datepicker( 'option', 'maxDate', null );
+                                            jQuery( '.datepicker.to' ).datepicker( 'option', 'maxDate', null );
+                                        }
+                                   }
+            });
+
+            jQuery('.datepicker.from' ).each( function( key, obj ) {
+                if ( jQuery( obj ).val() == '' ) {
+                    jQuery( obj ).attr( 'value', formatedDateToday );
+                    jQuery( obj ).change();
+                }
+            });
+
+            jQuery('.datepicker.to' ).each( function( key, obj ) {
+                if ( jQuery( obj ).val() == '' ) {
+                    jQuery( obj ).attr( 'value', formatedDateNextWeek );
+                    jQuery( obj ).change();
+                } else if ( jQuery( obj ).val() == '00.00.0000' ) {
+                    jQuery( obj ).attr('value', '~');
+                    jQuery( obj ).change();
+                }
+            });
+
+            jQuery('.datepicker.from' ).on( 'click', function() {
+                jQuery( this ).datepicker( 'show' );
+            });
+
+            jQuery('.datepicker.to' ).on( 'click', function() {
+                jQuery( this ).datepicker( 'show' );
+            });
+        }
+    });
+
+    function closeBubble() {
+        jQuery( '.speechbubble' ).fadeOut();
+    }
+
+    function showBubble() {
+        jQuery( '.speechbubble-icon' ).fadeOut();
+        jQuery( '.speechbubble' ).fadeIn();
+    }
+</script>

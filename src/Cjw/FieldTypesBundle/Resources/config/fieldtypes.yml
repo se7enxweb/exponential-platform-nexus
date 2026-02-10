@@ -1,0 +1,50 @@
+parameters:
+    ### CjwGeoAddress ###
+    cjw_field_types.cjwgeoaddress.class: Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\Type
+    cjw_field_types.cjwgeoaddress.converter.class: Cjw\FieldTypesBundle\FieldType\CjwGeoAddress\CjwGeoAddressConverter
+
+    ### EzMatrix ###
+    cjw_field_types.ezmatrix.class: Cjw\FieldTypesBundle\FieldType\EzMatrix\Type
+    cjw_field_types.ezmatrix.converter.class: Cjw\FieldTypesBundle\FieldType\EzMatrix\EzMatrixConverter
+
+services:
+    ### CjwGeoAddress ###
+    cjw_field_types.cjwgeoaddress:
+        class: '%cjw_field_types.cjwgeoaddress.class%'
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: cjwgeoaddress}
+    cjw_field_types.cjwgeoaddress.converter:
+        class: '%cjw_field_types.cjwgeoaddress.converter.class%'
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: cjwgeoaddress}
+
+    # fix search indexing:
+    # Exception Class: OutOfBoundsException
+    # Exception Message: No type registered for cjwgeoaddress.
+    # https://symfony.fi/ez-platform-tip/field-type-gotcha-no-type-registered-for
+    #
+    ezpublish.fieldtype.indexable.cjwgeoaddress:
+        class: "%ezpublish.fieldType.indexable.unindexed.class%"
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: cjwgeoaddress}
+
+
+    ### EzMatrix ###
+    ezpublish.fieldType.ezmatrix:
+        class: '%cjw_field_types.ezmatrix.class%'
+        parent: ezpublish.fieldType
+        arguments: [ "ezmatrix" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: ezmatrix}
+
+    ezpublish.fieldType.ezmatrix.converter:
+        class: '%cjw_field_types.ezmatrix.converter.class%'
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmatrix, lazy: true, callback: '::create'}
+
+    # https://symfony.fi/ez-platform-tip/field-type-gotcha-no-type-registered-for
+    ezpublish.fieldtype.indexable.ezmatrix:
+        class: "%ezpublish.fieldType.indexable.unindexed.class%"
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezmatrix}

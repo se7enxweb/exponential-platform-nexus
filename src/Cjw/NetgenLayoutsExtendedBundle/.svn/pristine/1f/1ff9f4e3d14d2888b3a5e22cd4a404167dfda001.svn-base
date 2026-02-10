@@ -1,0 +1,4 @@
+block_type_groups:
+    cjw:
+        name: 'CJW Extended'
+        block_types: [spacer]

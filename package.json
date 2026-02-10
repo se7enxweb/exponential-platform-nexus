@@ -1,16 +1,69 @@
 {
-  "devDependencies": {
-    "@babel/preset-react": "^7.0.0",
-    "@symfony/webpack-encore": "^1.8.2",
-    "flatpickr": "^4.6.13",
-    "leaflet": "^1.9.4",
-    "sass": "^1.56.0",
-    "sass-loader": "^10.5.2",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3"
-  },
-  "resolutions": {
-    "minimatch": "3.0.5"
-  }
+    "browserslist": {
+        "defaults": [
+            "last 2 versions",
+            "Safari >= 10",
+            "iOS >= 10",
+            "not ie <= 10",
+            "> 1%"
+        ],
+        "evergreen": [
+            "last 2 Chrome versions",
+            "last 2 ChromeAndroid versions",
+            "last 2 Firefox versions",
+            "last 2 FirefoxAndroid versions",
+            "last 2 Safari versions",
+            "last 2 iOS versions",
+            "last 2 Edge versions",
+            "last 2 Opera versions"
+        ]
+    },
+    "scripts": {
+        "dev": "encore dev",
+        "build:dev": "encore dev",
+        "prod": "encore production",
+        "build:prod": "encore production",
+        "watch": "encore dev --watch",
+        "start": "encore dev-server",
+        "server": "encore dev-server",
+        "site:dev": "encore dev --config-name",
+        "site:prod": "encore production --config-name",
+        "site:watch": "encore dev --watch --config-name",
+        "site:server": "encore dev-server --config-name",
+        "ezplatform": "encore production --config=webpack.config.ezplatform.js",
+        "build:parallel": "parallel -j2 encore ::: dev production",
+        "site:parallel": "echo '--config-name'; | parallel -j2 encore {} ::: dev production"
+    },
+    "private": true,
+    "devDependencies": {
+        "@babel/core": "^7.8.3",
+        "@babel/preset-env": "^7.8.3",
+        "@babel/preset-react": "^7.8.3",
+        "@symfony/webpack-encore": "^0.27.0",
+        "autoprefixer": "^9.7.4",
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb": "^17.1.0",
+        "eslint-plugin-import": "^2.20.0",
+        "eslint-plugin-jsx-a11y": "^6.2.1",
+        "eslint-plugin-react": "^7.18.0",
+        "node-sass": "^4.13.1",
+        "parallel": "^1.2.0",
+        "path": "^0.12.7",
+        "postcss-loader": "^3.0.0",
+        "sass-lint": "^1.12.1",
+        "sass-loader": "^7.1.0"
+    },
+    "dependencies": {
+        "@babel/polyfill": "^7.8.3",
+        "@fortawesome/fontawesome-free": "^5.8.1",
+        "@netgen/javascript-cookie-control": "^0.0.6",
+        "blueimp-gallery": "^2.36.0",
+        "bootstrap": "^4.3.1",
+        "bootstrap-datepicker": "^1.9.0",
+        "jquery": "^3.4.0",
+        "jquery-observe": "^0.2.3",
+        "magnific-popup": "^1.1.0",
+        "popper.js": "^1.16.1",
+        "swiper": "^4.5.0"
+    }
 }

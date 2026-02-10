@@ -1,0 +1,20 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    {% set cols_left = 'col-12 col-sm-12 col-md-6 col-lg-4' %}
+    {% set cols_right = 'col-12 col-sm-12 col-md-6 col-lg-8' %}
+
+    {% if '<img' in nglayouts_render_placeholder(block, 'left') == false and nglayouts_render_placeholder(block, 'left')|striptags|trim == '' %}
+        {% set cols_left = 'col-0' %}
+        {% set cols_right = 'col-12' %}
+    {% endif %}
+
+    <div class="row">
+        <div class="{{ cols_left }}">
+            {{ nglayouts_render_placeholder(block, 'left') }}
+        </div>
+        <div class="{{ cols_right }}">
+            {{ nglayouts_render_placeholder(block, 'right') }}
+        </div>
+    </div>
+{% endblock %}

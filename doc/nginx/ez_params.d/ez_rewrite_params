@@ -1,4 +1,5 @@
 rewrite "^/var/([^/]+/)?storage/images(-versioned)?/(.*)" "/var/$1storage/images$2/$3" break;
+rewrite "^/var/([^/]+/)?storage/original/image/(.*)\.svg" "/var/$1storage/original/image/$2.svg" break;
 
 # Makes it possible to place your favicon at the root of your
 # eZ Platform instance. It will then be served directly.
@@ -18,7 +19,7 @@ rewrite "^/bundles/(.*)" "/bundles/$1" break;
 rewrite "^/assets/(.*)" "/assets/$1" break;
 
 # Prevent access to website with direct usage of app.php in URL
-if ($request_uri ~ "^/(.+/)?app\.php") {
+if ($request_uri ~ "^/([^/]+/)?app\.php([/?#]|$)") {
     return 404;
 }
 

@@ -1,0 +1,16 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% import '@NetgenLayouts/parts/macros.html.twig' as macros %}
+
+{% block content %}
+    {% if collections.default is defined %}
+{#        <div class="slick-slider container-max"#}
+{#             data-slick='{ "slidesToShow": 1, "infinite": true, "arrows": true, "autoplay": false, "autoplaySpeed": 6000, "fade": true, "speed": 1000, "centerMode": true, "responsive": [ { "breakpoint": 480, "settings": { "slidesToShow": 1 } } ] }'>#}
+{#        </div>#}
+        <div class="carousel container-max">
+            {% for result in collections.default %}
+                {{ nglayouts_render_result(result, null, block.itemViewType) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

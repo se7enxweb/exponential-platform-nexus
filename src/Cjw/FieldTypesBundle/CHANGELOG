@@ -1,0 +1,32 @@
+FieldTypesBundle CHANGELOG
+==========================
+
+20200110 (mw) – Adjustments for 2019.03
+---------------------------------------
+
+Removed some deprecated calls, as well as changed some calls in the
+"Type" class.
+
+20180320 (mw) – Added missing `ezmatrix` field type
+---------------------------------------------------
+
+Because the legacy `ezmatrix` field type hasn't been implemented in Symfony, we
+have implemented it ourselves.
+
+It basically returns the whole Matrix, so you can access all data via (multiple)
+arrays.
+
+
+20200407 (fW) bugfix search indexing for cjwgeoaddress => no indexing => but no errors
+--------------------------------------------------------------------------------------
+
+    Cjw/FieldTypesBundle/Resources/config/fieldtypes.yml
+
+    # fix search indexing:
+    # Exception Class: OutOfBoundsException
+    # Exception Message: No type registered for cjwgeoaddress.
+    # https://symfony.fi/ez-platform-tip/field-type-gotcha-no-type-registered-for
+    ezpublish.fieldtype.indexable.cjwgeoaddress:
+        class: "%ezpublish.fieldType.indexable.unindexed.class%"
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: cjwgeoaddress}

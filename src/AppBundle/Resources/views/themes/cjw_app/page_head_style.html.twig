@@ -1,0 +1,9 @@
+{#<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,900&subset=latin,latin-ext">#}
+{#<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">#}
+<link rel="stylesheet" href="{{ asset('bundles/app/fonts/opensans.css') }}">
+
+{{ encore_entry_link_tags('app', null, 'app') }}
+<link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'nglayouts_' ~ (nglayouts.debug ? 'dev_' : '') ~ 'css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'nglayouts_standard_' ~ (nglayouts.debug ? 'dev_' : '') ~ 'css') }}"/>
+<link rel="stylesheet" href="/bundles/app/css/update.css">
+

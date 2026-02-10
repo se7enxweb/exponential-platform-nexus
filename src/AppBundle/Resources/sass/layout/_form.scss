@@ -1,0 +1,22 @@
+.btn-more {
+    display: inline-block;
+    padding: 0.5rem 3rem 0.5rem 0;
+    background: url( $icon-link_blue ) transparent no-repeat 99% center;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 0.5rem 0 0.5rem 3rem;
+    background: url( $icon-link_blue_left ) transparent no-repeat 0 center;
+    color: #fff;
+    font-weight: bold;
+}
+
+input[type="submit"] {
+    &.btn-text {
+        color: $btn-text-color;
+        border-bottom: 1px solid $btn-text-color;
+    }
+}

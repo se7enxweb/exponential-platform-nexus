@@ -1,0 +1,78 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% set collection_identifier = 'default' %}
+{% set number_of_columns = block.parameter('number_of_columns').value|default(2) %}
+{% set set_container = block.parameter('set_container').value %}
+{% set count_items = collections[collection_identifier].results|length %}
+{% set max_items = 6 %}
+{% set diff_count_and_max = max_items - count_items %}
+
+{# Template mapping je nach Spaltenanzahl #}
+{% set templates = {
+    1: '@nglayouts/block/list/grid_tiles/1_tile_column.html.twig',
+    2: '@nglayouts/block/list/grid_tiles/2_columns.html.twig',
+    3: '@nglayouts/block/list/grid_tiles/3_columns.html.twig'
+} %}
+
+{# Standard-Feature-Klasse #}
+{% set feature_class = count_items == 1 ? 'feature no-tile' : 'feature' %}
+
+{% set collection_html %}
+    {% set feature_teaser = random(collections[collection_identifier]) %}
+
+    <div class="col-single">
+        <div class="single-row">
+            {% include '@nglayouts/block/list/grid_tiles/1_tile_column.html.twig' with {
+                result: feature_teaser,
+                custom_class: feature_class
+            } %}
+        </div>
+    </div>
+
+    {% if count_items > 0 %}
+        <div class="col-nested">
+            <div
+                class="{% if count_items > 4 %}col-12{% elseif count_items > 2 %}col-8{% elseif count_items > 1 %}col-4{% else %}col-12 one_tile-row{% endif %} nested-row">
+
+                {% for result in collections[collection_identifier] %}
+                    {% if count_items < 2 %}
+                        {% include templates[1] %}
+                    {% elseif count_items < 3 %}
+                        {% include '@nglayouts/block/list/grid_tiles/1_column.html.twig' %}
+                    {% elseif count_items < 5 %}
+                        {% include templates[2] %}
+                    {% else %}
+                        {% include templates[3] %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if diff_count_and_max > 0 %}
+                    {% if count_items in [3, 5] %}
+                        <div class="col-{{ count_items == 5 ? '4' : '6' }} col-tile">
+                            <div class="view-type-tile empty"></div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            {% if count_items < 5 and count_items > 1 %}
+                {% set parent_content = cjw_load_content_by_id(collections.default[0].item.object.parent.contentId) %}
+                <div class="col-{{ count_items < 3 ? '8' : '4' }} filling-row">
+                    <div class="col-tile">
+                        <a class="tile-title" href="{{ path(parent_content.mainLocation) }}"
+                           class="view-type-tile">{{ parent_content.name }}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endset %}
+
+{% block content %}
+    {% if collections[collection_identifier] is defined and collections[collection_identifier] is not empty %}
+        <div class="row">
+            {{ collection_html }}
+        </div>
+    {% endif %}
+{% endblock %}

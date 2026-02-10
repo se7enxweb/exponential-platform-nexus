@@ -1,0 +1,11 @@
+#
+# Custom bundle yaml
+#
+
+netgen_layouts_extended:
+    spacer:
+        images:
+            # default
+            - { name: 'Keine Bilder definiert', path: 'no_image_defined' }
+#            - { name: 'Blaues Schiff', path: 'bundles/app/images/grafiken/vignette-zeesboot-blau.png' }
+#            - { name: 'Braunes Schiff', path: 'bundles/app/images/grafiken/vignette-zeesboot-braun.png' }

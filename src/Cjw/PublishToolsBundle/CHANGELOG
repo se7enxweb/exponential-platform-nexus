@@ -1,0 +1,547 @@
+20150730 - cjw_fetch_content new parameter  main_location_only
+           if true => only mainlocations will be included in the result
+
+       {% set listChildren = cjw_fetch_content( [ currentLocationId ],
+                                                { 'main_location_only': true } ) %}
+
+
+20150721 - sortby jetzt als array mit arrays für jede sortclause
+         - 2 array items means sorts by content meta / attribute
+         - 3 array items means sorts by content field ( content-class, content-field, sort-order: ASC/DESC )
+
+20150703 - PublishToolsService umbenannt von "cjw.publishtools" zu "cjw_publishtools"
+         - Formbuilder-Config-Datei kann jetzt per YAML-Parameter angegeben werden; Fallback in PublishTools config
+
+20160315 - update exmaple email template for Inforamtioncollection
+           src/Cjw/PublishToolsBundle/Resources/views/email.html.twig
+           2 templatevariables to define the different parts of an html / text mail
+           {% block body_text_html %}{% endblock %}
+           {% block body_text_plain %}{% endblock %}
+           {% block body_text_plain %}{% endblock %}
+
+20170728 – Added TwigFunction *cjw_get_asset_path*
+
+- Simple function for getting the web path, which can be used for the bundle's
+  assets in templates. E.g. "/bundles/sitemvwaelder/" or
+  "/bundles/sitemvwaelder/images"
+
+20180222 – Added parameter for defining /search template in SearchController
+
+- Now you're able to define a template, which should be used by the
+  SearchController when the '/search' route is called
+
+20180223 - Added Controller StaticFileController to example
+           Controller to output a static file through the symfony kernel, so you don't have add custom webserver rules
+
+    # static file routing.yml examples
+
+    cjwpublishtools_static_example_index_html:
+        path: /index.html
+        defaults:
+          _controller: CjwPublishToolsBundle:StaticFile:output
+          file: @CjwPublishToolsBundle/Resources/static/index.html
+          ttl: 60
+          locationId: 2
+
+    cjwpublishtools_static_example_test_xml:
+        path: /test.xml
+        defaults:
+          _controller: CjwPublishToolsBundle:StaticFile:output
+          file: @CjwPublishToolsBundle/Resources/static/test.xml
+          ttl: 0
+
+    cjwpublishtools_static_example_favicon:
+        path: /favicon.ico
+        defaults:
+          _controller: CjwPublishToolsBundle:StaticFile:output
+          file: @CjwPublishToolsBundle/Resources/static/favicon.ico
+          ttl: 84600
+
+
+20180319 - FormHandlerService #8548
+      - add the possiblity to get email_subject and email_receiver from ContentObjektField without infocollection enbebled
+
+            formcollector_config:
+                types:
+                    cjw_contact_form:
+                        handler:
+                            infocollector:
+                                handler_class: addToInfoCollectorHandler
+                            sendmail:
+                                handler_class: sendEmailHandler
+                                logging: false
+                                debug: false
+                                email_receiver: @email_receiver
+                                email_subject: @email_subject
+
+20180410 - TwigFunctionsService update cjw_content_download_file => filestream with HTTP_RANGE
+
+        {{ cjw_content_download_file( file, contentDisposition, maxAge ) }}
+        examples:
+        {{ cjw_content_download_file( content.getFieldValue( 'file' ), 'attachment', '2592000' ) }}
+        {{ cjw_content_download_file( content.getFieldValue( 'image' ), 'inline', '2592000' ) }}
+
+
+20180413 – "addTimestampToFilepath" Function + "cjw_add_timestamp_to_filepath" template function
+
+Appends the modification timestamp of the file passed to the filepath.
+
+Diese Funktion ist dafür gedacht, dass der Cache für bestimmte Assets umgangen
+werden kann, da es sich dann um eine neue URL handelt und die Datei
+dementsprechend wieder neu angefragt wird.
+
+### Example
+
+**Code**
+```twig
+    {% set filepath_with_timestamp = cjw_add_timestamp_to_filepath( '/path/to/file/from/web/dir' ) %}
+
+    {{ filepath_with_timestamp }}
+```
+
+**Output**
+```
+    '/path/to/file/from/web/dir?ts=321324657'
+```
+
+
+20180413 – 'priority' Parameter zu `cjw_fetch_content` hinzugefügt
+
+Dieser Parameter ermöglicht es nach Priorität zu filtern.
+
+```twig
+{% set list = cjw_fetch_content( [2], {
+    'priority' : [[ '>=', 200 ]]
+} ) %}
+```
+
+
+20180416 – Neue Twig-Funktionen `load_cotent_relations` und `load_content_reverse_relations` hinzugefügt
+
+Diese beiden Funktionen ermöglichen es einfach und schnell alle Relationen zu
+einer `ContentID`, einem `Content`-, `Location`-, `ContentInfo`- oder
+`VersionInfo`-Objekt zu holen und diese bei Bedarf sofort als `Content`-Array
+präparieren zu lassen (letzteres ist Standard, wenn eine der beiden Funktionen
+von Twig aus aufgerufen wird).
+
+Der erste Parameter trägt also eines der genannten Objekte (oder eine ContentID)
+und wird automatisch "normalisiert", sodass das richtige Objekt für den Fetch
+genutzt wird.
+Der zweite Parameter ermöglicht es, dass Array als Liste von `Relation`-Objekten
+zu erhalten – wie es auch Standard ist, wenn die `loadRelations()`-Methode
+benutzt wird. Dies sollte vom Template aus aber selten notwendig sein, es sei
+denn man benötigt die Informationen der `SourceContentInfo` (welche man aber
+mehr oder weniger übergibt, außer man benutzt eine ID als Parameter).
+
+
+20180508 – Neuer Controller `TrackingController`, welcher eine View zur Verfügung stellt die den Nutzer das Tracking auf dieser Seite de- und aktivieren lässt
+    Anforderung #8798 – Controller/Funktionalität für statische Seite zum Ändern der Tracking-Einstellungen
+
+
+Bedingt durch die DSGVO und den damit verbundenen Auflagen, benötigen wir eine
+Funktionalität, die dem Nutzer ermöglicht das Tracking für eine Seite zu
+deaktivieren.
+
+Dazu bedienen wir uns eines Cookies, welcher dann zur Abfrage genutzt wird, ob
+der Aufruf getracked werden soll oder nicht.
+Ist kein Cookie gesetzt, so wird standardmäßig getracked.
+
+---
+
+Diese Funktionalität wird über einen Controller und ein Template bereit
+gestellt. Dafür muss eine Route im Projekt konfiguriert werden (siehe
+`routing.example.yml`).
+
+
+20180514 – Anpassung der Tracking-Einstellungen
+
+Es gibt jetzt nur noch eine globale Tracking-Einstellung bzw. einen globalen
+Cookie namens `UseTracking` pro URL.
+
+Die Tracker werden nicht mehr aufgelistet; die Einstellungen werden wie eine
+globale Einstellung für die Seite behandelt.
+Informationen über die verwendete Tracking-Software sollten in die
+**Datenschutzbestimmungen** der Seite mit aufgenommen werden.
+
+Außerdem wurde der Code zur Anzeige des aktuellen Cookie-Status (per JavaScript)
+so angepasst, dass er auch mit älteren IE-Versionen funktionieren sollte.
+
+Die Einstellungen sind jetzt auf die Route `tracking/settings` definiert, damit
+wir eine URL haben, die wir sowohl im eZ5, als auch im Legacy einfach definiert
+können.
+
+*Angepasste Dateien:*
+    - src/Cjw/PublishToolsBundle/Resources/config/routing.example.yml
+    - src/Cjw/PublishToolsBundle/Resources/views/full/tracking_settings.html.twig
+    - src/Cjw/PublishToolsBundle/CHANGELOG
+
+
+20180622 – Neuer Fetch-Parameter `ignore_visibility` + Neuer Template-Operator `cjw_is_request_versionview`
+
+Neuer Fetch-Parameter `ignore_visibility`, mit dem die Sichtbarkeit einer
+Location ignoriert wird und so auch versteckte Locations gefetched werden
+können.
+
+Neuer Template-Operator `cjw_is_request_versionview`, welcher überprüft ob es
+sich bei einer gegebenen URL um einen VersionView-Request handelt.
+
+*Angepasste Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+    - src/Cjw/PublishToolsBundle/Services/TwigFunctionsService.php
+
+
+20180622 – `cjw_render_location`-Operator unterstützt jetzt zusätzlichen Parameter `ignore_visibility`
+
+In manchen Fällen (z.B. VersionView) kann es notwendig sein eine hidden Location
+zu rendern. Dafür gibt es jetzt einen zusätzlichen Parameter, mit dem die
+Sichtbarkeit der zu rendernden Location ignoriert wird.
+
+*Angepasste Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/TwigContentFunctionsService.php
+
+
+20190718 – Neuer Template-Operator `cjw_load_content_location_list`
+
+Dieser Operator holt alle Orte (bzw. AssignedNodes) eines Objekts/Contents.
+
+*Angepasste Dateien:*
+
+    - src/Cjw/PublishToolsBundle/Services/TwigFunctionsService.php
+    - src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+
+
+20190820 - ezplatform changes/update
+
+- src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+        // new ezplatform syntax: criterion becomes filter
+        if ( property_exists( $querySearch, 'filter' )  )
+            $querySearch->filter = new Criterion\LogicalAnd( $criterion );
+        // old style
+        else
+            $querySearch->criterion = new Criterion\LogicalAnd( $criterion );
+
+- src/Cjw/PublishToolsBundle/Resources/config/services.yml
+
+        arguments: [@service_container, @cjw_publishtools.service.functions]
+        =>
+        arguments: ['@service_container', '@cjw_publishtools.service.functions']
+
+
+20190904
+
+- src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+
+        // in ezplatform $limit must be an integer so to get all items we do not add the limit parameter to the querySearch
+        if ( $limit > 0 )
+            $querySearch = new LocationQuery( array( 'offset' => $offset, 'limit' => $limit ) );
+        else
+            $querySearch = new LocationQuery( array( 'offset' => $offset ) );
+
+- TwigContentFunctionsService.php {{ cjw_render_location( )}}
+
+        // update
+        // override.yml   location_view block is replaced wiht content_view block !!!
+
+
+        ezpublish:
+            system:
+                %cjwsite.name.project%_user_group:
+                    field_templates:
+                       -
+                            template: %cjwsite.name.bundle%::fields.html.twig
+                            # Priority is optional (default is 0). The higher it is, the higher your template gets in the list.
+                            priority: 1
+                    content_view:
+        #            location_view:
+        #    content_view replaces location_view
+
+                        # The view type (full/line are standard, but you can use custom ones)
+                        full:
+                            # mind. ein matcher wird benötigt, sonst gibt es einen fehler beim default eintrag
+                            cjw_article:
+                                template: %cjwsite.name.bundle%:full:cjw_article.html.twig
+                                match:
+                                    Identifier\ContentType: cjw_article
+
+                            # default full view template
+                            default:
+                                template: %cjwsite.name.bundle%::full.html.twig
+                                match: ~
+                        line:
+                            # mind. ein matcher wird benötigt, sonst gibt es einen fehler beim default eintrag
+                            dummy:
+                                template: %cjwsite.name.bundle%::line.html.twig
+                                match:
+                                    Identifier\ContentType: dummy
+                            # default line view template
+                            default:
+                                template: %cjwsite.name.bundle%::line.html.twig
+                                match: ~
+
+- src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+       check if a contentTypeIdentifier in the fetch include array exists
+       to avoid Exceptions from Kernel if a contentType not exist but uses ind template fetch  inlude array
+
+       =>  add Logger to PublishtoolsService => write info message if contentype not exists
+
+
+
+20190916
+
+- src/Cjw/PublishToolsBundle/Controller/SitemapsController.php
+
+yml 'pattern' wird zu 'path'
+
+cjwpublishtools_sitemaps_sitemap:
+#    pattern: /sitemap.{_format}
+    path: /sitemap.{_format}
+    defaults: { _controller: CjwPublishToolsBundle:Sitemaps:sitemap }
+    requirements:
+        _format: xml
+
+cjwpublishtools_sitemaps_robots:
+#    pattern: /robots.{_format}
+    path: /robots.{_format}
+    defaults: { _controller: CjwPublishToolsBundle:Sitemaps:robots }
+    requirements:
+        _format: txt
+
+
+20190923 (fw)
+
+PublishToolsService - Custom Criterion !!! #10522
+==========================================
+
+- src/Cjw/PublishToolsBundle/Services/PublishToolsService.php::fetchSubtree()
+
+Possibility to add custom Criterion to the PublishToolsService fetchSubtree() method used e.g. in twig cjw_fetch_content.
+
+So we have an easy way to extend the query logic with custom Criterioncombinations!
+(e.g. extended_attribute_filter in ezpublish_legacy fetch list function)
+
+
+Example implementation (FlowBlockType):
+
+- src/Cjw/PublishToolsBundle/PublishToolsService/CustomCriterion/FlowBlockType.php
+
+
+   - get all Locations which are not assigned to a Flow Block Type (ContentGrid or CntentSlider) of the current Page (BlockNodeId)
+
+
+    Example for usage with Twig cjw_fetch_content:
+
+    get all Locations which are not assigned to a Flow Block Type (ContentGrid or CntentSlider) of the current Page (BlockNodeId)
+
+    {% set listChildren = cjw_fetch_content( [ currentLocationId ], { 'depth': '3',
+                                                                   'main_location_only': true,
+                                                                   'limit': listLimit,
+                                                                   'offset': listOffset,
+                                                                   'include': listContenttypes,
+                                                                   'language': [ cjw_lang_get_default_code() ],
+                                                                   'sortby': [ [ 'DatePublished', 'DESC' ] ],
+                                                                   'custom_criterion': [
+                                                                                         [ '\\Cjw\\PublishToolsBundle\\PublishToolsService\\CustomCriterion\\FlowBlockType',
+                                                                                             {'block_types': [  'ContentGrid', 'ContentSlider' ],
+                                                                                                 'block_node_id': blockNodeId,
+                                                                                                 'operator': 'not in'}
+                                                                                         ],
+                                                                                       ],
+
+                                                                   'count': true } ) %}
+
+
+     Easy to use, just set the following array as Key use the ClassPath to the Criterion
+     @see example: src/Cjw/PublishToolsBundle/PublishToolsService/CustomCriterion/FlowBlockType.php
+     method -> getCriterion( $params ) must be implemented
+
+     define your own params. The logic you have to implement yourserlve
+
+       'custom_criterion': [
+         [ '\\my\\Path\\of\\CustomCriterion\\MyNewCriterion',
+             {'param_identifier1': [  'value1.1', 'value1.2' ],
+              'param_identifier_2': value2,
+              'param_identifier_3': value3}
+         ]
+
+       ],
+
+
+
+eZ SearchService - new Criterion  - FlowBlockType (legacySearch) #10523
+=======================================================================
+
+New Criterion for the eZ SearchService (legacy)  FlowBlockType.
+
+so we can create search query for:
+
+get all Locations which are not assigned to a Flow Block Type (ContentGrid or CntentSlider) of the current Page (BlockNodeId)
+@see example some line below
+
+eZ Platform new API Criterion:
+- src/Cjw/PublishToolsBundle/API/Repository/Values/Content/Query/Criterion/FlowBlockType.php
+- src/Cjw/PublishToolsBundle/API/Repository/Values/Content/Query/Criterion/Value/FlowBlockTypeValue.php
+- src/Cjw/PublishToolsBundle/Core/Search/Legacy/Content/Common/Gateway/CriterionHandler/FlowBlockType.php - logic sql
+- src/Cjw/PublishToolsBundle/Resources/config/services.yml
+
+    # custom eZ API search criterion for legacy search - FlowBlockType #10523
+    cjwpublish_tools.search.legacy.gateway.criterion_handler.common.flow_block_type:
+        class: Cjw\PublishToolsBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FlowBlockType
+        arguments: ['@ezpublish.api.storage_engine.legacy.dbhandler']
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+
+Custom Criterion for PublishToolsService:
+- src/Cjw/PublishToolsBundle/PublishToolsService/CustomCriterion/FlowBlockType.php
+
+
+example of usage:
+
+  @see src/Cjw/PublishToolsBundle/PublishToolsService/CustomCriterion/FlowBlockType.php
+
+  ...
+  $valueData =   new FlowBlockTypeCriterionValue( $blockTypes, $blockNodeId );
+  $criterion =  new FlowBlockTypeCriterion( 'dummy', $operator, null, $valueData );
+
+
+
+PublishToolsService - fetchSubtree - possibility to fetch in multiple subtrees at the same time => one result !!! #10524
+========================================================================================================================
+
+src/Cjw/PublishToolsBundle/Services/PublishToolsService.php::fetchSubtree(
+
+   private function fetchSubtree( $locationArrayOrObject, array $params = array() )
+
+   => first Parameter can be now an array of locationObjects  (OR)
+   => the fetch will be search in Subtree1 and Subtree2
+
+
+Example Usage in the twig function cjw_fetch_content search in currentLocationId and subtree 2
+
+NOTE: if use an array as a single locationParam [ [currentLocationId,2] ] => the result uses the index 0,1
+      if use an array of node ids [ currentLocationId, 333 ] => the result has 2 key currentLocationId and 333 with the fetch results
+
+
+
+{% set listChildren = cjw_fetch_content( [ [currentLocationId,2] ], { 'depth': '3',
+                                                                  'main_location_only': true,
+                                                                  'limit': listLimit,
+                                                                  'offset': listOffset,
+                                                                  'include': listContenttypes,
+                                                                  'language': [ cjw_lang_get_default_code() ],
+                                                                  'sortby': [ [ 'DatePublished', 'DESC' ] ],
+                                                                  'custom_criterion': [
+                                                                                        [ '\\Cjw\\PublishToolsBundle\\PublishToolsService\\CustomCriterion\\FlowBlockType',
+                                                                                            {'block_types': [  'ContentGrid', 'ContentSlider' ],
+                                                                                             'block_node_id': blockNodeId,
+                                                                                             'operator': 'not in'}
+                                                                                        ],
+
+                                                                                      ],
+
+                                                                  'count': true } ).0 %}
+
+
+20191129 (fw)
+#10719 PublishToolsService NetgenSiteApi integration -
+=======================================================
+
+=> if NetgenSiteApi Bundle is activated PublishToolsService will return NetgenSiteApiObjects
+
+ $bundles[] = new Netgen\Bundle\EzPlatformSiteApiBundle\NetgenEzPlatformSiteApiBundle();
+
+
+
+20191204 (mw)
+NetGenSiteApi-Integration verbessert + Erweiterte Parameter für `cjw_treemenu`
+==============================================================================
+
+- Bessere Unterstützung für NetGenSiteApi-Objekte in den PublishTools-Funktionen
+  und -Fetches
+- Erweiterte Parameter für `cjw_treemenu`-Fetch ==> 'priority'
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/TwigFunctionsService.php
+    - src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+20200117 (fw)
+#10869 RedirectController to define redirects to relative or absolute urls easily
+=================================================================================
+
+example in routing.yml
+
+# redirect intern
+# http://domain.de/redirect_test_intern => redirect to http://domain.de/?redirected=1
+cjwpublishtools_redirect_internal_test:
+  path: /redirect_test_intern
+  defaults:
+    _controller: CjwPublishToolsBundle:Redirect:redirect
+    url: /?redirected=1
+    status: 302
+
+# redirect external
+# http://domain.de/redirect_test_extern => redirect to https://www.cjw-network.com/?redirected=1
+cjwpublishtools_redirect_internal_test:
+  path: /redirect_test_extern
+  defaults:
+    _controller: CjwPublishToolsBundle:Redirect:redirect
+    url: https://www.cjw-network.com/?redirected=1
+    status: 302
+
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Controller/RedirectController.php
+    - src/Cjw/PublishToolsBundle/Resources/config/routing.example.yml
+
+
+20200120 (fw)
+Bugfix  cjw_treemenu - param offset should be used only for first fetch in cjw_treemenu!
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/TwigFunctionsService.php:206
+
+20200121 (mw) – Verbesserung der SiteApi-Unterstützung
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/PublishToolsService.php
+
+20200407 (fw)
+
+- Neuer SearchPlaformController Basisimplementierung der Suche ueber die Platform SearchServices
+
+    routing.yml example:
+    # ezplatform suche - test ggf. eigenen Controller schreiben der SiteAPI Objekte zurückliefert + eigenes template übergeben
+    # contentsearch?SearchText=meist&SearchButton=Suchen
+    cjwpublishtools_contentsearch:
+        path: /contentsearch
+        defaults:
+            _controller: CjwPublishToolsBundle:SearchPlatform:search
+            template: 'CjwPublishToolsBundle:full:search_platform.html.twig'
+    #        template: 'AppBundle:full:search.html.twig'
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Controller/SearchPlatformController.php
+    - src/Cjw/PublishToolsBundle/Resources/views/full/search_platform.html.twig
+
+
+20200825 (fw)
+
+- Twigglobals cjw_siteaccess Anpassung an neue symfony version
+
+*Geänderte Dateien:*
+    - src/Cjw/PublishToolsBundle/Services/TwigConfigFunctionsService.php
+
+
+20201210 (fw)
+
+- cjw_content_download_file udpate / FileStreamService Update
+- PublishToolsService update  new function  getVarDir()  getStorageDir()
+
+20240125 (tm)
+
+- add cjw_get_tags() twig function, fetch all tags or by parent tag id

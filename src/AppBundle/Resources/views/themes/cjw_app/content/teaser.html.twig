@@ -1,0 +1,41 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_content_fields.html.twig' as cjw_content_fields %}
+
+{% set design = 'normal' %}
+
+{% if teaser_design is defined %}
+    {% set design = teaser_design %}
+{% endif %}
+
+{% set image = false %}
+{% if content.fields.teaser_image is defined and not content.fields.teaser_image.empty %}
+    {% set image = content.fields.teaser_image %}
+{% elseif content.fields.image is defined and not content.fields.image.empty %}
+    {% set image = content.fields.image %}
+{% endif %}
+
+<div class="view-type view-type-{{ view_type }} {{ design }}">
+    <div class="top">
+        {% if content.fields.headline is defined and not content.fields.headline.empty %}
+            <span class="headline">
+                {{ ng_render_field( content.fields.headline ) }}
+            </span>
+        {% endif %}
+
+        <h2>
+            {{ content_fields.title( content ) }}
+        </h2>
+
+        {{ content_fields.intro( content ) }}
+
+        <a class="btn-more" href="{{ path(location.contentInfo.mainLocation) }}">MEHR DAZU</a>
+    </div>
+
+    {% if design == 'chess' %}
+        <div class="bottom"{% if image != false %} style="background-image: url( {{ ng_image_alias(image, 'i480').uri }} );"{% endif %}></div>
+    {% endif %}
+</div>

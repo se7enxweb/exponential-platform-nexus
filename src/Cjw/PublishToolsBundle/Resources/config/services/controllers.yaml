@@ -1,0 +1,13 @@
+#services:
+#    Cjw\PublishToolsBundle\Controller\DownloadFileController:
+#        parent: ngsite.controller.base
+#        arguments: [ ]
+#        tags:
+#            - { name: 'container.service_subscriber' }
+services:
+    cjw_publishtools.controller.platform_search_bridge:
+        class: Cjw\PublishToolsBundle\Controller\PlatformSearchBridgeController
+        parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.search.resolver.suggestion"
+        public: true

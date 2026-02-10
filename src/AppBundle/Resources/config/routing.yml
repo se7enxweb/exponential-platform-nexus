@@ -1,0 +1,30 @@
+# Handle root / index page redirect
+# DISABLED: IndexPageController - testing if this is actually required
+# cjwapp_index:
+#     path: /
+#     defaults:
+#         _controller: AppBundle:IndexPage:index
+
+# redirect intern
+cjwpublishtools_redirect_internal_test:
+  path: /redirect_test_intern
+  defaults:
+    _controller: CjwPublishToolsBundle:Redirect:redirect
+    url: /?redirected=1
+    status: 302
+
+# Provides tracking settings, where the user can see which tracking mechanisms
+# are used, which are activated and also has the opportunity to deactivate each
+# one of those.
+cjwpublishtools_tracking_settings:
+    path: /tracking/settings
+    defaults:
+      _controller: CjwPublishToolsBundle:Tracking:viewPage
+      template: 'CjwPublishToolsBundle:full:tracking_settings.html.twig'
+
+# sitemap.xml und robots.txt
+cjwpublishtools_sitemaps_sitemap:
+    path: /sitemap.{_format}
+    defaults: { _controller: CjwPublishToolsBundle:Sitemaps:sitemap }
+    requirements:
+        _format: xml

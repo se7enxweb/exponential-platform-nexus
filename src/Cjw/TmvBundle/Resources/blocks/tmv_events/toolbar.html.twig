@@ -1,0 +1,13 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    {% set list_categories = block.dynamicParameter('list_categories') %}
+    {% set list_places = block.dynamicParameter('list_places') %}
+    {% set filter_params = block.dynamicParameter('filter_params') %}
+
+    {% include '@ezdesign/parts/toolbar.html.twig' with {
+        filter_params: filter_params,
+        list_places: list_places,
+        list_categories: list_categories
+    } only %}
+{% endblock %}

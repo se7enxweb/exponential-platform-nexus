@@ -1,0 +1,10 @@
+block_types:
+    tmv_events:
+        name: 'TMV Veranstaltungen'
+        icon: '/src/Cjw/TmvBundle/Resources/public/images/block_definitions/tmv_events.svg'
+        definition_identifier: tmv_events
+        defaults:
+            parameters:
+                limit: 10
+                number_of_columns: 1
+                exclude_categories:

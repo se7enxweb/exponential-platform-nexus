@@ -1,0 +1,82 @@
+{#{% extends nglayouts.layoutTemplate|default( site_bundle_name ~ '::pagelayout.html.twig' ) %}#}
+
+{% block content %}
+    <div class="container block-teaser page-container">
+
+        {{ dump( app.request.pathInfo ) }}
+
+        <form action="{{ app.request.pathInfo }}" method="get">
+            <h1>Suchen</h1>
+            <div class="form-horizontal">
+                <div class="block form-group">
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" name="SearchText" id="Search" value="{{ app.request.get('SearchText') }}" placeholder="Suchtext eingeben…">
+                    </div>
+
+                    <div class="col-sm-2 hidden-xs">
+                        <input class="btn btn-primary" name="SearchButton" type="submit" value="Suchen">
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback">
+                <h3>Suche nach "die" ergab {{ results.totalCount }} Ergebnisse</h3>
+            </div>
+
+            <div class="row">
+
+                {{ dump( results ) }}
+
+                {% for result in results.searchHits %}
+{#                    {% set result_content = cjw_load_content_by_id( result.ContentObjectID ) %}#}
+
+                    {{ dump( result ) }}
+
+{#                    <div class="col-md-12 class-search line-view line-view-cjw_article">#}
+{#                        <div class="row">#}
+{#                            <div class="col-md-4 line-view-image pull-right">#}
+{#                                {{ ez_render_field( result_content, 'image' ) }}#}
+{#                            </div>#}
+
+{#                            <div class="col-md-8">#}
+{#                                <h4>#}
+{#                                    <a href="{{ path( 'ez_urlalias', {'locationId': result_content.contentInfo.mainLocationId } ) }}">#}
+{#                                        {{ ez_content_name( result_content ) }}#}
+{#                                    </a>#}
+{#                                </h4>#}
+
+{#                                {{ ez_render_field( result_content, 'short_description' ) }}#}
+
+{#                                <p>#}
+{#                                    <a href="{{ path( 'ez_urlalias', {'locationId': result_content.contentInfo.mainLocationId } ) }}">#}
+{#                                        Weiter ...#}
+{#                                    </a>#}
+{#                                </p>#}
+
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+                {% endfor %}
+            </div>
+
+            {# todo: pagination hinzugefügt #}
+            {#<div class="pagenavigator">#}
+                {#<p>#}
+                    {#<span class="next"><a href="/content/search/(offset)/10?SearchText=die"><span class="text">Weiter&nbsp;»</span></a></span>#}
+
+                    {#<span class="pages">#}
+                        {#<span class="current">1</span>#}
+                        {#<span class="other"><a href="/content/search/(offset)/10?SearchText=die">2</a></span>#}
+                        {#<span class="other"><a href="/content/search/(offset)/20?SearchText=die">3</a></span>#}
+                        {#<span class="other"><a href="/content/search/(offset)/30?SearchText=die">4</a></span>#}
+                        {#<span class="other"><a href="/content/search/(offset)/40?SearchText=die">5</a></span>#}
+                        {#<span class="other"><a href="/content/search/(offset)/50?SearchText=die">6</a></span>#}
+                    {#</span>#}
+                {#</p>#}
+                {#<div class="break"></div>#}
+            {#</div>#}
+
+
+        </form>
+    </div>
+{% endblock %}

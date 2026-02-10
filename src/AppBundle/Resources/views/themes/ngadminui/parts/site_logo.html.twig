@@ -1,0 +1,14 @@
+<a class="site-logo {{ css_class|default }}" href="{{ path( ezpublish.rootLocation ) }}" title="{{ site_name }}">
+    {% if site_logo is defined %}
+        <img src="{{ asset( site_logo ) }}" alt="{{ site_name }}" />
+    {% else %}
+        {% if not ngsite.siteInfoContent.fields.site_logo.empty and
+              'svg' in ngsite.siteInfoContent.fields.site_logo.value.mimeType %}
+            <img src="{{ asset( ngsite.siteInfoContent.fields.site_logo.value.id, 'ezfile' ) }}" alt="{{ site_name }}" />
+        {% elseif not ngsite.siteInfoContent.fields.site_opengraph_image.empty %}
+            {{ ng_render_field( ngsite.siteInfoContent.fields.site_opengraph_image, { 'parameters': { 'lazy_loading': false } } ) }}
+        {% else %}
+            {{ site_name }}
+        {% endif %}
+    {% endif %}
+</a>

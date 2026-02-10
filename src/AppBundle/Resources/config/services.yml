@@ -1,0 +1,16 @@
+parameters:
+
+services:
+    ngsite.layouts.block.plugin.vertical_whitespace_v2:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespaceV2Plugin
+        arguments:
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.top%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.bottom%"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
+
+    app.twig.extension:
+        class: AppBundle\Twig\AppExtension
+        arguments: ['@service_container', '@cjw_publishtools.service.functions', '@ezpublish.templating.global_helper.core']
+        tags:
+            - { name: twig.extension }

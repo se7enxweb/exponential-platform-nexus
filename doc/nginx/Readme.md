@@ -49,9 +49,6 @@ Example config:
         # Access to repository images in single server setup
         include ez_params.d/ez_rewrite_params;
 
-        # Legacy rewrite rules
-        include ez_params.d/ez_legacy_rewrite_params;
-
         # upload max size
         client_max_body_size 48m;
 

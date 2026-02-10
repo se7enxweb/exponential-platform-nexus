@@ -1,5 +1,10 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
+# Force container rebuild: version-12345
+
+imports:
+    - { resource: services/cache.yml }
+
 parameters:
     #parameter_name: value
     ezrepoforms.user_register.registration_groups:

@@ -1,0 +1,181 @@
+.single-row {
+    height: 100%;
+
+    .col-12 {
+        height: 100%;
+        padding: $padding-tile;
+
+        &.no-tile .tile-feature {
+            display: none;
+        }
+
+        .view-type-tile {
+            position: relative;
+            display: block;
+            height: 100%;
+            background: center / cover no-repeat;
+
+            @include media-breakpoint-down(md) {
+                height: 100%;
+            }
+
+            .tile-feature {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 33.3333%;
+                height: $height-tile;
+                padding: 1rem;
+                text-align: right;
+                background-color: $tile-feature-bg;
+
+                @include media-breakpoint-down(md) {
+                    left: 0;
+                    width: 50%;
+                    height: auto;
+                    text-align: left;
+                }
+
+                @include media-breakpoint-down(xs) {
+                    width: 100%;
+                }
+
+                .tile-title {
+                    font-weight: bold;
+                    color: $tile-title-color;
+                    padding-left: 0.5rem;
+                }
+
+                .tile-intro {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.nested-row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+
+    [class^="col-"] {
+        padding: $padding-tile;
+
+        @include media-breakpoint-down(md) {
+            flex: 1 1 50%;
+            max-width: 50%;
+        }
+
+        @include media-breakpoint-down(xs) {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+    }
+
+    > .col-tile {
+        @each $color in $matrix-color-list-rgba {
+            $index: index($matrix-color-list-rgba, $color);
+
+            &:nth-of-type(#{$index}n) .view-type-tile {
+                display: block;
+                background-color: $color;
+                background-image: none !important;
+
+                .tile-feature {
+                    height: $height-tile;
+                    padding: 1rem;
+                    text-align: right;
+
+                    @include media-breakpoint-down(md) {
+                        height: auto;
+                        text-align: left;
+                    }
+
+                    .tile-title {
+                        color: $tile-title-color;
+                    }
+
+                    .tile-intro {
+                        display: none;
+                    }
+                }
+
+                &.empty {
+                    background-color: $color-bkg-tile-empty;
+                    height: 100%;
+
+                    @include media-breakpoint-down(xs) {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+
+.one_tile-row {
+    .col-one_tile {
+        @include media-breakpoint-down(md) {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        a.view-type.view-type-tile {
+            background-color: $color-bkg-tile-empty_rgba !important;
+
+            .tile-feature {
+                height: $height-1tile-row;
+                text-align: inherit;
+                padding: 1.5rem 2.5rem;
+
+                @include media-breakpoint-down(md) {
+                    height: auto;
+                    padding: 1.5rem 1.25rem;
+                }
+
+                .tile-title {
+                    font-size: 2rem;
+                    color: $font-color;
+                    margin-bottom: 0.5rem;
+
+                    @include media-breakpoint-down(md) {
+                        font-size: 1.75rem;
+                    }
+                }
+
+                .tile-intro {
+                    display: block;
+                    color: $font-color;
+                }
+            }
+        }
+    }
+}
+
+.filling-row {
+    padding: $padding-tile;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
+
+    .col-tile {
+        background-color: $color-bkg-tile-empty_rgba;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        padding: 2rem 1rem 2rem 1.5rem;
+
+        .tile-title {
+            font-size: 1.75rem;
+            color: $font-color;
+            margin: 0;
+        }
+    }
+}

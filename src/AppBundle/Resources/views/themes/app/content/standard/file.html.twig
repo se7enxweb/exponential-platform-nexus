@@ -1,0 +1,12 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+<article class="view-type view-type-{{ view_type }} file vl1">
+	<header class="article-header">
+	    <h2 class="title">
+			<a href="{{ path(location) }}">
+				{{ content.fields.name.value.text }}
+			</a>
+		</h2>
+	</header>
+</article>

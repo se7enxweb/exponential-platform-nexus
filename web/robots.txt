@@ -1,2 +1,1 @@
-User-agent: *
-
+../src/AppBundle/Resources/symlink/root_prod/robots.txt

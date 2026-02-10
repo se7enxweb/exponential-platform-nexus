@@ -1,0 +1,192 @@
+diff --git a/composer.json b/composer.json
+index 1234567..abcdefg 100644
+--- a/composer.json
++++ b/composer.json
+@@ -16,6 +16,8 @@
+     },
+     "autoload": {
+         "psr-4": {
++            "Cjw\\": "src/Cjw/",
+             "AppBundle\\": "src/AppBundle/",
++            "CJW\\CJWConfigProcessor\\": "vendor/cjw-network/cjw-config-processor/"
+         },
+         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+     },
+
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 1234567..abcdefg 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -185,11 +185,11 @@ jms_translation:
+     configs:
+         admin:
+             dirs:
+-                - '%kernel.root_dir%/../vendor/ezsystems/ezplatform-admin-ui/src'
+-            output_dir: '%kernel.root_dir%/../vendor/ezsystems/ezplatform-admin-ui/src/bundle/Resources/translations/'
++                - '%kernel.root_dir%/../vendor/se7enxweb/ezplatform-admin-ui/src'
++            output_dir: '%kernel.root_dir%/../vendor/se7enxweb/ezplatform-admin-ui/src/bundle/Resources/translations/'
+         admin_modules:
+             dirs:
+-                - '%kernel.root_dir%/../vendor/ezsystems/ezplatform-admin-ui-modules/src'
+-            output_dir: '%kernel.root_dir%/../vendor/ezsystems/ezplatform-admin-ui-modules/Resources/translations/'
++                - '%kernel.root_dir%/../vendor/se7enxweb/ezplatform-admin-ui-modules/src'
++            output_dir: '%kernel.root_dir%/../vendor/se7enxweb/ezplatform-admin-ui-modules/Resources/translations/'
+
+diff --git a/app/config/cache_pool/cache.tagaware.filesystem.yml b/app/config/cache_pool/cache.tagaware.filesystem.yml
+index 1234567..abcdefg 100644
+--- a/app/config/cache_pool/cache.tagaware.filesystem.yml
++++ b/app/config/cache_pool/cache.tagaware.filesystem.yml
+@@ -4,7 +4,7 @@
+ # If you are on Windows you would have to use `cache.app` by setting `env(CACHE_POOL): "cache.app"` parameter
+ services:
+     cache.tagaware.filesystem:
+-        class: Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter
++        class: Symfony\Component\Cache\Adapter\TagAware\FilesystemTagAwareAdapter
+         parent: cache.adapter.filesystem
+         tags:
+             - name: cache.pool
+
+diff --git a/app/config/cache_pool/cache.redis.yml b/app/config/cache_pool/cache.redis.yml
+index 1234567..abcdefg 100644
+--- a/app/config/cache_pool/cache.redis.yml
++++ b/app/config/cache_pool/cache.redis.yml
+@@ -7,7 +7,7 @@
+ # https://doc.ezplatform.com/en/latest/guide/persistence_cache/#redis
+ services:
+     cache.redis:
+-        class: Symfony\Component\Cache\Adapter\RedisTagAwareAdapter
++        class: Symfony\Component\Cache\Adapter\TagAware\RedisTagAwareAdapter
+         parent: cache.adapter.redis
+         tags:
+             - name: cache.pool
+
+diff --git a/vendor/netgen/tagsbundle/bundle/PlatformAdminUI/Menu/RoutePrefixVoter.php b/vendor/netgen/tagsbundle/bundle/PlatformAdminUI/Menu/RoutePrefixVoter.php
+index 1234567..abcdefg 100644
+--- a/vendor/netgen/tagsbundle/bundle/PlatformAdminUI/Menu/RoutePrefixVoter.php
++++ b/vendor/netgen/tagsbundle/bundle/PlatformAdminUI/Menu/RoutePrefixVoter.php
+@@ -26,7 +26,7 @@ final class RoutePrefixVoter implements VoterInterface
+         $this->routePrefix = $routePrefix;
+     }
+ 
+-    public function matchItem(ItemInterface $item)
++    public function matchItem(ItemInterface $item): ?bool
+     {
+         $request = $this->requestStack->getCurrentRequest();
+         if (!$request instanceof Request) {
+
+diff --git a/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/AbstractCloner.php b/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/AbstractCloner.php
+index 1234567..abcdefg 100644
+--- a/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/AbstractCloner.php
++++ b/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/AbstractCloner.php
+@@ -235,7 +235,7 @@ abstract class AbstractCloner implements ClonerInterface
+         if ($gc = gc_enabled()) {
+             gc_disable();
+         }
+         try {
+-            return new Data($this->doClone($var));
++            return new \Symfony\Component\VarDumper\Cloner\Data($this->doClone($var));
+         } finally {
+             if ($gc) {
+                 gc_enable();
+
+diff --git a/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/Data.php b/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/Data.php
+index 1234567..abcdefg 100644
+--- a/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/Data.php
++++ b/vendor/se7enxweb/symfony/src/Symfony/Component/VarDumper/Cloner/Data.php
+@@ -106,7 +106,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         return $children;
+     }
+
+-    public function count()
++    public function count(): int
+     {
+         return \count($this->getValue());
+     }
+@@ -111,7 +111,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         return \count($this->getValue());
+     }
+
+-    public function getIterator()
++    public function getIterator(): \Traversable
+     {
+         if (!\is_array($value = $this->getValue())) {
+             throw new \LogicException(sprintf('"%s" object holds non-iterable type "%s".', self::class, \gettype($value)));
+@@ -138,7 +138,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         return null !== $this->seek($key);
+     }
+
+-    public function offsetExists($key)
++    public function offsetExists($key): bool
+     {
+         return $this->__isset($key);
+     }
+@@ -143,7 +143,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         return $this->__isset($key);
+     }
+
+-    public function offsetGet($key)
++    public function offsetGet($key): mixed
+     {
+         return $this->__get($key);
+     }
+@@ -148,7 +148,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         return $this->__get($key);
+     }
+
+-    public function offsetSet($key, $value)
++    public function offsetSet($key, $value): void
+     {
+         throw new \BadMethodCallException(self::class.' objects are immutable.');
+     }
+@@ -153,7 +153,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
+         throw new \BadMethodCallException(self::class.' objects are immutable.');
+     }
+
+-    public function offsetUnset($key)
++    public function offsetUnset($key): void
+     {
+         throw new \BadMethodCallException(self::class.' objects are immutable.');
+     }
+
+diff --git a/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/fieldtype_services.yml b/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/fieldtype_services.yml
+index 1234567..abcdefg 100644
+--- a/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/fieldtype_services.yml
++++ b/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/fieldtype_services.yml
+@@ -1,6 +1,6 @@
+ parameters:
+     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+-    ezpublish.fieldType.ezxmltext.converter.html5.resources: "%kernel.root_dir%/../vendor/ezsystems/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl"
++    ezpublish.fieldType.ezxmltext.converter.html5.resources: "%kernel.root_dir%/../vendor/se7enxweb/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl"
+     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
+     ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
+     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5
+
+diff --git a/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/default_settings.yml b/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/default_settings.yml
+index 1234567..abcdefg 100644
+--- a/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/default_settings.yml
++++ b/vendor/se7enxweb/ezplatform-xmltext-fieldtype/bundle/Resources/config/default_settings.yml
+@@ -3,10 +3,10 @@ parameters:
+     # Built-in stylesheets are treated as custom for the sake of extensibility.
+     ezsettings.default.fieldtypes.ezxml.custom_xsl:
+         -
+-            path: "%kernel.root_dir%/../vendor/ezsystems/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl"
++            path: "%kernel.root_dir%/../vendor/se7enxweb/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl"
+             priority: 0
+         -
+-            path: "%kernel.root_dir%/../vendor/ezsystems/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl"
++            path: "%kernel.root_dir%/../vendor/se7enxweb/ezplatform-xmltext-fieldtype/lib/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl"
+             priority: 0
+
+diff --git a/vendor/netgen/site-bundle/bundle/Menu/Factory/LocationFactory.php b/vendor/netgen/site-bundle/bundle/Menu/Factory/LocationFactory.php
+index 1234567..abcdefg 100644
+--- a/vendor/netgen/site-bundle/bundle/Menu/Factory/LocationFactory.php
++++ b/vendor/netgen/site-bundle/bundle/Menu/Factory/LocationFactory.php
+@@ -39,7 +39,7 @@ class LocationFactory implements FactoryInterface
+
+     public function createItem($name, array $options = []): ItemInterface
+     {
+-        $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
++        $menuItem = (new MenuItem($name ?? '', $this))->setExtra('translation_domain', false);
+
+         if (!isset($options['ezlocation']) || !$options['ezlocation'] instanceof Location) {
+             return $menuItem;

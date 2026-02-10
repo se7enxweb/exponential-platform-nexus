@@ -1,0 +1,7 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    <div class="spacer">
+        <hr />
+    </div>
+{% endblock %}

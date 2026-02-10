@@ -1,0 +1,30 @@
+{% if content.fields.column_count is defined and not content.fields.column_count.empty %}
+    {% set count_columns = content.fields.column_count.value.value %}
+{% endif %}
+
+{% set counter = 1 %}
+
+{% set number_of_columns = 3 %}
+
+<div class="nglayouts-flex-row">
+
+{% for multimedia_item in multimedia_items %}
+    {% if multimedia_item.contentInfo.contentTypeIdentifier != 'ng_gallery' and counter <= count_columns %}
+
+        {% if multimedia_items|length - 1 <= number_of_columns %}
+            {% set divider = multimedia_items|length - 1 %}
+        {% else %}
+            {% set divider = number_of_columns %}
+        {% endif %}
+        {% include '@ezdesign/parts/related_multimedia/image_grid.html.twig'
+            ignore missing
+            with {
+            'content': multimedia_item.content,
+            'location': multimedia_item,
+            'width_item': (100 / divider)
+        } %}
+
+        {% set counter = counter + 1 %}
+    {% endif %}
+{% endfor %}
+</div>

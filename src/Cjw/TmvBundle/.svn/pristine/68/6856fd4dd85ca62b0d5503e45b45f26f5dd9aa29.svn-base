@@ -1,0 +1,11 @@
+block_definitions:
+    tmv_events:
+        name: 'TMV Veranstaltungen'
+        view_types:
+            list:
+                name: 'Veranstaltungen mit Toolbar'
+            toolbar:
+                name: 'Toolbar'
+                valid_parameters: ['!number_of_columns', '!limit', '!view_type']
+            recent:
+                 name: 'Neues ( Aktuelle Veranstaltungen - ohne Toolbar )'

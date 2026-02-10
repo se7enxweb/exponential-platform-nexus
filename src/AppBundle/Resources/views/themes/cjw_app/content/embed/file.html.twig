@@ -1,0 +1,20 @@
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+
+{% if objectParameters[ 'link_target' ] is defined and objectParameters[ 'link_target' ] == '_blank' %}
+    <p>
+        <a href="{{ '/content/view/pdfjs/' ~ location.id }}" class="fancybox-pdf{% if objectParameters[ 'link_title' ] is defined and objectParameters[ 'link_title' ] != '' %} {{ objectParameters[ 'class' ] }}{% endif %}" data-type="iframe">
+            {% if objectParameters[ 'link_title' ] is defined and objectParameters[ 'link_title' ] != '' %}
+                {{ objectParameters[ 'link_title' ] }}
+            {% else %}
+                {{ ng_render_field(content.fields.name) }}
+            {% endif %}
+        </a>
+    </p>
+{% else %}
+    <div class="view-type view-type-{{ view_type }} file">
+        <div class="file mime-type-{{ content.fields.file.value.mimeType|replace({'/': '-'}) }}">
+            {{ ng_render_field(content.fields.file) }}
+        </div>
+    </div>
+{% endif %}

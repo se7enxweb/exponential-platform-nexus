@@ -1,0 +1,89 @@
+{% trans_default_domain 'cjwsite' %}
+
+{% set SHOW_EXAMPLE_DROPDOWN = true %}
+
+{% from "@ezdesign/parts/macros/cjw_macros.html.twig" import cjw_nav_item %}
+
+{% set tree_root_location_id = ezpublish.configResolver.parameter( 'content.tree_root.location_id', 'ezsettings' ) %}
+
+{% set base_params = {
+    'fetch_params' : {
+        'depth': 1,
+        'offset': 1,
+        'limit': 100,
+        'sortby': { 'LocationPriority': 'ASC' },
+        'datamap': false,
+        'count' : false
+    },
+    'priorities' : {
+        'min' : 0,
+        'break' : 999,
+        'max' : 2000
+    }
+} %}
+
+{% set top_fetch_params = base_params.fetch_params|merge( {
+    'priority' : [['between', [base_params.priorities.min, base_params.priorities.break]]]
+} ) %}
+
+{% set bottom_fetch_params = base_params.fetch_params|merge( {
+    'priority' : [['between', [base_params.priorities.break, base_params.priorities.max]]]
+} ) %}
+
+{% set nav_items = {
+    'top' : cjw_treemenu( tree_root_location_id, top_fetch_params ),
+    'bottom' : cjw_treemenu( tree_root_location_id, bottom_fetch_params )
+} %}
+
+
+
+<div class="navbar-collapse offcanvas-collapse" id="offcanvas-menu">
+
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/" title="{{ 'cjwsite.navigation.home.title'|trans }}">
+            {# @todo: Get rid of the hardcoded image path #}
+            <img src="{{ asset('bundles/app/images/logos/icon.png') }}" alt="">
+        </a>
+
+        <div class="navbar-toggler">
+            <a href="#" data-toggle="offcanvas" title="{{ 'cjwsite.navigation.close.title'|trans }}">
+                {{ 'cjwsite.navigation.close'|trans }}&nbsp;
+
+                {# @todo: Get rid of the hardcoded image path #}
+                <img src="{{ asset( 'bundles/app/images/icons/close.png' ) }}" alt="x" />
+            </a>
+        </div>
+    </div>
+
+    {# Render navs #}
+    {% for nav_name, nav_items in nav_items %}
+        <ul class="navbar-nav mr-auto cjw-nav-offcanvas-{{ nav_name }}">
+            {% for nav_item in nav_items %}
+                {{ cjw_nav_item( nav_item ) }}
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    {% if 0 %}
+    <ul class="navbar-nav mr-auto cjw-nav-offcanvas-top">
+        {% for nav_item in nav_items.top %}
+            {{ cjw_nav_item( nav_item ) }}
+        {% endfor %}
+    </ul>
+
+    <ul class="navbar-nav mr-auto cjw-nav-offcanvas-bottom">
+        {% for nav_item in nav_items.bottom %}
+            {{ cjw_nav_item( nav_item ) }}
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+    {#<form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search"
+               aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+        </button>
+    </form>#}
+</div>

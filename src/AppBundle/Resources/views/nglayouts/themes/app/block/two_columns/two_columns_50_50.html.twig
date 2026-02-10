@@ -1,0 +1,20 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% block content %}
+    {% set col_left = 6 %}
+    {% set col_right = 6 %}
+
+    {% if nglayouts_render_placeholder(block, 'right')|striptags|trim == '' %}
+        {% set col_left = 12 %}
+        {% set col_right = 0 %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-{{ col_left }}">
+            {{ nglayouts_render_placeholder(block, 'left') }}
+        </div>
+        <div class="col-md-{{ col_right }}">
+            {{ nglayouts_render_placeholder(block, 'right') }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% import '@NetgenLayouts/parts/macros.html.twig' as macros %}
+
+{% block content %}
+    {% if collections.default is defined %}
+        <div class="slick-slider" data-slick='{ "slidesToShow": 2, "infinite": false, "responsive": [ { "breakpoint": 480, "settings": { "slidesToShow": 1 } } ] }'>
+            {% for result in collections.default %}
+                {{ nglayouts_render_result(result, null, block.itemViewType) }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

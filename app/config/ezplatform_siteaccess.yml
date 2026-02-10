@@ -1,0 +1,132 @@
+ezpublish:
+    siteaccess:
+        default_siteaccess: de
+        list:
+            - de
+            - en
+            - ngadminui
+            - admin
+            - legacy_admin
+        groups:
+            frontend_group:
+                - de
+                - en
+            ngadmin_group:
+                - ngadminui
+            admin_group:
+                - admin
+            legacy_group:
+                - legacy_admin
+
+        match:
+            Map\URI:
+                en : en
+            # 7x + Cjw Documentation: This definition is vital to uncached hosts feature of AppCache (in Nexus).
+            # The mappping of hostnames to siteaccesses is used by AppCache to determine whether a request should be cached or remain private
+            # This mapping is used to detect which siteaccess is handling each request
+            # Caching headers is determined by this mapping.
+            Map\Host:
+                legacy.platform.cjw.demo.se7enx.com: en
+                platform.cjw.demo.se7enx.com: en
+                site.platform.cjw.demo.se7enx.com: en
+                edit.platform.cjw.demo.se7enx.com: admin
+                legacy.platform.cjw.demo.se7enx.com: legacy_admin
+                editor.platform.cjw.demo.se7enx.com: legacy_admin
+                nga.platform.cjw.demo.se7enx.com: ngadminui
+
+    system:
+        frontend_group:
+            translation_siteaccesses:
+                - de
+                - en
+        de:
+            design: cjw_app
+            languages:
+                - ger-DE
+                - eng-GB
+            session:
+                name: eZSESSID
+            translation_siteaccesses:
+                - de
+            # When index_page is not set, the tree_root location is served directly at /
+            #            index_page: /Test-Ordner-1-ger-DE/Test-Seite-1-2
+            # index_page: /startseite
+            index_page: /startseite
+            content:
+                tree_root:
+                    # https://github.com/ezsystems/ezpublish-kernel/blob/master/doc/specifications/multisite/design_routing.md
+                    # https://doc.ez.no/display/EZP/Multisite+using+content_root
+                    # Root locationId: 168 (JAC Example)
+                    location_id: '%ngsite.default.locations.tree_root.id%'
+                    excluded_uri_prefixes:
+                        - media
+                        - images
+
+        en:
+            design: cjw_app
+            languages:
+                - eng-GB
+                - ger-DE
+            session:
+                name: eZSESSID
+            translation_siteaccesses:
+                - en
+            # When index_page is not set, the tree_root location is served directly at /
+            #            index_page: /Test-Ordner-1-ger-DE/Test-Seite-1-2
+            # index_page: /startseite
+            index_page: /startseite
+            content:
+                tree_root:
+                    location_id: '%ngsite.default.locations.tree_root.id%'
+                    excluded_uri_prefixes:
+                        - media
+                        - images
+        ngadminui:
+            design: ngadminui
+            languages:
+                - ger-DE
+                - eng-GB
+            session:
+                name: eZSESSID
+        admin:
+            languages:
+                - ger-DE
+                - eng-GB
+            session:
+                name: eZSESSID
+        legacy_admin:
+            languages:
+                - ger-DE
+                - eng-GB
+netgen_layouts:
+    design_list:
+        app:
+            - app
+            - cjw_app
+        cjw_app:
+            - cjw_app
+            - app
+    system:
+        frontend_group:
+            design: cjw_app
+ezdesign:
+    design_list:
+        app:
+            - app
+            - cjw_app
+            - common
+        cjw_app:
+            - cjw_app
+            - app
+            - common
+        admin:
+            - admin
+            - standard
+            - common
+        ngadminui:
+            - ngadminui
+            - common
+ez_publish_legacy:
+    system:
+        legacy_admin:
+            legacy_mode: true

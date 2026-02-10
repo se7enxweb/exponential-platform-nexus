@@ -1,0 +1,40 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% import '@NetgenLayouts/parts/macros.html.twig' as macros %}
+
+{% block content %}
+    {% if collections.default is defined %}
+        {% set number_of_thumbnails = block.parameter('number_of_thumbnails').value %}
+
+        {% set parent_content = cjw_load_content_by_id( collections.default[0].item.object.parent.contentId ) %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {#
+                    <div class="gallery-title">
+                        {{ ng_render_field(parent_content.fields.title) }}
+                    </div>
+#}
+                    <div class="block-intro">
+                        {% if parent_content.fields.teaser_intro is defined and not parent_content.fields.teaser_intro.empty %}
+                            <div class="article-intro">
+                                {{ ng_render_field(parent_content.fields.teaser_intro) }}
+                            </div>
+                        {% endif %}
+
+                        {% if parent_content.fields.description is defined and not parent_content.fields.description.empty %}
+                            {{ ng_render_field(parent_content.fields.description) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-row nglayouts-flex-row {% if block.parameter('enable_lightbox').value %}js-lightbox-enabled{% endif %}">
+            {% for result in collections.default %}
+                <div class="nglayouts-as-flex" style="width:{{ 100 / number_of_thumbnails }}%">{{ nglayouts_render_result(result, null, block.itemViewType) }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

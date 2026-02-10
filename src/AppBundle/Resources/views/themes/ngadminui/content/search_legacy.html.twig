@@ -1,0 +1,82 @@
+{% extends nglayouts.layoutTemplate %}
+
+{% set show_path = false %}
+
+{% block pre_content %}
+    <form action="{{ path('_ezpublishSearchRoute') }}" method="get" class="form-search">
+        <header class="full-page-header full-search-header">
+            <div class="container">
+                <div class="search-inputs">
+                    <div class="input-group">
+                        <input type="text" value="{{ search_text }}" name="SearchText" id="Search" class="form-control" placeholder="{{ 'Search'|trans }}" />
+                        <button type="submit" class="btn btn-dark">{{ 'Search'|trans }}</button>
+                    </div>
+
+                    {% if search_text is not empty %}
+                        {% if search_count == 0 %}
+                            <div class="result-message result-message-error">
+                                <h2>{{ 'No results were found while searching for: %searchText%'|trans({'%searchText%': search_text}) }}</h2>
+                                <ul class="full-no-results-list">
+                                    <li>{{ 'Check spelling of keywords.' }}</li>
+                                    <li>{{ 'Try changing some keywords e.g. "car" instead of "cars".' }}</li>
+                                    <li>{{ 'Try more general keywords.' }}</li>
+                                    <li>{{ 'Fewer keywords result in more matches. Try reducing keywords until you get a result.' }}</li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <div class="result-message result-message-success">
+                                <h2>{{ 'Search for %searchText% returned %searchCount% matches'|trans({'%searchText%': search_text, '%searchCount%': search_count}) }}</h2>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        {% if search_text is not empty and search_count > 0 %}
+            <div class="full-search-results">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            {% if search_result is defined and search_result is not null %}
+                                <div id="search-result">
+                                    {% for result in search_result %}
+                                        {% if result.object is defined and result.object.content is defined %}
+                                            {% set content = result.object.content %}
+                                            {% set location = result.object %}
+                                            {% set score = null %}
+                                            
+                                            {% if result.score is not null %}
+                                                {% set score = (result.score * 100)|round %}
+                                            {% endif %}
+
+                                            {% include '@ezdesign/parts/ng_view_content.html.twig' with {
+                                                content: content,
+                                                location: location,
+                                                view_type: 'search',
+                                                params: { 'score_percent': score }
+                                            } only %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elseif search_text is empty %}
+            <div class="full-search-results">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>{{ 'Enter search terms to search the site' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

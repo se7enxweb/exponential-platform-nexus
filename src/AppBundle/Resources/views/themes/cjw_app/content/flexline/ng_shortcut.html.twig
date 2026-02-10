@@ -1,0 +1,17 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import "@ezdesign/parts/macros.html.twig" as macros %}
+
+{% block content %}
+    <a class="view-type view-type-{{ view_type }} ng-shortcut" {{ macros.content_link_parameters( content ) }}>
+{#        <a>#}
+            <h3 class="title">
+                {{ content.fields.title.value.text }}
+            </h3>
+{#            <p>#}
+                {{ ng_render_field( content.fields.teaser_intro ) }}
+{#            </p>#}
+{#        </a>#}
+    </a>
+{% endblock %}

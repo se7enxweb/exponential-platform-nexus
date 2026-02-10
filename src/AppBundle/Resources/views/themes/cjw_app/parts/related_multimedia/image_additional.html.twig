@@ -1,0 +1,15 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+<figure class="image-wrapper">
+    {% set title = content_fields.title(content) %}
+    {% if not content.fields.additional_image.empty and ng_image_alias(content.fields.image, 'i1200').uri is defined %}
+        <a href="{{ asset(ng_image_alias(content.fields.additional_image, 'i1200').uri) }}"
+           title="{{ title }}" data-fancybox="{# {{ view_type }} #}"
+           alt="{{ content.fields.image.value.alternativeText }}">
+            {{ ng_render_field(content.fields.additional_image) }}
+        </a>
+    {% endif %}
+</figure>

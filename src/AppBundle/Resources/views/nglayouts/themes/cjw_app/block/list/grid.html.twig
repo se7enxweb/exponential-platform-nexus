@@ -1,0 +1,65 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% set collection_identifier = 'default' %}
+{% set number_of_columns = block.parameter('number_of_columns').value|default(2) %}
+{% set set_container = block.parameter('set_container').value %}
+
+{% set template_name = '@nglayouts/block/list/grid/' ~ number_of_columns ~ '_columns.html.twig' %}
+{% if column_templates is defined and column_templates[number_of_columns] is defined %}
+    {% set template_name = column_templates[number_of_columns] %}
+{% endif %}
+
+{% set ajax_template_name = '@nglayouts/block/list/grid_ajax/' ~ number_of_columns ~ '_columns.html.twig' %}
+{% if ajax_column_templates is defined and ajax_column_templates[number_of_columns] is defined %}
+    {% set ajax_template_name = ajax_column_templates[number_of_columns] %}
+{% endif %}
+
+{% set collection_html %}
+    {% for result in collections[collection_identifier] %}
+        {% if block.parameter('paged_collections:enabled').value %}
+            {% include ajax_template_name %}
+        {% else %}
+            {% include template_name %}
+        {% endif %}
+    {% endfor %}
+{% endset %}
+
+{% block content %}
+    {% if collections[collection_identifier] is defined and collections[collection_identifier] is not empty %}
+        {% if show_parent_informations is defined and show_parent_informations != 'no' %}
+            {% set parent_content = cjw_load_content_by_id( collections.default[0].item.object.parent.contentId ) %}
+
+            {% if show_parent_informations == 'title' %}
+                <h1 class="title landing-page-title">
+                    {{ ng_render_field(parent_content.fields.title) }}
+                </h1>
+            {% elseif show_parent_informations == 'intro' %}
+                {% if parent_content.fields.full_intro is defined and not parent_content.fields.full_intro.empty %}
+                    {{ ng_render_field(parent_content.fields.full_intro) }}
+                {% endif %}
+            {% elseif show_parent_informations == 'title_intro' %}
+                <h1 class="title landing-page-title">
+                    {{ ng_render_field(parent_content.fields.title) }}
+                </h1>
+
+                {% if parent_content.fields.full_intro is defined and not parent_content.fields.full_intro.empty %}
+                    {{ ng_render_field(parent_content.fields.full_intro) }}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        {% if block.parameter('paged_collections:enabled').value %}
+            {% embed '@NetgenLayouts/collection/paged_collection.html.twig' with {pager: pagers[collection_identifier]} %}
+                {% block wrap_css_class %}row{% endblock %}
+
+                {% block collection_page %}
+                    {{ collection_html }}
+                {% endblock %}
+            {% endembed %}
+        {% else %}
+            <div class="row">
+                {{ collection_html }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

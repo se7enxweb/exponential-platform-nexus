@@ -1,4 +1,4 @@
-# Exponential Platform Nexus 2.5.0.x
+# Exponential Platform Nexus 1.0.0.2
 
 # Exponential Platform Nexus Project Notice : 2025.08.12
 
@@ -20,7 +20,12 @@ Previously before 2022, 7x was called Brookins Consulting who was the outspoken 
 
 # What is Exponential Platform Nexus?
 
+Exponential Platform Nexus is made up of the latest Exponential Platform Legacy + Netgen Bundles for Media Site + Layouts + 7x Symfony 3.4 + PHP 8.5+ Bugfixes from 7x.
+
+It's #1 Goal is to be the stable basis for building all Exponential Platform (Legacy) Based Web Applications.
+
 ## Recent improvements to Exponential Platform Nexus
+
 Exponential Platform Nexus (the application of interest) delivered to users worldwide by a web server (PHP built-in, Apache, Nginx, lighttpd, Among others).
 
 With PHP we require composer to install Exponential Platform Nexus software and no other software required to run
@@ -163,4 +168,4 @@ You can not choose between the GNU GPL and the Ibexa Professional License. The G
 
 Using Exponential Platform under the terms of the GNU GPL is free of charge.
 
-This effectively makes Exponential Platform GNU GPL ONLY. 
+This effectively makes Exponential Platform GNU GPL ONLY.

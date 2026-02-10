@@ -1,0 +1,42 @@
+{% from '@ezdesign/parts/macros/cjw_macros.html.twig' import
+    cjw_toggle_target_id as toggle_target_id,
+    cjw_toggle_toggler_attr as toggle_toggler_attr,
+    cjw_css_content_class as css_class
+%}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_content_fields.html.twig' as cjw_content_fields %}
+
+{% set col_map     = 'col-12 col-sm-12 col-md-12 col-lg-6' %}
+
+{# -- Parameters -- #}
+{% set full_content_link = full_content_link|default %}
+
+<article class="view-type view-type-{{ view_type }} {{ css_class( content ) }} vl1">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 d-none d-lg-block article-content">
+                <header class="article-header">
+                    <h2 class="title"><a href="{{ path(location) }}">{{ content_fields.title(content) }}</a></h2>
+                </header>
+                <div class="short">
+                    {{ content_fields.intro(content) }}
+                </div>
+            </div>
+
+            <div class="{{ col_map }} col-map">
+                {% include "@ezdesign/parts/leaflet_map.html.twig" %}
+
+                <a data-fancybox data-type="iframe" class="enlarge d-none d-md-block" href="{{ path(location) }}?overlay=yes" title="Karte vergrößern"><img src="{{ asset( 'bundles/app/images/icons/symbol-plus.png' ) }}" alt="Größer" /></a>
+            </div>
+
+            <div class="col-12 d-lg-none article-content">
+                <header class="article-header">
+                    <h2 class="title"><a href="{{ path(location) }}">{{ content_fields.title(content) }}</a></h2>
+                </header>
+                <div class="short">
+                    {{ content_fields.intro(content) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

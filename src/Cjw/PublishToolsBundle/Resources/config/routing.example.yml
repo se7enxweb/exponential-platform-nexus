@@ -1,0 +1,113 @@
+cjwpublishtools_user_register:
+    path:     /register
+    defaults: { _controller: CjwPublishToolsBundle:Formular:userRegister }
+cjwpublishtools_user_activate:
+    path:     /activate/{hash}/{id}
+    defaults: { _controller: CjwPublishToolsBundle:UserRegisterActivate:userActivate }
+
+cjwpublishtools_formbuilder:
+    pattern:  /form/{identifier}
+    defaults: { _controller: CjwPublishToolsBundle:Formular:formBuilder }
+
+cjwpublishtools_frontend_editing_edit:
+    pattern:  /content/edit/{locationid}
+    defaults: { _controller: CjwPublishToolsBundle:Formular:editForm }
+cjwpublishtools_frontend_editing_add:
+    pattern:  /content/add/{locationid}/{contenttypeid}
+    defaults: { _controller: CjwPublishToolsBundle:Formular:addForm }
+
+cjwpublishtools_sitemaps_sitemap:
+    path: /sitemap.{_format}
+    defaults: { _controller: CjwPublishToolsBundle:Sitemaps:sitemap }
+    requirements:
+        _format: xml
+
+cjwpublishtools_sitemaps_robots:
+    path: /robots.txt
+    defaults: { _controller: CjwPublishToolsBundle:Sitemaps:robots }
+
+cjwpublishtools_search:
+    path: /search
+    defaults:
+        _controller: CjwPublishToolsBundle:Search:index
+        template: CjwPublishToolsBundle:full:search.html.twig
+
+# suche legacy wrapper
+cjwpublishtools_legacysearch:
+    #    path: /search => belegt von admin_ui
+    path: /legacysearch
+    defaults:
+        _controller: CjwPublishToolsBundle:Search:index
+        template: CjwPublishToolsBundle:full:search.html.twig
+#        template: 'CjwPublishToolsBundle:full:search_platform.html.twig'
+
+# ezplatform suche - test ggf. eigenen Controller schreiben der SiteAPI Objekte zurückliefert + eigenes template übergeben
+# /contentsearch?SearchText=meist&SearchButton=Suchen
+cjwpublishtools_contentsearch:
+    #    path: /psearch
+    path: /contentsearch
+    defaults:
+        _controller: CjwPublishToolsBundle:SearchPlatform:search
+        template: 'CjwPublishToolsBundle:full:search_platform.html.twig'
+#        template: 'AppBundle:full:search.html.twig'
+
+
+
+
+cjwpublishtools_appetizer:
+    path: /appetizer/ezpnode/{node_id}
+    defaults: { _controller: CjwPublishToolsBundle:Appetizer2:index }
+
+
+# static file routing examples
+cjwpublishtools_static_example_index_html:
+    path: /index.html
+    defaults:
+      _controller: CjwPublishToolsBundle:StaticFile:output
+      file: @CjwPublishToolsBundle/Resources/static/index.html
+      ttl: 60
+      locationId: 2
+
+cjwpublishtools_static_example_test_xml:
+    path: /test.xml
+    defaults:
+      _controller: CjwPublishToolsBundle:StaticFile:output
+      file: @CjwPublishToolsBundle/Resources/static/test.xml
+      ttl: 0
+
+# favicon im Root verfuegbar machen - webserver regeln anschauen ob da sind
+cjwpublishtools_static_example_favicon:
+    path: /favicon.ico
+    defaults:
+      _controller: CjwPublishToolsBundle:StaticFile:output
+      file: @CjwPublishToolsBundle/Resources/static/favicon.ico
+      ttl: 84600
+
+# Provides tracking settings, where the user can see which tracking mechanisms
+# are used, which are activated and also has the opportunity to deactivate each
+# one of those.
+cjwpublishtools_tracking_settings:
+    path: /tracking/settings
+    defaults:
+      _controller: CjwPublishToolsBundle:Tracking:viewPage
+#      template: 'JacSiteSparkassenverbandBayernBundle:full:tracking_settings.html.twig'
+      template: 'CjwPublishToolsBundle:full:tracking_settings.html.twig'
+
+
+# redirect intern
+# http://domain.de/redirect_test_intern => redirect to http://domain.de/?redirected=1
+cjwpublishtools_redirect_internal_test:
+  path: /redirect_test_intern
+  defaults:
+    _controller: CjwPublishToolsBundle:Redirect:redirect
+    url: /?redirected=1
+    status: 302
+
+# redirect external
+# http://domain.de/redirect_test_extern => redirect to https://www.cjw-network.com/?redirected=1
+cjwpublishtools_redirect_external_test:
+  path: /redirect_test_extern
+  defaults:
+    _controller: CjwPublishToolsBundle:Redirect:redirect
+    url: https://www.cjw-network.com/?redirected=1
+    status: 302

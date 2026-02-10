@@ -1,0 +1,3 @@
+<div class="col-12{% if custom_class is defined and custom_class != '' %} {{ custom_class }}{% endif %} col-{{ block.itemViewType }}">
+    {{ nglayouts_render_result(result, null, block.itemViewType) }}
+</div>

@@ -1,0 +1,67 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+{% import '@ezdesign/parts/macros/cjw_content_fields.html.twig' as cjw_content_fields %}
+
+{% set event_location = location.parent %}
+
+{% set link_button_text = 'cjwsite.content.link.more'|trans %}
+
+{% set col_content = 'col-12 col-sm-6 col-md-6 col-lg-8' %}
+{% set col_image   = 'col-12 col-sm-6 col-md-6 col-lg-4' %}
+
+{% if 'line_h' in view_type  %}
+    {% set col_content = 'col-12 col-sm-6 col-md-6 col-lg-6' %}
+    {% set col_image   = 'col-12 col-sm-6 col-md-6 col-lg-6' %}
+{% endif %}
+
+{% set image_list = cjw_fetch_content( [[event_location.id]], {
+    'depth' : 1,
+    'limit' : 1,
+    'include' : [ 'tmv_image' ]
+} ).0.children|default() %}
+
+{% set image = false %}
+{% if image_list.0 is defined %}
+    {% set image = image_list.0 %}
+{% endif %}
+
+<article class="view-type view-type-line_details {{ event_location.content.contentInfo.contentTypeIdentifier|replace({'_': '-'}) }} vl4">
+    <header class="article-header">
+        <h2 class="title"><a href="{{ path(event_location) }}">{{ content_fields.title(event_location.content) }}</a></h2>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="{{ col_content}} article-content">
+                <div class="short">
+                    {{ cjw_content_fields.intro( event_location.content, false, 260 ) }}
+                </div>
+
+                <div class="contact-details">
+                    {% if event_location.content.fields.location is defined and not event_location.content.fields.location.empty %}
+                        {{ ng_render_field(event_location.content.fields.location) }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="{{ col_image }} article-image image-right">
+                {% if image %}
+                    {{ cjw_content_fields.image(image.content, event_location, 'i770wc_16-9') }}
+                {% endif %}
+
+                <div class="links">
+                    <span class="read-more btn-border">
+                        nächster Termin:<br /> {{ location.content.fields.start.value|date( 'd.m.Y, H:i' ) }} Uhr
+                    </span>
+
+                    <a href="{{ path( event_location ) }}" class="read-more btn-border" target="_blank">
+                        {{ link_button_text }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

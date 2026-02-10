@@ -1,0 +1,79 @@
+.weather-widget {
+    text-align: center;
+
+     @include media-breakpoint-down(xs) {
+         margin-bottom: 2rem;
+     }
+}
+
+.toggle-block {
+    clear: both;
+}
+
+.toggle-block .content {
+    display: none;
+}
+
+.toggle-block.mobil .content {
+    padding: 0;
+}
+
+.toggle-block.has-custom-title .content h2 {
+    display: none;
+}
+
+.toggle-block .text-is-opened {
+    display: none;
+}
+
+.toggle-block .text-is-closed {
+    display: inline-block;
+}
+
+.toggle-block.state-opened .control {
+    background: url($icon-toggle_close) no-repeat right center;
+}
+
+.toggle-block.mobil.state-opened .control {
+    background: url($icon-toggle-arrow_close) no-repeat right center;
+}
+
+.toggle-block.state-opened .text-is-closed {
+    display: none;
+}
+
+.toggle-block.state-opened .content {
+    display: block;
+}
+
+.toggle-block.state-opened .text-is-opened {
+    display: inline-block;
+}
+
+.toggle-block .control {
+    padding: 0.5rem 1.5rem 0.5rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid $border-color;
+    background: url($icon-toggle_open) no-repeat right 8px;
+    cursor: pointer;
+    color: $link-color;
+    font-weight: bold;
+}
+
+.toggle-block.mobil .control {
+    background: url($icon-toggle-arrow_open) no-repeat right 8px;
+}
+
+.toggle-block.section .control-section {
+    color: $link-color;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    .text-is-closed::before {
+        content: "Weiterlesen";
+    }
+
+    .text-is-opened::before {
+        content: "Schließen";
+    }
+}

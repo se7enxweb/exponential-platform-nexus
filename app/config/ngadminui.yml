@@ -1,0 +1,102 @@
+parameters:
+    netgen_admin_ui.nga.is_admin_ui_siteaccess: true
+    eztags.nga.routing.enable_tag_router: false
+    ezsettings.nga.treemenu.http_cache: false
+    netgen_admin_ui.nga.content_tree_default_page: /
+    netgen_admin_ui.nga.media_folder_location: /content/view/full/43
+    netgen_admin_ui.nga.design_root_location: /content/view/full/58
+
+# REMOVED 2026-02-06: FOSHttpCache rules for ngadminui siteaccess
+# These rules were too restrictive and prevented caching of public content.
+# Instead, use the global cache rules from config.yml which are applied per-route.
+# The CacheControlHeaderListener in app bundle now handles proper cache directives.
+#
+# Removed section:
+# fos_http_cache:
+#     cache_control:
+#         rules:
+#             - match:
+#                 path: "^/$"
+#               headers:
+#                 overwrite: true
+#                 cache_control:
+#                   public: false
+#                   private: true
+#                   max_age: 0
+#                   s_maxage: 0
+
+ezpublish:
+    siteaccess:
+        list:
+            - nga
+            - ngadminui
+        groups:
+            ngadminui:
+                - nga
+                - ngadminui
+        match:
+            Map\URI:
+                nga: nga
+                ngadminui: ngadminui
+            Map\Host:
+                nga.platform.cjw.demo.se7enx.com: ngadminui
+    system:
+        nga:
+            user:
+                layout: '@NetgenAdminUI/pagelayout_login.html.twig'
+                login_template: '@NetgenAdminUI/user/login.html.twig'
+            languages:
+                - eng-GB
+            var_dir: var/site
+            repository: null
+            index_page: /content/view/full/2
+        ngadminui:
+            user:
+                layout: '@NetgenAdminUI/pagelayout_login.html.twig'
+                login_template: '@NetgenAdminUI/user/login.html.twig'
+            languages:
+                - eng-GB
+            var_dir: var/site
+            repository: null
+            index_page: /content/view/full/2
+
+ez_publish_legacy:
+    system:
+        nga:
+            templating:
+                view_layout: '@NetgenAdminUI/pagelayout.html.twig'
+                module_layout: '@NetgenAdminUI/pagelayout_module.html.twig'
+            legacy_mode: false
+        ngadminui:
+            legacy_mode: false
+        ngadminui:
+            legacy_mode: false
+
+ezpublish:
+    system:
+        nga:
+            user:
+                layout: '@NetgenAdminUI/pagelayout_login.html.twig'
+                login_template: '@NetgenAdminUI/user/login.html.twig'
+            languages:
+                - eng-GB
+            var_dir: var/site
+            repository: null
+            index_page: /content/view/full/2
+            content_view:
+                full:
+                    default:
+                        template: '@NetgenAdminUI/content/locationview.html.twig'
+                        match: ~
+            netgen_admin_ui.content_tree_default_page: /content/view/full/2
+            netgen_admin_ui.media_folder_location: /content/view/full/43
+        ngadminui:
+            user:
+                layout: '@NetgenAdminUI/pagelayout_login.html.twig'
+                login_template: '@NetgenAdminUI/user/login.html.twig'
+            languages:
+                - eng-GB
+            var_dir: var/site
+            repository: null
+            index_page: /content/view/full/2
+

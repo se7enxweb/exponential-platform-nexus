@@ -1,0 +1,6 @@
+#services:
+#    Cjw\PublishToolsBundle\Controller\DownloadFileController:
+#        parent: ngsite.controller.base
+#        arguments: [ ]
+#        tags:
+#            - { name: 'container.service_subscriber' }

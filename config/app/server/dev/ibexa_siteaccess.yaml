@@ -1,0 +1,4 @@
+ibexa:
+    siteaccess:
+        match:
+            URIElement: 1

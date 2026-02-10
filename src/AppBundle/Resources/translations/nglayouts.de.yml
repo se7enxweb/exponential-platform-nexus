@@ -1,0 +1,23 @@
+block.plugin.vertical_whitespace.none: 'Kein'
+block.plugin.vertical_whitespace.mini: 'Mini'
+block.plugin.vertical_whitespace.small: 'Klein'
+block.plugin.vertical_whitespace.medium: 'Mittel'
+block.plugin.vertical_whitespace.large: 'Gross'
+block.plugin.vertical_whitespace.max: 'Max'
+
+block.plugin.background_color.yellow: 'Gelb'
+block.plugin.background_color.light_gray: 'Hellgrau'
+block.plugin.background_color.white: 'Weiss'
+block.plugin.background_color.black: 'Schwarz'
+
+block.list.children_submenu: 'Untermenü der Objekte anzeigen'
+block.list.children_submenu.none: 'Nein'
+block.list.children_submenu.list: 'Einfache Liste'
+block.list.children_submenu.tags: 'Bunte Schlagworte'
+block.list.children_submenu.list_icons: 'Einfache Liste mit Icon'
+
+block.list.show_parent_informations: 'Informationen des Elternknotens anzeigen'
+block.list.show_parent_informations.no: 'Nein'
+block.list.show_parent_informations.title: 'Titel anzeigen'
+block.list.show_parent_informations.intro: 'Intro anzeigen'
+block.list.show_parent_informations.title_intro: 'Titel und Intro anzeigen'

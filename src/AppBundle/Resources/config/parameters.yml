@@ -1,0 +1,148 @@
+parameters:
+
+    #=== `ngsite` variable namespace ===#
+    ngsite.default.search.content_types:
+        - ng_blog_post
+        - ng_article
+        - ng_news
+        - ng_category
+        - ng_feedback_form
+        - ng_landing_page
+        - ng_video
+        - ng_audio
+        - file
+
+    netgen_admin_ui.default.legacy_routes: [ez_urlalias, ngsite_content_search]
+
+# vendor/netgen/site-bundle/bundle/Resources/config/parameters.yml
+    ngsite.default.lazy_loading.enabled: true
+    ngsite.default.lazy_loading.initial_image_alias: 'i30'
+    ngsite.default.render_content_directly: true
+    ngsite.default.template.pagerfanta.ngsite: '@@NetgenSite/pagerfanta/ngsite2.html.twig'
+
+    # ngsite.default.site_settings.jwplayer_id: 'gYe8hbFO'
+    # set it to null jwplayer is not loaded!
+    ngsite.default.site_settings.jwplayer_id: ~
+    ngsite.default.site_settings.jwplayer_key: ~
+
+#    ngsite.default.site_settings.meta_data: []
+#    ngsite.default.site_settings.show_path_in_title: false
+
+    ngsite.default.mail.sender_email: 'info@jac-example.test'
+    ngsite.default.mail.sender_name: 'JAC Example'
+    ngsite.default.mail.admin_email: ~
+    ngsite.default.mail.admin_name: ~
+
+
+
+    #=== Additional `cjwsite` variable namespace ===#
+
+    #-- COMMON --#
+
+    cjwsite.default.locations.tree_root.id: 168
+    cjwsite.default.locations.landing_home.id: 779
+
+    cjwsite.default.system.local_uri_parts:
+        - '.in-mv.co'
+        - '.lokal'
+
+    cjwsite.default.breadcrumb.content_type_id:
+        - 48  #ng_landing_page
+        - 44  #ng_article
+        - 46  #ng_category
+        - 146 #cjw_feedback_form
+
+    #-- HEADER --#
+    cjwsite.default.header.fallback_image_landing: "/bundles/app/images/header_images/wieck_kopf_start_hafen.jpg"
+    cjwsite.default.header.fallback_image: "/bundles/app/images/header_images/wieck_kopf_folge_bootwieck.jpg"
+    cjwsite.default.header.image_content_types:
+        - 'ng_banner'
+    cjwsite.default.header.logo_image: "bundles/app/images/logos/medium.png"
+
+    cjwsite.default.header.top_link_container_location: 1292
+
+    #-- FOOTER --#
+    cjwsite.default.footer.logo_image: "bundles/app/images/logos/small.png"
+    cjwsite.default.footer.background_image: "bundles/app/images/footer_bg.png"
+
+
+    #-- CONTENT --#
+    cjwsite.default.content.image_content_types:
+        - "image"
+        - "ng_image"
+
+    cjwsite.default.content.title_fields:
+        - "title"
+        - "teaser_title"
+        - "short_title"
+        - "name"
+    cjwsite.default.content.short_description_fields:
+        - "teaser_intro"
+        - "teaser_text"
+        - "short_description"
+        - "intro"
+    cjwsite.default.content.description_fields:
+        - "text"
+        - "description"
+        - "body"
+    cjwsite.default.content.image_fields:
+        - "teaser_image"
+        - "image"
+        - "icon"
+        - "picture"
+
+    cjwsite.default.content.gallery.item_content_types:
+        - "image"
+        - "ng_video"
+
+    cjwsite.default.container_menu.content_types:
+        - ng_shortcut
+        - ng_article
+
+#    # Filepath + -name for formbuilder Config, from EZROOT directory
+#    cjw_publishtools.default.formbuilder.config_file: src/AppBundle/Resources/config/formbuilder.yml
+
+    # Settings used by the weather widget
+    # Copied over from `jac440/extension/site_wieck-a-darss/settings/override/site.ini.append.php:63`
+    cjwsite.default.weather.kjkey  : "T3c0b3hZYXZJdXp5MlNza3FOOVBRQjBab3F0K2dWVVYwTDNhYkdhNU81Z1BqaWlRS2JDRURRdU9vQTZTZUJWQw=="
+    cjwsite.default.weather.sensor : "dWZ4SXRUdXhYUTNNek9YYzZKczRpa3Y2NGtBcWFuSmVoUVBMM2VkejhqdERhaG45ZWFJcStJOTVSRnljdFIvRQ=="
+
+### ===================== JavaScript/Leaflet Settings ====================== ###
+
+## Settings for the implementation of the proxy with leaflet
+#[LeafletSettings]
+## Zoom setting to use when initializing leaflet
+#InitialZoom=14
+## Minimum zoom setting to use when initializing leaflet
+#InitialMinZoom=14
+## Maximum zoom setting to use when initializing leaflet
+#InitialMaxZoom=16
+## Latitude to use when initializing leaflet
+#InitialLatitude=54
+## Longitude to use when intitializing leaflet
+#InitialLongitude=12
+## (Module) URL to use for fetching tiles
+## Can contain placeholders `{x}`, `{y}` and `{z}` which will be replaced by the
+## corresponding tiles number (x and y) and the zoom level (z) respectively
+#TileLayer=osm_proxy/tiles/{x}/{y}/{z}
+## Attribution to display on the map (can contain HTML code)
+#TileLayerAttribution=© <a href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors
+
+    # Leaflet settings used by the map template
+    cjwsite.default.leaflet.initial_zoom : 14
+    cjwsite.default.leaflet.initial_min_zoom : 14
+    cjwsite.default.leaflet.initial_max_zoom : 16
+    cjwsite.default.leaflet.initial_latitude : 54.41002
+    cjwsite.default.leaflet.initial_longitude : 12.58279
+    #cjwsite.default.leaflet.tile_layer : "osm_proxy/tiles/{x}/{y}/{z}"
+    cjwsite.default.leaflet.tile_layer : "osm_proxy/tiles/(get)/1"
+
+    cjwsite.default.piwik.user: jac-example
+    cjwsite.default.piwik.password_hash:
+    cjwsite.default.piwik.tracking_id:
+    cjwsite.default.piwik.tracking_url: stats.jac-systeme.de
+
+# sitemap #
+
+    sitemaps.default.protocol: https
+    sitemaps.default.include: [ ng_container, ng_gallery, ng_article, ng_landing_page, cjw_map, ng_feedback_form ]

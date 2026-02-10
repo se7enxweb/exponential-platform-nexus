@@ -1,0 +1,30 @@
+# HTTP Cache Configuration for AppCache middleware
+# This configuration is read directly by AppCache.php (not through Symfony DI container)
+# No schema validation is applied to avoid conflicts with ezPlatform configuration loading
+
+http_cache:
+    # Hostnames that should NEVER be publicly cached (always remain private/no-cache)
+    # These are administrative or development hosts where user-specific content is served
+    uncached_hostnames:
+        - nga.platform.cjw.demo.se7enx.com    # Admin UI host
+        - edit.platform.cjw.demo.se7enx.com   # Admin edit host
+        - editor.platform.cjw.demo.se7enx.com # Legacy admin host
+    
+    # SiteAccesses that should NEVER be publicly cached (always remain private/no-cache)
+    # These are administrative or sensitive siteaccesses where user-specific content is served
+    uncached_siteaccesses:
+        - ngadminui      # Admin UI siteaccess
+        - admin          # Admin siteaccess
+        - legacy_admin   # Legacy admin siteaccess
+    
+    # URL path patterns that should NEVER be publicly cached (regex patterns)
+    # Applied to all siteaccesses - matches are excluded from caching
+    uncached_url_patterns:
+        - '^/admin'      # Admin interface routes
+        - '^/api/'       # API endpoints (usually user-specific)
+        - '^/login'      # Authentication pages
+        - '^/logout'     # Logout pages
+        - '^/user'       # User profile/account pages
+        - '^/_'          # System/internal routes
+        - '^/ngadminui'  # eZ Platform admin UI
+        - '^/ng/'        # Admin/internal ng routes

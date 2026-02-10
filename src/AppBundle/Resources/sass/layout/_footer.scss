@@ -1,0 +1,42 @@
+.site-footer {
+    border-left: 1px dotted $border-color;
+    padding-left: 5px;
+}
+
+footer {
+    border-top: 1.5rem solid $footer-bg-color-light;
+    background-color: $footer-bg-color-dark;
+    padding: 1rem 0 6rem 0;
+    margin-top: 1rem;
+
+    .nav {
+        font-size: $font-size-footer;
+        display: inline-block;
+        margin-top: 2rem;
+
+        li {
+            &:first-child {
+                border-left: 0;
+                padding-left: 0;
+            }
+
+            border-left: 1px solid #fff;
+            display: inline-block;
+            padding: 0 0.5rem;
+
+            a {
+                color: #fff;
+            }
+
+            @include media-breakpoint-down(xs) {
+                 border: 0 !important;
+                display: list-item;
+                padding: 0;
+            }
+        }
+
+        @include media-breakpoint-down(xs) {
+            margin-top: 0;
+        }
+    }
+}

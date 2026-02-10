@@ -1,0 +1,61 @@
+<fieldset>
+    <legend>{{ 'block.tmv_events.list.filter.title'|trans|desc( 'Filter events' ) }}</legend>
+
+    <form id="list-events" method="post">
+        <div class="form-row">
+            <div class="form-group col-6">
+                <label for="start">{{ 'block.tmv_events.list.filter.start.label'|trans|desc( 'From' ) }}</label>
+                <input class="form-control" type="date" name="Start" id="start" value="{% if filter_params.start != '' %}{{ filter_params.start }}{% endif %}" placeholder="dd.mm.yyyy" />
+            </div>
+
+            <div class="form-group col-6">
+                <label for="end">{{ 'block.tmv_events.list.filter.end.label'|trans|desc( 'To' ) }}</label>
+                <input class="form-control" type="date" name="End" id="end" value="{% if filter_params.end != '' %}{{ filter_params.end }}{% endif %}" placeholder="dd.mm.yyyy" />
+            </div>
+        </div>
+
+        {% if list_categories|length != 0 %}
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="start">{{ 'block.tmv_events.list.filter.category.label'|trans|desc( 'Category' ) }}</label>
+
+                    <div class="form-group">
+                        {% for id, name in list_categories %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkbox_{{ id }}" name="Categories[]" value="{{ id }}"{% if id in filter_params.categories %} checked="checked"{% endif %} />
+                                <label class="form-check-label" for="checkbox_{{ id }}">{{ name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if list_places|length != 0 %}
+            <div class="form-row">
+                <div class="form-group col-12">
+                    <label for="start">{{ 'block.tmv_events.list.filter.place.label'|trans|desc( 'Place' ) }}</label>
+
+                    <div class="form-group">
+                        {% for place in list_places %}
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="checkbox_{{ loop.index }}" name="Places[]" value="{{ place }}"{% if place in filter_params.places %} checked="checked"{% endif %} />
+                                <label class="form-check-label" for="checkbox_{{ loop.index }}">{{ place }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="form-row">
+            <div class="form-group col-6">
+                <input class="form-control" type="text" name="Keyword" id="keyword" value="{% if filter_params.keyword != '' %}{{ filter_params.keyword }}{% endif %}" placeholder="{{ 'block.tmv_events.list.filter.keyword.placeholder'|trans|desc( 'Keyword' ) }}" />
+            </div>
+
+            <div class="form-group col-6">
+                <button class="btn btn-primary btn-lg btn-block" type="submit" name="Search">{{ 'block.tmv_events.list.filter.search.button'|trans|desc( 'Search' ) }}</button>
+            </div>
+        </div>
+    </form>
+</fieldset>

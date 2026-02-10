@@ -1,0 +1,73 @@
+{% extends '@ibexadesign/pagelayout/variables.html.twig' %}
+
+{% block pagelayout_content %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
+<head>
+    <meta charset="utf-8">
+
+    {% block page_head_title %}
+        {% include '@ibexadesign/pagelayout/head/title.html.twig' %}
+    {% endblock %}
+
+    {% block page_head_meta %}
+        {% include '@ibexadesign/pagelayout/head/meta.html.twig' %}
+    {% endblock %}
+
+    {% block page_head_link %}
+        {% include '@ibexadesign/pagelayout/head/link.html.twig' %}
+    {% endblock %}
+
+    {% block page_head_style %}
+        {% include '@ibexadesign/pagelayout/head/style.html.twig' %}
+    {% endblock %}
+
+    {% block page_head_script %}
+        {% include '@ibexadesign/pagelayout/head/script.html.twig' %}
+    {% endblock %}
+
+    {% block open_graph %}
+        {% include '@ibexadesign/parts/opengraph.html.twig' %}
+    {% endblock %}
+
+    {% include '@ibexadesign/parts/google_tag_manager_code_script.html.twig' %}
+
+    {% block structuredData %}{% endblock %}
+</head>
+<body>
+
+{% include '@ibexadesign/pagelayout/accessibility_links.html.twig' %}
+{% include '@ibexadesign/parts/google_tag_manager_code_noscript.html.twig' %}
+{% include '@ibexadesign/parts/facebook_api.html.twig' %}
+{% include "@NetgenToolbar/ngtoolbar.html.twig" %}
+
+<div id="page"{% if page_css_class|default is not empty %} class="{{ page_css_class }}"{% endif %}{% if location is defined and location is not empty %} data-path='["{{ location.pathArray|join('","') }}"]'{% endif %}>
+    {% block layout %}
+        {% block header %}
+            {% include '@ibexadesign/pagelayout/header.html.twig' %}
+        {% endblock %}
+
+        {% block breadcrumb %}
+            {% include '@ibexadesign/pagelayout/breadcrumbs.html.twig' %}
+        {% endblock %}
+
+        <div id="main">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% block footer %}
+            {% include '@ibexadesign/pagelayout/footer.html.twig' %}
+        {% endblock %}
+    {% endblock %}
+
+    {{ nglayouts_template_plugin('preview.body') }}
+</div>
+
+{% block page_footer_script %}
+    {% include '@ibexadesign/pagelayout/script_bottom.html.twig' %}
+{% endblock %}
+
+{% include '@ibexadesign/pagelayout/cookie_control.html.twig' %}
+</body>
+</html>
+{% endblock %}

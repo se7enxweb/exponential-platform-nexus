@@ -1,0 +1,121 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% extends nglayouts.layoutTemplate %}
+
+{% import '@ezdesign/parts/slide.html.twig' as slide %}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+{% set date_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'include' : [ 'tmv_date' ],
+    'sortby' :  [ 'tmv_date', 'start', 'ASC' ]
+} ).0.children|default() %}
+
+{% set image_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'include' : [ 'tmv_image' ]
+} ).0.children|default() %}
+
+{% block content %}
+    <article class="view-type view-type-{{ view_type }} ng-article vf1">
+        {% block content_header %}
+            {% block title %}
+                <h1 class="title">{{ ng_render_field(content.fields.title) }}</h1>
+            {% endblock %}
+
+            {% block intro %}
+                {% if not content.fields.full_intro.empty %}
+                    <div class="article-intro">
+                        {{ ng_render_field(content.fields.full_intro) }}
+                    </div>
+                {% elseif not content.fields.teaser_intro.empty %}
+                    <div class="article-intro">
+                        {{ ng_render_field(content.fields.teaser_intro) }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        {% endblock %}
+
+        {% block content_body %}
+            <div class="container">
+                {% block image %}
+                    {% if image_list.0 is defined %}
+                        <div class="imagebar">
+                            <div class="row">
+                                {% for image in image_list %}
+                                    {% set image_title = content_fields.title( image.content ) %}
+
+                                    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                                        <a href="{{ asset(ng_image_alias(image.content.fields.image, 'i1200').uri) }}" title="{{ image_title }}" data-fancybox="event">
+                                            {{ slide.image(image.content, null, 'i770') }}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+                <div class="full-article-content">
+                    {% block body %}
+                        {% if not content.fields.body.empty %}
+                            <div class="full-article-body">
+                                {{ ng_render_field(content.fields.body) }}
+                            </div>
+                        {% endif %}
+
+                        {% if date_list.0 is defined %}
+                            <div class="dates">
+                                <h3>{{ 'block.tmv_events.full.dates.title'|trans|desc( 'Dates' ) }}</h3>
+
+                                <ul>
+                                    {% for date in date_list %}
+                                        <li>
+                                            {{ date.content.fields.start.value|date( 'H:i' ) }}
+
+                                            {{ 'block.tmv_events.full.dates.clock'|trans|desc( 'o\'clock' ) }}
+
+                                            {{ 'block.tmv_events.full.dates.at'|trans|desc( 'at' ) }}
+
+                                            {{ date.content.fields.start.value|date( 'd.m.Y' ) }}
+
+                                            {% if date.content.fields.end is defined and not date.content.fields.end.empty %}
+                                                {{ 'block.tmv_events.full.dates.to'|trans|desc( 'to' ) }}
+
+                                                {{ date.content.fields.end.value|date( 'H:i' ) }}
+
+                                                {{ 'block.tmv_events.full.dates.clock'|trans|desc( 'o\'clock' ) }}
+
+                                                {{ 'block.tmv_events.full.dates.at'|trans|desc( 'at' ) }}
+
+                                                {{ date.content.fields.end.value|date( 'd.m.Y' ) }}
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <div class="contact">
+                            <h3>{{ 'block.tmv_events.full.contact.title'|trans|desc( 'Contact / address' ) }}</h3>
+
+                            {% if content.fields.contact is defined and not content.fields.contact.empty %}
+                                {{ ng_render_field(content.fields.contact) }}
+                            {% endif %}
+
+                            {% if content.fields.location is defined and not content.fields.location.empty %}
+                                {{ ng_render_field(content.fields.location) }}
+                            {% endif %}
+
+                            {% if content.fields.place is defined and not content.fields.place.empty %}
+                                {{ ng_render_field(content.fields.place) }}
+                            {% endif %}
+                        </div>
+                    {% endblock %}
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        {% endblock %}
+    </article>
+{% endblock %}

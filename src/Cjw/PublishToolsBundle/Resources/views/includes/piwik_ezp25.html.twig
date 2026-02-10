@@ -1,0 +1,101 @@
+{% set tracking_cookie_name = "UseTracking" %}
+
+{% set piwik = {
+    user : ezpublish.configResolver.getParameter( 'piwik.user', 'cjwsite' ),
+    password_hash : ezpublish.configResolver.getParameter( 'piwik.password_hash', 'cjwsite' ),
+    tracking_id : ezpublish.configResolver.getParameter( 'piwik.tracking_id', 'cjwsite' ),
+    tracking_url     : ezpublish.configResolver.getParameter( 'piwik.tracking_url', 'cjwsite' )
+} %}
+
+{# Only include the JavaScript block if the `piwik` variable is defined. #}
+{% if piwik is defined %}
+    <!-- TRACKING START -->
+
+    {% set piwik_settings = piwik %}
+
+    {# If there are indeed `piwik_settings` defined now, we're going to render
+       the JavaScript block, which takes care of the rest. #}
+    {% if ( piwik_settings and piwik_settings.tracking_id is not null ) %}
+        <script type="text/javascript">
+            {# Cookie functionalities – BEGIN #}
+            document.Cookie = document.Cookie || {};
+
+            {# `document.Cookie.setCookie` function #}
+            if ( typeof( document.Cookie.setCookie ) !== 'function' ) {
+                document.Cookie.setCookie = function ( cname, cvalue, exdays ) {
+                    var d = new Date();
+                    d.setTime( d.getTime() + (exdays * 24 * 60 * 60 * 1000) );
+                    var expires = "expires=" + d.toUTCString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                };
+            }
+
+            {# `document.Cookie.getCookie` function #}
+            if ( typeof( document.Cookie.getCookie ) !== 'function' ) {
+                document.Cookie.getCookie = function ( cname ) {
+                    var name = cname + "=";
+                    var decodedCookie = decodeURIComponent( document.cookie );
+                    var ca = decodedCookie.split( ';' );
+                    for ( var i = 0; i < ca.length; i++ ) {
+                        var c = ca[i];
+                        while ( c.charAt( 0 ) == ' ' ) {
+                            c = c.substring( 1 );
+                        }
+                        if ( c.indexOf( name ) == 0 ) {
+                            return c.substring( name.length, c.length );
+                        }
+                    }
+                    return "";
+                };
+            }
+            {# Cookie functionalities – END #}
+
+            var pkBaseURL   = ( ( 'https:' === document.location.protocol ) ? "{{ 'https://' ~ piwik_settings.tracking_url ~ '/' }}" : "{{ 'http://' ~ piwik_settings.tracking_url ~ '/' }}" ),
+                trackingId  = {{ piwik_settings.tracking_id }},
+                useTracking = document.Cookie.getCookie( '{{ tracking_cookie_name }}' );
+
+            let disableCookies;
+            console.log ('useTracking');
+            console.log (useTracking);
+            // useTracking = !(useTracking === "false" || useTracking === "0");
+            disableCookies = useTracking !== '';
+            {# Check useTracking variable and make a boolean out of it. #}
+            useTracking = !(useTracking === "false" || useTracking === "0");
+
+            if ( useTracking ) {
+                var _paq = _paq || [];
+                {# If domains are defined in piwik_settings we're going to add them
+                   to the piwik JS code. #}
+                {% if piwik_settings.domains is defined %}
+                _paq.push(["setDomains", {{ piwik_settings.domains|json_encode|raw }}]);
+                {% endif %}
+
+                {#                #}{# #10553 disable_cookies - default (1) - keine Tracking Cookies werden gesetzt ! #}
+                {#                {% if piwik_settings.disable_cookies|default(1) %}#}
+                {#                _paq.push(['disableCookies']);#}
+                {#                {% endif %}#}
+                if ( disableCookies )  _paq.push(['disableCookies']);
+                _paq.push(['trackPageView']);
+                _paq.push(['enableLinkTracking']);
+
+                (function() {
+                    var u=pkBaseURL;
+                    _paq.push(['setTrackerUrl', pkBaseURL+'piwik.php']);
+                    _paq.push(['setSiteId', trackingId]);
+                    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+                })();
+            } else {
+                console.info( "Tracking disabled via cookie setting!" );
+            }
+        </script>
+
+        <noscript><p><img src="{{ app.request.scheme ~ "://" ~ piwik_settings.tracking_url ~ '/piwik.php?idsite=' ~ piwik_settings.tracking_id }}" style="border:0;" alt="" /></p></noscript>
+    {% else %}
+        <script type="text/javascript">
+            console.info( "Tracking per default disabled!" );
+        </script>
+    {% endif %}
+
+    <!-- TRACKING END -->
+{% endif %}

@@ -1,0 +1,451 @@
+# template override: https://doc.ez.no/display/EZP/View+provider+configuration
+#                    https://docs.netgen.io/projects/site-api/en/latest/reference/configuration.html#site-api-content-views
+# remove first to levels  @see src/AppBundle/DependencyInjection/AppExtension.php
+# ezpublish:
+#   system:
+
+frontend_group:
+    ngcontent_view:
+        full:
+            file:
+                template: "@ezdesign/content/full/file.html.twig"
+                controller: Cjw\PublishToolsBundle\Controller\DownloadFileController
+                match:
+                    Identifier\ContentType: file
+
+#            ng_category:
+#                template: "@ezdesign/content/full/ng_category.html.twig"
+#                controller: ngsite.controller.check_redirect
+#                queries:
+#                    subtree:
+#                        query_type: "SiteAPI:Location/Subtree"
+#                        max_per_page: "@=fieldValue('page_limit').value > 0 ? fieldValue('page_limit').value : 12"
+#                        page: "@=queryParam('page', 1)"
+#                        parameters:
+#                            content_type: "@=split(fieldValue('children_class_filter_include').text)"
+#                            visible: true
+#                            relative_depth: "@=fieldValue('fetch_subtree').bool ? null : 1"
+#                            sort: "@=location"
+#                match:
+#                    Identifier\ContentType: ng_category
+
+            ng_category:
+                template: "@ezdesign/content/full/ng_category.html.twig"
+                controller: "ngsite.controller.full_view:viewNgCategory"
+                match:
+                    Identifier\ContentType: ng_category
+
+            ng_feedback_form:
+                template: "@ezdesign/content/full/ng_feedback_form.html.twig"
+                controller: "netgen_information_collection.controller:displayAndHandle"
+                match:
+                    Identifier\ContentType: ng_feedback_form
+            cjw_feedback_form:
+                template: "@ezdesign/content/full/cjw_feedback_form.html.twig"
+                controller: "netgen_information_collection.controller:displayAndHandle"
+                match:
+                    Identifier\ContentType: cjw_feedback_form
+            ng_landing_page:
+                template: "@ezdesign/content/full/ng_landing_page.html.twig"
+                controller: ngsite.controller.check_redirect
+                match:
+                    Identifier\ContentType: ng_landing_page
+            common:
+                template: "@ezdesign/content/full/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_container
+                        - ng_article
+                        - ng_audio
+                        - ng_blog_post
+                        - ng_frontpage
+                        - ng_gallery
+                        - ng_htmlbox
+                        - ng_news
+                        - ng_recipe
+                        - ng_topic
+                        - ng_video
+                        - cjw_map
+                        - ng_category
+        line:
+            common:
+                template: "@ezdesign/content/line/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - file
+#                        - ng_article
+                        - ng_audio
+#                        - ng_banner
+                        - ng_blog_post
+                        - ng_category
+                        - ng_feedback_form
+                        - ng_gallery
+                        - ng_landing_page
+                        - ng_news
+                        - ng_recipe
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: right
+                match: ~
+        listitem:
+            common:
+                template: "@ezdesign/content/listitem/{content_type}.html.twig"
+                params:
+                    with_intro: false
+                match:
+                    Identifier\ContentType:
+                        - file
+                        - ng_article
+                        - ng_audio
+#                        - ng_banner
+                        - ng_blog_post
+                        - ng_gallery
+                        - ng_news
+                        - ng_recipe
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/listitem.html.twig"
+                params:
+                    with_intro: false
+                match: ~
+        listitem_with_intro:
+            common:
+                extends: listitem/common
+                params:
+                    with_intro: true
+            match_all:
+                template: "@ezdesign/content/listitem.html.twig"
+                params:
+                    with_intro: true
+                match: ~
+        standard:
+            common:
+                template: "@ezdesign/content/standard/{content_type}.html.twig"
+                params:
+                    with_intro: false
+                match:
+                    Identifier\ContentType:
+                        - file
+                        - image
+                        - ng_article
+                        - ng_audio
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_category
+                        - ng_feedback_form
+                        - ng_frontpage
+                        - ng_gallery
+                        - ng_htmlbox
+                        - ng_landing_page
+                        - ng_news
+                        - ng_recipe
+                        - ng_video
+                        - cjw_map
+                        - ng_shortcut
+            match_all:
+                template: "@ezdesign/content/standard.html.twig"
+                params:
+                    with_intro: false
+                match: ~
+        standard_with_intro:
+            common:
+                extends: standard/common
+                params:
+                    with_intro: true
+            match_all:
+                template: "@ezdesign/content/standard.html.twig"
+                params:
+                    with_intro: true
+                match: ~
+        mini:
+            common:
+                template: "@ezdesign/content/mini/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - file
+                        - ng_article
+                        - ng_audio
+#                        - ng_banner
+                        - ng_blog_post
+                        - ng_gallery
+                        - ng_news
+                        - ng_recipe
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/mini.html.twig"
+                match: ~
+        overlay:
+            common:
+                template: "@ezdesign/content/overlay/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+#                        - ng_banner
+                        - ng_blog_post
+                        - ng_gallery
+                        - ng_news
+                        - ng_recipe
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/overlay.html.twig"
+                match: ~
+        slide:
+            common:
+                template: "@ezdesign/content/slide/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - image
+                        - ng_article
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_news
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/slide.html.twig"
+                match: ~
+        carousel:
+            common:
+                template: "@ezdesign/content/carousel/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - image
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/slide.html.twig"
+                match: ~
+        gallery_thumb:
+            common:
+                template: "@ezdesign/content/gallery_thumb/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - image
+                        - ng_article
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_news
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/gallery_thumb.html.twig"
+                match: ~
+        gallery_grid:
+            common:
+                template: "@ezdesign/content/gallery_grid/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - image
+                        - ng_article
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_news
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/gallery_grid.html.twig"
+                match: ~
+        embed:
+            image:
+                template: "@ezdesign/content/embed/image.html.twig"
+                controller: "ngsite.controller.embed_view:embedImage"
+                match:
+                    Identifier\ContentType: image
+            common:
+                template: "@ezdesign/content/embed/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - file
+                        - image
+                        - ng_article
+                        - ng_audio
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_category
+                        - ng_feedback_form
+                        - ng_frontpage
+                        - ng_gallery
+                        - ng_htmlbox
+                        - ng_landing_page
+                        - ng_news
+                        - ng_shortcut
+                        - ng_video
+            match_all:
+                template: "@ezdesign/content/embed.html.twig"
+                match: ~
+        search:
+            match_all:
+                template: "@ezdesign/content/search.html.twig"
+                match: ~
+
+        # custom
+        flexline:
+            common:
+                template: "@ezdesign/content/flexline/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - cjw_content_embedded
+                        - ng_gallery_intro
+                        - ng_gallery
+                        - ng_shortcut
+                        - ng_news
+                        - cjw_event
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                match: ~
+        teaser_bg_matrix:
+            match_all:
+                template: "@ezdesign/content/teaser.html.twig"
+                params:
+                    teaser_design: chess
+                match: ~
+        teaser_bg_white:
+            match_all:
+                template: "@ezdesign/content/teaser.html.twig"
+                params:
+                    teaser_design: chess
+                match: ~
+
+        button:
+            match_all:
+                template: "@ezdesign/content/button.html.twig"
+                match: ~
+        event:
+            match_all:
+                template: "@ezdesign/content/event.html.twig"
+                match: ~
+
+        line_il:
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: left
+                match: ~
+        line_x:
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: chess
+                match: ~
+        line_h:
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: right
+                    image_size: half
+                match: ~
+        line_h_il:
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: left
+                    image_size: half
+                match: ~
+        line_h_x:
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                params:
+                    image_position: chess
+                    image_size: half
+                match: ~
+
+        line_30_70_ir:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+                        - ng_news
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+        line_30_70_il:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+                        - ng_news
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+        line_30_70_x:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+        line_50_50_ir:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+        line_50_50_il:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+        line_50_50_x:
+            common:
+                template: "@ezdesign/content/line_x_y/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+            match_all:
+                template: "@ezdesign/content/line_x_y.html.twig"
+                match: ~
+
+        line_full_il:
+            common:
+                template: "@ezdesign/content/line_full/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - ng_article
+            match_all:
+                template: "@ezdesign/content/line.html.twig"
+                match: ~
+
+        40_60_img_left_plus_list:
+            common:
+                template: "@ezdesign/content/container/{content_type}.html.twig"
+                params:
+                    image_position: left
+                match:
+                    Identifier\ContentType:
+                        - ng_container
+            match_all:
+                template: "@ezdesign/content/line_40_60_il_plus.html.twig"
+                params:
+                    image_position: left
+                match: ~
+
+        tile:
+            match_all:
+                template: "@ezdesign/content/tile.html.twig"
+                match: ~
+
+default:
+    ngcontent_view:
+        ngcb_preview:
+            common:
+                template: "@ezdesign/content/ngcb_preview/{content_type}.html.twig"
+                match:
+                    Identifier\ContentType:
+                        - image
+                        - ng_article
+                        - ng_audio
+                        - ng_banner
+                        - ng_blog_post
+                        - ng_gallery
+                        - ng_news
+                        - ng_video
+                        - ng_recipe

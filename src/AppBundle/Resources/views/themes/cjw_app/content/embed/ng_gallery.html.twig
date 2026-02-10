@@ -1,0 +1,30 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+<div class="view-type view-type-{{ view_type }} ng-gallery">
+
+    {% if objectParameters.gallery_view_mode == 'slider' %}
+        {{ render(
+            controller(
+                'ngsite.controller.parts:viewRelatedMultimediaItems', {
+                'locationId': content.contentInfo.mainLocationId,
+                'includeChildren': true,
+                'contentTypeIdentifiers': ['image', 'ng_video'],
+                'template': '@ezdesign/parts/related_multimedia.html.twig'
+            }
+            )
+        ) }}
+    {% else %}
+        {{ render(
+            controller(
+                'ngsite.controller.parts:viewRelatedMultimediaItems', {
+                'locationId': content.contentInfo.mainLocationId,
+                'includeChildren': true,
+                'contentTypeIdentifiers': ['image', 'ng_video'],
+                'template': '@ezdesign/parts/related_multimedia_grid.html.twig'
+            }
+            )
+        ) }}
+    {% endif %}
+
+</div>

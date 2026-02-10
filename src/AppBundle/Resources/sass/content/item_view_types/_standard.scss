@@ -1,0 +1,68 @@
+/* standard item view type */
+.vl1 {
+    //margin: 0 0 2rem;
+    position: relative;
+
+    @include media-breakpoint-down(xs) {
+        margin-bottom: 2rem;
+    }
+
+    .image {
+        @extend %image-zoom-effect;
+
+        position: relative;
+        width: 100%;
+        height: 0;
+        &:not(:empty) {
+            padding-bottom: 56.25%;
+        }
+        margin: 0 0 1rem;
+        img {
+            object-fit: cover;
+            object-position: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .title {
+        color: $headings-color;
+        font-size: 1.5rem;
+        //font-weight: 900;
+        font-weight: normal;
+        margin: 0 0 .25rem;
+        a {
+            @extend %item-title-link;
+        }
+    }
+    .short {
+        color: $gray-54;
+        p {
+            margin: 0;
+        }
+    }
+    .info {
+        @extend %item-header-info;
+    }
+    .article-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 3rem;
+        height: 3rem;
+        line-height: 3rem;
+        text-align: center;
+        background: $sunglow;
+        color: $black;
+        z-index: 2;
+        pointer-events: none;
+        + .article-header {
+            padding-top: 3.5rem;
+        }
+    }
+    @include media-breakpoint-down(lg) {
+        .title {
+            font-size: 1.25rem;
+        }
+    }
+}

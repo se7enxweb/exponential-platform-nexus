@@ -1,0 +1,146 @@
+ezpublish:
+    # Siteaccess configuration, with one siteaccess per default
+    siteaccess:
+        list: [site, admin, legacy_admin, editor, edit, nga, alt, platformsite]
+        groups:
+            site_group: [site, alt, platformsite]
+
+            # WARNING: Do not remove or rename this group.
+            # It's used to distinguish common siteaccesses from admin ones.
+            # In case of multisite with multiple admin panels, remember to add any additional admin siteaccess to this group.
+            admin_group: [admin, legacy_admin, edit, editor, nga]
+        default_siteaccess: platformsite
+        match:
+            Map\Host:
+                legacy.platform.demo.se7enx.com: site
+                platform.demo.se7enx.com: platformsite
+                site.platform.demo.se7enx.com: alt
+                edit.platform.demo.se7enx.com: admin
+                editor.platform.demo.se7enx.com: editor
+                nga.platform.demo.se7enx.com: nga
+            # URIElement: 1
+
+    # System settings for siteaccesses - per-siteaccess configuration defaults
+    # This file contains all per-siteaccess settings that are imported into the main ezplatform.yml
+    system:
+        site_group:
+            design: standard
+            content_tree_module:
+                contextual_tree_root_location_ids:
+                    - 2 # Home (Content structure)
+                    - 5 # Users
+                    - 43 # Media
+                    - 48 # Setup
+            subtree_paths:
+                content: /1/2/
+                media: /1/43/
+
+        admin_group:
+            # System languages. Note that by default, content, content types, and other data are in eng-GB locale,
+            # so removing eng-GB from this list may lead to errors or content not being shown, unless you change
+            # all eng-GB data to other locales first.
+            # For admin this needs to contain all languages you want to translate content to on the given repository.
+            languages: [eng-GB]
+            content_tree_module:
+                contextual_tree_root_location_ids:
+                    - 2 # Home (Content structure)
+                    - 5 # Users
+                    - 43 # Media
+                    - 48 # Setup
+            subtree_paths:
+                content: /1/2/
+                media: /1/43/
+
+        site:
+            languages: [eng-GB]
+            default_page: "/content/view/full/2"
+            index_page: "/content/view/full/2"
+
+        platformsite:
+            languages: [eng-GB]
+            design: standard
+            content_tree_module:
+                contextual_tree_root_location_ids:
+                    - 2 # Home (Content structure)
+                    - 5 # Users
+                    - 43 # Media
+                    - 48 # Setup
+            subtree_paths:
+                content: /1/2/
+                media: /1/43/
+            content_view:
+                full:
+                    default:
+                        template: themes/standard/pagelayout.html.twig
+                        match: ~
+
+        alt:
+            languages: [eng-GB]
+            design: custom1
+            content_tree_module:
+                contextual_tree_root_location_ids:
+                    - 2 # Home (Content structure)
+                    - 5 # Users
+                    - 43 # Media
+                    - 48 # Setup
+            subtree_paths:
+                content: /1/2/
+                media: /1/43/
+            content_view:
+                full:
+                    default:
+                        template: themes/alt/pagelayout.html.twig
+                        match: ~
+
+        nga:
+            languages: [eng-GB]
+            design: ngadminui
+            content_tree_module:
+                contextual_tree_root_location_ids:
+                    - 2 # Home (Content structure)
+                    - 5 # Users
+                    - 43 # Media
+                    - 48 # Setup
+            subtree_paths:
+                content: /1/2/
+                media: /1/43/
+
+        edit:
+            languages: [eng-GB]
+            design: admin
+
+        editor:
+            languages: [eng-GB]
+            design: admin
+
+        legacy_admin:
+            languages: [eng-GB]
+
+        admin:
+            languages: [eng-GB]
+            design: admin
+
+# eZ Publish legacy bridge configuration
+# Maps each siteaccess to legacy mode settings and template layout configuration
+ez_publish_legacy:
+    system:
+        site:
+            templating:
+                view_layout: themes/standard/pagelayout.html.twig
+        platformsite:
+            templating:
+                view_layout: themes/standard/pagelayout.html.twig
+        alt:
+            templating:
+                view_layout: themes/standard/pagelayout.html.twig
+            legacy_mode: false
+        legacy_admin:
+            legacy_mode: true
+        edit:
+            legacy_mode: true
+        editor:
+            legacy_mode: true
+        admin:
+            legacy_mode: false
+        nga:
+            legacy_mode: false

@@ -1,0 +1,23 @@
+{% extends '@nglayouts/block/block.html.twig' %}
+
+{% import '@ezdesign/parts/macros/cjw_macros.html.twig' as cjw_macros %}
+
+{% set collection_identifier = 'default' %}
+
+{% set collection_html %}
+    {{ cjw_macros.collection_list(block, collections, collection_identifier, null, view_context) }}
+{% endset %}
+
+{% block content %}
+    {% if collections[collection_identifier] is defined and collections[collection_identifier] is not empty %}
+        {% if block.parameter('paged_collections:enabled').value %}
+            {% embed '@NetgenLayouts/collection/paged_collection.html.twig' with {pager: pagers[collection_identifier]} %}
+                {% block collection_page %}
+                    {{ collection_html }}
+                {% endblock %}
+            {% endembed %}
+        {% else %}
+            {{ collection_html }}
+        {% endif %}
+    {% endif %}
+{% endblock %}

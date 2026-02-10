@@ -1,0 +1,77 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+
+{% set col_content = 'col-12 col-sm-12 col-md-6 col-lg-8' %}
+{% set col_image   = 'col-12 col-sm-12 col-md-6 col-lg-4' %}
+
+{% set date_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'limit' : 1,
+    'include' : [ 'tmv_date' ],
+    'sortby' :  [ 'tmv_date', 'start', 'ASC' ]
+} ).0.children|default() %}
+
+{% set next_date = false %}
+{% if date_list.0 is defined %}
+    {% set next_date = date_list.0 %}
+{% endif %}
+
+{% set image_list = cjw_fetch_content( [[location.id]], {
+    'depth' : 1,
+    'limit' : 1,
+    'include' : [ 'tmv_image' ]
+} ).0.children|default() %}
+
+{% set image = false %}
+{% if image_list.0 is defined %}
+    {% set image = image_list.0 %}
+{% endif %}
+
+<article class="view-type view-type-{{ view_type }} {{ content.contentInfo.contentTypeIdentifier|replace({'_': '-'}) }} vl4">
+    <div class="container">
+        <div class="row">
+            {% if image and image_position is defined and image_position != 'right' %}
+                <div class="{{ col_image }} article-image image-left">
+                    {{ content_fields.image(image.content, location, 'i770') }}
+                </div>
+            {% endif %}
+
+            <div class="{{ col_content}} article-content">
+                <header class="article-header">
+                    <h2 class="title">
+                        {% if next_date %}
+                            <small>
+                                {{ next_date.content.fields.start.value|date( 'd.m.Y' ) }}
+                            </small>
+                            <br />
+                        {% endif %}
+
+                        {% if content.fields.body is defined and content.fields.body.empty %}
+                            {{ content_fields.title(content) }}
+                        {% else %}
+                            <a href="{{ path(location) }}">{{ content_fields.title(content) }}</a>
+                        {% endif %}
+                    </h2>
+                </header>
+
+                <div class="short">
+                    {% if content.fields.full_intro is defined and not content.fields.full_intro.empty %}
+                        {{ ng_render_field( content.fields.full_intro ) }}
+                    {% elseif content.fields.teaser_intro is defined and not content.fields.teaser_intro.empty %}
+                        {{ ng_render_field( content.fields.teaser_intro ) }}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if image and image_position is not defined or image_position != 'left' %}
+                <div class="{{ col_image }} article-image image-right">
+                    {{ content_fields.image(image.content, location, 'i770') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</article>
+
+<hr />

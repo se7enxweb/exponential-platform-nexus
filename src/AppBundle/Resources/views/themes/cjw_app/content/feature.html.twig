@@ -1,0 +1,14 @@
+{# content \Netgen\EzPlatformSiteApi\API\Values\Content #}
+{# location \Netgen\EzPlatformSiteApi\API\Values\Location #}
+
+
+{# Fallback/Default templates used for location/content object rendered in the
+   `cjw_object_accommodation` full view. #}
+
+{% from '@ezdesign/parts/macros/cjw_macros.html.twig' import
+    cjw_toggle_target_id as toggle_target_id,
+    cjw_toggle_toggler_attr as toggle_toggler_attr,
+    cjw_css_content_class as css_class
+%}
+{% import '@ezdesign/parts/content_fields.html.twig' as content_fields %}
+{% import '@ezdesign/parts/macros/cjw_content_fields.html.twig' as cjw_content_fields %}

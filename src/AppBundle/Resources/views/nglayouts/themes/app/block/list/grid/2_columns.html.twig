@@ -1,0 +1,14 @@
+{% set use_clearfixes = false %}
+
+{% set cols = 'col-sm-6 col-md-6 col-lg-6' %}
+{% if block.itemViewType == 'event' %}
+    {% set cols = 'col-12 col-sm-12 col-md-12 col-lg-6' %}
+{% endif %}
+
+<div class="{{ cols }} col-{{ block.itemViewType }}">
+   {{ nglayouts_render_result(result, null, block.itemViewType) }}
+</div>
+
+{% if use_clearfixes %}
+    {% if loop.index0 % number_of_columns == 1 %}<div class="clearfix visible-sm-block visible-md-block visible-lg-block"></div>{% endif %}
+{% endif %}

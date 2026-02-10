@@ -1,0 +1,37 @@
+{% set site_info = ngsite.siteInfoContent %}
+
+{% set footer_site_logo = footer_site_logo ?? ezpublish.configResolver.getParameter( 'footer.logo_image', 'cjwsite' ) %}
+{% if site_info.fields.footer_logo is defined and not site_info.fields.footer_logo.empty %}
+    {% set footer_site_logo = ng_image_alias(site_info.fields.footer_logo, 'i1920').uri %}
+{% endif %}
+
+{% set render_footer_menu = false %}
+{% set render_footer_social = false %}
+{% set render_footer_info = false %}
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="footer-logo">
+                    {% include '@ezdesign/parts/site_logo.html.twig' with {
+                        site_logo : footer_site_logo
+                    } %}
+                </div>
+            </div>
+
+            <div class="col-6">
+                {% block page_additional_menu_footer %}
+                    {{ render_esi(
+                        controller(
+                            'ngsite.controller.menu:renderMenu', {
+                                menuName: 'ngsite_additional_menu',
+                                activeItemId: main_category_location_id ?? 0
+                            }
+                        )
+                    ) }}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</footer>

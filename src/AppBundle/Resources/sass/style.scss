@@ -1,0 +1,32 @@
+@charset 'UTF-8';
+//IMPORTANT: only add imports to this file
+
+@import 'jquery/jquery-ui.min.css';
+@import '@fortawesome/fontawesome-free/css/all';
+@import 'swiper/dist/css/swiper';
+@import 'magnific-popup/src/css/main';
+@import 'fancybox/fancybox.css';
+@import 'variables';
+
+@import 'bootstrap_import/bootstrap_import';
+
+@import 'typography';
+@import 'layout/layout';
+@import 'blocks/blocks';
+@import 'content/content';
+@import 'cookie_control';
+
+@import 'slick/slick';
+@import 'slick/slick-theme';
+@import 'slick/slick_custom';
+
+@import 'fancybox/fancybox_custom';
+@import 'jquery/datepicker_custom';
+
+@import 'leaflet/leaflet.css';
+@import 'leaflet/MarkerCluster.css';
+@import 'leaflet/MarkerClusterDefault.css';
+@import 'leaflet/leaflet_custom';
+
+//@import '../public/css/bootstrap-datepicker.css';
+//@import '../public/css/update.css';

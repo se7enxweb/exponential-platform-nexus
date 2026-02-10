@@ -1,0 +1,42 @@
+.bookingbar {
+    .col-input {
+        padding: 0 $gutter;
+
+        .input-group {
+            border-bottom: 1px solid $border-color;
+
+            .input-group-prepend {
+                border-right: 1px solid $border-color;
+                padding-right: 0.5rem;
+                margin-right: 0;
+
+                .input-group-text {
+                    background-color: transparent;
+                    color: $font-color;
+                    padding: 0;
+                    border: 0;
+                    font-size: $font-size-toolbar-top;
+                }
+            }
+        }
+
+        input, select {
+            font-size: $font-size-toolbar-top;
+            border: 0;
+            padding: 0 0.5rem;
+            height: 1.5rem;
+        }
+
+        input[type="submit"] {
+            height: calc( 1.5rem - 2px );
+        }
+
+         @include media-breakpoint-down(md) {
+             margin-bottom: 1rem;
+         }
+
+         @include media-breakpoint-down(sm) {
+             margin-bottom: 2rem;
+         }
+    }
+}

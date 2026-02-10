@@ -1,0 +1,24 @@
+parameters:
+    ngsite.layouts.block.plugin.vertical_whitespace.top:
+        none: 'block.plugin.vertical_whitespace.none'
+        mini: 'block.plugin.vertical_whitespace.mini'
+        small: 'block.plugin.vertical_whitespace.small'
+        medium: 'block.plugin.vertical_whitespace.medium'
+        large: 'block.plugin.vertical_whitespace.large'
+        max: 'block.plugin.vertical_whitespace.max'
+
+    ngsite.layouts.block.plugin.vertical_whitespace.bottom:
+        none: 'block.plugin.vertical_whitespace.none'
+        mini: 'block.plugin.vertical_whitespace.mini'
+        small: 'block.plugin.vertical_whitespace.small'
+        medium: 'block.plugin.vertical_whitespace.medium'
+        large: 'block.plugin.vertical_whitespace.large'
+        max: 'block.plugin.vertical_whitespace.max'
+
+    ngsite.layouts.block.plugin.background_color.colors:
+        primary: 'block.plugin.background_color.primary'
+        secondary: 'block.plugin.background_color.secondary'
+        white: 'block.plugin.background_color.white'
+        black: 'block.plugin.background_color.black'
+
+services:
