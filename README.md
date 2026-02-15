@@ -561,10 +561,10 @@ In essence, Netgen Site API is the bridge between a powerful content repository 
 
 # License
 
-Exponential Platform is GNU GPL licensed.
+Exponential Platform Nexus is GNU GPL licensed.
 
-You can not choose between the GNU GPL and the Ibexa Professional License. The GNU GPL gives you the right to use, modify and redistribute Exponential Platform under certain conditions. The GNU GPL license is distributed with the software, see the file LICENSE. It is also available at http://www.gnu.org/licenses/gpl.txt
+You can not choose between the GNU GPL and the Ibexa Professional License. The GNU GPL gives you the right to use, modify and redistribute Exponential Platform Nexus under certain conditions. The GNU GPL license is distributed with the software, see the file LICENSE. It is also available at http://www.gnu.org/licenses/gpl.txt
 
-Using Exponential Platform under the terms of the GNU GPL is free of charge.
+Using Exponential Platform Nexus under the terms of the GNU GPL is free of charge.
 
-This effectively makes Exponential Platform GNU GPL ONLY.
+This effectively makes Exponential Platform Nexus GNU GPL ONLY.
