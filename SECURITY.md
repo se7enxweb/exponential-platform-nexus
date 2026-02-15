@@ -2,17 +2,16 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This project 7x Exponential Platform Nexus supports the following versions of the products within the product itself; currently being supported with security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.5.x   | :white_check_mark: |
-| 1.x.x   | :x:                |
+| Version   | Supported          |
+| --------- | ------------------ |
+| 1.0.0.0.x | :white_check_mark: |
+| 1.x.x     | :x:                |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+This section instructs users on how to report a vulnerability.
 
 Please responsibly report security issues to security@se7enx.com 
 You can expect your contact to be returned within 1 business day.
