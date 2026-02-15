@@ -1,0 +1,8 @@
+.fontsize-l6 p{
+      font-size: 16px;
+  }
+.no-hyphens{
+    -webkit-hyphens: none;
+      -ms-hyphens: none;
+      hyphens: none;
+}

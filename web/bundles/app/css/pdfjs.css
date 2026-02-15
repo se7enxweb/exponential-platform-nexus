@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+
+.zone-footer,
+.zone-pre_footer,
+.zone-post_header,
+.zone-header {
+    display: none;
+}
