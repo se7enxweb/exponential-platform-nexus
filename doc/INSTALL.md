@@ -1,4 +1,4 @@
-## Exponential Platform 6.0 INSTALL
+## Exponential Platform Nexus 1.0.0.0.3 INSTALL Instructions
 
 
 Requirements
@@ -68,7 +68,7 @@ Simple database dump of just the expected structure's content (starter default i
 
 Note: For the short term future the composer argument '--ignore-platform-reqs' is required to install the software via composer package dependencies successfully. This limitation will soon be removed in the future as we continue to update requirements within the composer package definition files for each package repostiory (tedious detail oriented work which is currently on going).
 
-- (Option) Run Exponential Platform Console Installation of Default Database Content Packages
+- (Option) Run Exponential Platform Nexus Console Installation of Default Database Content Packages
 
 `php bin/console ezplatform:install netgen-media;`
 
@@ -117,7 +117,7 @@ Use the following MySQL DDL to create a database which will be used for your pro
 CREATE DATABASE <db_name> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_general_ci;
 ```
 
-- Install Exponential Platform required PHP libraries like Zeta Components and Exponential Platform Bundles and Bundle extensions as specified in this project's composer.json.
+- Install Exponential Platform Nexus required PHP libraries like Zeta Components and Exponential Platform Bundles and Bundle extensions as specified in this project's composer.json.
 
 `cd exponential-platform-nexus; composer require se7enxweb/exponential-platform-nexus:v2.5.0.0 --ignore-platform-reqs;`
 
@@ -135,7 +135,7 @@ Simple database dump of just the structure schema needed to be installed from: s
 Simple database dump of just the expected structure's content (starter default installation as required by the configuration of the software) needed to be installed from: src/AppBundle/Resources/database/sql/data/content.sql
 
 
-- Run Exponential Platform Console Installation of Default Database Content Packages
+- Run Exponential Platform Nexus Console Installation of Default Database Content Packages
 
 `php bin/console ezplatform:install netgen-media;`
 
