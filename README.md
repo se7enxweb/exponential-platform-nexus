@@ -160,6 +160,405 @@ Documentation for Ibexa DXP: [doc.ibexa.co/en/latest/](https://doc.ibexa.co/en/l
 Ibexa DXP Developer Portal: [developers.ibexa.co](https://developers.ibexa.co/)
 
 
+# What is Netgen Media Site?
+
+**Netgen Media Site** is a full-featured enterprise web content management and digital publishing platform built on top of the modern PHP ecosystem. It provides organizations with a structured, extensible framework for creating, managing, and delivering complex digital experiences across websites, portals, and content-driven applications.
+
+At its core, Netgen Media Site combines a robust content model with a high-performance Symfony-based architecture, enabling developers and editors to collaborate efficiently while maintaining strict control over data structure, workflows, and presentation.
+
+## Architecture Overview
+
+Netgen Media Site is designed around several foundational principles:
+
+- **Structured Content Modeling** — Content is stored as typed objects with clearly defined schemas, relationships, and metadata. This ensures consistency, reusability, and API-friendly data access.
+- **Symfony Foundation** — Built on the Symfony framework, the platform benefits from dependency injection, modular services, routing, and a mature ecosystem of reusable components.
+- **MVC-Oriented Rendering Layer** — Presentation is decoupled from storage, allowing developers to build flexible templates and frontend integrations without altering the core content model.
+- **Extensible Service Layer** — Developers can inject custom services, event listeners, and integrations without modifying core code.
+- **API-Driven Delivery** — Content can be consumed by traditional templates, headless frontends, or external applications through REST-style interfaces.
+
+## Key Capabilities
+
+Netgen Media Site supports advanced publishing workflows and scalable content operations, including:
+
+- Hierarchical content organization with reusable components
+- Role-based access control and editorial permissions
+- Draft/version management for safe publishing workflows
+- Multi-site and multi-language support
+- Custom content types and field definitions
+- Template-driven rendering
+- Integration with external systems via APIs
+- Caching and performance optimization strategies
+
+## Developer Experience
+
+For developers, Netgen Media Site provides:
+
+- A modular architecture aligned with modern PHP best practices
+- Composer-managed dependencies
+- Symfony console tooling
+- Clear separation between domain logic and presentation
+- Extensible templating and layout control
+- Strong compatibility with standard PHP infrastructure
+
+This architecture enables rapid development of complex publishing systems while maintaining long-term maintainability.
+
+## Use Cases
+
+Netgen Media Site is suitable for:
+
+- Enterprise websites and portals
+- News and media publishing platforms
+- Community-driven content sites
+- Structured information repositories
+- Headless CMS deployments
+- Multi-channel digital content distribution
+
+## Philosophy
+
+The platform emphasizes **structured content**, **developer control**, and **editorial flexibility**. Rather than treating content as flat documents, Netgen Media Site models information as reusable data entities, enabling scalable digital architectures that evolve alongside business needs.
+
+---
+
+In short, Netgen Media Site is not just a website builder — it is a programmable content platform designed for teams that require precision, scalability, and deep integration capabilities.
+
+
+# What is Netgen Layouts?
+
+**Netgen Layouts** is a visual layout management engine and page composition framework designed to separate *content structure* from *presentation layout*. It enables developers, editors, and designers to build complex, reusable page layouts without tightly coupling layout logic to templates or content models.
+
+Rather than treating a page as a static template, Netgen Layouts introduces a dynamic layout layer that controls how content is organized, positioned, and rendered — making it possible to design modular, multi-zone page structures that adapt to different contexts and content sources.
+
+At its core, Netgen Layouts acts as an orchestration layer between your content repository, rendering engine, and frontend delivery pipeline.
+
+---
+
+## Architectural Overview
+
+Netgen Layouts is built around a modular, Symfony-based architecture with a strong emphasis on composability and extensibility.
+
+Key architectural concepts include:
+
+### Layout Containers and Zones
+Layouts are composed of containers divided into **zones**. Each zone represents a configurable region of a page where content blocks can be placed. Zones allow independent layout behavior, permissions, and rendering strategies.
+
+### Blocks
+Blocks are reusable presentation units responsible for rendering specific types of content or functionality. A block might display:
+
+- Lists of content items
+- Featured articles
+- Dynamic feeds
+- Custom widgets
+- External data integrations
+
+Blocks encapsulate both configuration and rendering logic, enabling them to be reused across layouts.
+
+### Value and Parameter System
+Layouts use a structured configuration system that allows editors and developers to control behavior without code changes. Parameters define:
+
+- Data sources
+- Rendering rules
+- Display limits
+- Context-aware filtering
+
+This promotes predictable, testable layout behavior.
+
+### Rendering Pipeline
+The rendering layer integrates with Symfony’s templating ecosystem. Layouts can render through Twig or custom view handlers, allowing developers to:
+
+- Override block templates
+- Inject dynamic context
+- Apply caching strategies
+- Optimize performance
+
+Rendering is decoupled from layout definition, ensuring flexibility without sacrificing maintainability.
+
+---
+
+## Core Capabilities
+
+Netgen Layouts provides advanced layout management features:
+
+- Drag-and-drop visual layout editing
+- Multi-zone page composition
+- Reusable layout definitions
+- Block-based content assembly
+- Context-aware rendering
+- Layout inheritance and overrides
+- Role-based editing permissions
+- Preview and staging workflows
+- Performance-aware caching integration
+
+These features enable editorial teams to control presentation while developers retain architectural authority.
+
+---
+
+## Developer Experience
+
+For developers, Netgen Layouts offers:
+
+- Symfony-native service architecture
+- Dependency injection and event hooks
+- Custom block development APIs
+- Extensible rendering pipeline
+- Composer-managed installation
+- Clean separation of layout logic from business logic
+- Integration points for headless or hybrid delivery
+
+Layouts can be versioned, extended, and integrated into CI/CD pipelines like any other application component.
+
+---
+
+## Editorial Workflow
+
+Editors gain a visual interface for assembling pages without modifying templates or touching code. This reduces deployment friction and accelerates iteration cycles while preserving developer-defined constraints.
+
+Layout changes can be previewed and staged, supporting structured publishing workflows.
+
+---
+
+## Use Cases
+
+Netgen Layouts excels in environments where presentation flexibility is critical:
+
+- Enterprise CMS deployments
+- Media and publishing platforms
+- Marketing landing pages
+- Multi-brand or multi-site systems
+- Modular web portals
+- Headless content orchestration
+
+---
+
+## Philosophy
+
+Netgen Layouts embraces the principle that **layout is infrastructure** — not just decoration. By elevating layout management to a first-class system component, it enables scalable, maintainable digital architectures that empower both developers and editors.
+
+---
+
+In essence, Netgen Layouts transforms page composition from rigid template coding into a modular, configurable system that scales with organizational complexity.
+
+
+# What is Netgen AdminUI Bundle?
+
+**Netgen AdminUI Bundle** is a Symfony-based administrative interface framework designed to provide a structured, extensible backend UI for managing content, configuration, and system operations within Netgen-powered applications. It acts as the control surface for editors and administrators, translating complex backend services into a cohesive, user-friendly management environment.
+
+Rather than being a monolithic admin panel, the AdminUI Bundle is an integration layer that connects domain services, APIs, and workflows into modular UI components. Its architecture prioritizes scalability, extensibility, and developer customization while maintaining a consistent editorial experience.
+
+---
+
+## Architectural Overview
+
+Netgen AdminUI Bundle is built on Symfony’s bundle system and follows modern backend UI architecture principles:
+
+### Modular UI Components
+The interface is composed of reusable modules that represent distinct management domains — such as content handling, layout configuration, permissions, or system tools. Each module encapsulates:
+
+- Routing and controllers
+- Service bindings
+- View models
+- Templates and UI assets
+
+This modularity allows features to be enabled, extended, or replaced without affecting the overall system.
+
+### Symfony Integration Layer
+The bundle leverages Symfony’s dependency injection container, routing, and event system to bind backend services to UI actions. Administrative workflows are implemented as service-driven operations, ensuring:
+
+- Predictable behavior
+- Testable logic
+- Clean separation between UI and domain layers
+
+### View Rendering System
+Templates are rendered through Symfony’s templating stack (typically Twig), allowing developers to override views, customize layouts, or integrate frontend tooling while preserving core behavior.
+
+### Permission and Role Awareness
+Administrative actions are tied to Symfony security mechanisms. UI elements dynamically respond to user roles and permissions, preventing unauthorized access while simplifying interface complexity for editors.
+
+---
+
+## Core Capabilities
+
+Netgen AdminUI Bundle provides a structured environment for administrative workflows:
+
+- Content and configuration management interfaces
+- Context-aware navigation
+- Role-based UI visibility
+- Modular dashboard architecture
+- Service-backed administrative actions
+- Extensible menu and toolbar systems
+- Form-driven configuration panels
+- Integration hooks for custom tools
+- Responsive backend layout
+
+These features allow organizations to scale administrative complexity without sacrificing usability.
+
+---
+
+### Developer Experience
+
+For developers, the bundle offers a predictable extension model:
+
+- Symfony-native bundle architecture
+- Service and controller overrides
+- Custom admin modules
+- Event-driven UI extensions
+- Template customization
+- Asset pipeline integration
+- Dependency-managed installation via Composer
+
+Developers can introduce new administrative workflows without modifying core bundle code, enabling long-term maintainability.
+
+---
+
+## Editorial Workflow
+
+Editors interact with a structured backend that exposes only relevant functionality. The UI emphasizes clarity and workflow efficiency, reducing training overhead while preserving advanced system capabilities.
+
+Administrative actions map directly to backend services, ensuring data integrity and consistent behavior across environments.
+
+---
+
+## Use Cases
+
+Netgen AdminUI Bundle is well suited for:
+
+- Enterprise CMS backends
+- Layout and configuration management
+- Custom administrative dashboards
+- Multi-role editorial systems
+- Modular application control panels
+
+---
+
+## Philosophy
+
+The bundle treats administration as an extension of application architecture — not an afterthought. By formalizing backend interactions into modular UI components, it enables scalable administrative systems that evolve alongside application complexity.
+
+---
+
+In practical terms, Netgen AdminUI Bundle provides the foundation for building professional-grade administrative interfaces that balance developer control with editorial usability.
+
+
+# What is Netgen Site API?
+
+**Netgen Site API** is a high-level application programming interface that provides a structured, developer-friendly abstraction layer for accessing and manipulating content, site structure, and domain data within Netgen-powered systems. It is designed to simplify interaction with complex repositories by exposing consistent, object-oriented interfaces that align with modern PHP application architecture.
+
+Instead of requiring direct interaction with low-level storage or legacy APIs, Netgen Site API presents a clean domain model that enables predictable, maintainable content operations — whether rendering pages, building integrations, or powering headless delivery.
+
+---
+
+## Architectural Purpose
+
+Modern content repositories often contain deeply structured data models optimized for storage efficiency and historical compatibility. While powerful, these systems can introduce complexity for application developers.
+
+Netgen Site API acts as a **translation and orchestration layer**, providing:
+
+- Normalized domain objects
+- Context-aware content access
+- Simplified traversal of content hierarchies
+- Consistent querying interfaces
+- Application-focused abstractions
+
+This allows developers to focus on business logic and presentation rather than repository mechanics.
+
+---
+
+## Core Concepts
+
+### Domain Object Wrappers
+
+Repository entities — such as content items, locations, and relations — are exposed as rich PHP objects. These wrappers provide:
+
+- Typed field access
+- Lazy-loaded properties
+- Context-sensitive behavior
+- Helper methods for navigation and rendering
+
+This reduces boilerplate code and enforces consistent access patterns.
+
+### Context Awareness
+
+Site API operates within defined runtime contexts, enabling features such as:
+
+- Language fallback handling
+- Siteaccess-aware resolution
+- Permission-aware retrieval
+- Visibility filtering
+
+This ensures that application logic respects editorial and runtime constraints automatically.
+
+### Query and Traversal Layer
+
+Developers can navigate complex content structures using expressive APIs rather than manual repository calls. Built-in helpers support:
+
+- Hierarchical traversal
+- Related content discovery
+- Filtered collections
+- Structured iteration
+
+### Integration Surface
+
+The API is designed to integrate seamlessly with Symfony services, controllers, and templating layers, making it suitable for:
+
+- MVC-driven rendering
+- Headless content delivery
+- API endpoints
+- Custom application logic
+
+---
+
+## Core Capabilities
+
+Netgen Site API enables:
+
+- Simplified content retrieval and manipulation
+- Structured navigation of site hierarchies
+- Language-aware field resolution
+- Repository abstraction and normalization
+- Integration with templating engines
+- Consistent handling of visibility and permissions
+- Efficient data access patterns
+
+These capabilities help maintain performance while improving developer productivity.
+
+---
+
+## Developer Experience
+
+For developers, Site API emphasizes clarity and maintainability:
+
+- Object-oriented PHP interfaces
+- Symfony-native service integration
+- Predictable domain modeling
+- Reduced repository coupling
+- Reusable helper methods
+- Clean separation between domain logic and storage mechanics
+
+The result is code that is easier to test, extend, and evolve.
+
+---
+
+## Use Cases
+
+Netgen Site API is ideal for:
+
+- Frontend rendering pipelines
+- Custom controllers and services
+- Headless CMS integrations
+- Data-driven applications
+- Content-heavy portals
+- API-backed microservices
+
+---
+
+## Philosophy
+
+Netgen Site API treats content as structured domain data rather than raw storage artifacts. By elevating repository interaction into a coherent application layer, it enables scalable architectures that remain developer-friendly even as complexity grows.
+
+---
+
+In essence, Netgen Site API is the bridge between a powerful content repository and modern application development practices — providing clarity, consistency, and control.
+
+
 # License
 
 Exponential Platform is GNU GPL licensed.
