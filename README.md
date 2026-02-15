@@ -10,7 +10,7 @@
 
 # Who is 7x
 
-[7x](https://se7enx.com) is the North American corporation driving The Continued General Use, Support, Development, Hosting, Design of Exponential Platform Enterprise Open Source Content Management System in 2025.
+[7x](https://se7enx.com) is the North American corporation driving The Continued General Use, Support, Development, Hosting, Design of Exponential Platform Enterprise Open Source Content Management System in 2026.
 
 7x has been in busines supporting Exponential Platform Website Customers and Projects for over 24 years. 7x took over leadership of the project and it's development, support, adoption and community growth in 2023.
 
