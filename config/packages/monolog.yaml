@@ -9,7 +9,12 @@ when@dev:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
-                channels: ["!event", "!doctrine", "!ibexa.cache", "!deprecation"]
+                channels: ["!event", "!ibexa.cache", "!deprecation"]
+            doctrine:
+                type: stream
+                path: "%kernel.logs_dir%/doctrine.log"
+                level: debug
+                channels: ["doctrine"]
             deprecation:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.deprecation.log"

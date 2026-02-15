@@ -1,7 +1,7 @@
 cjwsite.navigation.close : "close"
 cjwsite.navigation.close.title: "Close the navigation"
 cjwsite.navigation.home.title: "Go to home page"
-cjwsite.navigation.open: "All topics"
+cjwsite.navigation.open: ""
 cjwsite.navigation.open.title: "Open the menu containing all topics"
 
 cjwsite.breadcrumb.home: "Start"

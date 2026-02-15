@@ -1,0 +1,20 @@
+# APCu Cache Adapter Configuration
+# Fast local in-process caching for single-server deployments
+#
+# APCu provides sub-millisecond cache access speeds and is ideal for:
+# - Development environments
+# - Single-server production setups
+# - High-performance caching layers
+#
+# For distributed/clustered setups, use Redis instead (cache.redis.yml)
+
+services:
+    cache.apcu:
+        class: Symfony\Component\Cache\Adapter\ApcuAdapter
+        tags:
+            - name: cache.pool
+              clearer: cache.app_clearer
+        arguments:
+            - '%cache_namespace%'      # Cache namespace prefix
+            - 0                        # Default TTL (0 = infinite)
+            - null                     # Version prefix

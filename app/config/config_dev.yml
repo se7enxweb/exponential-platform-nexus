@@ -12,6 +12,65 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
+doctrine:
+    orm:
+        # APCu Cache Configuration (ACTIVE)
+        # Fast local in-process caching - optimal for development
+        metadata_cache_driver:
+            type: apcu
+        query_cache_driver:
+            type: apcu
+        result_cache_driver:
+            type: apcu
+        second_level_cache:
+            enabled: true
+            region_lifetime: 3600
+            region_lock_lifetime: 60
+            region_cache_driver:
+                type: apcu
+            regions:
+                default_region:
+                    type: default
+                    lifetime: 3600
+                    cache_driver:
+                        type: apcu
+
+        # Redis Cache Configuration (COMMENTED OUT)
+        # Uncomment below to use Redis instead (useful for distributed/clustered setups)
+        # metadata_cache_driver:
+        #     type: redis
+        #     host: 127.0.0.1
+        #     port: 6379
+        #     database: 0
+        # query_cache_driver:
+        #     type: redis
+        #     host: 127.0.0.1
+        #     port: 6379
+        #     database: 1
+        # result_cache_driver:
+        #     type: redis
+        #     host: 127.0.0.1
+        #     port: 6379
+        #     database: 2
+        # second_level_cache:
+        #     enabled: true
+        #     region_lifetime: 3600
+        #     region_lock_lifetime: 60
+        #     region_cache_driver:
+        #         type: redis
+        #         host: 127.0.0.1
+        #         port: 6379
+        #         database: 3
+        #     regions:
+        #         default_region:
+        #             type: default
+        #             lifetime: 3600
+        #             cache_driver:
+        #                 type: redis
+        #                 host: 127.0.0.1
+        #                 port: 6379
+        #                 database: 3
+
 monolog:
     handlers:
         main:

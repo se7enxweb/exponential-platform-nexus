@@ -1,0 +1,11 @@
+{% set use_clearfixes = false %}
+
+<div class="col-sm-6 col-md-4 col-lg-3 col-{{ block.itemViewType }}">
+   {{ nglayouts_render_result(result, null, block.itemViewType) }}
+</div>
+
+{% if use_clearfixes|default %}
+    {% if loop.index0 % 2 == 1 %}<div class="clearfix visible-sm-block"></div>{% endif %}
+    {% if loop.index0 % 3 == 2 %}<div class="clearfix visible-md-block"></div>{% endif %}
+    {% if loop.index0 % number_of_columns == 3 %}<div class="clearfix visible-lg-block"></div>{% endif %}
+{% endif %}

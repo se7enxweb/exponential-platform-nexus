@@ -10,6 +10,10 @@
     <script defer type="text/javascript" src="{{ src }}"></script>
 {% endfor %}
 
+{# PhotoSwipe initialization - Must load BEFORE app.js #}
+{% for src in encore_entry_js_files('photoswipe-init', 'app') %}
+    <script type="text/javascript" src="{{ src }}"></script>
+{% endfor %}
 <script defer type="text/javascript" src="{{ asset('app.js', 'nglayouts_' ~ (nglayouts.debug ? 'dev_' : '') ~ 'js') }}"></script>
 
 {{ nglayouts_template_plugin('preview.javascripts') }}

@@ -1,0 +1,49 @@
+services:
+    # APCu Cache Services (ACTIVE)
+    # Fast in-process caching - optimized for single-server deployments
+    doctrine_cache.apcu_metadata:
+        class: Doctrine\Common\Cache\ApcuCache
+        public: false
+
+    doctrine_cache.apcu_query:
+        class: Doctrine\Common\Cache\ApcuCache
+        public: false
+
+    doctrine_cache.apcu_result:
+        class: Doctrine\Common\Cache\ApcuCache
+        public: false
+
+    # Redis Cache Services (COMMENTED OUT)
+    # Uncomment below to use Redis instead (useful for distributed/clustered setups)
+    # doctrine_cache.redis_metadata:
+    #     class: Doctrine\Common\Cache\RedisCache
+    #     calls:
+    #         - [setRedis, ['@redis_client_metadata']]
+
+    # doctrine_cache.redis_query:
+    #     class: Doctrine\Common\Cache\RedisCache
+    #     calls:
+    #         - [setRedis, ['@redis_client_query']]
+
+    # doctrine_cache.redis_result:
+    #     class: Doctrine\Common\Cache\RedisCache
+    #     calls:
+    #         - [setRedis, ['@redis_client_result']]
+
+    # redis_client_metadata:
+    #     class: Redis
+    #     calls:
+    #         - [connect, ['localhost', 6379]]
+    #         - [select, [1]]
+
+    # redis_client_query:
+    #     class: Redis
+    #     calls:
+    #         - [connect, ['localhost', 6379]]
+    #         - [select, [2]]
+
+    # redis_client_result:
+    #     class: Redis
+    #     calls:
+    #         - [connect, ['localhost', 6379]]
+    #         - [select, [3]]

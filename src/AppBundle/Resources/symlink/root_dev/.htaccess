@@ -1,10 +1,23 @@
+# platform.cjw.demo.se7enx.com https + bcrypt browser authentication
+# DISABLED: Basic Auth removed - app-level auth only
+AuthType Basic
+AuthName "7x :: Restricted Content"
+AuthUserFile /var/www/vhosts/platform.cjw.alpha.se7enx.com/web/acl/nga.acl
+Require valid-user
+
+# Redis cache configuration
+# Use Redis for caching instead of filesystem
+# SetEnv CACHE_POOL cache.redis
+# SetEnv CACHE_DSN localhost:6379
+# SetEnv CACHE_NAMESPACE ez
+
 ## eZ Platform/Symfony ENVIRONMENT variables, for customizing app.php* execution
 # * Only SYMFONY_ENV and SYMFONY_DEBUG supported by console command, rest are eZ Platform features in app.php.
 
 # Environment.
 # Possible values: "prod" and "dev" out-of-the-box, other values possible with proper configuration
 # Defaults to "prod" if omitted (uses SetEnvIf so value can be used in rewrite rules)
-SetEnvIf REQUEST_URI ".*" SYMFONY_ENV=dev
+SetEnvIf REQUEST_URI ".*" SYMFONY_ENV=prod
 
 # Whether to use debugging.
 # Possible values: 0 or 1

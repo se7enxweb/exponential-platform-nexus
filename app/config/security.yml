@@ -24,6 +24,20 @@ security:
             pattern: /user/(forgot-password|reset-password)
             security: false
 
+        admin_ui:
+            request_matcher: app.security.admin_ui_siteaccess_matcher
+            pattern: ^/
+            anonymous: ~
+            ezpublish_rest_session: ~
+            form_login:
+                require_previous_session: false
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /
+                always_use_default_target_path: false
+            logout:
+                target: /login
+
         ezpublish_front:
             pattern: ^/
             anonymous: ~
@@ -37,7 +51,8 @@ security:
                 # success_handler: netgen_admin_ui.security.authentication_success_handler
                 # CSRF token removed: causes session initialization on login GET
                 # Login form doesn't need CSRF since it's the unauthenticated entry point
-            logout: ~
+            logout:
+                target: /login
 
         main:
             anonymous: ~

@@ -75,6 +75,10 @@ security:
             anonymous: ~
             ibexa_rest_session: ~
             form_login:
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /
+                always_use_default_target_path: true
                 require_previous_session: false
                 csrf_token_generator: security.csrf.token_manager
             logout: ~

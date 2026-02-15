@@ -2,17 +2,17 @@
 
 </div>
 
-{% if app.environment == 'dev' %}
-    {% if 'jac-hosting' in app.request.host %}
-        {% set change_to_server_name = 'in-mv.co' %}
-        {% set current_server_name = 'jac-hosting' %}
-        {% set change_to_server_url = '//www.erholungsort-wieck-darss.de.ezp25-wieck-dev.in-mv.co' %}
-    {% else %}
-        {% set change_to_server_name = 'jac-hosting' %}
-        {% set current_server_name = 'in-mv.co' %}
-        {% set change_to_server_url = '//ezp25-wieck-p090101.jac-hosting.de' %}
-    {% endif %}
+{% if 'jac-hosting' in app.request.host %}
+    {% set change_to_server_name = 'in-mv.co' %}
+    {% set current_server_name = 'jac-hosting' %}
+    {% set change_to_server_url = '//www.erholungsort-wieck-darss.de.ezp25-wieck-dev.in-mv.co' %}
+{% else %}
+    {% set change_to_server_name = 'jac-hosting' %}
+    {% set current_server_name = 'in-mv.co' %}
+    {% set change_to_server_url = '//ezp25-wieck-p090101.jac-hosting.de' %}
+{% endif %}
 
+{% if app.environment == 'dev' %}
     <style>
         .server-changer {
             position: fixed;

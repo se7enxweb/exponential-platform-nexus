@@ -22,9 +22,9 @@ security:
                 check_path: /login_check
                 default_target_path: /
                 always_use_default_target_path: false
-                csrf_token_generator: security.csrf.token_manager
-                csrf_token_id: authenticate
-            logout: ~
+                # success_handler: netgen_admin_ui.security.authentication_success_handler
+            logout:
+                target: /login
 
         main:
             anonymous: ~

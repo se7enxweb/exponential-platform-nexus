@@ -40,6 +40,8 @@ ezpublish:
                 ngadminui: ngadminui
             Map\Host:
                 nga.platform.cjw.demo.se7enx.com: ngadminui
+                nga.platform.cjw.alpha.se7enx.com: ngadminui
+                nga.platform.cjw.beta.se7enx.com: ngadminui
     system:
         nga:
             user:

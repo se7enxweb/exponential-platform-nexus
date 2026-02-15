@@ -30,4 +30,17 @@ TextTranslation=disabled
 [ContentSettings]
 CachedViewPreferences[full]=admin_navigation_content=1;admin_children_viewmode=list;admin_list_limit=1
 TranslationList=
+
+[SiteAccessRules]
+Rules[]=access;enable
+Rules[]=moduleall
+Rules[]=module;visual
+Rules[]=module;visual/templateedit
+Rules[]=module;visual/templatelist
+Rules[]=module;visual/templateview
+Rules[]=module;visual/templatecreate
+Rules[]=module;visual/toolbar
+Rules[]=module;visual/toolbarlist
+Rules[]=module;visual/menuconfig
+
 */ ?>

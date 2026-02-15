@@ -9,6 +9,12 @@ http_cache:
         - nga.platform.cjw.demo.se7enx.com    # Admin UI host
         - edit.platform.cjw.demo.se7enx.com   # Admin edit host
         - editor.platform.cjw.demo.se7enx.com # Legacy admin host
+        - nga.platform.cjw.alpha.se7enx.com    # Admin UI host
+        - edit.platform.cjw.alpha.se7enx.com   # Admin edit host
+        - editor.platform.cjw.alpha.se7enx.com # Legacy admin host
+        - nga.platform.cjw.beta.se7enx.com    # Admin UI host
+        - edit.platform.cjw.beta.se7enx.com   # Admin edit host
+        - editor.platform.cjw.beta.se7enx.com # Legacy admin host
     
     # SiteAccesses that should NEVER be publicly cached (always remain private/no-cache)
     # These are administrative or sensitive siteaccesses where user-specific content is served
