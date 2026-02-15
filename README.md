@@ -46,7 +46,7 @@ Exponential Platform Nexus is database, platform and browser independent. Becaus
 browser based it can be used and updated from anywhere as long as you have
 access to the Internet.
 
-(Referred to as `legacy+new stasck` in Exponential Platform and Ibexa OSS)
+(Referred to as `legacy+new stack` in Exponential Platform and Ibexa OSS)
 
 # Requirements
 - PHP
