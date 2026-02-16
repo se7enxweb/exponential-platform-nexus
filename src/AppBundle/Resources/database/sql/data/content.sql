@@ -40397,7 +40397,7 @@ UNLOCK TABLES;
 LOCK TABLES `ezuser` WRITE;
 /*!40000 ALTER TABLE `ezuser` DISABLE KEYS */;
 INSERT INTO `ezuser` VALUES (10,'nospam@ez.no','anonymous','$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',7,1770191485);
-INSERT INTO `ezuser` VALUES (14,'info@jac-systeme.de','admin','$2y$10$80R9cHSyuKMMALYkvLEYDu/0f3i69F0h0mZn0M10yLUgXbwSIJE.u',7,1770191485);
+INSERT INTO `ezuser` VALUES (14,'info@jac-systeme.de','admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 INSERT INTO `ezuser` VALUES (189,'jac.editor@projekte.jac-systeme.com','jac.editor','$2y$10$CNF304sQDpouEhBLn4LxM.Edx2jppQp/8dury7gOnbEeaBc7PaPKa',7,1770191485);
 INSERT INTO `ezuser` VALUES (455,'jac.admin@projekte.jac-systeme.com','jac.admin','$2y$10$hnJONO/cRIy2hJwZttQJ1OyQrvTujOEZO8p6eSNEKexBrzZSk0we.',7,1770191485);
 INSERT INTO `ezuser` VALUES (457,'axel@ars-campus.de','n980001','$2y$10$tFxwAyJXD349RiP13/jxbOttYs0wOsFg4.SrII63D7PrErw914kIS',7,1770191485);
