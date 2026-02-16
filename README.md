@@ -100,6 +100,10 @@ Exponential Platform Nexus supports PHP 7.3 -> 8.5 please use the latest version
 
 Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.one/display/DEVELOPER/Step%2b1_%2bInstallation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html)
 
+# Default Installation Starter Demo Design Bundle Database 'admin' Password is 'publish' (all lowercase).
+
+Read [Reseting the admin password in eZ publish](https://ezpedia.se7enx.com/en/solution/reseting_the_admin_password_in_ez_publish#eztoc507_1_1) on database sql to use to reset any user's password.
+
 # Issue tracker
 
 Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platfom-legacy/issues](https://github.com/se7enxweb/exponential-platfom-legacy/issues)
