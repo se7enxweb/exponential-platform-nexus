@@ -1,7 +1,7 @@
 /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19  Distrib 10.5.29-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: xa_cjw_example
+-- Host: localhost    Database: demo
 -- ------------------------------------------------------
 -- Server version	10.5.29-MariaDB
 
@@ -33,7 +33,7 @@ CREATE TABLE `cjwnl_blacklist_item` (
   `note` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cjwnewsletter_user_id` (`newsletter_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='table with blacklisted user emails';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='table with blacklisted user emails';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `cjwnl_edition` (
   KEY `contentobject_id` (`contentobject_id`),
   KEY `contentobject_attribute_id` (`contentobject_attribute_id`),
   KEY `contentobject_attribute_version` (`contentobject_attribute_version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +108,7 @@ CREATE TABLE `cjwnl_edition_send` (
   KEY `edition_contentobject_id` (`edition_contentobject_id`),
   KEY `edition_contentobject_version` (`edition_contentobject_version`),
   KEY `list_contentobject_id` (`list_contentobject_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `cjwnl_edition_send_item` (
   KEY `edition_send_id` (`edition_send_id`),
   KEY `newsletter_user_id` (`newsletter_user_id`),
   KEY `subscription_id` (`subscription_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,7 +175,7 @@ CREATE TABLE `cjwnl_import` (
   `imported_user_count` int(11) NOT NULL,
   `imported_subscription_count` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -217,7 +217,7 @@ CREATE TABLE `cjwnl_list` (
   KEY `contentobject_id` (`contentobject_id`),
   KEY `contentobject_attribute_id` (`contentobject_attribute_id`),
   KEY `contentobject_attribute_version` (`contentobject_attribute_version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +249,7 @@ CREATE TABLE `cjwnl_mailbox` (
   `is_activated` tinyint(1) DEFAULT 1,
   `last_server_connect` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,7 +288,7 @@ CREATE TABLE `cjwnl_mailbox_item` (
   KEY `edition_send_id` (`edition_send_id`),
   KEY `mailbox_id` (`mailbox_id`),
   KEY `newsletter_user_id` (`newsletter_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,7 +327,7 @@ CREATE TABLE `cjwnl_subscription` (
   KEY `list_contentobject_id` (`list_contentobject_id`),
   KEY `newsletter_user_id` (`newsletter_user_id`),
   KEY `import_id` (`import_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -379,7 +379,7 @@ CREATE TABLE `cjwnl_user` (
   PRIMARY KEY (`id`),
   KEY `ez_user_id` (`ez_user_id`),
   KEY `import_id` (`import_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +403,7 @@ CREATE TABLE `ezapprove_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `workflow_process_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -429,7 +429,7 @@ CREATE TABLE `ezbasket` (
   `session_id` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ezbasket_session_id` (`session_id`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -456,7 +456,7 @@ CREATE TABLE `ezbinaryfile` (
   `original_filename` varchar(255) NOT NULL DEFAULT '',
   `version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`contentobject_attribute_id`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -489,7 +489,7 @@ CREATE TABLE `ezcobj_state` (
   UNIQUE KEY `ezcobj_state_identifier` (`group_id`,`identifier`),
   KEY `ezcobj_state_lmask` (`language_mask`),
   KEY `ezcobj_state_priority` (`priority`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -518,7 +518,7 @@ CREATE TABLE `ezcobj_state_group` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ezcobj_state_group_identifier` (`identifier`),
   KEY `ezcobj_state_group_lmask` (`language_mask`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -545,7 +545,7 @@ CREATE TABLE `ezcobj_state_group_language` (
   `name` varchar(45) NOT NULL DEFAULT '',
   `real_language_id` bigint(20) NOT NULL DEFAULT 0,
   PRIMARY KEY (`contentobject_state_group_id`,`real_language_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -571,7 +571,7 @@ CREATE TABLE `ezcobj_state_language` (
   `language_id` bigint(20) NOT NULL DEFAULT 0,
   `name` varchar(45) NOT NULL DEFAULT '',
   PRIMARY KEY (`contentobject_state_id`,`language_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -596,7 +596,7 @@ CREATE TABLE `ezcobj_state_link` (
   `contentobject_id` int(11) NOT NULL DEFAULT 0,
   `contentobject_state_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`contentobject_id`,`contentobject_state_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -662,7 +662,6 @@ INSERT INTO `ezcobj_state_link` VALUES (1205,1);
 INSERT INTO `ezcobj_state_link` VALUES (1206,1);
 INSERT INTO `ezcobj_state_link` VALUES (1239,1);
 INSERT INTO `ezcobj_state_link` VALUES (1251,1);
-INSERT INTO `ezcobj_state_link` VALUES (1312,1);
 INSERT INTO `ezcobj_state_link` VALUES (1314,1);
 INSERT INTO `ezcobj_state_link` VALUES (1318,1);
 INSERT INTO `ezcobj_state_link` VALUES (1326,1);
@@ -791,7 +790,7 @@ CREATE TABLE `ezcollab_group` (
   PRIMARY KEY (`id`),
   KEY `ezcollab_group_depth` (`depth`),
   KEY `ezcollab_group_path` (`path_string`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -827,7 +826,7 @@ CREATE TABLE `ezcollab_item` (
   `status` int(11) NOT NULL DEFAULT 1,
   `type_identifier` varchar(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -856,7 +855,7 @@ CREATE TABLE `ezcollab_item_group_link` (
   `modified` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`collaboration_id`,`group_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -884,7 +883,7 @@ CREATE TABLE `ezcollab_item_message_link` (
   `modified` int(11) NOT NULL DEFAULT 0,
   `participant_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -914,7 +913,7 @@ CREATE TABLE `ezcollab_item_participant_link` (
   `participant_role` int(11) NOT NULL DEFAULT 1,
   `participant_type` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`collaboration_id`,`participant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -940,7 +939,7 @@ CREATE TABLE `ezcollab_item_status` (
   `last_read` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`collaboration_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -964,7 +963,7 @@ CREATE TABLE `ezcollab_notification_rule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -991,7 +990,7 @@ CREATE TABLE `ezcollab_profile` (
   `modified` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1026,7 +1025,7 @@ CREATE TABLE `ezcollab_simple_message` (
   `message_type` varchar(40) NOT NULL DEFAULT '',
   `modified` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1052,7 +1051,7 @@ CREATE TABLE `ezcontent_language` (
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ezcontent_language_name` (`name`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1084,7 +1083,7 @@ CREATE TABLE `ezcontentbrowsebookmark` (
   KEY `ezcontentbrowsebookmark_user_location` (`user_id`,`node_id`),
   CONSTRAINT `ezcontentbrowsebookmark_location_fk` FOREIGN KEY (`node_id`) REFERENCES `ezcontentobject_tree` (`node_id`) ON DELETE CASCADE,
   CONSTRAINT `ezcontentbrowsebookmark_user_fk` FOREIGN KEY (`user_id`) REFERENCES `ezuser` (`contentobject_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1111,7 +1110,7 @@ CREATE TABLE `ezcontentbrowserecent` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezcontentbrowserecent_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1161,7 +1160,7 @@ CREATE TABLE `ezcontentclass` (
   PRIMARY KEY (`id`,`version`),
   KEY `ezcontentclass_version` (`version`),
   KEY `ezcontentclass_identifier` (`identifier`,`version`)
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1245,7 +1244,7 @@ CREATE TABLE `ezcontentclass_attribute` (
   `version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`version`),
   KEY `ezcontentclass_attr_ccid` (`contentclass_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1444 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1444 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1638,7 +1637,7 @@ CREATE TABLE `ezcontentclass_attribute_ml` (
   PRIMARY KEY (`contentclass_attribute_id`,`version`,`language_id`),
   KEY `ezcontentclass_attribute_ml_lang_fk` (`language_id`),
   CONSTRAINT `ezcontentclass_attribute_ml_lang_fk` FOREIGN KEY (`language_id`) REFERENCES `ezcontent_language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1663,7 +1662,7 @@ CREATE TABLE `ezcontentclass_classgroup` (
   `group_id` int(11) NOT NULL DEFAULT 0,
   `group_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`contentclass_id`,`contentclass_version`,`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1726,7 +1725,7 @@ CREATE TABLE `ezcontentclass_name` (
   `language_locale` varchar(20) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`contentclass_id`,`contentclass_version`,`language_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1812,7 +1811,7 @@ CREATE TABLE `ezcontentclassgroup` (
   `modifier_id` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1860,7 +1859,7 @@ CREATE TABLE `ezcontentobject` (
   KEY `ezcontentobject_pub` (`published`),
   KEY `ezcontentobject_status` (`status`),
   KEY `ezcontentobject_section` (`section_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1467 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1467 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1890,7 +1889,7 @@ INSERT INTO `ezcontentobject` VALUES (49,1,172,2,3,1416081920,'Multimedia',14,14
 INSERT INTO `ezcontentobject` VALUES (104,5,173,2,7,1620727952,'Cookie Richtlinie - [COOKIE POLICY]',14,1570440525,'60c1a4f0386e2c808348331bfefd772b',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (49,10,174,4,4,1614758829,'JAC Example',14,1574843222,'4e39421cc74c7ffa8d4bba1afcd6fadc',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (49,1,177,4,5,1574957344,'Allgemeiner Inhalt',14,1574957344,'f1c5f6e6e301dd017bf2b1ce5c4dfc56',3,1,0);
-INSERT INTO `ezcontentobject` VALUES (4,1,189,4,5,1574961985,'JAC Editor',14,1574961985,'72de8317d467fbeda9148d0d257a9dcc',2,1,0);
+INSERT INTO `ezcontentobject` VALUES (4,2,189,4,5,1771354696,'Project Editor',14,1574961985,'72de8317d467fbeda9148d0d257a9dcc',2,1,0);
 INSERT INTO `ezcontentobject` VALUES (48,2,190,2,6,1620804724,'Showcase',14,1575010771,'26a230d8dec60f0459d541330153f78d',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (44,1,191,2,2,1575010771,'Article test',14,1575010771,'34300ced44afbe53ee131f95b8cba42f',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (41,1,192,2,3,1575010772,'Audio test',14,1575010772,'ded40b4e2d9cdabfc1c7b6e8c26b24cf',1,1,0);
@@ -1913,8 +1912,8 @@ INSERT INTO `ezcontentobject` VALUES (97,1,208,2,3,1575010775,'Video test',14,15
 INSERT INTO `ezcontentobject` VALUES (81,1,209,2,2,1575010775,'Image test',14,1575010775,'04a00f67a05c1f785b2082f8c12aea48',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (80,1,210,2,2,1575010776,'File test',14,1575010776,'8716fe3aa585b13004b36a09430621b9',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (49,3,248,4,7,1575479166,'Basis-Menü',14,1575363040,'e54bc03fbd95305595413c8dc74988c4',3,1,0);
-INSERT INTO `ezcontentobject` VALUES (4,2,455,4,5,1606750763,'JAC Admin',14,1576485502,'9f332ba95e464c479f6484cf0669eb82',2,1,0);
-INSERT INTO `ezcontentobject` VALUES (4,2,457,4,5,1576498104,'Axel Thiessenhusen',455,1576492981,'0631729536c1d7c71edcd4f5726c7298',2,1,0);
+INSERT INTO `ezcontentobject` VALUES (4,3,455,4,5,1771354640,'Project Admin',14,1576485502,'9f332ba95e464c479f6484cf0669eb82',2,1,0);
+INSERT INTO `ezcontentobject` VALUES (4,3,457,4,5,1771354503,'Example 01 Editor 01',455,1576492981,'0631729536c1d7c71edcd4f5726c7298',2,1,0);
 INSERT INTO `ezcontentobject` VALUES (3,2,484,4,5,1620726569,'Redakteure Layouts',455,1576668329,'eccde633ef69a48e0c779239363898f4',2,1,0);
 INSERT INTO `ezcontentobject` VALUES (145,28,710,4,4,1634278593,'Startseite',455,1588677004,'f37c3cf349d196e68d6e328fb9166b73',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (117,1,738,4,4,1596113618,'Verwaltung',455,1596113618,'3fe5eee603c1c99495d0e0f019523ebd',1,1,0);
@@ -1926,8 +1925,7 @@ INSERT INTO `ezcontentobject` VALUES (51,3,1205,4,5,1621260158,'Externe Informat
 INSERT INTO `ezcontentobject` VALUES (51,3,1206,4,5,1607684791,'Veranstaltungen',455,1605708525,'ef31dcf89345f83798aadc5568c06312',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (48,9,1239,4,4,1753688563,'Beispiele 1',455,1607339308,'ce18b8f3966686e288e0ff75cc3b70d6',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1251,4,4,1607510486,'Kirchberg-Ein-Mann-gibt-Portrait',0,1607510486,'7c52e21da21396b45e9f085753c8841a',3,1,0);
-INSERT INTO `ezcontentobject` VALUES (4,1,1312,4,5,1612868378,'Norman Pappisch (Admin)',455,1612868378,'a0c57318f7cfde29f6bc5aa3ff115153',2,1,0);
-INSERT INTO `ezcontentobject` VALUES (4,1,1314,4,5,1612869311,'Norman Pappisch (Editor)',455,1612869311,'b37dbd57972dfc1e67bd7179cd31b22d',2,1,0);
+INSERT INTO `ezcontentobject` VALUES (4,2,1314,4,5,1771354588,'Project Editor User (Editor)',455,1612869311,'b37dbd57972dfc1e67bd7179cd31b22d',2,1,0);
 INSERT INTO `ezcontentobject` VALUES (45,8,1318,4,4,1753691329,'Rapsfest',455,1614961469,'19f101e68140f3d6eb20034822d73970',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1326,4,4,1614962071,'IMG_0830',455,1614962071,'d3b971784fbb592667089f86161c268a',3,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1327,4,4,1614962071,'IMG_0513',455,1614962071,'3340bfe5fadf0a8ed1c0ce0c87fc1465',3,1,0);
@@ -1944,7 +1942,7 @@ INSERT INTO `ezcontentobject` VALUES (81,1,1347,4,4,1621257750,'Wire 2019-10-04 
 INSERT INTO `ezcontentobject` VALUES (81,1,1348,4,4,1621257751,'Wire 2019-10-04 at 7_57 AM',455,1621257751,'9bf3966228b1e021de68ec96a66b892c',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1349,4,4,1621257751,'Wire 2018-10-17 at 11_01 AM',455,1621257751,'75646bd90d7558047184af977b7dd381',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1350,4,4,1621257751,'Wire 2018-11-27 at 8_16 AM',455,1621257751,'8c5c0611832e75ea82662fa40f321f1f',1,1,0);
-INSERT INTO `ezcontentobject` VALUES (42,3,1352,4,5,1747152621,'Kopfbild 1',455,1621258144,'f517cb40279bbcd6417de4ffc86df060',1,1,0);
+INSERT INTO `ezcontentobject` VALUES (42,5,1352,4,5,1771342840,'Kopfbild 1',455,1621258144,'f517cb40279bbcd6417de4ffc86df060',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (42,3,1353,4,5,1747152672,'Kopfbild 2',455,1621258376,'c676377a97b809f0b89677747e522a80',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (45,6,1354,4,4,1753691560,'Hafentage',455,1621258829,'c2609a8ca27e332fc10010882323897a',1,1,0);
 INSERT INTO `ezcontentobject` VALUES (81,1,1355,4,4,1621258991,'Wire 2019-02-18 at 8_351 AM',455,1621258991,'f86510be4ace22b0d0a2d6be7a93ee79',1,1,0);
@@ -2061,7 +2059,7 @@ CREATE TABLE `ezcontentobject_attribute` (
   KEY `ezcontentobject_classattr_id` (`contentclassattribute_id`),
   KEY `sort_key_int` (`sort_key_int`),
   KEY `sort_key_string` (`sort_key_string`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=15327 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15327 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2397,11 +2395,11 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,758,63,0,0,'','ezurl',2176,'ge
 INSERT INTO `ezcontentobject_attribute` VALUES (0,758,63,0,0,'','ezurl',2176,'ger-DE',5,0,'',68);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,758,63,0,0,'','ezurl',2176,'ger-DE',5,0,'',69);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,177,0,NULL,'Allgemeiner Inhalt','ezstring',2215,'ger-DE',5,0,'allgemeiner inhalt',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,189,0,NULL,'JAC','ezstring',2334,'ger-DE',5,0,'jac',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,189,0,NULL,'Editor','ezstring',2335,'ger-DE',5,0,'editor',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (2336,12,189,0,NULL,'{\"login\":\"jac.editor\",\"password_hash\":\"$2y$10$CNF304sQDpouEhBLn4LxM.Edx2jppQp\\/8dury7gOnbEeaBc7PaPKa\",\"email\":\"jac.editor@projekte.jac-systeme.com\",\"password_hash_type\":7}','ezuser',2336,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,189,0,NULL,'','eztext',2337,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,189,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1574961849\"><original attribute_id=\"2338\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',2338,'ger-DE',5,0,'',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,8,189,0,NULL,'Project','ezstring',2334,'ger-DE',5,0,'project',2);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,9,189,0,NULL,'Editor','ezstring',2335,'ger-DE',5,0,'editor',2);
+INSERT INTO `ezcontentobject_attribute` VALUES (2336,12,189,0,NULL,'','ezuser',2336,'ger-DE',5,0,'',2);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,179,189,0,NULL,'','eztext',2337,'ger-DE',5,0,'',2);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,180,189,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1574961849\"><original attribute_id=\"2338\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',2338,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,397,190,0,NULL,'Showcase','ezstring',2339,'eng-GB',2,0,'showcase',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,397,190,0,NULL,'Showcase','ezstring',2339,'eng-GB',2,0,'showcase',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,401,190,0,NULL,'','ezstring',2340,'eng-GB',2,0,'',1);
@@ -2610,26 +2608,16 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,901,190,0,NULL,'<?xml version=
 INSERT INTO `ezcontentobject_attribute` VALUES (0,901,190,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1575649624\"/>\n','ezimage',3081,'eng-GB',2,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,901,205,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576506671\"/>\n','ezimage',3082,'eng-GB',2,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,919,195,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576853497\"/>\n','ezimage',3088,'eng-GB',3,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,455,0,NULL,'JAC','ezstring',4216,'ger-DE',5,0,'jac',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,455,0,NULL,'JAC','ezstring',4216,'ger-DE',5,0,'jac',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,455,0,NULL,'Admin','ezstring',4217,'ger-DE',5,0,'admin',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,455,0,NULL,'Admin','ezstring',4217,'ger-DE',5,0,'admin',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (4218,12,455,0,NULL,'','ezuser',4218,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (4218,12,455,0,NULL,'','ezuser',4218,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,455,0,NULL,'','eztext',4219,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,455,0,NULL,'','eztext',4219,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,455,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576485432\"><original attribute_id=\"4220\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4220,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,455,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576485432\"><original attribute_id=\"4220\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4220,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,457,0,NULL,'Axel','ezstring',4224,'ger-DE',5,0,'axel',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,457,0,NULL,'Axel','ezstring',4224,'ger-DE',5,0,'axel',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,457,0,NULL,'Thiessenhusen','ezstring',4225,'ger-DE',5,0,'thiessenhusen',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,457,0,NULL,'Thiessenhusen','ezstring',4225,'ger-DE',5,0,'thiessenhusen',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (4226,12,457,0,NULL,'','ezuser',4226,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (4226,12,457,0,NULL,'','ezuser',4226,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,457,0,NULL,'','eztext',4227,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,457,0,NULL,'','eztext',4227,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,457,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576492926\"><original attribute_id=\"4228\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4228,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,457,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576492926\"><original attribute_id=\"4228\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4228,'ger-DE',5,0,'',2);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,8,455,0,NULL,'Project','ezstring',4216,'ger-DE',5,0,'project',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,9,455,0,NULL,'Admin','ezstring',4217,'ger-DE',5,0,'admin',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (4218,12,455,0,NULL,'','ezuser',4218,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,179,455,0,NULL,'','eztext',4219,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,180,455,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576485432\"><original attribute_id=\"4220\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4220,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,8,457,0,NULL,'Example 01','ezstring',4224,'ger-DE',5,0,'example 01',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,9,457,0,NULL,'Editor 01','ezstring',4225,'ger-DE',5,0,'editor 01',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (4226,12,457,0,NULL,'','ezuser',4226,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,179,457,0,NULL,'','eztext',4227,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,180,457,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1576492926\"><original attribute_id=\"4228\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',4228,'ger-DE',5,0,'',3);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,6,484,0,NULL,'Editor Layouts','ezstring',4625,'ger-DE',5,0,'editor layouts',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,6,484,0,NULL,'Redakteure Layouts','ezstring',4625,'ger-DE',5,0,'redakteure layouts',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,7,484,0,NULL,'','ezstring',4626,'ger-DE',5,0,'',1);
@@ -3048,16 +3036,16 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,1369,741,0,0,'','ezboolean',12
 INSERT INTO `ezcontentobject_attribute` VALUES (0,576,1251,0,NULL,'Kirchberg-Ein-Mann-gibt-Portrait','ezstring',12641,'ger-DE',4,0,'kirchberg-ein-mann-gibt-portrait',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,577,1251,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',12642,'ger-DE',4,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,578,1251,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"kirchberg-ein-mann-gibt-portrait.jpg\" suffix=\"jpg\" basename=\"kirchberg-ein-mann-gibt-portrait\" dirpath=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE\" url=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE/kirchberg-ein-mann-gibt-portrait.jpg\" original_filename=\"Kirchberg-Ein-Mann-gibt-Portrait.jpg\" mime_type=\"image/jpeg\" width=\"2912\" height=\"4724\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1607510486\"><original attribute_id=\"12643\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"4724\" Width=\"2912\" IsColor=\"0\" ByteOrderMotorola=\"0\" CCDWidth=\"23mm\" ApertureFNumber=\"f/3.5\" Thumbnail.FileType=\"2\" Thumbnail.MimeType=\"image/jpeg\"><array name=\"ifd0\"><item key=\"ImageWidth\" base64=\"1\">MjkxMg==</item><item key=\"ImageLength\" base64=\"1\">NDM2OA==</item><item key=\"BitsPerSample\" base64=\"1\">OA==</item><item key=\"Compression\" base64=\"1\">MQ==</item><item key=\"PhotometricInterpretation\" base64=\"1\">MQ==</item><item key=\"Make\" base64=\"1\">Q2Fub24=</item><item key=\"Model\" base64=\"1\">Q2Fub24gRU9TIDVE</item><item key=\"Orientation\" base64=\"1\">MQ==</item><item key=\"SamplesPerPixel\" base64=\"1\">MQ==</item><item key=\"XResolution\" base64=\"1\">MzAwMDAwMC8xMDAwMA==</item><item key=\"YResolution\" base64=\"1\">MzAwMDAwMC8xMDAwMA==</item><item key=\"ResolutionUnit\" base64=\"1\">Mg==</item><item key=\"Software\" base64=\"1\">QWRvYmUgUGhvdG9zaG9wIENTNCBNYWNpbnRvc2g=</item><item key=\"DateTime\" base64=\"1\">MjAwOTowOToyMyAwOTo0MTowOQ==</item><item key=\"Exif_IFD_Pointer\" base64=\"1\">Mjgw</item></array><array name=\"exif\"><item key=\"ExposureTime\" base64=\"1\">MS82MA==</item><item key=\"FNumber\" base64=\"1\">MzUvMTA=</item><item key=\"ExposureProgram\" base64=\"1\">MQ==</item><item key=\"ISOSpeedRatings\" base64=\"1\">MTAw</item><item key=\"ExifVersion\" base64=\"1\">MDIyMQ==</item><item key=\"DateTimeOriginal\" base64=\"1\">MjAwOTowNjoyMyAxNTo0MjozMQ==</item><item key=\"DateTimeDigitized\" base64=\"1\">MjAwOTowNjoyMyAxNTo0MjozMQ==</item><item key=\"ShutterSpeedValue\" base64=\"1\">NTkwNjg5MS8xMDAwMDAw</item><item key=\"ApertureValue\" base64=\"1\">MzYxNDcxLzEwMDAwMA==</item><item key=\"ExposureBiasValue\" base64=\"1\">MC8x</item><item key=\"MaxApertureValue\" base64=\"1\">My8x</item><item key=\"MeteringMode\" base64=\"1\">NQ==</item><item key=\"Flash\" base64=\"1\">MTY=</item><item key=\"FocalLength\" base64=\"1\">NzUvMQ==</item><item key=\"ColorSpace\" base64=\"1\">NjU1MzU=</item><item key=\"ExifImageWidth\" base64=\"1\">MjkxMg==</item><item key=\"ExifImageLength\" base64=\"1\">NDcyNA==</item><item key=\"FocalPlaneXResolution\" base64=\"1\">NDM2ODAwMC8xNDE1</item><item key=\"FocalPlaneYResolution\" base64=\"1\">MjkxMjAwMC85NDI=</item><item key=\"FocalPlaneResolutionUnit\" base64=\"1\">Mg==</item><item key=\"CustomRendered\" base64=\"1\">MA==</item><item key=\"ExposureMode\" base64=\"1\">MQ==</item><item key=\"WhiteBalance\" base64=\"1\">MQ==</item><item key=\"SceneCaptureType\" base64=\"1\">MA==</item></array></information><alias name=\"small\" filename=\"kirchberg-ein-mann-gibt-portrait_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE\" url=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE/kirchberg-ein-mann-gibt-portrait_small.jpg\" mime_type=\"image/jpeg\" width=\"62\" height=\"100\" alias_key=\"1455834182\" timestamp=\"1770381131\" is_valid=\"1\"/><alias name=\"medium\" filename=\"kirchberg-ein-mann-gibt-portrait_medium.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE\" url=\"var/site/storage/images/media/images/kirchberg-ein-mann-gibt-portrait/12643-1-ger-DE/kirchberg-ein-mann-gibt-portrait_medium.jpg\" mime_type=\"image/jpeg\" width=\"123\" height=\"200\" alias_key=\"1201168738\" timestamp=\"1607510489\" is_valid=\"1\"/></ezimage>\n','ezimage',12643,'ger-DE',4,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,8,1312,0,NULL,'Norman','ezstring',13407,'ger-DE',5,0,'norman',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,9,1312,0,NULL,'Pappisch (Admin)','ezstring',13408,'ger-DE',5,0,'pappisch (admin)',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (13409,12,1312,0,NULL,'','ezuser',13409,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,179,1312,0,NULL,'','eztext',13410,'ger-DE',5,0,'',1);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,180,1312,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1612868378\"><original attribute_id=\"13411\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',13411,'ger-DE',5,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,8,1314,0,NULL,'Norman','ezstring',13417,'ger-DE',5,0,'norman',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,8,1314,0,NULL,'Project','ezstring',13417,'ger-DE',5,0,'project',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,9,1314,0,NULL,'Pappisch (Editor)','ezstring',13418,'ger-DE',5,0,'pappisch (editor)',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,9,1314,0,NULL,'Editor User (Editor)','ezstring',13418,'ger-DE',5,0,'editor user (editor)',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (13419,12,1314,0,NULL,'','ezuser',13419,'ger-DE',5,0,'',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (13419,12,1314,0,NULL,'','ezuser',13419,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,179,1314,0,NULL,'','eztext',13420,'ger-DE',5,0,'',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,179,1314,0,NULL,'','eztext',13420,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,180,1314,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1612869278\"><original attribute_id=\"13421\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',13421,'ger-DE',5,0,'',1);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,180,1314,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1612869278\"><original attribute_id=\"13421\" attribute_version=\"1\" attribute_language=\"ger-DE\"/></ezimage>\n','ezimage',13421,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,364,1318,0,NULL,'Neue News','ezstring',13464,'ger-DE',4,0,'neue news',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,364,1318,0,NULL,'Neue News','ezstring',13464,'ger-DE',4,0,'neue news',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,364,1318,0,NULL,'Rapsfest','ezstring',13464,'ger-DE',4,0,'rapsfest',3);
@@ -3394,22 +3382,40 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,577,1350,0,1045487555,'<?xml v
 INSERT INTO `ezcontentobject_attribute` VALUES (0,578,1350,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"wire-2018-11-27-at-8_16-am.jpg\" suffix=\"jpg\" basename=\"wire-2018-11-27-at-8_16-am\" dirpath=\"var/site/storage/images/jac-example/startseite/bilder-aus-stralsund/wire-2018-11-27-at-8_16-am/13802-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/bilder-aus-stralsund/wire-2018-11-27-at-8_16-am/13802-1-ger-DE/wire-2018-11-27-at-8_16-am.jpg\" original_filename=\"Wire 2018-11-27 at 8_16 AM.jpeg\" mime_type=\"image/jpeg\" width=\"1080\" height=\"810\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1621257751\"><original attribute_id=\"13802\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"810\" Width=\"1080\" IsColor=\"1\" ByteOrderMotorola=\"1\"><array name=\"ifd0\"><item key=\"Orientation\" base64=\"1\">MQ==</item><item key=\"XResolution\" base64=\"1\">MS8x</item><item key=\"YResolution\" base64=\"1\">MS8x</item><item key=\"ResolutionUnit\" base64=\"1\">MQ==</item><item key=\"YCbCrPositioning\" base64=\"1\">MQ==</item></array></information><alias name=\"small\" filename=\"wire-2018-11-27-at-8_16-am_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/bilder-aus-stralsund/wire-2018-11-27-at-8_16-am/13802-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/bilder-aus-stralsund/wire-2018-11-27-at-8_16-am/13802-1-ger-DE/wire-2018-11-27-at-8_16-am_small.jpg\" mime_type=\"image/jpeg\" width=\"100\" height=\"75\" alias_key=\"1455834182\" timestamp=\"1747755115\" is_valid=\"1\"/></ezimage>\n','ezimage',13802,'ger-DE',4,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1352,0,NULL,'Kopfbild 1','ezstring',13806,'ger-DE',5,0,'kopfbild 1',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1352,0,NULL,'Kopfbild 1','ezstring',13806,'ger-DE',5,0,'kopfbild 1',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1352,0,NULL,'Kopfbild 1','ezstring',13806,'ger-DE',5,0,'kopfbild 1',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1352,0,NULL,'Kopfbild 1','ezstring',13806,'ger-DE',5,0,'kopfbild 1',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,339,1352,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"kopfbild-1.jpg\" suffix=\"jpg\" basename=\"kopfbild-1\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1.jpg\" original_filename=\"Wire 2018-03-20 at 3_04 PM.jpeg\" mime_type=\"image/jpeg\" width=\"2405\" height=\"872\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1621258143\"><original attribute_id=\"13807\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"872\" Width=\"2405\" IsColor=\"1\"/><alias name=\"large\" filename=\"kopfbild-1_large.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_large.jpg\" mime_type=\"image/jpeg\" width=\"300\" height=\"109\" alias_key=\"2641345450\" timestamp=\"1747071861\" is_valid=\"1\"/><alias name=\"small\" filename=\"kopfbild-1_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_small.jpg\" mime_type=\"image/jpeg\" width=\"100\" height=\"36\" alias_key=\"1455834182\" timestamp=\"1747047696\" is_valid=\"1\"/><alias name=\"medium\" filename=\"kopfbild-1_medium.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_medium.jpg\" mime_type=\"image/jpeg\" width=\"200\" height=\"73\" alias_key=\"1201168738\" timestamp=\"1621259691\" is_valid=\"1\"/></ezimage>\n','ezimage',13807,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,339,1352,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"kopfbild-1.jpg\" suffix=\"jpg\" basename=\"kopfbild-1\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1.jpg\" original_filename=\"Wire 2018-03-20 at 3_04 PM.jpeg\" mime_type=\"image/jpeg\" width=\"2405\" height=\"872\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1621258143\"><original attribute_id=\"13807\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"872\" Width=\"2405\" IsColor=\"1\"/><alias name=\"large\" filename=\"kopfbild-1_large.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_large.jpg\" mime_type=\"image/jpeg\" width=\"300\" height=\"109\" alias_key=\"2641345450\" timestamp=\"1747071861\" is_valid=\"1\"/><alias name=\"small\" filename=\"kopfbild-1_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_small.jpg\" mime_type=\"image/jpeg\" width=\"100\" height=\"36\" alias_key=\"1455834182\" timestamp=\"1770392854\" is_valid=\"1\"/><alias name=\"medium\" filename=\"kopfbild-1_medium.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_medium.jpg\" mime_type=\"image/jpeg\" width=\"200\" height=\"73\" alias_key=\"1201168738\" timestamp=\"1747152549\" is_valid=\"1\"/></ezimage>\n','ezimage',13807,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,339,1352,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"kopfbild-1.jpg\" suffix=\"jpg\" basename=\"kopfbild-1\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1.jpg\" original_filename=\"Wire 2018-03-20 at 3_04 PM.jpeg\" mime_type=\"image/jpeg\" width=\"2405\" height=\"872\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1621258143\"><original attribute_id=\"13807\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"872\" Width=\"2405\" IsColor=\"1\"/><alias name=\"large\" filename=\"kopfbild-1_large.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_large.jpg\" mime_type=\"image/jpeg\" width=\"300\" height=\"109\" alias_key=\"2641345450\" timestamp=\"1747071861\" is_valid=\"1\"/><alias name=\"small\" filename=\"kopfbild-1_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_small.jpg\" mime_type=\"image/jpeg\" width=\"100\" height=\"36\" alias_key=\"1455834182\" timestamp=\"1770392854\" is_valid=\"1\"/><alias name=\"medium\" filename=\"kopfbild-1_medium.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_medium.jpg\" mime_type=\"image/jpeg\" width=\"200\" height=\"73\" alias_key=\"1201168738\" timestamp=\"1747152549\" is_valid=\"1\"/></ezimage>\n','ezimage',13807,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,339,1352,0,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"1\" filename=\"kopfbild-1.jpg\" suffix=\"jpg\" basename=\"kopfbild-1\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1.jpg\" original_filename=\"Wire 2018-03-20 at 3_04 PM.jpeg\" mime_type=\"image/jpeg\" width=\"2405\" height=\"872\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1621258143\"><original attribute_id=\"13807\" attribute_version=\"1\" attribute_language=\"ger-DE\"/><information Height=\"872\" Width=\"2405\" IsColor=\"1\"/><alias name=\"large\" filename=\"kopfbild-1_large.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_large.jpg\" mime_type=\"image/jpeg\" width=\"300\" height=\"109\" alias_key=\"2641345450\" timestamp=\"1747071861\" is_valid=\"1\"/><alias name=\"small\" filename=\"kopfbild-1_small.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_small.jpg\" mime_type=\"image/jpeg\" width=\"100\" height=\"36\" alias_key=\"1455834182\" timestamp=\"1770392854\" is_valid=\"1\"/><alias name=\"medium\" filename=\"kopfbild-1_medium.jpg\" suffix=\"jpg\" dirpath=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE\" url=\"var/site/storage/images/jac-example/startseite/kopfbild-1/13807-1-ger-DE/kopfbild-1_medium.jpg\" mime_type=\"image/jpeg\" width=\"200\" height=\"73\" alias_key=\"1201168738\" timestamp=\"1747152549\" is_valid=\"1\"/></ezimage>\n','ezimage',13807,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,338,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',13808,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,338,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Kurze Beschreibung 1</paragraph></section>\n','ezxmltext',13808,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,338,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Kurze Beschreibung 1</paragraph></section>\n','ezxmltext',13808,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,338,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Kurze Beschreibung 1</paragraph></section>\n','ezxmltext',13808,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,333,1352,0,0,'','ezurl',13809,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,333,1352,0,0,'','ezurl',13809,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,333,1352,0,0,'','ezurl',13809,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,333,1352,0,0,'','ezurl',13809,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,334,1352,0,NULL,'','ezobjectrelation',13810,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,334,1352,0,NULL,'','ezobjectrelation',13810,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,334,1352,0,NULL,'','ezobjectrelation',13810,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,334,1352,0,NULL,'','ezobjectrelation',13810,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,697,1352,0,0,'','ezboolean',13811,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,697,1352,0,0,'','ezboolean',13811,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,697,1352,0,0,'','ezboolean',13811,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,697,1352,0,0,'','ezboolean',13811,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,335,1352,0,NULL,'','ezstring',13812,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,335,1352,0,NULL,'','ezstring',13812,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,335,1352,0,NULL,'','ezstring',13812,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,335,1352,0,NULL,'','ezstring',13812,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,660,1352,0,NULL,'','ezstring',13813,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,660,1352,0,NULL,'','ezstring',13813,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,660,1352,0,NULL,'','ezstring',13813,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,660,1352,0,NULL,'','ezstring',13813,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,761,1352,0,NULL,'','ezobjectrelation',13814,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,761,1352,0,NULL,'','ezobjectrelation',13814,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,761,1352,0,NULL,'','ezobjectrelation',13814,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,761,1352,0,NULL,'','ezobjectrelation',13814,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1353,0,NULL,'Kopfbild - Stralsund Mohle','ezstring',13815,'ger-DE',5,0,'kopfbild - stralsund mohle',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1353,0,NULL,'Kopfbild 2','ezstring',13815,'ger-DE',5,0,'kopfbild 2',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,336,1353,0,NULL,'Kopfbild 2','ezstring',13815,'ger-DE',5,0,'kopfbild 2',3);
@@ -4975,6 +4981,8 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,761,1406,0,NULL,'','ezobjectre
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,193,NULL,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',14352,'eng-GB',3,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1352,NULL,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',14353,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Text im Header 1</paragraph></section>\n','ezxmltext',14353,'ger-DE',5,0,'',3);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Text im Header 1</paragraph></section>\n','ezxmltext',14353,'ger-DE',5,0,'',4);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1352,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Text im Header 1</paragraph></section>\n','ezxmltext',14353,'ger-DE',5,0,'',5);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1353,NULL,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',14354,'ger-DE',5,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1353,NULL,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',14354,'ger-DE',5,0,'',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1441,1353,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph>Text im Header 2</paragraph></section>\n','ezxmltext',14354,'ger-DE',5,0,'',3);
@@ -9165,7 +9173,7 @@ CREATE TABLE `ezcontentobject_link` (
   PRIMARY KEY (`id`),
   KEY `ezco_link_from` (`from_contentobject_id`,`from_contentobject_version`,`contentclassattribute_id`),
   KEY `ezco_link_to_co_id` (`to_contentobject_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4049 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4052 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9357,7 +9365,7 @@ CREATE TABLE `ezcontentobject_name` (
   KEY `ezcontentobject_name_cov_id` (`content_version`),
   KEY `ezcontentobject_name_lang_id` (`language_id`),
   KEY `ezcontentobject_name_name` (`name`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -9427,7 +9435,7 @@ INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',5,173,3,'Netgen Media Site -
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',5,173,4,'Cookie Richtlinie - [COOKIE POLICY]','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',10,174,4,'JAC Example','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,177,5,'Allgemeiner Inhalt','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,189,5,'JAC Editor','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,189,5,'Project Editor','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',1,190,2,'Showcase','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',2,190,2,'Showcase','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,190,4,'Showcase','ger-DE');
@@ -9455,10 +9463,8 @@ INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,248,5,'BaseMenu','ger-DE')
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,248,5,'Basis-Menü','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',3,248,2,'Base menu','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,248,5,'Basis-Menü','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,455,5,'JAC Admin','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,455,5,'JAC Admin','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,457,5,'Axel Thiessenhusen','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,457,5,'Axel Thiessenhusen','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,455,5,'Project Admin','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,457,5,'Example 01 Editor 01','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,484,5,'Editor Layouts','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,484,5,'Redakteure Layouts','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',27,710,4,'Startseite','ger-DE');
@@ -9486,8 +9492,8 @@ INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',7,1239,4,'Aktuelles','ger-DE
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',8,1239,4,'Beispiele 1 KT','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',9,1239,4,'Beispiele 1','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1251,4,'Kirchberg-Ein-Mann-gibt-Portrait','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1312,5,'Norman Pappisch (Admin)','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1314,5,'Norman Pappisch (Editor)','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,1314,5,'Project Editor User (Editor)','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1318,4,'Neue News','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,1318,4,'Neue News','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,1318,4,'Rapsfest','ger-DE');
@@ -9521,6 +9527,8 @@ INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1349,4,'Wire 2018-10-17 at
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1350,4,'Wire 2018-11-27 at 8_16 AM','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,1352,5,'Kopfbild 1','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,1352,5,'Kopfbild 1','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',4,1352,5,'Kopfbild 1','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',5,1352,5,'Kopfbild 1','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',1,1353,5,'Kopfbild - Stralsund Mohle','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',2,1353,5,'Kopfbild 2','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,1353,5,'Kopfbild 2','ger-DE');
@@ -10100,7 +10108,7 @@ CREATE TABLE `ezcontentobject_trash` (
   KEY `ezcobj_trash_p_node_id` (`parent_node_id`),
   KEY `ezcobj_trash_path` (`path_string`(191)),
   KEY `ezcobj_trash_path_ident` (`path_identification_string`(50))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10145,7 +10153,7 @@ CREATE TABLE `ezcontentobject_tree` (
   KEY `ezcontentobject_tree_path` (`path_string`(191)),
   KEY `ezcontentobject_tree_path_ident` (`path_identification_string`(50)),
   KEY `modified_subnode` (`modified_subnode`)
-) ENGINE=InnoDB AUTO_INCREMENT=1558 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1558 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10154,12 +10162,12 @@ CREATE TABLE `ezcontentobject_tree` (
 
 LOCK TABLES `ezcontentobject_tree` WRITE;
 /*!40000 ALTER TABLE `ezcontentobject_tree` DISABLE KEYS */;
-INSERT INTO `ezcontentobject_tree` VALUES (0,1,1,0,0,0,1,1771073631,1,1,'','/1/',0,'629709ba256fe317c3ddcee35453a96a',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (61,1,101,1,0,0,2,1771073631,2,1,'','/1/2/',0,'f3e90596361e31d496d4026eb624c983',8,1);
-INSERT INTO `ezcontentobject_tree` VALUES (4,1,2,1,0,0,5,1620739357,5,1,'users','/1/5/',0,'3f6d92f8044aed134f32153517850f5a',8,1);
+INSERT INTO `ezcontentobject_tree` VALUES (0,1,1,0,0,0,1,1771354696,1,1,'','/1/',0,'629709ba256fe317c3ddcee35453a96a',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (61,1,101,1,0,0,2,1771342840,2,1,'','/1/2/',0,'f3e90596361e31d496d4026eb624c983',8,1);
+INSERT INTO `ezcontentobject_tree` VALUES (4,1,2,1,0,0,5,1771354696,5,1,'users','/1/5/',0,'3f6d92f8044aed134f32153517850f5a',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (11,1,2,2,0,0,12,1620726322,12,5,'users/members','/1/5/12/',20,'a66e8445a6726eed1a20768a32a7c818',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (12,1,2,2,0,0,13,1620726367,13,5,'users/administrator_users','/1/5/13/',50,'769380b7aa94541679167eab817ca893',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (13,1,2,2,0,0,14,1620739357,14,5,'users/editors','/1/5/14/',30,'f7dda2854fc68f7c8455d9cb14bd04a9',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (12,1,2,2,0,0,13,1771354640,13,5,'users/administrator_users','/1/5/13/',50,'769380b7aa94541679167eab817ca893',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (13,1,2,2,0,0,14,1771354696,14,5,'users/editors','/1/5/14/',30,'f7dda2854fc68f7c8455d9cb14bd04a9',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (14,1,9,3,0,0,15,1606750724,15,13,'users/administrator_users/administrator_user','/1/5/13/15/',0,'e5161a99f733200b9ed4e80f9c16187b',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (41,1,1,1,0,0,43,1622643985,43,1,'media','/1/43/',0,'75c715a51699d2d309a924eca6a95145',9,1);
 INSERT INTO `ezcontentobject_tree` VALUES (42,1,3,2,0,0,44,1620726461,44,5,'users/anonymous_users','/1/5/44/',10,'4fdf0072da953bb276c0c7e0141c5c9b',9,1);
@@ -10174,9 +10182,9 @@ INSERT INTO `ezcontentobject_tree` VALUES (63,1,69,3,0,0,65,1771073631,65,807,'v
 INSERT INTO `ezcontentobject_tree` VALUES (84,1,3,2,0,0,85,1620739066,85,43,'media/banners','/1/43/85/',6,'34f42ccb142b1dd46c020a49c3d650f8',9,1);
 INSERT INTO `ezcontentobject_tree` VALUES (168,1,1,2,0,0,166,1588174112,166,43,'media/menu_items','/1/43/166/',5,'315ad5948c74c87826f574f129440bdd',9,1);
 INSERT INTO `ezcontentobject_tree` VALUES (173,1,5,3,0,0,167,1620727952,167,807,'verwaltung/netgen_media_site','/1/2/807/167/',1010,'190a75b271d6e197ab013726fd2fa9ed',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (174,1,10,2,0,0,168,1770373266,168,2,'jac_example','/1/2/168/',0,'32cedf9bfce4f5822813a93c700efa3f',8,1);
+INSERT INTO `ezcontentobject_tree` VALUES (174,1,10,2,0,0,168,1771342840,168,2,'jac_example','/1/2/168/',0,'32cedf9bfce4f5822813a93c700efa3f',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (177,1,1,2,0,0,171,1622643985,171,43,'media/allgemeiner_inhalt','/1/43/171/',0,'168b72c1c70deda5f624159cea8e7d1d',9,1);
-INSERT INTO `ezcontentobject_tree` VALUES (189,1,1,3,0,0,175,1574961985,175,14,'users/editors/jac_editor','/1/5/14/175/',0,'957674258fa7e355193352b4a0ac6eb2',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (189,1,2,3,0,0,175,1771354696,175,14,'users/editors/project_editor','/1/5/14/175/',0,'957674258fa7e355193352b4a0ac6eb2',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (190,1,2,3,0,0,176,1770373266,176,168,'jac_example/showcase','/1/2/168/176/',100,'9164b835555d8c9d448a249acc74588f',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (191,1,1,4,0,0,177,1770373266,177,176,'jac_example/showcase/article_test2','/1/2/168/176/177/',0,'8ba6c0c5e4fdbc4f033b0792152d3f2b',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (192,1,1,4,0,0,178,1614854307,178,176,'jac_example/showcase/audio_test','/1/2/168/176/178/',0,'2244d0761e496a02e4fff8e602303767',1,1);
@@ -10199,12 +10207,12 @@ INSERT INTO `ezcontentobject_tree` VALUES (208,1,1,4,0,0,194,1614854307,194,176,
 INSERT INTO `ezcontentobject_tree` VALUES (209,1,1,4,0,0,195,1614854307,195,176,'jac_example/showcase/image_test','/1/2/168/176/195/',0,'cd1699f8c3ab1fd22d0823c3dc0cdf12',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (210,1,1,4,0,0,196,1614854307,196,176,'jac_example/showcase/file_test','/1/2/168/176/196/',17,'c4afe58f6cb617c39ce002be32ec3be9',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (248,1,3,3,0,0,242,1588174112,242,166,'media/menu_items/basis_menue','/1/43/166/242/',0,'1d79759710764a81f6736add8a558732',9,1);
-INSERT INTO `ezcontentobject_tree` VALUES (455,1,2,3,0,0,467,1606750763,467,13,'users/administrator_users/jac_admin','/1/5/13/467/',0,'f5d36e841607cec49e6d6fee579a98c4',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (457,1,2,3,0,0,469,1576498104,469,14,'users/editors/axel_thiessenhusen','/1/5/14/469/',0,'f6d1d0219999000fec2ae23c1d51e0bd',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (484,1,2,2,0,0,492,1620726569,492,5,'users/redakteure_layouts','/1/5/492/',40,'12f79823c71bb55a85389f901bd959d6',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (457,1,2,3,0,0,469,1576668704,493,492,'users/redakteure_layouts/axel_thiessenhusen','/1/5/492/493/',0,'319c5a2faec7ced1542dfa52dcdf2006',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (189,1,1,3,0,0,175,1576670032,496,492,'users/redakteure_layouts/jac_editor','/1/5/492/496/',0,'96b15b8774fa1863536cf497d1120237',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (710,1,28,3,0,0,779,1753715405,779,168,'jac_example/startseite','/1/2/168/779/',0,'8dcb3260bbe5cdbec567074cdb229522',8,1);
+INSERT INTO `ezcontentobject_tree` VALUES (455,1,3,3,0,0,467,1771354640,467,13,'users/administrator_users/project_admin','/1/5/13/467/',0,'f5d36e841607cec49e6d6fee579a98c4',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (457,1,3,3,0,0,469,1771354503,469,14,'users/editors/example_01_editor_01','/1/5/14/469/',0,'f6d1d0219999000fec2ae23c1d51e0bd',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (484,1,2,2,0,0,492,1771354696,492,5,'users/redakteure_layouts','/1/5/492/',40,'12f79823c71bb55a85389f901bd959d6',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (457,1,3,3,0,0,469,1771354503,493,492,'users/redakteure_layouts/example_01_editor_01','/1/5/492/493/',0,'319c5a2faec7ced1542dfa52dcdf2006',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (189,1,2,3,0,0,175,1771354696,496,492,'users/redakteure_layouts/project_editor','/1/5/492/496/',0,'96b15b8774fa1863536cf497d1120237',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (710,1,28,3,0,0,779,1771342840,779,168,'jac_example/startseite','/1/2/168/779/',0,'8dcb3260bbe5cdbec567074cdb229522',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (738,1,1,2,0,0,807,1771073631,807,2,'verwaltung','/1/2/807/',1000,'73e7be77f39ca72290635324c03745ec',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (740,1,5,3,0,0,809,1662471025,809,168,'jac_example/datenschutzerklaerung','/1/2/168/809/',1010,'14c15099c0bcc7860b6e7e9b6d346072',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (741,1,9,3,0,0,810,1621256783,810,168,'jac_example/impressum_und_kontakt','/1/2/168/810/',1000,'a4b0c562db1f0f091953e9c24e471c3d',2,0);
@@ -10214,9 +10222,7 @@ INSERT INTO `ezcontentobject_tree` VALUES (1205,1,3,4,0,0,1293,1621260158,1293,1
 INSERT INTO `ezcontentobject_tree` VALUES (1206,1,3,4,0,0,1294,1607684791,1294,1292,'verwaltung/verweise_in_der_kopfzeile/veranstaltungen','/1/2/807/1292/1294/',10,'6c39517faf560b52a1389ebce4990433',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (1239,1,9,3,0,0,1334,1755810785,1334,168,'jac_example/beispiele_1','/1/2/168/1334/',10,'085d67ae5e56609880bb50f7b8a749df',8,1);
 INSERT INTO `ezcontentobject_tree` VALUES (1251,1,1,3,0,0,1345,1607510486,1345,51,'media/images/kirchberg_ein_mann_gibt_portrait','/1/43/51/1345/',0,'6f868d838a127a7ec0be3da03d274be3',2,0);
-INSERT INTO `ezcontentobject_tree` VALUES (1312,1,1,3,0,0,1406,1612868378,1406,13,'users/administrator_users/norman_pappisch_admin','/1/5/13/1406/',0,'11131c23e9cecd0dba76260274e3202a',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (1314,1,1,3,0,0,1408,1612869311,1408,14,'users/editors/norman_pappisch_editor','/1/5/14/1408/',0,'20e8d165ddb2b8ecfa088a1bdbf2e6ed',1,1);
-INSERT INTO `ezcontentobject_tree` VALUES (1314,1,1,3,0,0,1408,1612869325,1409,492,'users/redakteure_layouts/norman_pappisch_editor','/1/5/492/1409/',0,'80c60045991541466105dcac4ae21a29',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (1314,1,2,3,0,0,1408,1771354588,1408,14,'users/editors/project_editor_user_editor','/1/5/14/1408/',0,'20e8d165ddb2b8ecfa088a1bdbf2e6ed',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (1318,1,8,5,0,0,1413,1753691329,1413,1512,'jac_example/beispiele_2/jahreshighlights/rapsfest','/1/2/168/1511/1512/1413/',10,'fd4b3b5027bafa56aa0562e35dddce69',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (1326,1,1,3,0,0,1421,1614962071,1421,51,'media/images/img_0830','/1/43/51/1421/',0,'00044ab90b4d1e722686f6743d1bf9bf',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (1327,1,1,3,0,0,1422,1614962071,1422,51,'media/images/img_0513','/1/43/51/1422/',0,'ecd85f18273abf244315247189d08908',2,0);
@@ -10233,7 +10239,7 @@ INSERT INTO `ezcontentobject_tree` VALUES (1347,1,1,5,0,0,1439,1621257750,1439,1
 INSERT INTO `ezcontentobject_tree` VALUES (1348,1,1,5,0,0,1440,1621257751,1440,1437,'jac_example/startseite/galerie_startseite/wire_2019_10_04_at_7_57_am','/1/2/168/779/1437/1440/',30,'820a0e8fa399602e0c75cf4dba0f0aa6',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (1349,1,1,5,0,0,1441,1621257751,1441,1437,'jac_example/startseite/galerie_startseite/wire_2018_10_17_at_11_01_am','/1/2/168/779/1437/1441/',40,'f7c61b8d787c5388b856c3fee65a1355',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (1350,1,1,5,0,0,1442,1621257751,1442,1437,'jac_example/startseite/galerie_startseite/wire_2018_11_27_at_8_16_am','/1/2/168/779/1437/1442/',81,'c8f16f7df17378de58f6bef4379935bf',2,0);
-INSERT INTO `ezcontentobject_tree` VALUES (1352,1,3,4,0,0,1444,1747152621,1444,779,'jac_example/startseite/kopfbild_1','/1/2/168/779/1444/',10,'2cdd53b8c84136766fe27e14d0072146',1,1);
+INSERT INTO `ezcontentobject_tree` VALUES (1352,1,5,4,0,0,1444,1771342840,1444,779,'jac_example/startseite/kopfbild_1','/1/2/168/779/1444/',10,'2cdd53b8c84136766fe27e14d0072146',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (1353,1,3,4,0,0,1445,1747152672,1445,779,'jac_example/startseite/kopfbild_2','/1/2/168/779/1445/',20,'4868068e475631668fdd5c0b46c01c6f',1,1);
 INSERT INTO `ezcontentobject_tree` VALUES (1354,1,6,5,0,0,1446,1753691560,1446,1512,'jac_example/beispiele_2/jahreshighlights/hafentage','/1/2/168/1511/1512/1446/',20,'6877a9d0da0bdd74a39af6d1b83c6b17',2,0);
 INSERT INTO `ezcontentobject_tree` VALUES (1355,1,1,5,0,0,1447,1621258991,1447,1437,'jac_example/startseite/galerie_startseite/wire_2019_02_18_at_8_351_am','/1/2/168/779/1437/1447/',55,'ec0db5cc4bf6d39a1f0fc8ee1bb1c398',2,0);
@@ -10347,7 +10353,7 @@ CREATE TABLE `ezcontentobject_version` (
   KEY `ezcobj_version_status` (`status`),
   KEY `idx_object_version_objver` (`contentobject_id`,`version`),
   KEY `ezcontobj_version_obj_status` (`contentobject_id`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=6288 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6296 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10374,7 +10380,6 @@ INSERT INTO `ezcontentobject_version` VALUES (61,1453475428,14,1584,2,3,14534754
 INSERT INTO `ezcontentobject_version` VALUES (10,1453475780,14,1586,2,3,1453475784,1,0,3,0);
 INSERT INTO `ezcontentobject_version` VALUES (14,1472411997,14,2038,2,3,1472412012,3,0,6,0);
 INSERT INTO `ezcontentobject_version` VALUES (177,1574957332,14,2743,4,5,1574957344,1,0,1,0);
-INSERT INTO `ezcontentobject_version` VALUES (189,1574961849,14,2757,4,5,1574961985,1,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (61,1574963910,14,2759,2,3,1574963921,3,0,99,0);
 INSERT INTO `ezcontentobject_version` VALUES (14,1575010504,14,2760,2,3,1575010515,3,0,7,0);
 INSERT INTO `ezcontentobject_version` VALUES (190,1551871384,14,2761,2,3,1551871400,3,0,1,0);
@@ -10401,10 +10406,7 @@ INSERT INTO `ezcontentobject_version` VALUES (210,1551879463,14,2781,2,3,1551879
 INSERT INTO `ezcontentobject_version` VALUES (248,1575363033,14,2872,4,5,1575363040,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (248,1575479138,14,2891,4,5,1575479149,3,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (248,1575479159,14,2892,2,7,1575479166,1,0,3,0);
-INSERT INTO `ezcontentobject_version` VALUES (455,1576485431,14,3124,4,5,1576485502,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (14,1576485530,14,3125,2,3,1576485549,3,0,8,0);
-INSERT INTO `ezcontentobject_version` VALUES (457,1576492926,455,3127,4,5,1576492981,3,0,1,0);
-INSERT INTO `ezcontentobject_version` VALUES (457,1576498025,457,3137,4,5,1576498104,1,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (484,1576668320,455,3241,4,5,1576668329,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (61,1576830946,189,3286,4,7,1576830955,3,0,100,0);
 INSERT INTO `ezcontentobject_version` VALUES (738,1596113609,455,4180,4,5,1596113618,1,0,1,0);
@@ -10415,15 +10417,13 @@ INSERT INTO `ezcontentobject_version` VALUES (1206,1605708504,455,5041,4,5,16057
 INSERT INTO `ezcontentobject_version` VALUES (1205,1605709104,455,5042,4,5,1605709111,3,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (1206,1605793795,457,5064,4,5,1605793818,3,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (14,1606750710,455,5155,2,3,1606750724,1,0,9,0);
-INSERT INTO `ezcontentobject_version` VALUES (455,1606750729,455,5156,4,5,1606750763,1,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (1239,1607339300,455,5191,4,4,1607339308,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (1239,1607353677,457,5192,4,4,1607354271,3,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (1251,1607510486,0,5241,4,5,1607510486,1,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (1239,1607531016,457,5309,4,4,1607531099,3,0,3,0);
 INSERT INTO `ezcontentobject_version` VALUES (1239,1607684196,457,5354,4,4,1607684212,3,0,4,0);
 INSERT INTO `ezcontentobject_version` VALUES (1206,1607684772,457,5356,4,5,1607684791,1,0,3,0);
-INSERT INTO `ezcontentobject_version` VALUES (1312,1585652368,455,5650,4,5,1585652428,1,0,1,0);
-INSERT INTO `ezcontentobject_version` VALUES (1314,1612869277,455,5657,4,5,1612869311,1,0,1,0);
+INSERT INTO `ezcontentobject_version` VALUES (1314,1612869277,455,5657,4,5,1612869311,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (174,1614758813,455,5658,4,5,1614758829,1,0,10,0);
 INSERT INTO `ezcontentobject_version` VALUES (1318,1614961448,455,5665,4,5,1614961469,3,0,1,0);
 INSERT INTO `ezcontentobject_version` VALUES (1326,1614962071,455,5674,4,5,1614962071,1,0,1,0);
@@ -10547,7 +10547,7 @@ INSERT INTO `ezcontentobject_version` VALUES (1318,1747048844,455,5902,4,5,17470
 INSERT INTO `ezcontentobject_version` VALUES (1406,1747072592,455,5905,4,5,1747072592,3,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (1406,1747072686,455,5906,4,5,1747072723,3,0,3,0);
 INSERT INTO `ezcontentobject_version` VALUES (1406,1747144485,455,5907,4,5,1747144659,1,0,4,0);
-INSERT INTO `ezcontentobject_version` VALUES (1352,1747152549,455,5908,4,5,1747152620,1,0,3,0);
+INSERT INTO `ezcontentobject_version` VALUES (1352,1747152549,455,5908,4,5,1747152620,3,0,3,0);
 INSERT INTO `ezcontentobject_version` VALUES (1353,1747152638,455,5909,4,5,1747152672,1,0,3,0);
 INSERT INTO `ezcontentobject_version` VALUES (1361,1747152700,455,5910,4,5,1747152744,1,0,2,0);
 INSERT INTO `ezcontentobject_version` VALUES (1404,1747436934,455,5912,4,5,1747436943,3,0,12,0);
@@ -10815,6 +10815,12 @@ INSERT INTO `ezcontentobject_version` VALUES (1403,1755810769,455,6279,4,5,17558
 INSERT INTO `ezcontentobject_version` VALUES (1453,1761138098,457,6280,4,5,1761138178,3,0,33,0);
 INSERT INTO `ezcontentobject_version` VALUES (1453,1761138255,457,6281,4,5,1761138263,1,0,34,0);
 INSERT INTO `ezcontentobject_version` VALUES (63,1771073608,14,6287,2,7,1771073631,1,0,69,0);
+INSERT INTO `ezcontentobject_version` VALUES (1352,1771342385,14,6288,4,5,1771342400,3,0,4,0);
+INSERT INTO `ezcontentobject_version` VALUES (1352,1771342836,14,6290,4,5,1771342840,1,0,5,0);
+INSERT INTO `ezcontentobject_version` VALUES (457,1771354465,14,6292,4,5,1771354503,1,0,3,0);
+INSERT INTO `ezcontentobject_version` VALUES (1314,1771354573,14,6293,4,5,1771354588,1,0,2,0);
+INSERT INTO `ezcontentobject_version` VALUES (455,1771354631,14,6294,4,5,1771354640,1,0,3,0);
+INSERT INTO `ezcontentobject_version` VALUES (189,1771354654,14,6295,4,5,1771354696,1,0,2,0);
 /*!40000 ALTER TABLE `ezcontentobject_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -10836,7 +10842,7 @@ CREATE TABLE `ezcurrencydata` (
   `symbol` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ezcurrencydata_code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10859,7 +10865,7 @@ CREATE TABLE `ezdiscountrule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10885,7 +10891,7 @@ CREATE TABLE `ezdiscountsubrule` (
   `limitation` char(1) DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10909,7 +10915,7 @@ CREATE TABLE `ezdiscountsubrule_value` (
   `issection` int(11) NOT NULL DEFAULT 0,
   `value` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`discountsubrule_id`,`value`,`issection`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10935,7 +10941,7 @@ CREATE TABLE `ezenumobjectvalue` (
   `enumid` int(11) NOT NULL DEFAULT 0,
   `enumvalue` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`contentobject_attribute_id`,`contentobject_attribute_version`,`enumid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10963,7 +10969,7 @@ CREATE TABLE `ezenumvalue` (
   `placement` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`contentclass_attribute_id`,`contentclass_attribute_version`),
   KEY `ezenumvalue_co_cl_attr_id_co_class_att_ver` (`contentclass_attribute_id`,`contentclass_attribute_version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -10989,7 +10995,7 @@ CREATE TABLE `ezforgot_password` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezforgot_password_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -11017,7 +11023,7 @@ CREATE TABLE `ezgeneral_digest_user_settings` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ezgeneral_digest_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -11044,7 +11050,7 @@ CREATE TABLE `ezgmaplocation` (
   `address` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`contentobject_attribute_id`,`contentobject_version`),
   KEY `latitude_longitude_key` (`latitude`,`longitude`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -11090,7 +11096,7 @@ CREATE TABLE `ezimagefile` (
   PRIMARY KEY (`id`),
   KEY `ezimagefile_coid` (`contentobject_attribute_id`),
   KEY `ezimagefile_file` (`filepath`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=8383 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8383 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13500,7 +13506,7 @@ CREATE TABLE `ezinfocollection` (
   `user_identifier` varchar(34) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ezinfocollection_co_id_created` (`contentobject_id`,`created`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13533,7 +13539,7 @@ CREATE TABLE `ezinfocollection_attribute` (
   KEY `ezinfocollection_attr_co_id` (`contentobject_id`),
   KEY `ezinfocollection_attr_coa_id` (`contentobject_attribute_id`),
   KEY `ezinfocollection_attr_ic_id` (`informationcollection_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13557,7 +13563,7 @@ CREATE TABLE `ezisbn_group` (
   `group_number` int(11) NOT NULL DEFAULT 0,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13793,7 +13799,7 @@ CREATE TABLE `ezisbn_group_range` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `to_number` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -13829,7 +13835,7 @@ CREATE TABLE `ezisbn_registrant_range` (
   `registrant_to` varchar(32) NOT NULL DEFAULT '',
   `to_number` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=927 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=927 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14780,7 +14786,7 @@ CREATE TABLE `ezkeyword` (
   `keyword` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ezkeyword_keyword` (`keyword`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14812,7 +14818,7 @@ CREATE TABLE `ezkeyword_attribute_link` (
   PRIMARY KEY (`id`),
   KEY `ezkeyword_attr_link_kid_oaid` (`keyword_id`,`objectattribute_id`),
   KEY `ezkeyword_attr_link_oaid` (`objectattribute_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14852,7 +14858,7 @@ CREATE TABLE `ezmedia` (
   `version` int(11) NOT NULL DEFAULT 0,
   `width` int(11) DEFAULT NULL,
   PRIMARY KEY (`contentobject_attribute_id`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14882,7 +14888,7 @@ CREATE TABLE `ezmessage` (
   `send_weekday` varchar(50) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14909,7 +14915,7 @@ CREATE TABLE `ezmodule_run` (
   `workflow_process_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ezmodule_run_workflow_process_id_s` (`workflow_process_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14939,7 +14945,7 @@ CREATE TABLE `ezmultipricedata` (
   KEY `ezmultipricedata_coa_id` (`contentobject_attr_id`),
   KEY `ezmultipricedata_coa_version` (`contentobject_attr_version`),
   KEY `ezmultipricedata_currency_code` (`currency_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -14977,7 +14983,7 @@ CREATE TABLE `eznode_assignment` (
   KEY `eznode_assignment_coid_cov` (`contentobject_id`,`contentobject_version`),
   KEY `eznode_assignment_is_main` (`is_main`),
   KEY `eznode_assignment_parent_node` (`parent_node`)
-) ENGINE=InnoDB AUTO_INCREMENT=6333 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6343 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15005,7 +15011,6 @@ INSERT INTO `eznode_assignment` VALUES (61,98,-1,1122,1,2,1,'f3e90596361e31d496d
 INSERT INTO `eznode_assignment` VALUES (10,3,-1,1124,1,2,44,'2cf8343bee7b482bab82b269d8fecd76','0',9,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (14,6,-1,1583,1,2,13,'e5161a99f733200b9ed4e80f9c16187b','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (177,1,0,2265,1,5,43,'168b72c1c70deda5f624159cea8e7d1d','0',9,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (189,1,0,2272,1,2,14,'957674258fa7e355193352b4a0ac6eb2','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (61,99,-1,2274,1,2,1,'f3e90596361e31d496d4026eb624c983','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (14,7,-1,2275,1,2,13,'e5161a99f733200b9ed4e80f9c16187b','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (190,1,0,2276,1,2,168,'9164b835555d8c9d448a249acc74588f','0',8,1,0,0);
@@ -15032,13 +15037,8 @@ INSERT INTO `eznode_assignment` VALUES (210,1,0,2296,1,2,176,'c4afe58f6cb617c39c
 INSERT INTO `eznode_assignment` VALUES (248,1,0,2407,1,2,166,'1d79759710764a81f6736add8a558732','0',9,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (248,2,-1,2432,1,2,166,'1d79759710764a81f6736add8a558732','0',9,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (248,3,-1,2433,1,2,166,'1d79759710764a81f6736add8a558732','0',9,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (455,1,0,2683,1,2,13,'f5d36e841607cec49e6d6fee579a98c4','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (14,8,-1,2684,1,2,13,'e5161a99f733200b9ed4e80f9c16187b','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (457,1,0,2686,1,2,14,'f6d1d0219999000fec2ae23c1d51e0bd','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (457,2,-1,2698,1,2,14,'f6d1d0219999000fec2ae23c1d51e0bd','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (484,1,0,2810,1,2,5,'12f79823c71bb55a85389f901bd959d6','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (457,2,0,2811,0,2,492,'319c5a2faec7ced1542dfa52dcdf2006','0',2,0,0,0);
-INSERT INTO `eznode_assignment` VALUES (189,1,0,2814,0,2,492,'96b15b8774fa1863536cf497d1120237','0',2,0,0,0);
 INSERT INTO `eznode_assignment` VALUES (61,100,-1,2876,1,2,1,'f3e90596361e31d496d4026eb624c983','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (738,1,0,4158,1,5,2,'73e7be77f39ca72290635324c03745ec','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (752,1,0,4178,1,2,51,'1a1b4695bde81f385d45063a709401a7','0',2,0,0,0);
@@ -15048,16 +15048,13 @@ INSERT INTO `eznode_assignment` VALUES (1206,1,0,5090,1,2,1292,'6c39517faf560b52
 INSERT INTO `eznode_assignment` VALUES (1205,2,-1,5091,1,2,1292,'9ddc384ad426aa6967b3b2720ac7dfce','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1206,2,-1,5129,1,2,1292,'6c39517faf560b52a1389ebce4990433','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (14,9,-1,5264,1,2,13,'e5161a99f733200b9ed4e80f9c16187b','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (455,2,-1,5265,1,2,13,'f5d36e841607cec49e6d6fee579a98c4','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1239,1,0,5304,1,2,168,'085d67ae5e56609880bb50f7b8a749df','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1239,2,-1,5305,1,2,168,'085d67ae5e56609880bb50f7b8a749df','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1251,1,0,5356,1,2,51,'6f868d838a127a7ec0be3da03d274be3','0',2,0,0,0);
 INSERT INTO `eznode_assignment` VALUES (1239,3,-1,5424,1,2,168,'085d67ae5e56609880bb50f7b8a749df','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1239,4,-1,5486,1,2,168,'085d67ae5e56609880bb50f7b8a749df','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1206,3,-1,5488,1,2,1292,'6c39517faf560b52a1389ebce4990433','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (1312,1,0,5810,1,2,13,'11131c23e9cecd0dba76260274e3202a','0',1,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1314,1,0,5817,1,2,14,'20e8d165ddb2b8ecfa088a1bdbf2e6ed','0',1,1,0,0);
-INSERT INTO `eznode_assignment` VALUES (1314,1,0,5818,0,2,492,'80c60045991541466105dcac4ae21a29','0',2,0,0,0);
 INSERT INTO `eznode_assignment` VALUES (174,10,-1,5819,1,2,2,'32cedf9bfce4f5822813a93c700efa3f','0',8,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1318,1,0,5831,1,2,803,'fd4b3b5027bafa56aa0562e35dddce69','0',2,0,0,0);
 INSERT INTO `eznode_assignment` VALUES (1326,1,0,5840,1,2,51,'00044ab90b4d1e722686f6743d1bf9bf','0',2,0,0,0);
@@ -15321,6 +15318,14 @@ INSERT INTO `eznode_assignment` VALUES (1403,9,-1,6324,1,2,1334,'73f37525d96b607
 INSERT INTO `eznode_assignment` VALUES (1453,33,-1,6325,1,2,168,'56f2dc8311cc8ebef6c516ab35048247','0',2,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (1453,34,-1,6326,1,2,168,'56f2dc8311cc8ebef6c516ab35048247','0',2,1,0,0);
 INSERT INTO `eznode_assignment` VALUES (63,69,-1,6332,1,2,807,'4b2ab8dca36765c7f893d6c4c20e6972','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (1352,4,-1,6333,1,2,779,'2cdd53b8c84136766fe27e14d0072146','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (1352,5,-1,6335,1,2,779,'2cdd53b8c84136766fe27e14d0072146','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (457,3,-1,6337,1,2,14,'f6d1d0219999000fec2ae23c1d51e0bd','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (457,3,-1,6338,0,2,492,'319c5a2faec7ced1542dfa52dcdf2006','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (1314,2,-1,6339,1,2,14,'20e8d165ddb2b8ecfa088a1bdbf2e6ed','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (455,3,-1,6340,1,2,13,'f5d36e841607cec49e6d6fee579a98c4','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (189,2,-1,6341,1,2,14,'957674258fa7e355193352b4a0ac6eb2','0',1,1,0,0);
+INSERT INTO `eznode_assignment` VALUES (189,2,-1,6342,0,2,492,'96b15b8774fa1863536cf497d1120237','0',1,1,0,0);
 /*!40000 ALTER TABLE `eznode_assignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -15341,7 +15346,7 @@ CREATE TABLE `eznotification` (
   PRIMARY KEY (`id`),
   KEY `eznotification_owner` (`owner_id`),
   KEY `eznotification_owner_is_pending` (`owner_id`,`is_pending`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15368,7 +15373,7 @@ CREATE TABLE `eznotificationcollection` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `transport` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=566 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=566 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15394,7 +15399,7 @@ CREATE TABLE `eznotificationcollection_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `send_date` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15426,7 +15431,7 @@ CREATE TABLE `eznotificationevent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `status` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4313 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4319 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15779,6 +15784,12 @@ INSERT INTO `eznotificationevent` VALUES (1403,9,0,0,'','','','','ezpublish',430
 INSERT INTO `eznotificationevent` VALUES (1453,33,0,0,'','','','','ezpublish',4310,0);
 INSERT INTO `eznotificationevent` VALUES (1453,34,0,0,'','','','','ezpublish',4311,0);
 INSERT INTO `eznotificationevent` VALUES (63,69,0,0,'','','','','ezpublish',4312,0);
+INSERT INTO `eznotificationevent` VALUES (1352,4,0,0,'','','','','ezpublish',4313,0);
+INSERT INTO `eznotificationevent` VALUES (1352,5,0,0,'','','','','ezpublish',4314,0);
+INSERT INTO `eznotificationevent` VALUES (457,3,0,0,'','','','','ezpublish',4315,0);
+INSERT INTO `eznotificationevent` VALUES (1314,2,0,0,'','','','','ezpublish',4316,0);
+INSERT INTO `eznotificationevent` VALUES (455,3,0,0,'','','','','ezpublish',4317,0);
+INSERT INTO `eznotificationevent` VALUES (189,2,0,0,'','','','','ezpublish',4318,0);
 /*!40000 ALTER TABLE `eznotificationevent` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -15797,7 +15808,7 @@ CREATE TABLE `ezoperation_memento` (
   `memento_key` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`memento_key`),
   KEY `ezoperation_memento_memento_key_main` (`memento_key`,`main`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15835,7 +15846,7 @@ CREATE TABLE `ezorder` (
   PRIMARY KEY (`id`),
   KEY `ezorder_is_archived` (`is_archived`),
   KEY `ezorder_is_tmp` (`is_temporary`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15865,7 +15876,7 @@ CREATE TABLE `ezorder_item` (
   PRIMARY KEY (`id`),
   KEY `ezorder_item_order_id` (`order_id`),
   KEY `ezorder_item_type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15887,7 +15898,7 @@ DROP TABLE IF EXISTS `ezorder_nr_incr`;
 CREATE TABLE `ezorder_nr_incr` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15915,7 +15926,7 @@ CREATE TABLE `ezorder_status` (
   KEY `ezorder_status_active` (`is_active`),
   KEY `ezorder_status_name` (`name`(191)),
   KEY `ezorder_status_sid` (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15947,7 +15958,7 @@ CREATE TABLE `ezorder_status_history` (
   KEY `ezorder_status_history_mod` (`modified`),
   KEY `ezorder_status_history_oid` (`order_id`),
   KEY `ezorder_status_history_sid` (`status_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -15972,7 +15983,7 @@ CREATE TABLE `ezpackage` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `version` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16014,7 +16025,7 @@ CREATE TABLE `ezpaymentobject` (
   `status` int(11) NOT NULL DEFAULT 0,
   `workflowprocess_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16051,7 +16062,7 @@ CREATE TABLE `ezpdf_export` (
   `title` varchar(255) DEFAULT NULL,
   `version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16078,7 +16089,7 @@ CREATE TABLE `ezpending_actions` (
   PRIMARY KEY (`id`),
   KEY `ezpending_actions_action` (`action`),
   KEY `ezpending_actions_created` (`created`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16178,7 +16189,7 @@ CREATE TABLE `ezpolicy` (
   PRIMARY KEY (`id`),
   KEY `ezpolicy_original_id` (`original_id`),
   KEY `ezpolicy_role_id` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2948 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2948 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16253,7 +16264,7 @@ CREATE TABLE `ezpolicy_limitation` (
   `policy_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `policy_id` (`policy_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2277 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2277 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16307,7 +16318,7 @@ CREATE TABLE `ezpolicy_limitation_value` (
   PRIMARY KEY (`id`),
   KEY `ezpolicy_limitation_value_val` (`value`(191)),
   KEY `ezpolicy_limit_value_limit_id` (`limitation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8984 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8984 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16410,7 +16421,7 @@ CREATE TABLE `ezpreferences` (
   PRIMARY KEY (`id`),
   KEY `ezpreferences_name` (`name`),
   KEY `ezpreferences_user_id_idx` (`user_id`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16456,7 +16467,7 @@ CREATE TABLE `ezprest_authcode` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`(191)),
   KEY `authcode_client_id` (`client_id`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16482,7 +16493,7 @@ CREATE TABLE `ezprest_authorized_clients` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_user` (`rest_client_id`,`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16514,7 +16525,7 @@ CREATE TABLE `ezprest_clients` (
   `version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `client_id_unique` (`client_id`(191),`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16542,7 +16553,7 @@ CREATE TABLE `ezprest_token` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`(191)),
   KEY `token_client_id` (`client_id`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16565,7 +16576,7 @@ CREATE TABLE `ezproductcategory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16589,7 +16600,7 @@ CREATE TABLE `ezproductcollection` (
   `currency_code` varchar(4) NOT NULL DEFAULT '',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16621,7 +16632,7 @@ CREATE TABLE `ezproductcollection_item` (
   PRIMARY KEY (`id`),
   KEY `ezproductcollection_item_contentobject_id` (`contentobject_id`),
   KEY `ezproductcollection_item_productcollection_id` (`productcollection_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16650,7 +16661,7 @@ CREATE TABLE `ezproductcollection_item_opt` (
   `value` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `ezproductcollection_item_opt_item_id` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16677,7 +16688,7 @@ CREATE TABLE `ezpublishingqueueprocesses` (
   `started` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`ezcontentobject_version_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16703,7 +16714,7 @@ CREATE TABLE `ezrole` (
   `value` char(1) DEFAULT NULL,
   `version` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16748,7 +16759,7 @@ CREATE TABLE `ezrss_export` (
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16780,7 +16791,7 @@ CREATE TABLE `ezrss_export_item` (
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`status`),
   KEY `ezrss_export_rsseid` (`rssexport_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16817,7 +16828,7 @@ CREATE TABLE `ezrss_import` (
   `status` int(11) NOT NULL DEFAULT 0,
   `url` longtext DEFAULT NULL,
   PRIMARY KEY (`id`,`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16846,7 +16857,7 @@ CREATE TABLE `ezscheduled_script` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezscheduled_script_timestamp` (`last_report_timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -16886,7 +16897,7 @@ CREATE TABLE `ezsearch_object_word_link` (
   KEY `ezsearch_object_word_link_integer_value` (`integer_value`),
   KEY `ezsearch_object_word_link_object` (`contentobject_id`),
   KEY `ezsearch_object_word_link_word` (`word_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64244 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64270 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -17016,8 +17027,6 @@ INSERT INTO `ezsearch_object_word_link` VALUES (7,3,42,0,412,'description',0,55,
 INSERT INTO `ezsearch_object_word_link` VALUES (7,3,42,0,414,'description',0,829,12,50,1072180330,2,55,4);
 INSERT INTO `ezsearch_object_word_link` VALUES (7,3,42,0,418,'description',0,690,13,55,1072180330,2,829,4);
 INSERT INTO `ezsearch_object_word_link` VALUES (7,3,42,0,421,'description',0,0,14,829,1072180330,2,690,4);
-INSERT INTO `ezsearch_object_word_link` VALUES (8,4,189,0,1504,'first_name',0,1026,0,0,1574961985,2,895,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,189,0,1507,'last_name',0,0,1,895,1574961985,2,1026,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (762,48,190,0,1638,'teaser_intro',0,825,0,0,1575010771,1,1027,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (762,48,190,0,1641,'teaser_intro',0,1012,1,1027,1575010771,1,825,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (762,48,190,0,1644,'teaser_intro',0,691,2,825,1575010771,1,1012,2);
@@ -18483,10 +18492,7 @@ INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5142,'body',0,1107,
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5144,'body',0,1480,1147,1186,1575010771,1,1107,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5146,'body',0,1481,1148,1107,1575010771,1,1480,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5148,'body',0,1149,1149,1480,1575010771,1,1481,2);
-INSERT INTO `ezsearch_object_word_link` VALUES (8,4,1312,0,5149,'first_name',0,2042,0,0,1612868378,2,2041,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5151,'body',0,310,1150,1481,1575010771,1,1149,2);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1312,0,5152,'last_name',0,2043,1,2041,1612868378,2,2042,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1312,0,5154,'last_name',0,0,2,2042,1612868378,2,2043,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5155,'body',0,1110,1151,1149,1575010771,1,310,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5157,'body',0,1482,1152,310,1575010771,1,1110,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5159,'body',0,1096,1153,1110,1575010771,1,1482,2);
@@ -18512,10 +18518,7 @@ INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5196,'body',0,1082,
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5198,'body',0,1041,1173,1081,1575010771,1,1082,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5199,'body',0,1100,1174,1082,1575010771,1,1041,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5200,'body',0,1101,1175,1041,1575010771,1,1100,2);
-INSERT INTO `ezsearch_object_word_link` VALUES (8,4,1314,0,5201,'first_name',0,2042,0,0,1612869311,2,2041,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5202,'body',0,1486,1176,1100,1575010771,1,1101,2);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1314,0,5203,'last_name',0,1026,1,2041,1612869311,2,2042,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1314,0,5204,'last_name',0,0,2,2042,1612869311,2,1026,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5205,'body',0,1487,1177,1101,1575010771,1,1486,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5206,'body',0,1355,1178,1486,1575010771,1,1487,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (355,44,191,0,5207,'body',0,1429,1179,1487,1575010771,1,1355,2);
@@ -25166,10 +25169,6 @@ INSERT INTO `ezsearch_object_word_link` VALUES (571,80,210,0,12392,'description'
 INSERT INTO `ezsearch_object_word_link` VALUES (571,80,210,0,12393,'description',0,1030,4,825,1575010776,1,3032,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (571,80,210,0,12394,'description',0,3033,5,3032,1575010776,1,1030,2);
 INSERT INTO `ezsearch_object_word_link` VALUES (571,80,210,0,12395,'description',0,0,6,1030,1575010776,1,3033,2);
-INSERT INTO `ezsearch_object_word_link` VALUES (8,4,455,0,12396,'first_name',0,2043,0,0,1576485502,2,895,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,455,0,12397,'last_name',0,0,1,895,1576485502,2,2043,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (8,4,457,0,12398,'first_name',0,1946,0,0,1576492981,2,1945,5);
-INSERT INTO `ezsearch_object_word_link` VALUES (9,4,457,0,12399,'last_name',0,0,1,1945,1576492981,2,1946,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (6,3,484,0,12400,'name',0,3034,0,0,1576668329,2,708,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (6,3,484,0,12401,'name',0,0,1,708,1576668329,2,3034,5);
 INSERT INTO `ezsearch_object_word_link` VALUES (973,117,738,0,12430,'title',0,0,0,0,1596113618,1,3047,4);
@@ -27201,10 +27200,6 @@ INSERT INTO `ezsearch_object_word_link` VALUES (647,95,1380,0,32526,'title',0,43
 INSERT INTO `ezsearch_object_word_link` VALUES (647,95,1380,0,32527,'title',0,4307,3,208,1621316795,1,4306,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (648,95,1380,0,32528,'teaser_intro',0,437,4,4306,1621316795,1,4307,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (1308,95,1380,0,32529,'column_count',3,0,5,4307,1621316795,1,437,1);
-INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,32530,'header_text',0,208,0,0,1621258144,1,45,1);
-INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,32531,'header_text',0,4308,1,45,1621258144,1,208,1);
-INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,32532,'header_text',0,13,2,208,1621258144,1,4308,1);
-INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,32533,'header_text',0,0,3,4308,1621258144,1,13,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1353,0,32534,'header_text',0,208,0,0,1621258376,1,45,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1353,0,32535,'header_text',0,4308,1,45,1621258376,1,208,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1353,0,32536,'header_text',0,257,2,208,1621258376,1,4308,1);
@@ -36844,6 +36839,22 @@ INSERT INTO `ezsearch_object_word_link` VALUES (409,50,63,0,64240,'footer_block'
 INSERT INTO `ezsearch_object_word_link` VALUES (409,50,63,0,64241,'footer_block',0,895,2331,286,1361279467,1,910,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (409,50,63,0,64242,'footer_block',0,4414,2332,910,1361279467,1,895,1);
 INSERT INTO `ezsearch_object_word_link` VALUES (409,50,63,0,64243,'footer_block',0,0,2333,895,1361279467,1,4414,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,64248,'header_text',0,208,0,0,1621258144,1,45,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,64249,'header_text',0,4308,1,45,1621258144,1,208,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,64250,'header_text',0,13,2,208,1621258144,1,4308,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (1441,42,1352,0,64251,'header_text',0,0,3,4308,1621258144,1,13,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (8,4,457,0,64258,'first_name',0,4430,0,0,1576492981,2,896,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (8,4,457,0,64259,'first_name',0,1026,1,896,1576492981,2,4430,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,457,0,64260,'last_name',0,4430,2,4430,1576492981,2,1026,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,457,0,64261,'last_name',0,0,3,1026,1576492981,2,4430,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (8,4,1314,0,64262,'first_name',0,1026,0,0,1612869311,2,4431,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1314,0,64263,'last_name',0,702,1,4431,1612869311,2,1026,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1314,0,64264,'last_name',0,1026,2,1026,1612869311,2,702,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,1314,0,64265,'last_name',0,0,3,702,1612869311,2,1026,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (8,4,455,0,64266,'first_name',0,4432,0,0,1576485502,2,4431,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,455,0,64267,'last_name',0,0,1,4431,1576485502,2,4432,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (8,4,189,0,64268,'first_name',0,1026,0,0,1574961985,2,4431,1);
+INSERT INTO `ezsearch_object_word_link` VALUES (9,4,189,0,64269,'last_name',0,0,1,4431,1574961985,2,1026,1);
 /*!40000 ALTER TABLE `ezsearch_object_word_link` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -36862,7 +36873,7 @@ CREATE TABLE `ezsearch_search_phrase` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ezsearch_search_phrase_phrase` (`phrase`(191)),
   KEY `ezsearch_search_phrase_count` (`phrase_count`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36892,7 +36903,7 @@ CREATE TABLE `ezsearch_word` (
   PRIMARY KEY (`id`),
   KEY `ezsearch_word_obj_count` (`object_count`),
   KEY `ezsearch_word_word_i` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=4430 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4433 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37136,7 +37147,7 @@ INSERT INTO `ezsearch_word` VALUES (691,8,'view');
 INSERT INTO `ezsearch_word` VALUES (692,1,'hauptgruppe');
 INSERT INTO `ezsearch_word` VALUES (700,3,'mehr');
 INSERT INTO `ezsearch_word` VALUES (701,2,'anonymous');
-INSERT INTO `ezsearch_word` VALUES (702,3,'user');
+INSERT INTO `ezsearch_word` VALUES (702,4,'user');
 INSERT INTO `ezsearch_word` VALUES (703,1,'members');
 INSERT INTO `ezsearch_word` VALUES (704,1,'mitglieder');
 INSERT INTO `ezsearch_word` VALUES (705,2,'administrator');
@@ -37326,8 +37337,8 @@ INSERT INTO `ezsearch_word` VALUES (891,4,'00');
 INSERT INTO `ezsearch_word` VALUES (892,2,'netgen');
 INSERT INTO `ezsearch_word` VALUES (893,5,'media');
 INSERT INTO `ezsearch_word` VALUES (894,5,'site');
-INSERT INTO `ezsearch_word` VALUES (895,5,'jac');
-INSERT INTO `ezsearch_word` VALUES (896,6,'example');
+INSERT INTO `ezsearch_word` VALUES (895,3,'jac');
+INSERT INTO `ezsearch_word` VALUES (896,7,'example');
 INSERT INTO `ezsearch_word` VALUES (897,2,'demoseite');
 INSERT INTO `ezsearch_word` VALUES (901,2,'18439');
 INSERT INTO `ezsearch_word` VALUES (902,5,'stralsund');
@@ -37356,7 +37367,7 @@ INSERT INTO `ezsearch_word` VALUES (1012,7,'all');
 INSERT INTO `ezsearch_word` VALUES (1023,7,'15');
 INSERT INTO `ezsearch_word` VALUES (1024,2,'september');
 INSERT INTO `ezsearch_word` VALUES (1025,1,'13');
-INSERT INTO `ezsearch_word` VALUES (1026,2,'editor');
+INSERT INTO `ezsearch_word` VALUES (1026,3,'editor');
 INSERT INTO `ezsearch_word` VALUES (1027,1,'showcase');
 INSERT INTO `ezsearch_word` VALUES (1028,1,'types');
 INSERT INTO `ezsearch_word` VALUES (1029,5,'article');
@@ -38274,8 +38285,8 @@ INSERT INTO `ezsearch_word` VALUES (1941,2,'gesetzt');
 INSERT INTO `ezsearch_word` VALUES (1942,2,'navigationsstruktur');
 INSERT INTO `ezsearch_word` VALUES (1943,2,'ars');
 INSERT INTO `ezsearch_word` VALUES (1944,2,'campus');
-INSERT INTO `ezsearch_word` VALUES (1945,3,'axel');
-INSERT INTO `ezsearch_word` VALUES (1946,3,'thiessenhusen');
+INSERT INTO `ezsearch_word` VALUES (1945,2,'axel');
+INSERT INTO `ezsearch_word` VALUES (1946,2,'thiessenhusen');
 INSERT INTO `ezsearch_word` VALUES (1947,2,'design');
 INSERT INTO `ezsearch_word` VALUES (1948,2,'umsetzung');
 INSERT INTO `ezsearch_word` VALUES (1949,2,'rostock');
@@ -38366,9 +38377,6 @@ INSERT INTO `ezsearch_word` VALUES (2033,19,'2019');
 INSERT INTO `ezsearch_word` VALUES (2034,4,'7_53');
 INSERT INTO `ezsearch_word` VALUES (2036,2,'veranstaltungen');
 INSERT INTO `ezsearch_word` VALUES (2040,1,'portrait');
-INSERT INTO `ezsearch_word` VALUES (2041,2,'norman');
-INSERT INTO `ezsearch_word` VALUES (2042,2,'pappisch');
-INSERT INTO `ezsearch_word` VALUES (2043,2,'admin');
 INSERT INTO `ezsearch_word` VALUES (2044,1,'img_0830');
 INSERT INTO `ezsearch_word` VALUES (2045,1,'img_0513');
 INSERT INTO `ezsearch_word` VALUES (2046,1,'tatjana');
@@ -40027,6 +40035,9 @@ INSERT INTO `ezsearch_word` VALUES (4426,1,'3831');
 INSERT INTO `ezsearch_word` VALUES (4427,1,'306507');
 INSERT INTO `ezsearch_word` VALUES (4428,1,'telefax');
 INSERT INTO `ezsearch_word` VALUES (4429,1,'306508');
+INSERT INTO `ezsearch_word` VALUES (4430,1,'01');
+INSERT INTO `ezsearch_word` VALUES (4431,3,'project');
+INSERT INTO `ezsearch_word` VALUES (4432,1,'admin');
 /*!40000 ALTER TABLE `ezsearch_word` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -40044,7 +40055,7 @@ CREATE TABLE `ezsection` (
   `name` varchar(255) DEFAULT NULL,
   `navigation_part_identifier` varchar(100) DEFAULT 'ezcontentnavigationpart',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40078,7 +40089,7 @@ CREATE TABLE `ezsession` (
   PRIMARY KEY (`session_key`),
   KEY `expiration_time` (`expiration_time`),
   KEY `ezsession_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40101,7 +40112,7 @@ CREATE TABLE `ezsite_data` (
   `name` varchar(60) NOT NULL DEFAULT '',
   `value` longtext NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40128,7 +40139,7 @@ CREATE TABLE `ezstarrating` (
   `rating_average` float NOT NULL,
   `rating_count` int(11) NOT NULL,
   PRIMARY KEY (`contentobject_id`,`contentobject_attribute_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40158,7 +40169,7 @@ CREATE TABLE `ezstarrating_data` (
   PRIMARY KEY (`id`),
   KEY `user_id_session_key` (`user_id`,`session_key`),
   KEY `contentobject_id_contentobject_attribute_id` (`contentobject_id`,`contentobject_attribute_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40184,7 +40195,7 @@ CREATE TABLE `ezsubtree_notification_rule` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezsubtree_notification_rule_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40218,7 +40229,7 @@ CREATE TABLE `eztags` (
   UNIQUE KEY `idx_eztags_remote_id` (`remote_id`),
   KEY `idx_eztags_keyword` (`keyword`(191)),
   KEY `idx_eztags_keyword_id` (`keyword`(191),`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40254,7 +40265,7 @@ CREATE TABLE `eztags_attribute_link` (
   KEY `idx_eztags_attr_link_kid_oaid_oav` (`keyword_id`,`objectattribute_id`,`objectattribute_version`),
   KEY `idx_eztags_attr_link_kid_oid` (`keyword_id`,`object_id`),
   KEY `idx_eztags_attr_link_oaid_oav` (`objectattribute_id`,`objectattribute_version`)
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40290,7 +40301,7 @@ CREATE TABLE `eztags_keyword` (
   `locale` varchar(255) NOT NULL DEFAULT '',
   `status` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`keyword_id`,`locale`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40319,7 +40330,7 @@ CREATE TABLE `eztipafriend_counter` (
   `node_id` int(11) NOT NULL DEFAULT 0,
   `requested` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`node_id`,`requested`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40343,7 +40354,7 @@ CREATE TABLE `eztipafriend_request` (
   `email_receiver` varchar(100) NOT NULL DEFAULT '',
   KEY `eztipafriend_request_created` (`created`),
   KEY `eztipafriend_request_email_rec` (`email_receiver`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40372,7 +40383,7 @@ CREATE TABLE `eztrigger` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `eztrigger_def_id` (`module_name`(50),`function_name`(50),`connect_type`),
   KEY `eztrigger_fetch` (`name`(25),`module_name`(50),`function_name`(50))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40401,7 +40412,7 @@ CREATE TABLE `ezurl` (
   `url` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ezurl_url` (`url`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40477,7 +40488,7 @@ CREATE TABLE `ezurl_object_link` (
   KEY `ezurl_ol_coa_id` (`contentobject_attribute_id`),
   KEY `ezurl_ol_coa_version` (`contentobject_attribute_version`),
   KEY `ezurl_ol_url_id` (`url_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40595,7 +40606,7 @@ CREATE TABLE `ezurlalias` (
   KEY `ezurlalias_source_md5` (`source_md5`),
   KEY `ezurlalias_source_url` (`source_url`(191)),
   KEY `ezurlalias_wcard_fwd` (`is_wildcard`,`forward_to_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40634,7 +40645,7 @@ CREATE TABLE `ezurlalias_ml` (
   KEY `ezurlalias_ml_par_lnk_txt` (`parent`,`text`(32),`link`),
   KEY `ezurlalias_ml_text` (`text`(32),`id`,`link`),
   KEY `ezurlalias_ml_text_lang` (`text`(32),`lang_mask`,`parent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40643,126 +40654,126 @@ CREATE TABLE `ezurlalias_ml` (
 
 LOCK TABLES `ezurlalias_ml` WRITE;
 /*!40000 ALTER TABLE `ezurlalias_ml` DISABLE KEYS */;
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:5','eznode',1,1947,0,1,5,1947,0,'Benutzer','151e6a4b8cedeca3e25a73b2513c7439');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:58','eznode',1,1982,0,1,3,1982,0,'Design','31c13f47ad87dd7baa2d558a91e0fbb9');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:168','eznode',1,1819,0,1,4,1819,0,'JAC-Example','327c3f7ae74cddd3757fe94239525a99');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:807','eznode',1,1941,0,1,4,1941,0,'Verwaltung','3f115f2fd2496888515e8d7dd5bbcc83');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:48','eznode',1,1981,0,1,3,1981,0,'Setup2','475e97c0146bfb1c490339546d9e72ee');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:43','eznode',1,1963,0,1,3,1963,0,'Media','62933a2951ef01f4eafd9bdf4d3cd2f0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:5','eznode',1,1947,0,1,3,1947,0,'Users','9bc65c2abec141778ffaa729489f3e87');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:5','eznode',1,1947,0,1,5,1947,0,'benutzer','151e6a4b8cedeca3e25a73b2513c7439');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:58','eznode',1,1982,0,1,3,1982,0,'design','31c13f47ad87dd7baa2d558a91e0fbb9');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:168','eznode',1,1819,0,1,4,1819,0,'jac-example','327c3f7ae74cddd3757fe94239525a99');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:807','eznode',1,1941,0,1,4,1941,0,'verwaltung','3f115f2fd2496888515e8d7dd5bbcc83');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:48','eznode',1,1981,0,1,3,1981,0,'setup2','475e97c0146bfb1c490339546d9e72ee');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:43','eznode',1,1963,0,1,3,1963,0,'media','62933a2951ef01f4eafd9bdf4d3cd2f0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:5','eznode',1,1947,0,1,3,1947,0,'users','9bc65c2abec141778ffaa729489f3e87');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:2','eznode',1,1818,0,1,7,1818,0,'','d41d8cd98f00b204e9800998ecf8427e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1483','eznode',1,1839,0,1,4,1839,1819,'Veranstaltungen','071fae8a900e0092e887f3d604a49bbd');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:810','eznode',1,1940,0,1,4,1940,1819,'Impressum-und-Kontakt','827ac20cc17f95eee7ef253a5bc07bb6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:176','eznode',1,1889,0,1,6,1889,1819,'Showcase','88c5ba0ad717231c45ce638a11060487');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1544','eznode',1,1884,0,1,5,1884,1819,'Neuigkeiten-Kategorie','a44dc6ed53b5dd3674b46825036459f7');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1482','eznode',1,1838,0,1,4,1838,1819,'Kontaktformular','c7ec67c74104a45bde479c5d666bdc75');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:779','eznode',1,1912,0,1,4,1912,1819,'Startseite','cdd921bcc205ed68a79c1dd05a302c9b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:809','eznode',1,1939,0,1,4,1939,1819,'Datenschutzerklaerung','f10319ea7b216efdde178df602e66f9f');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1334','eznode',1,1820,0,1,4,1820,1819,'Beispiele-1','f11cf4ec9b0a323ef4a82a0abc0adc2c');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1511','eznode',1,1848,0,1,4,1848,1819,'Beispiele-2','f3e0ccc83bd551bd25ca600d19bd1ee5');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1496','eznode',1,1823,0,1,4,1823,1820,'Testartikel-3-KT','0b855fc065372e5969cfb8fcca19bdad');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1494','eznode',1,1821,0,1,4,1821,1820,'Testartikel-1-KT','0c18fd2d649bbeeced90d87e67a67977');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1498','eznode',1,1825,0,1,4,1825,1820,'Galerie-Test','56ce48b8fd817265947c10f65b760f9d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1497','eznode',1,1824,0,1,5,1824,1820,'Aktuelles','8744b593e102071b1ade5fe7be69afc2');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1495','eznode',1,1822,0,1,4,1822,1820,'Testartikel-2-KT','de6230f19a34c6c04ef8d80eea239038');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1500','eznode',1,1827,0,1,4,1827,1825,'Wire-2019-10-04-at-7_571-AM','0a95a2f4fbb7d256f536d2ed9b88146e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1508','eznode',1,1835,0,1,4,1835,1825,'Wire-2018-12-17-at-8_30-AM','327c4542bce75e18acb2ae71d7910d46');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1499','eznode',1,1826,0,1,4,1826,1825,'Wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1510','eznode',1,1837,0,1,4,1837,1825,'IMG_20210514_075011','63274ee750df8658c686f073ff940fb8');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1505','eznode',1,1832,0,1,4,1832,1825,'Wire-2019-10-15-at-7_53-AM','6b5b13943f25814e5062a72d12cc0563');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1503','eznode',1,1830,0,1,4,1830,1825,'Wire-2018-11-27-at-8_16-AM','8b2d02c450b27299de65369f299ce61b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1504','eznode',1,1831,0,1,4,1831,1825,'Wire-2019-02-18-at-8_351-AM','9e5187a2d07f15be7610bbc8fce0d091');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1506','eznode',1,1833,0,1,4,1833,1825,'Wire-2019-02-18-at-8_341-AM','bf7d8ebf2e268883e6db5015e74e912e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1501','eznode',1,1828,0,1,4,1828,1825,'Wire-2019-10-04-at-7_57-AM','d5a4058d05e56ab1ca1c50658324a638');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1509','eznode',1,1836,0,1,4,1836,1825,'Wire-2019-10-22-at-7_532-AM','d9742dadb2944847f6d2e32512feb127');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1502','eznode',1,1829,0,1,4,1829,1825,'Wire-2018-10-17-at-11_01-AM','eadf074d0909541e1976663721b07ddc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1507','eznode',1,1834,0,1,4,1834,1825,'Wire-2018-10-24-at-12_12-PM','fbed54b6e58f099c1a1c47a3a3f5fd64');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1488','eznode',1,1843,0,1,4,1843,1839,'Duo-Liaisong','0c41f6fab10beb3f3994a90f575d105d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1491','eznode',1,1846,0,1,4,1846,1839,'Johannes-Kirchberg','57e6ce445577cde7d93bdfcd33cf4a51');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1489','eznode',1,1844,0,1,4,1844,1839,'Gunter-Boehnke-The-Schummlers','62a7ccc048b4eaf0e1cd20e896e26318');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1493','eznode',1,1847,0,1,4,1847,1839,'Tatjana-Karpouk','6498152b9fe18c78b8c07a54a5aa23a0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1486','eznode',1,1842,0,1,4,1842,1839,'Musiktheater-Stellmaecke','6e62ac7588cc3e359660cc752af5df87');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1490','eznode',1,1845,0,1,4,1845,1839,'Harro-Huebner','776612cadc17283f49cbe8c4a1da4f34');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1484','eznode',1,1840,0,1,4,1840,1839,'TMV','e967d6b37c5113dc66170963fe7e54f0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1485','eznode',1,1841,0,1,4,1841,1840,'Kategorien','6d07c7d1d0a3bb936d322a276f019463');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1522','eznode',1,1854,0,1,4,1854,1848,'Testartikel-3-KT','0b855fc065372e5969cfb8fcca19bdad');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1520','eznode',1,1852,0,1,4,1852,1848,'Testartikel-1-KT','0c18fd2d649bbeeced90d87e67a67977');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1537','eznode',1,1869,0,1,5,1869,1848,'Testartikel-Ordner','33165f70c3327ffbbcf89e03f5b8b09a');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1551','eznode',1,1877,0,1,5,1877,1848,'Ordner','4ea9c64070cb2d55c7556634b6117f77');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1524','eznode',1,1856,0,1,4,1856,1848,'Galerie-Test','56ce48b8fd817265947c10f65b760f9d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1523','eznode',1,1855,0,1,5,1855,1848,'Aktuelles','8744b593e102071b1ade5fe7be69afc2');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1512','eznode',1,1849,0,1,5,1849,1848,'Jahreshighlights','acde9b2f7e63176d90efec8b17f6e257');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1521','eznode',1,1853,0,1,4,1853,1848,'Testartikel-2-KT','de6230f19a34c6c04ef8d80eea239038');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1549','eznode',1,1876,0,1,4,1876,1848,'PDF-Datei-Download','e3bff9827e7ef34d5b50b4ba34d64a9e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1413','eznode',1,1850,0,1,4,1850,1849,'Rapsfest','aa91c9e02f3ef8a33204388aacaeb7cc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1446','eznode',1,1851,0,1,4,1851,1849,'Hafentage','beb502a3b7b0f7bc69dc2070c1bd810e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1526','eznode',1,1858,0,1,4,1858,1856,'Wire-2019-10-04-at-7_571-AM','0a95a2f4fbb7d256f536d2ed9b88146e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1534','eznode',1,1866,0,1,4,1866,1856,'Wire-2018-12-17-at-8_30-AM','327c4542bce75e18acb2ae71d7910d46');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1525','eznode',1,1857,0,1,4,1857,1856,'Wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1536','eznode',1,1868,0,1,4,1868,1856,'IMG_20210514_075011','63274ee750df8658c686f073ff940fb8');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1531','eznode',1,1863,0,1,4,1863,1856,'Wire-2019-10-15-at-7_53-AM','6b5b13943f25814e5062a72d12cc0563');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1529','eznode',1,1861,0,1,4,1861,1856,'Wire-2018-11-27-at-8_16-AM','8b2d02c450b27299de65369f299ce61b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1530','eznode',1,1862,0,1,4,1862,1856,'Wire-2019-02-18-at-8_351-AM','9e5187a2d07f15be7610bbc8fce0d091');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1532','eznode',1,1864,0,1,4,1864,1856,'Wire-2019-02-18-at-8_341-AM','bf7d8ebf2e268883e6db5015e74e912e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1527','eznode',1,1859,0,1,4,1859,1856,'Wire-2019-10-04-at-7_57-AM','d5a4058d05e56ab1ca1c50658324a638');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1535','eznode',1,1867,0,1,4,1867,1856,'Wire-2019-10-22-at-7_532-AM','d9742dadb2944847f6d2e32512feb127');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1528','eznode',1,1860,0,1,4,1860,1856,'Wire-2018-10-17-at-11_01-AM','eadf074d0909541e1976663721b07ddc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1533','eznode',1,1865,0,1,4,1865,1856,'Wire-2018-10-24-at-12_12-PM','fbed54b6e58f099c1a1c47a3a3f5fd64');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1540','eznode',1,1872,0,1,4,1872,1869,'Testartikel-3-KT','0b855fc065372e5969cfb8fcca19bdad');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1538','eznode',1,1870,0,1,4,1870,1869,'Testartikel-1-KT','0c18fd2d649bbeeced90d87e67a67977');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1543','eznode',1,1875,0,1,4,1875,1869,'Testartikel-6-KT','0f395d3ad7e15b36994f8fc3e1de11c4');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1542','eznode',1,1874,0,1,4,1874,1869,'Testartikel-5-KT','80f5fd6af605321396d02cba39fd4ddc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1539','eznode',1,1871,0,1,4,1871,1869,'Testartikel-2-KT','de6230f19a34c6c04ef8d80eea239038');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1541','eznode',1,1873,0,1,4,1873,1869,'Testartikel-4-KT','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1557','eznode',1,1883,0,1,4,1883,1877,'Testartikel-6-KT','0f395d3ad7e15b36994f8fc3e1de11c4');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1552','eznode',1,1878,0,1,4,1878,1877,'Test-Shortcut-1-KT','4705f52e43dbca723e43ee358d40d6bf');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1553','eznode',1,1879,0,1,4,1879,1877,'Test-Shortcut-2-KT','684022a7fc1c32818e82cc568ce6fcbe');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1556','eznode',1,1882,0,1,4,1882,1877,'Testartikel-5-KT','80f5fd6af605321396d02cba39fd4ddc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1554','eznode',1,1880,0,1,4,1880,1877,'Test-Shortcut-3-KT','b4f063afed4d264110643a358876f372');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1555','eznode',1,1881,0,1,4,1881,1877,'Testartikel-4-KT','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1547','eznode',1,1887,0,1,4,1887,1884,'Testartikel-3-KT','0b855fc065372e5969cfb8fcca19bdad');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1545','eznode',1,1885,0,1,4,1885,1884,'Testartikel-1-KT','0c18fd2d649bbeeced90d87e67a67977');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1546','eznode',1,1886,0,1,4,1886,1884,'Testartikel-2-KT','de6230f19a34c6c04ef8d80eea239038');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1548','eznode',1,1888,0,1,4,1888,1884,'Testartikel-4-KT','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:181','eznode',1,1896,0,1,3,1896,1889,'Category-test','10263d9a64fca52380b2f60040cd48c0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:177','eznode',1,1892,0,1,2,1892,1889,'Article-test2','2a7a6003d1fe69110f832da0c78fe3fa');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:180','eznode',1,1895,0,1,2,1895,1889,'Blog-post-test','3944d7c01f7e3f1d21f9d494869d9c84');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:191','eznode',1,1906,0,1,2,1906,1889,'Landing-page-test','4bd58a2662d9c1f93b193527d1478fcb');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1433','eznode',1,1891,0,1,2,1891,1889,'Article-test','7916ec3c9bc5a76062a3ae51f76afd99');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:179','eznode',1,1894,0,1,3,1894,1889,'Banner-test','7989b315eac65382f63994c834c1147d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:183','eznode',1,1898,0,1,2,1898,1889,'Gallery-test','89259ab92bf4de433dc75722066522e6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:195','eznode',1,1910,0,1,2,1910,1889,'Image-test','8e68af2decc86ce5605fab1a8259397d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:182','eznode',1,1897,0,1,2,1897,1889,'Form-test','9555669169df68767b06736062e25dd2');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:193','eznode',1,1908,0,1,2,1908,1889,'Recipe-test','a6edd485d966437ef004d7c3a65736f1');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:194','eznode',1,1909,0,1,3,1909,1889,'Video-test','ab2ebb6ca0eeec63b42bb45baab7df73');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:192','eznode',1,1907,0,1,2,1907,1889,'News-test','b0437e8c3d872686667462bb3ae8f036');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:190','eznode',1,1905,0,1,3,1905,1889,'HTML-box-test2','c2374ba41e4e0daa3557a7206720959b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:196','eznode',1,1911,0,1,2,1911,1889,'File-test','dae7c38fb19a323691ae75ea1dc8d315');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:178','eznode',1,1893,0,1,3,1893,1889,'Audio-test','f3e2dc7922b717e7499f897c55d35913');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1428','eznode',1,1890,0,1,3,1890,1889,'HTML-box-test','f9cc08bd40cc6eb1cbe962ec861eb253');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1483','eznode',1,1839,0,1,4,1839,1819,'veranstaltungen','071fae8a900e0092e887f3d604a49bbd');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:810','eznode',1,1940,0,1,4,1940,1819,'impressum-und-kontakt','827ac20cc17f95eee7ef253a5bc07bb6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:176','eznode',1,1889,0,1,6,1889,1819,'showcase','88c5ba0ad717231c45ce638a11060487');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1544','eznode',1,1884,0,1,5,1884,1819,'neuigkeiten-kategorie','a44dc6ed53b5dd3674b46825036459f7');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1482','eznode',1,1838,0,1,4,1838,1819,'kontaktformular','c7ec67c74104a45bde479c5d666bdc75');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:779','eznode',1,1912,0,1,4,1912,1819,'startseite','cdd921bcc205ed68a79c1dd05a302c9b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:809','eznode',1,1939,0,1,4,1939,1819,'datenschutzerklaerung','f10319ea7b216efdde178df602e66f9f');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1334','eznode',1,1820,0,1,4,1820,1819,'beispiele-1','f11cf4ec9b0a323ef4a82a0abc0adc2c');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1511','eznode',1,1848,0,1,4,1848,1819,'beispiele-2','f3e0ccc83bd551bd25ca600d19bd1ee5');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1496','eznode',1,1823,0,1,4,1823,1820,'testartikel-3-kt','0b855fc065372e5969cfb8fcca19bdad');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1494','eznode',1,1821,0,1,4,1821,1820,'testartikel-1-kt','0c18fd2d649bbeeced90d87e67a67977');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1498','eznode',1,1825,0,1,4,1825,1820,'galerie-test','56ce48b8fd817265947c10f65b760f9d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1497','eznode',1,1824,0,1,5,1824,1820,'aktuelles','8744b593e102071b1ade5fe7be69afc2');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1495','eznode',1,1822,0,1,4,1822,1820,'testartikel-2-kt','de6230f19a34c6c04ef8d80eea239038');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1500','eznode',1,1827,0,1,4,1827,1825,'wire-2019-10-04-at-7_571-am','0a95a2f4fbb7d256f536d2ed9b88146e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1508','eznode',1,1835,0,1,4,1835,1825,'wire-2018-12-17-at-8_30-am','327c4542bce75e18acb2ae71d7910d46');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1499','eznode',1,1826,0,1,4,1826,1825,'wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1510','eznode',1,1837,0,1,4,1837,1825,'img_20210514_075011','63274ee750df8658c686f073ff940fb8');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1505','eznode',1,1832,0,1,4,1832,1825,'wire-2019-10-15-at-7_53-am','6b5b13943f25814e5062a72d12cc0563');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1503','eznode',1,1830,0,1,4,1830,1825,'wire-2018-11-27-at-8_16-am','8b2d02c450b27299de65369f299ce61b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1504','eznode',1,1831,0,1,4,1831,1825,'wire-2019-02-18-at-8_351-am','9e5187a2d07f15be7610bbc8fce0d091');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1506','eznode',1,1833,0,1,4,1833,1825,'wire-2019-02-18-at-8_341-am','bf7d8ebf2e268883e6db5015e74e912e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1501','eznode',1,1828,0,1,4,1828,1825,'wire-2019-10-04-at-7_57-am','d5a4058d05e56ab1ca1c50658324a638');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1509','eznode',1,1836,0,1,4,1836,1825,'wire-2019-10-22-at-7_532-am','d9742dadb2944847f6d2e32512feb127');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1502','eznode',1,1829,0,1,4,1829,1825,'wire-2018-10-17-at-11_01-am','eadf074d0909541e1976663721b07ddc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1507','eznode',1,1834,0,1,4,1834,1825,'wire-2018-10-24-at-12_12-pm','fbed54b6e58f099c1a1c47a3a3f5fd64');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1488','eznode',1,1843,0,1,4,1843,1839,'duo-liaisong','0c41f6fab10beb3f3994a90f575d105d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1491','eznode',1,1846,0,1,4,1846,1839,'johannes-kirchberg','57e6ce445577cde7d93bdfcd33cf4a51');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1489','eznode',1,1844,0,1,4,1844,1839,'gunter-boehnke-the-schummlers','62a7ccc048b4eaf0e1cd20e896e26318');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1493','eznode',1,1847,0,1,4,1847,1839,'tatjana-karpouk','6498152b9fe18c78b8c07a54a5aa23a0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1486','eznode',1,1842,0,1,4,1842,1839,'musiktheater-stellmaecke','6e62ac7588cc3e359660cc752af5df87');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1490','eznode',1,1845,0,1,4,1845,1839,'harro-huebner','776612cadc17283f49cbe8c4a1da4f34');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1484','eznode',1,1840,0,1,4,1840,1839,'tmv','e967d6b37c5113dc66170963fe7e54f0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1485','eznode',1,1841,0,1,4,1841,1840,'kategorien','6d07c7d1d0a3bb936d322a276f019463');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1522','eznode',1,1854,0,1,4,1854,1848,'testartikel-3-kt','0b855fc065372e5969cfb8fcca19bdad');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1520','eznode',1,1852,0,1,4,1852,1848,'testartikel-1-kt','0c18fd2d649bbeeced90d87e67a67977');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1537','eznode',1,1869,0,1,5,1869,1848,'testartikel-ordner','33165f70c3327ffbbcf89e03f5b8b09a');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1551','eznode',1,1877,0,1,5,1877,1848,'ordner','4ea9c64070cb2d55c7556634b6117f77');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1524','eznode',1,1856,0,1,4,1856,1848,'galerie-test','56ce48b8fd817265947c10f65b760f9d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1523','eznode',1,1855,0,1,5,1855,1848,'aktuelles','8744b593e102071b1ade5fe7be69afc2');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1512','eznode',1,1849,0,1,5,1849,1848,'jahreshighlights','acde9b2f7e63176d90efec8b17f6e257');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1521','eznode',1,1853,0,1,4,1853,1848,'testartikel-2-kt','de6230f19a34c6c04ef8d80eea239038');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1549','eznode',1,1876,0,1,4,1876,1848,'pdf-datei-download','e3bff9827e7ef34d5b50b4ba34d64a9e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1413','eznode',1,1850,0,1,4,1850,1849,'rapsfest','aa91c9e02f3ef8a33204388aacaeb7cc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1446','eznode',1,1851,0,1,4,1851,1849,'hafentage','beb502a3b7b0f7bc69dc2070c1bd810e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1526','eznode',1,1858,0,1,4,1858,1856,'wire-2019-10-04-at-7_571-am','0a95a2f4fbb7d256f536d2ed9b88146e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1534','eznode',1,1866,0,1,4,1866,1856,'wire-2018-12-17-at-8_30-am','327c4542bce75e18acb2ae71d7910d46');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1525','eznode',1,1857,0,1,4,1857,1856,'wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1536','eznode',1,1868,0,1,4,1868,1856,'img_20210514_075011','63274ee750df8658c686f073ff940fb8');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1531','eznode',1,1863,0,1,4,1863,1856,'wire-2019-10-15-at-7_53-am','6b5b13943f25814e5062a72d12cc0563');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1529','eznode',1,1861,0,1,4,1861,1856,'wire-2018-11-27-at-8_16-am','8b2d02c450b27299de65369f299ce61b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1530','eznode',1,1862,0,1,4,1862,1856,'wire-2019-02-18-at-8_351-am','9e5187a2d07f15be7610bbc8fce0d091');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1532','eznode',1,1864,0,1,4,1864,1856,'wire-2019-02-18-at-8_341-am','bf7d8ebf2e268883e6db5015e74e912e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1527','eznode',1,1859,0,1,4,1859,1856,'wire-2019-10-04-at-7_57-am','d5a4058d05e56ab1ca1c50658324a638');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1535','eznode',1,1867,0,1,4,1867,1856,'wire-2019-10-22-at-7_532-am','d9742dadb2944847f6d2e32512feb127');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1528','eznode',1,1860,0,1,4,1860,1856,'wire-2018-10-17-at-11_01-am','eadf074d0909541e1976663721b07ddc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1533','eznode',1,1865,0,1,4,1865,1856,'wire-2018-10-24-at-12_12-pm','fbed54b6e58f099c1a1c47a3a3f5fd64');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1540','eznode',1,1872,0,1,4,1872,1869,'testartikel-3-kt','0b855fc065372e5969cfb8fcca19bdad');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1538','eznode',1,1870,0,1,4,1870,1869,'testartikel-1-kt','0c18fd2d649bbeeced90d87e67a67977');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1543','eznode',1,1875,0,1,4,1875,1869,'testartikel-6-kt','0f395d3ad7e15b36994f8fc3e1de11c4');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1542','eznode',1,1874,0,1,4,1874,1869,'testartikel-5-kt','80f5fd6af605321396d02cba39fd4ddc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1539','eznode',1,1871,0,1,4,1871,1869,'testartikel-2-kt','de6230f19a34c6c04ef8d80eea239038');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1541','eznode',1,1873,0,1,4,1873,1869,'testartikel-4-kt','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1557','eznode',1,1883,0,1,4,1883,1877,'testartikel-6-kt','0f395d3ad7e15b36994f8fc3e1de11c4');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1552','eznode',1,1878,0,1,4,1878,1877,'test-shortcut-1-kt','4705f52e43dbca723e43ee358d40d6bf');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1553','eznode',1,1879,0,1,4,1879,1877,'test-shortcut-2-kt','684022a7fc1c32818e82cc568ce6fcbe');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1556','eznode',1,1882,0,1,4,1882,1877,'testartikel-5-kt','80f5fd6af605321396d02cba39fd4ddc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1554','eznode',1,1880,0,1,4,1880,1877,'test-shortcut-3-kt','b4f063afed4d264110643a358876f372');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1555','eznode',1,1881,0,1,4,1881,1877,'testartikel-4-kt','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1547','eznode',1,1887,0,1,4,1887,1884,'testartikel-3-kt','0b855fc065372e5969cfb8fcca19bdad');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1545','eznode',1,1885,0,1,4,1885,1884,'testartikel-1-kt','0c18fd2d649bbeeced90d87e67a67977');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1546','eznode',1,1886,0,1,4,1886,1884,'testartikel-2-kt','de6230f19a34c6c04ef8d80eea239038');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1548','eznode',1,1888,0,1,4,1888,1884,'testartikel-4-kt','e3d1098eb6bf44a0ff5f4bc2e9c05b7d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:181','eznode',1,1896,0,1,3,1896,1889,'category-test','10263d9a64fca52380b2f60040cd48c0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:177','eznode',1,1892,0,1,2,1892,1889,'article-test2','2a7a6003d1fe69110f832da0c78fe3fa');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:180','eznode',1,1895,0,1,2,1895,1889,'blog-post-test','3944d7c01f7e3f1d21f9d494869d9c84');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:191','eznode',1,1906,0,1,2,1906,1889,'landing-page-test','4bd58a2662d9c1f93b193527d1478fcb');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1433','eznode',1,1891,0,1,2,1891,1889,'article-test','7916ec3c9bc5a76062a3ae51f76afd99');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:179','eznode',1,1894,0,1,3,1894,1889,'banner-test','7989b315eac65382f63994c834c1147d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:183','eznode',1,1898,0,1,2,1898,1889,'gallery-test','89259ab92bf4de433dc75722066522e6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:195','eznode',1,1910,0,1,2,1910,1889,'image-test','8e68af2decc86ce5605fab1a8259397d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:182','eznode',1,1897,0,1,2,1897,1889,'form-test','9555669169df68767b06736062e25dd2');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:193','eznode',1,1908,0,1,2,1908,1889,'recipe-test','a6edd485d966437ef004d7c3a65736f1');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:194','eznode',1,1909,0,1,3,1909,1889,'video-test','ab2ebb6ca0eeec63b42bb45baab7df73');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:192','eznode',1,1907,0,1,2,1907,1889,'news-test','b0437e8c3d872686667462bb3ae8f036');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:190','eznode',1,1905,0,1,3,1905,1889,'html-box-test2','c2374ba41e4e0daa3557a7206720959b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:196','eznode',1,1911,0,1,2,1911,1889,'file-test','dae7c38fb19a323691ae75ea1dc8d315');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:178','eznode',1,1893,0,1,3,1893,1889,'audio-test','f3e2dc7922b717e7499f897c55d35913');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1428','eznode',1,1890,0,1,3,1890,1889,'html-box-test','f9cc08bd40cc6eb1cbe962ec861eb253');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:189','eznode',1,1904,0,1,2,1904,1898,'form-426165-unsplash','058c45915edef4417f42de834685e463');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:187','eznode',1,1902,0,1,2,1902,1898,'form-679347-unsplash','19be36abd8e36980dd3c2a0b7b0d2856');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:188','eznode',1,1903,0,1,2,1903,1898,'matthew-kane-94147-unsplash','509d99bb9d0990c8ff80040b1b2c6b94');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:185','eznode',1,1900,0,1,2,1900,1898,'mr-lee-618503-unsplash','6219e656f3239297934fd375a00827be');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:186','eznode',1,1901,0,1,2,1901,1898,'alora-griffiths-750409-unsplash','98a6152556f0adcbee6ac7e351901952');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:184','eznode',1,1899,0,1,2,1899,1898,'justyn-warner-541680-unsplash-1','b3e467a9fa28a02bfe3da2e49f65c80e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1444','eznode',1,1926,0,1,5,1926,1912,'Kopfbild-1','16b0453daa9b4fcb22155bb43ac7d430');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1453','eznode',1,1928,0,1,5,1928,1912,'Kopfbild-3','656fcf085e5d8970715d198927a18fd6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1445','eznode',1,1927,0,1,5,1927,1912,'Kopfbild-2','894bd6e852698e52e9918133a0704bb6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1437','eznode',1,1913,0,1,4,1913,1912,'Galerie-Startseite','c0c2732c1c2b387863c2d41e2afcfaef');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1472','eznode',1,1929,0,1,4,1929,1912,'Galerie-Stralsund-im-Winter','d51971264660a340c2378a63ab24822d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1439','eznode',1,1915,0,1,4,1915,1913,'Wire-2019-10-04-at-7_571-AM','0a95a2f4fbb7d256f536d2ed9b88146e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1451','eznode',1,1923,0,1,4,1923,1913,'Wire-2018-12-17-at-8_30-AM','327c4542bce75e18acb2ae71d7910d46');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1438','eznode',1,1914,0,1,4,1914,1913,'Wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1454','eznode',1,1925,0,1,4,1925,1913,'IMG_20210514_075011','63274ee750df8658c686f073ff940fb8');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1448','eznode',1,1920,0,1,4,1920,1913,'Wire-2019-10-15-at-7_53-AM','6b5b13943f25814e5062a72d12cc0563');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1442','eznode',1,1918,0,1,4,1918,1913,'Wire-2018-11-27-at-8_16-AM','8b2d02c450b27299de65369f299ce61b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1447','eznode',1,1919,0,1,4,1919,1913,'Wire-2019-02-18-at-8_351-AM','9e5187a2d07f15be7610bbc8fce0d091');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1449','eznode',1,1921,0,1,4,1921,1913,'Wire-2019-02-18-at-8_341-AM','bf7d8ebf2e268883e6db5015e74e912e');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1440','eznode',1,1916,0,1,4,1916,1913,'Wire-2019-10-04-at-7_57-AM','d5a4058d05e56ab1ca1c50658324a638');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1452','eznode',1,1924,0,1,4,1924,1913,'Wire-2019-10-22-at-7_532-AM','d9742dadb2944847f6d2e32512feb127');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1441','eznode',1,1917,0,1,4,1917,1913,'Wire-2018-10-17-at-11_01-AM','eadf074d0909541e1976663721b07ddc');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1450','eznode',1,1922,0,1,4,1922,1913,'Wire-2018-10-24-at-12_12-PM','fbed54b6e58f099c1a1c47a3a3f5fd64');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1444','eznode',1,1926,0,1,5,1926,1912,'kopfbild-1','16b0453daa9b4fcb22155bb43ac7d430');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1453','eznode',1,1928,0,1,5,1928,1912,'kopfbild-3','656fcf085e5d8970715d198927a18fd6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1445','eznode',1,1927,0,1,5,1927,1912,'kopfbild-2','894bd6e852698e52e9918133a0704bb6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1437','eznode',1,1913,0,1,4,1913,1912,'galerie-startseite','c0c2732c1c2b387863c2d41e2afcfaef');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1472','eznode',1,1929,0,1,4,1929,1912,'galerie-stralsund-im-winter','d51971264660a340c2378a63ab24822d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1439','eznode',1,1915,0,1,4,1915,1913,'wire-2019-10-04-at-7_571-am','0a95a2f4fbb7d256f536d2ed9b88146e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1451','eznode',1,1923,0,1,4,1923,1913,'wire-2018-12-17-at-8_30-am','327c4542bce75e18acb2ae71d7910d46');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1438','eznode',1,1914,0,1,4,1914,1913,'wire-2020-10-16-at-12-33-35','4ab6344c3af009bbfbabf81205ffeb14');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1454','eznode',1,1925,0,1,4,1925,1913,'img_20210514_075011','63274ee750df8658c686f073ff940fb8');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1448','eznode',1,1920,0,1,4,1920,1913,'wire-2019-10-15-at-7_53-am','6b5b13943f25814e5062a72d12cc0563');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1442','eznode',1,1918,0,1,4,1918,1913,'wire-2018-11-27-at-8_16-am','8b2d02c450b27299de65369f299ce61b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1447','eznode',1,1919,0,1,4,1919,1913,'wire-2019-02-18-at-8_351-am','9e5187a2d07f15be7610bbc8fce0d091');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1449','eznode',1,1921,0,1,4,1921,1913,'wire-2019-02-18-at-8_341-am','bf7d8ebf2e268883e6db5015e74e912e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1440','eznode',1,1916,0,1,4,1916,1913,'wire-2019-10-04-at-7_57-am','d5a4058d05e56ab1ca1c50658324a638');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1452','eznode',1,1924,0,1,4,1924,1913,'wire-2019-10-22-at-7_532-am','d9742dadb2944847f6d2e32512feb127');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1441','eznode',1,1917,0,1,4,1917,1913,'wire-2018-10-17-at-11_01-am','eadf074d0909541e1976663721b07ddc');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1450','eznode',1,1922,0,1,4,1922,1913,'wire-2018-10-24-at-12_12-pm','fbed54b6e58f099c1a1c47a3a3f5fd64');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:1475','eznode',1,1932,0,1,4,1932,1929,'3-5-da1a601f-dec5-4da5-a8d2-f598e1f9e958','04d7a5cf2ea76d1f12efc497e08b5d13');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:1480','eznode',1,1937,0,1,4,1937,1929,'3-5-973184bf-d81c-4e64-8362-34f6ea286baf','0a131563b8b1786df1ac4fb9c2782d9d');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:1476','eznode',1,1933,0,1,4,1933,1929,'3-5-c0c3a95d-aef0-4976-9abc-eb5a542213db','24847ce6332562d14f5753773419b605');
@@ -40773,53 +40784,57 @@ INSERT INTO `ezurlalias_ml` VALUES ('eznode:1478','eznode',1,1935,0,1,4,1935,192
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:1473','eznode',1,1930,0,1,4,1930,1929,'3-5-436838b6-3f53-42fe-a68b-ddf1bb404c68','777c9a24dcb01b9fcb01e787a70c0a98');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:1474','eznode',1,1931,0,1,4,1931,1929,'3-5-5d4c495c-d658-44f4-b947-cdcaf1084ecf','cd37983a9a9dd1c26d956bacc0d7c4cb');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:65','eznode',1,1946,0,1,3,1946,1941,'netgen-media-site2','09c975e81adc600ccec6cee54a6e0946');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:167','eznode',1,1945,0,1,5,1945,1941,'Cookie-Richtlinie','2a0163db036fabcbedc33f1879c04efd');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:167','eznode',1,1945,0,1,3,1945,1941,'Netgen-Media-Site','8316df56c4443a6506df2cfb07a85a5e');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:167','eznode',1,1945,0,1,5,1945,1941,'cookie-richtlinie','2a0163db036fabcbedc33f1879c04efd');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:167','eznode',1,1945,0,1,3,1945,1941,'netgen-media-site','8316df56c4443a6506df2cfb07a85a5e');
 INSERT INTO `ezurlalias_ml` VALUES ('eznode:65','eznode',1,1946,0,1,5,1946,1941,'seitenverwaltung','967d689265c46294088cf2dd4955c4aa');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1292','eznode',1,1942,0,1,5,1942,1941,'Verweise-in-der-Kopfzeile','f4012e5fb6d26af353cb23ce668e85b6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1294','eznode',1,1944,0,1,5,1944,1942,'Veranstaltungen','071fae8a900e0092e887f3d604a49bbd');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1293','eznode',1,1943,0,1,5,1943,1942,'Externe-Informationen','b9c32ed050814deea3c211a939bdc8bb');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:492','eznode',1,1959,0,1,5,1959,1947,'Redakteure-Layouts','09e1ed571de321a1646a59bcc5c781d6');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:44','eznode',1,1957,0,1,5,1957,1947,'Anonyme-Benutzer','65cfc376cdde27eb3537364f6c7d21ae');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:14','eznode',1,1953,0,1,3,1953,1947,'Editors','a147e136bfa717592f2bd70bd4b53b17');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:14','eznode',1,1953,0,1,5,1953,1947,'Redakteure','b4deae6c584e883d06a3b7b7c40b631f');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:13','eznode',1,1949,0,1,5,1949,1947,'Administratoren','bb5c8e68de6b228d8b16e4b3efc5e2e9');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:44','eznode',1,1957,0,1,3,1957,1947,'Anonymous-users','c2803c3fa1b0b5423237b4e018cae755');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:12','eznode',1,1948,0,1,3,1948,1947,'Members','d2e3083420929d8bfae81f58fa4594cb');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:12','eznode',1,1948,0,1,5,1948,1947,'Mitglieder','dabe390a960707b76922cdaa56498855');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:13','eznode',1,1949,0,1,3,1949,1947,'Administrator-users','f89fad7f8a3abc8c09e1deb46a420007');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:467','eznode',1,1952,0,1,5,1952,1949,'JAC-Admin','3ec3750d91fbc640609d15dda7d08a14');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:15','eznode',1,1951,0,1,3,1951,1949,'Administrator-User','5a9d7b0ec93173ef4fedee023209cb61');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1406','eznode',1,1950,0,1,5,1950,1949,'Norman-Pappisch-Admin','b912a52a88f5f082ab61fee60aaf4fbf');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:469','eznode',1,1956,0,1,5,1956,1953,'Axel-Thiessenhusen','4c8c5a6c0da6489b42413e6c0d189029');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1408','eznode',1,1954,0,1,5,1954,1953,'Norman-Pappisch-Editor','8e10daf75e496927270beb82550f0a0f');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:175','eznode',1,1955,0,1,5,1955,1953,'JAC-Editor','ecb7c5062a73be4e5752fbc1a48008b5');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:45','eznode',1,1958,0,1,3,1958,1957,'Anonymous-User','ccb62ebca03a31272430bc414bd5cd5b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:493','eznode',1,1961,0,1,5,1961,1959,'Axel-Thiessenhusen','4c8c5a6c0da6489b42413e6c0d189029');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1409','eznode',1,1960,0,1,5,1960,1959,'Norman-Pappisch-Editor','8e10daf75e496927270beb82550f0a0f');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:496','eznode',1,1962,0,1,5,1962,1959,'JAC-Editor','ecb7c5062a73be4e5752fbc1a48008b5');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:85','eznode',1,1980,0,1,3,1980,1963,'Banners','009a93317a248d0fbcd664b6fa5e79e8');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:85','eznode',1,1980,0,1,5,1980,1963,'Banner','12df53fea8b3adfa6c2ec456dd22e204');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:53','eznode',1,1978,0,1,3,1978,1963,'Multimedia','2e5bc8831f7ae6a29530e7f1bbf2de9c');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:52','eznode',1,1977,0,1,3,1977,1963,'Files','45b963397aa40d4a0063e0d85e4fe7a1');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:64','eznode',1,1979,0,1,5,1979,1963,'Konfiguration','568d3b7e30d828c9f3c2f1468ef8d78b');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:51','eznode',1,1967,0,1,3,1967,1963,'Images','59b514174bffe4ae402b3d63aad79fe0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:171','eznode',1,1966,0,1,5,1966,1963,'Allgemeiner-Inhalt','5d1ce6cb3d995c543abe426297eea8dd');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:52','eznode',1,1977,0,1,5,1977,1963,'Dateien','b8506100cb1943584422a51ec60597e2');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:166','eznode',1,1964,0,1,3,1964,1963,'Menu-items','c2dc5753b0cd1aa3b86a1b53e365faf0');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:64','eznode',1,1979,0,1,3,1979,1963,'Configuration','ccd1066343c95877b75b79d47c36bebe');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:51','eznode',1,1967,0,1,5,1967,1963,'Bilder','faadbe3c7e2e36a26164dbcf0d201d37');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:242','eznode',1,1965,0,1,3,1965,1964,'Base-menu','31991543747b528ce2666d1df58b81c5');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:242','eznode',1,1965,0,1,5,1965,1964,'Basis-Menue','676d1dfa4a6ddd2a229434683336637c');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1425','eznode',1,1973,0,1,4,1973,1967,'IMG_6838','212fd5eacf4c027ddf95abd1e0db8967');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1427','eznode',1,1975,0,1,4,1975,1967,'IMG_8708','3acc5c65663bef8af3e6436115f60b21');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1421','eznode',1,1969,0,1,4,1969,1967,'IMG_0830','4ea9820b721c4e69c3001602e722d8b2');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:821','eznode',1,1976,0,1,4,1976,1967,'Wire-2019-10-15-at-7_53-AM','6b5b13943f25814e5062a72d12cc0563');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1424','eznode',1,1972,0,1,4,1972,1967,'IMG_6078','76213f709027b86722902ea3f2d5d557');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1423','eznode',1,1971,0,1,4,1971,1967,'IMG_0837','ba1c3c118c7dc8777f881e170b96a5e9');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1426','eznode',1,1974,0,1,4,1974,1967,'IMG_7118','e9e10c8614e63fade4b7454237626e0d');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1345','eznode',1,1968,0,1,4,1968,1967,'Kirchberg-Ein-Mann-gibt-Portrait','eaf1c932946421b42222351cc069ec3c');
-INSERT INTO `ezurlalias_ml` VALUES ('eznode:1422','eznode',1,1970,0,1,4,1970,1967,'IMG_0513','ff34d97923c1ce1563a82023b6eb2f93');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1292','eznode',1,1942,0,1,5,1942,1941,'verweise-in-der-kopfzeile','f4012e5fb6d26af353cb23ce668e85b6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1294','eznode',1,1944,0,1,5,1944,1942,'veranstaltungen','071fae8a900e0092e887f3d604a49bbd');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1293','eznode',1,1943,0,1,5,1943,1942,'externe-informationen','b9c32ed050814deea3c211a939bdc8bb');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:492','eznode',1,1959,0,1,5,1959,1947,'redakteure-layouts','09e1ed571de321a1646a59bcc5c781d6');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:44','eznode',1,1957,0,1,5,1957,1947,'anonyme-benutzer','65cfc376cdde27eb3537364f6c7d21ae');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:14','eznode',1,1953,0,1,3,1953,1947,'editors','a147e136bfa717592f2bd70bd4b53b17');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:14','eznode',1,1953,0,1,5,1953,1947,'redakteure','b4deae6c584e883d06a3b7b7c40b631f');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:13','eznode',1,1949,0,1,5,1949,1947,'administratoren','bb5c8e68de6b228d8b16e4b3efc5e2e9');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:44','eznode',1,1957,0,1,3,1957,1947,'anonymous-users','c2803c3fa1b0b5423237b4e018cae755');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:12','eznode',1,1948,0,1,3,1948,1947,'members','d2e3083420929d8bfae81f58fa4594cb');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:12','eznode',1,1948,0,1,5,1948,1947,'mitglieder','dabe390a960707b76922cdaa56498855');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:13','eznode',1,1949,0,1,3,1949,1947,'administrator-users','f89fad7f8a3abc8c09e1deb46a420007');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:467','eznode',1,1986,0,0,5,1952,1949,'jac-admin','3ec3750d91fbc640609d15dda7d08a14');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:467','eznode',1,1952,0,1,5,1952,1949,'project-admin','59b7a0752743616458507ade12c9bb70');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:15','eznode',1,1951,0,1,3,1951,1949,'administrator-user','5a9d7b0ec93173ef4fedee023209cb61');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:469','eznode',1,1956,0,1,5,1956,1953,'example-01-editor-01','0ffd3dab5bfba23fb0d86796bd52796b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:469','eznode',1,1983,0,0,5,1956,1953,'axel-thiessenhusen','4c8c5a6c0da6489b42413e6c0d189029');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1408','eznode',1,1954,0,1,5,1954,1953,'project-editor-user-editor','86824d0da39bf15d80e98cf32037f507');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1408','eznode',1,1985,0,0,5,1954,1953,'norman-pappisch-editor','8e10daf75e496927270beb82550f0a0f');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:175','eznode',1,1955,0,1,5,1955,1953,'project-editor','91a9b240c4d5749b2c581c104d9dc8e7');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:175','eznode',1,1987,0,0,5,1955,1953,'jac-editor','ecb7c5062a73be4e5752fbc1a48008b5');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:45','eznode',1,1958,0,1,3,1958,1957,'anonymous-user','ccb62ebca03a31272430bc414bd5cd5b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:493','eznode',1,1961,0,1,5,1961,1959,'example-01-editor-01','0ffd3dab5bfba23fb0d86796bd52796b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:493','eznode',1,1984,0,0,5,1961,1959,'axel-thiessenhusen','4c8c5a6c0da6489b42413e6c0d189029');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:496','eznode',1,1962,0,1,5,1962,1959,'project-editor','91a9b240c4d5749b2c581c104d9dc8e7');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:496','eznode',1,1988,0,0,5,1962,1959,'jac-editor','ecb7c5062a73be4e5752fbc1a48008b5');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:85','eznode',1,1980,0,1,3,1980,1963,'banners','009a93317a248d0fbcd664b6fa5e79e8');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:85','eznode',1,1980,0,1,5,1980,1963,'banner','12df53fea8b3adfa6c2ec456dd22e204');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:53','eznode',1,1978,0,1,3,1978,1963,'multimedia','2e5bc8831f7ae6a29530e7f1bbf2de9c');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:52','eznode',1,1977,0,1,3,1977,1963,'files','45b963397aa40d4a0063e0d85e4fe7a1');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:64','eznode',1,1979,0,1,5,1979,1963,'konfiguration','568d3b7e30d828c9f3c2f1468ef8d78b');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:51','eznode',1,1967,0,1,3,1967,1963,'images','59b514174bffe4ae402b3d63aad79fe0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:171','eznode',1,1966,0,1,5,1966,1963,'allgemeiner-inhalt','5d1ce6cb3d995c543abe426297eea8dd');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:52','eznode',1,1977,0,1,5,1977,1963,'dateien','b8506100cb1943584422a51ec60597e2');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:166','eznode',1,1964,0,1,3,1964,1963,'menu-items','c2dc5753b0cd1aa3b86a1b53e365faf0');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:64','eznode',1,1979,0,1,3,1979,1963,'configuration','ccd1066343c95877b75b79d47c36bebe');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:51','eznode',1,1967,0,1,5,1967,1963,'bilder','faadbe3c7e2e36a26164dbcf0d201d37');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:242','eznode',1,1965,0,1,3,1965,1964,'base-menu','31991543747b528ce2666d1df58b81c5');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:242','eznode',1,1965,0,1,5,1965,1964,'basis-menue','676d1dfa4a6ddd2a229434683336637c');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1425','eznode',1,1973,0,1,4,1973,1967,'img_6838','212fd5eacf4c027ddf95abd1e0db8967');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1427','eznode',1,1975,0,1,4,1975,1967,'img_8708','3acc5c65663bef8af3e6436115f60b21');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1421','eznode',1,1969,0,1,4,1969,1967,'img_0830','4ea9820b721c4e69c3001602e722d8b2');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:821','eznode',1,1976,0,1,4,1976,1967,'wire-2019-10-15-at-7_53-am','6b5b13943f25814e5062a72d12cc0563');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1424','eznode',1,1972,0,1,4,1972,1967,'img_6078','76213f709027b86722902ea3f2d5d557');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1423','eznode',1,1971,0,1,4,1971,1967,'img_0837','ba1c3c118c7dc8777f881e170b96a5e9');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1426','eznode',1,1974,0,1,4,1974,1967,'img_7118','e9e10c8614e63fade4b7454237626e0d');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1345','eznode',1,1968,0,1,4,1968,1967,'kirchberg-ein-mann-gibt-portrait','eaf1c932946421b42222351cc069ec3c');
+INSERT INTO `ezurlalias_ml` VALUES ('eznode:1422','eznode',1,1970,0,1,4,1970,1967,'img_0513','ff34d97923c1ce1563a82023b6eb2f93');
 /*!40000 ALTER TABLE `ezurlalias_ml` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -40833,7 +40848,7 @@ DROP TABLE IF EXISTS `ezurlalias_ml_incr`;
 CREATE TABLE `ezurlalias_ml_incr` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1983 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1989 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42824,6 +42839,12 @@ INSERT INTO `ezurlalias_ml_incr` VALUES (1979);
 INSERT INTO `ezurlalias_ml_incr` VALUES (1980);
 INSERT INTO `ezurlalias_ml_incr` VALUES (1981);
 INSERT INTO `ezurlalias_ml_incr` VALUES (1982);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1983);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1984);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1985);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1986);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1987);
+INSERT INTO `ezurlalias_ml_incr` VALUES (1988);
 /*!40000 ALTER TABLE `ezurlalias_ml_incr` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -42840,7 +42861,7 @@ CREATE TABLE `ezurlwildcard` (
   `source_url` longtext NOT NULL,
   `type` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42868,7 +42889,7 @@ CREATE TABLE `ezuser` (
   `password_updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`contentobject_id`),
   UNIQUE KEY `ezuser_login` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42880,9 +42901,8 @@ LOCK TABLES `ezuser` WRITE;
 INSERT INTO `ezuser` VALUES (10,'nospam@ez.no','anonymous','$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',7,1770191485);
 INSERT INTO `ezuser` VALUES (14,'info@example.org','admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 INSERT INTO `ezuser` VALUES (189,'project.editor@example.org','project.editor','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
-INSERT INTO `ezuser` VALUES (455,'project.admin@example.org','project.admin','$2y$10$hnJONO/cRIy2hJwZttQJ1OyQrvTujOEZO8p6eSNEKexBrzZSk0we.',7,1770191485);
+INSERT INTO `ezuser` VALUES (455,'project.admin@example.org','project.admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 INSERT INTO `ezuser` VALUES (457,'project-user-alt@example.org','project-user-alt','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
-INSERT INTO `ezuser` VALUES (1312,'project-user+admin@example.org','project-admin-user','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 INSERT INTO `ezuser` VALUES (1314,'project-user+editor@example.org','project-editor-user','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 /*!40000 ALTER TABLE `ezuser` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -42901,7 +42921,7 @@ CREATE TABLE `ezuser_accountkey` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `hash_key` (`hash_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42926,7 +42946,7 @@ CREATE TABLE `ezuser_discountrule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42954,7 +42974,7 @@ CREATE TABLE `ezuser_role` (
   PRIMARY KEY (`id`),
   KEY `ezuser_role_contentobject_id` (`contentobject_id`),
   KEY `ezuser_role_role_id` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42989,7 +43009,7 @@ CREATE TABLE `ezuser_setting` (
   `max_login` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43003,7 +43023,6 @@ INSERT INTO `ezuser_setting` VALUES (1,10,14);
 INSERT INTO `ezuser_setting` VALUES (1,0,189);
 INSERT INTO `ezuser_setting` VALUES (1,0,455);
 INSERT INTO `ezuser_setting` VALUES (1,0,457);
-INSERT INTO `ezuser_setting` VALUES (1,0,1312);
 INSERT INTO `ezuser_setting` VALUES (1,0,1314);
 /*!40000 ALTER TABLE `ezuser_setting` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -43023,7 +43042,7 @@ CREATE TABLE `ezuservisit` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   KEY `ezuservisit_co_visit_count` (`current_visit_timestamp`,`login_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43049,7 +43068,7 @@ CREATE TABLE `ezvatrule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `vat_type` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43072,7 +43091,7 @@ CREATE TABLE `ezvatrule_product_category` (
   `product_category_id` int(11) NOT NULL DEFAULT 0,
   `vatrule_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`vatrule_id`,`product_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43096,7 +43115,7 @@ CREATE TABLE `ezvattype` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `percentage` float DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43119,7 +43138,7 @@ CREATE TABLE `ezview_counter` (
   `count` int(11) NOT NULL DEFAULT 0,
   `node_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`node_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43146,7 +43165,7 @@ CREATE TABLE `ezwaituntildatevalue` (
   `workflow_event_version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`workflow_event_id`,`workflow_event_version`),
   KEY `ezwaituntildateevalue_wf_ev_id_wf_ver` (`workflow_event_id`,`workflow_event_version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43170,7 +43189,7 @@ CREATE TABLE `ezwishlist` (
   `productcollection_id` int(11) NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43200,7 +43219,7 @@ CREATE TABLE `ezworkflow` (
   `version` int(11) NOT NULL DEFAULT 0,
   `workflow_type_string` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43226,7 +43245,7 @@ CREATE TABLE `ezworkflow_assign` (
   `node_id` int(11) NOT NULL DEFAULT 0,
   `workflow_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43263,7 +43282,7 @@ CREATE TABLE `ezworkflow_event` (
   `workflow_type_string` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`version`),
   KEY `wid_version_placement` (`workflow_id`,`version`,`placement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43290,7 +43309,7 @@ CREATE TABLE `ezworkflow_group` (
   `modifier_id` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43315,7 +43334,7 @@ CREATE TABLE `ezworkflow_group_link` (
   `workflow_id` int(11) NOT NULL DEFAULT 0,
   `workflow_version` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`workflow_id`,`group_id`,`workflow_version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43358,7 +43377,7 @@ CREATE TABLE `ezworkflow_process` (
   `workflow_id` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ezworkflow_process_process_key` (`process_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43400,7 +43419,7 @@ CREATE TABLE `nglayouts_block` (
   KEY `idx_ngl_layout` (`layout_id`,`status`),
   KEY `idx_ngl_parent_block` (`parent_id`,`placeholder`,`status`),
   CONSTRAINT `fk_ngl_block_layout` FOREIGN KEY (`layout_id`, `status`) REFERENCES `nglayouts_layout` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=941 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=941 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43992,7 +44011,7 @@ CREATE TABLE `nglayouts_block_collection` (
   KEY `idx_ngl_collection` (`collection_id`,`collection_status`),
   CONSTRAINT `fk_ngl_block_collection_block` FOREIGN KEY (`block_id`, `block_status`) REFERENCES `nglayouts_block` (`id`, `status`),
   CONSTRAINT `fk_ngl_block_collection_collection` FOREIGN KEY (`collection_id`, `collection_status`) REFERENCES `nglayouts_collection` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44146,7 +44165,7 @@ CREATE TABLE `nglayouts_block_translation` (
   `parameters` longtext NOT NULL,
   PRIMARY KEY (`block_id`,`status`,`locale`),
   CONSTRAINT `fk_ngl_block_translation_block` FOREIGN KEY (`block_id`, `status`) REFERENCES `nglayouts_block` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44738,7 +44757,7 @@ CREATE TABLE `nglayouts_collection` (
   `always_available` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`,`status`),
   UNIQUE KEY `idx_ngl_collection_uuid` (`uuid`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44899,7 +44918,7 @@ CREATE TABLE `nglayouts_collection_item` (
   UNIQUE KEY `idx_ngl_collection_item_uuid` (`uuid`,`status`),
   KEY `idx_ngl_collection` (`collection_id`,`status`),
   CONSTRAINT `fk_ngl_item_collection` FOREIGN KEY (`collection_id`, `status`) REFERENCES `nglayouts_collection` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44990,7 +45009,7 @@ CREATE TABLE `nglayouts_collection_query` (
   UNIQUE KEY `idx_ngl_collection_query_uuid` (`uuid`,`status`),
   KEY `idx_ngl_collection` (`collection_id`,`status`),
   CONSTRAINT `fk_ngl_query_collection` FOREIGN KEY (`collection_id`, `status`) REFERENCES `nglayouts_collection` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45111,7 +45130,7 @@ CREATE TABLE `nglayouts_collection_query_translation` (
   `parameters` longtext NOT NULL,
   PRIMARY KEY (`query_id`,`status`,`locale`),
   CONSTRAINT `fk_ngl_query_translation_query` FOREIGN KEY (`query_id`, `status`) REFERENCES `nglayouts_collection_query` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45237,7 +45256,7 @@ CREATE TABLE `nglayouts_collection_slot` (
   KEY `idx_ngl_collection` (`collection_id`,`status`),
   KEY `idx_ngl_position` (`collection_id`,`position`),
   CONSTRAINT `fk_ngl_slot_collection` FOREIGN KEY (`collection_id`, `status`) REFERENCES `nglayouts_collection` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45262,7 +45281,7 @@ CREATE TABLE `nglayouts_collection_translation` (
   `locale` varchar(191) NOT NULL,
   PRIMARY KEY (`collection_id`,`status`,`locale`),
   CONSTRAINT `fk_ngl_collection_translation_collection` FOREIGN KEY (`collection_id`, `status`) REFERENCES `nglayouts_collection` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45425,7 +45444,7 @@ CREATE TABLE `nglayouts_layout` (
   KEY `idx_ngl_layout_name` (`name`),
   KEY `idx_ngl_layout_type` (`type`),
   KEY `idx_ngl_layout_shared` (`shared`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45494,7 +45513,7 @@ CREATE TABLE `nglayouts_layout_translation` (
   `locale` varchar(191) NOT NULL,
   PRIMARY KEY (`layout_id`,`status`,`locale`),
   CONSTRAINT `fk_ngl_layout_translation_layout` FOREIGN KEY (`layout_id`, `status`) REFERENCES `nglayouts_layout` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45562,7 +45581,7 @@ CREATE TABLE `nglayouts_migration_versions` (
   `executed_at` datetime DEFAULT NULL,
   `execution_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45601,7 +45620,7 @@ CREATE TABLE `nglayouts_role` (
   PRIMARY KEY (`id`,`status`),
   UNIQUE KEY `idx_ngl_role_uuid` (`uuid`,`status`),
   KEY `idx_ngl_role_identifier` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45636,7 +45655,7 @@ CREATE TABLE `nglayouts_role_policy` (
   KEY `idx_ngl_policy_component` (`component`),
   KEY `idx_ngl_policy_component_permission` (`component`,`permission`),
   CONSTRAINT `fk_ngl_policy_role` FOREIGN KEY (`role_id`, `status`) REFERENCES `nglayouts_role` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45675,7 +45694,7 @@ CREATE TABLE `nglayouts_rule` (
   PRIMARY KEY (`id`,`status`),
   UNIQUE KEY `idx_ngl_rule_uuid` (`uuid`,`status`),
   KEY `idx_ngl_related_layout` (`layout_uuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45726,7 +45745,7 @@ CREATE TABLE `nglayouts_rule_condition` (
   `value` longtext DEFAULT NULL,
   PRIMARY KEY (`id`,`status`),
   UNIQUE KEY `idx_ngl_rule_condition_uuid` (`uuid`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45766,7 +45785,7 @@ CREATE TABLE `nglayouts_rule_condition_rule` (
   `rule_status` int(11) NOT NULL,
   PRIMARY KEY (`condition_id`,`condition_status`),
   KEY `idx_ngl_rule` (`rule_id`,`rule_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45806,7 +45825,7 @@ CREATE TABLE `nglayouts_rule_condition_rule_group` (
   `rule_group_status` int(11) NOT NULL,
   PRIMARY KEY (`condition_id`,`condition_status`),
   KEY `idx_ngl_rule_group` (`rule_group_id`,`rule_group_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45830,7 +45849,7 @@ CREATE TABLE `nglayouts_rule_data` (
   `enabled` tinyint(1) NOT NULL,
   `priority` int(11) NOT NULL,
   PRIMARY KEY (`rule_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45873,7 +45892,7 @@ CREATE TABLE `nglayouts_rule_group` (
   PRIMARY KEY (`id`,`status`),
   UNIQUE KEY `idx_ngl_rule_group_uuid` (`uuid`,`status`),
   KEY `idx_ngl_parent_rule_group` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45898,7 +45917,7 @@ CREATE TABLE `nglayouts_rule_group_data` (
   `enabled` tinyint(1) NOT NULL,
   `priority` int(11) NOT NULL,
   PRIMARY KEY (`rule_group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45930,7 +45949,7 @@ CREATE TABLE `nglayouts_rule_target` (
   KEY `idx_ngl_rule` (`rule_id`,`status`),
   KEY `idx_ngl_target_type` (`type`),
   CONSTRAINT `fk_ngl_target_rule` FOREIGN KEY (`rule_id`, `status`) REFERENCES `nglayouts_rule` (`id`, `status`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45982,7 +46001,7 @@ CREATE TABLE `nglayouts_zone` (
   KEY `idx_ngl_linked_zone` (`linked_layout_uuid`,`linked_zone_identifier`),
   CONSTRAINT `fk_ngl_zone_block` FOREIGN KEY (`root_block_id`, `status`) REFERENCES `nglayouts_block` (`id`, `status`),
   CONSTRAINT `fk_ngl_zone_layout` FOREIGN KEY (`layout_id`, `status`) REFERENCES `nglayouts_layout` (`id`, `status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46229,7 +46248,7 @@ CREATE TABLE `nguser_setting` (
   `user_id` int(11) NOT NULL,
   `is_activated` int(11) NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46261,7 +46280,7 @@ CREATE TABLE `sckenhancedselection` (
   `identifier` varchar(255) NOT NULL DEFAULT '',
   KEY `sckenhancedselection_coaid_coav` (`contentobject_attribute_id`,`contentobject_attribute_version`),
   KEY `sckenhancedselection_coaid_coav_iden` (`contentobject_attribute_id`,`contentobject_attribute_version`,`identifier`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46303,5 +46322,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-02-15  3:43:29
