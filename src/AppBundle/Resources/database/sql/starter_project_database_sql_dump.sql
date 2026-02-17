@@ -42878,12 +42878,12 @@ CREATE TABLE `ezuser` (
 LOCK TABLES `ezuser` WRITE;
 /*!40000 ALTER TABLE `ezuser` DISABLE KEYS */;
 INSERT INTO `ezuser` VALUES (10,'nospam@ez.no','anonymous','$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',7,1770191485);
-INSERT INTO `ezuser` VALUES (14,'info@jac-systeme.de','admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
-INSERT INTO `ezuser` VALUES (189,'jac.editor@projekte.jac-systeme.com','jac.editor','$2y$10$CNF304sQDpouEhBLn4LxM.Edx2jppQp/8dury7gOnbEeaBc7PaPKa',7,1770191485);
-INSERT INTO `ezuser` VALUES (455,'jac.admin@projekte.jac-systeme.com','jac.admin','$2y$10$hnJONO/cRIy2hJwZttQJ1OyQrvTujOEZO8p6eSNEKexBrzZSk0we.',7,1770191485);
-INSERT INTO `ezuser` VALUES (457,'axel@ars-campus.de','n980001','$2y$10$tFxwAyJXD349RiP13/jxbOttYs0wOsFg4.SrII63D7PrErw914kIS',7,1770191485);
-INSERT INTO `ezuser` VALUES (1312,'norman.pappisch+admin@jac-systeme.de','j960009admin','$2y$10$EJOYn7FuN8/6qb7Vmt.wpO.NbR6m9JSp3qTv770/lEueaczknWGGC',7,1770191485);
-INSERT INTO `ezuser` VALUES (1314,'norman.pappisch+editor@jac-systeme.de','j960009editor','$2y$10$ap/BBOb.EGiCgZdtDFEtsu9h/gsJoy0QBMzlTEWhZhnfFDwL/r4VS',7,1770191485);
+INSERT INTO `ezuser` VALUES (14,'info@example.org','admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
+INSERT INTO `ezuser` VALUES (189,'project.editor@example.org','project.editor','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
+INSERT INTO `ezuser` VALUES (455,'project.admin@example.org','project.admin','$2y$10$hnJONO/cRIy2hJwZttQJ1OyQrvTujOEZO8p6eSNEKexBrzZSk0we.',7,1770191485);
+INSERT INTO `ezuser` VALUES (457,'project-user-alt@example.org','project-user-alt','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
+INSERT INTO `ezuser` VALUES (1312,'project-user+admin@example.org','project-admin-user','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
+INSERT INTO `ezuser` VALUES (1314,'project-user+editor@example.org','project-editor-user','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,1770191485);
 /*!40000 ALTER TABLE `ezuser` ENABLE KEYS */;
 UNLOCK TABLES;
 
