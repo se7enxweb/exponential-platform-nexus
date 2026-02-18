@@ -98,7 +98,7 @@ Exponential Platform Nexus supports PHP 7.3 -> 8.5 please use the latest version
 
 # Installation
 
-Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.one/display/DEVELOPER/Step%2b1_%2bInstallation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html)
+Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html)
 
 # Default Installation Starter Demo Design Bundle Database 'admin' Password is 'publish' (all lowercase).
 
@@ -106,19 +106,19 @@ Read [Reseting the admin password in eZ publish](https://ezpedia.se7enx.com/en/s
 
 # Issue tracker
 
-Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platfom-legacy/issues](https://github.com/se7enxweb/exponential-platfom-legacy/issues)
+Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platfom-nexus/issues](https://github.com/se7enxweb/exponential-platfom-nexus/issues)
 
-If you discover a [security issue](SECURITY.md), please responsibly report such issues via email to security@exponential.one
+If you discover a [security issue](SECURITY.md), please responsibly report such issues via email to security@exponential.earth
 
 # Where to get more help
 
-Exponential Platform documentation: [exponential.doc.exponential.one/display/DEVELOPER/Docuemntation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Documentation.html)
+Exponential Platform documentation: [exponential.doc.exponential.earth/display/DEVELOPER/Docuemntation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Documentation.html)
 
-Exponential Platform Community forums: [share.exponential.one/forums](https://share.exponential.one/forums) and [share.exponential.one/forums/exponential-platform](https://share.se7enx.com/forums/exponential-platform)
+Exponential Platform Community forums: [share.exponential.earth/forums](https://share.exponential.earth/forums) and [share.exponential.earth/forums/exponential-platform](https://share.se7enx.com/forums/exponential-platform)
 
-Exponential Platform Project Website: [exponential.one](https://platform.exponential.one)
+Exponential Platform Project Website: [exponential.earth](https://platform.exponential.earth)
 
-Support Exponential Platform! Project extension support Website: [support.exponential.one](https://support.exponential.one)
+Support Exponential Platform! Project extension support Website: [support.exponential.earth](https://support.exponential.earth)
 
 Share Exponential! Telegram Community Support Chat
 [https://t.me/exponentialcms](https://t.me/exponentialcms)
