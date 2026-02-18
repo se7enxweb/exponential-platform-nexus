@@ -38,7 +38,7 @@ Requirements
 GitHub Installation Guide (Create project for contribution)
 ------------------
 
-- Create Database
+## Create Database
 
 ### MySQL database
 
@@ -64,6 +64,40 @@ Simple database dump of just the expected structure's content (starter default i
 
 - Install Exponential Platform Nexus required PHP libraries like Zeta Components and Exponential Platform bundles and bundle extensions as specified in this project's composer.json.
 
+## Install Node
+
+Download Node.js
+https://nodejs.org/en/download
+
+Install Node.js
+
+### Download and install nvm:
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
+### in lieu of restarting the shell
+\. "$HOME/.nvm/nvm.sh"
+
+### Download and install Node.js:
+nvm install 20
+
+### Verify the Node.js version:
+node -v # Should print "v20.20.0".
+
+### Verify npm version:
+npm -v # Should print "10.8.2".
+
+
+## Install Node
+
+Download Node.js
+https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+
+Install Node.js
+
+npm install --global yarn
+
+# Install the required composer packages and start the installation process
+
 `cd exponential-platform-nexus; composer install --keep-vcs --ignore-platform-reqs;`
 
 Note: For the short term future the composer argument '--ignore-platform-reqs' is required to install the software via composer package dependencies successfully. This limitation will soon be removed in the future as we continue to update requirements within the composer package definition files for each package repostiory (tedious detail oriented work which is currently on going).
@@ -75,6 +109,29 @@ Note: For the short term future the composer argument '--ignore-platform-reqs' i
 Note if you use the provided starter demo database sql files you do not need to run the above command.
 
 - Assign Database User, Password and Database Name information in app/config/parameters.yml
+
+- Manual Symlink Installation for default legacy storage images is required. 
+
+This is required to store the storage directory outside of the ezpublish_legacy directory which is *erased* upon composer update (when new releases are installed via update of package se7enxweb/exponential). This is a known issue due to the behavior and nature of composer usage.
+
+To see the images provided in the starter design and avoid a potential site bug of missing images perform the following commands:
+
+cd ezpublish_legacy/var/site/;
+
+mv storage storage-empty;
+
+ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage .;
+
+cd ../../../;
+
+cd web/bundles/;
+
+ln -s ../../src/AppBundle/Resources/public app;
+
+cd ../../;
+
+# replace user and group as needed or desired
+chown -R www-data:www-data .;
 
 - Clear cache
 
