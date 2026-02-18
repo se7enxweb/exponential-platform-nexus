@@ -3298,6 +3298,70 @@ CREATE TABLE `sckenhancedselection` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+--
+-- Table structure for table `lexik_translation_file`
+--
+
+DROP TABLE IF EXISTS `lexik_translation_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lexik_translation_file` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `domain` varchar(191) NOT NULL,
+  `locale` varchar(191) NOT NULL,
+  `extention` varchar(191) NOT NULL,
+  `path` varchar(191) NOT NULL,
+  `hash` varchar(191) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `hash_idx` (`hash`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lexik_trans_unit`
+--
+
+DROP TABLE IF EXISTS `lexik_trans_unit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lexik_trans_unit` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `key_name` varchar(191) NOT NULL,
+  `domain` varchar(191) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key_domain_idx` (`key_name`,`domain`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lexik_trans_unit_translations`
+--
+
+DROP TABLE IF EXISTS `lexik_trans_unit_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lexik_trans_unit_translations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `file_id` int DEFAULT NULL,
+  `trans_unit_id` int DEFAULT NULL,
+  `locale` varchar(191) NOT NULL,
+  `content` longtext NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `modified_manually` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `trans_unit_locale_idx` (`trans_unit_id`,`locale`),
+  KEY `IDX_B0AA394493CB796C` (`file_id`),
+  KEY `IDX_B0AA3944C3C583C9` (`trans_unit_id`),
+  CONSTRAINT `FK_B0AA394493CB796C` FOREIGN KEY (`file_id`) REFERENCES `lexik_translation_file` (`id`),
+  CONSTRAINT `FK_B0AA3944C3C583C9` FOREIGN KEY (`trans_unit_id`) REFERENCES `lexik_trans_unit` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -3306,4 +3370,3 @@ CREATE TABLE `sckenhancedselection` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-15  3:43:23
