@@ -3,12 +3,12 @@
 [DatabaseSettings]
 Charset=utf8mb4
 
-DatabaseImplementation=ezmysqli
-Server=localhost
-Port=
-User=xa_cjw_example
-Password=db-cjw-example-2030
-Database=xa_cjw_example
+#DatabaseImplementation=ezmysqli
+#Server=localhost
+#Port=
+#User=AdbUser
+#Password=ADBPassword
+#Database=aDatabaseName
 
 [FileSettings]
 VarDir=var/site
@@ -46,10 +46,10 @@ AvailableSiteAccessList[]=legacy_admin
 AvailableSiteAccessList[]=ngadminui
 MatchOrder=host
 HostMatchMapItems[]
-HostMatchMapItems[]=platform.alpha.se7enx.com;site
-HostMatchMapItems[]=edit.platform.alpha.se7enx.com;admin
-HostMatchMapItems[]=nga.platform.alpha.se7enx.com;ngadminui
-HostMatchMapItems[]=nga.platform.cjw.alpha.se7enx.com;ngadminui
+HostMatchMapItems[]=platform.demo.se7enx.com;site
+HostMatchMapItems[]=edit.platform.demo.se7enx.com;admin
+HostMatchMapItems[]=legacy.platform.demo.se7enx.com;legacy_admin
+HostMatchMapItems[]=nga.platform.demo.se7enx.com;ngadminui
 
 [DesignSettings]
 DesignLocationCache=enabled
