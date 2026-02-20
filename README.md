@@ -53,8 +53,10 @@ access to the Internet.
 - (Optional) Web server. Used to deliver the website to the end user.
 - (Required) Database server. Used to store website content (and application information)
 - (Required by default configuration only) PHP Extension APCu is technically completely optional.
-   Today APCu is strongly strongly recommended and enabled by default) it is easily replaced via service / yaml configuration changes in the base app/config.
-   For more information on installing this extension on your computer (for GNU/Linux OSs) please see: https://www.php.net/manual/en/apcu.installation.php 
+   Today APCu is strongly strongly recommended for greatly improving uncached page rendering speed
+   and in general page response time and enabled by default). APCu Caching is easily replaced via
+   service / yaml configuration changes in the base app/config. For more information on installing
+   this extension on your computer (for GNU/Linux OSs) please see: https://www.php.net/manual/en/apcu.installation.php 
 - Composer. Used to download Exponential Platform Nexus software packages for installation, also notebly installs the required Zeta Components php libraries.
 - Computer to run the PHP website application.
 
