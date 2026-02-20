@@ -107,7 +107,6 @@ _ezpublishSearchRoute:
     methods: [GET, POST]
 
 # Netgen Site routes follow. It is recommended to keep them at the end of file
-
 netgen_site:
     resource: '@NetgenSiteBundle/Resources/config/routing.yml'
 

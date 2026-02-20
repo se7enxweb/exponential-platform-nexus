@@ -37,11 +37,6 @@ services:
         arguments:
             $params: '%ezrepoforms.user_register.registration_content_types%'
 
-    # Alias for admin UI firewall siteaccess matcher (defined in admin-ui-bundle)
-    app.security.admin_ui_siteaccess_matcher:
-        alias: netgen_admin_ui.security.siteaccess_request_matcher
-        public: true
-
     # Alias Redis cache requests to APCu adapter (for eZ Platform's CacheFactory compatibility)
     # eZ Platform expects a 'cache.redis' service - we redirect this to our active APCu cache pool
     cache.redis:
