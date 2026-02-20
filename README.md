@@ -20,9 +20,9 @@ Previously before 2022, 7x was called Brookins Consulting who was the outspoken 
 
 # What is Exponential Platform Nexus?
 
-Exponential Platform Nexus is made up of the latest Exponential Platform Legacy + Netgen Bundles for Media Site + Layouts + 7x Symfony 3.4 + PHP 8.5+ Bugfixes from 7x.
+Exponential Platform Nexus is made up of the latest Exponential Platform Legacy + Netgen Bundles for Media Site + Tags Bundle + Layouts + 7x Symfony 3.4 + PHP 8.5+ Bugfixes from 7x.
 
-It's #1 Goal is to be the stable basis for building all Exponential Platform (Legacy) Based Web Applications.
+It's #1 Goal is to be the stable basis for building all Symfony based Exponential Platform (Legacy) Web Applications.
 
 ## Recent improvements to Exponential Platform Nexus
 
@@ -46,18 +46,21 @@ Exponential Platform Nexus is database, platform and browser independent. Becaus
 browser based it can be used and updated from anywhere as long as you have
 access to the Internet.
 
-(Referred to as `legacy+new stack` in Exponential Platform and Ibexa OSS)
+(Referred to as `legacy + new stack` in Exponential Platform and Ibexa OSS)
 
 # Requirements
 - PHP
 - (Optional) Web server. Used to deliver the website to the end user.
 - (Required) Database server. Used to store website content (and application information)
+- (Required by default configuration only) PHP Extension APCu is technically completely optional.
+   Today APCu is strongly strongly recommended and enabled by default) it is easily replaced via service / yaml configuration changes in the base app/config.
+   For more information on installing this extension on your computer (for GNU/Linux OSs) please see: https://www.php.net/manual/en/apcu.installation.php 
 - Composer. Used to download Exponential Platform Nexus software packages for installation, also notebly installs the required Zeta Components php libraries.
 - Computer to run the PHP website application.
 
 ## What version of PHP is required
 
-Exponential Platform Nexus supports PHP 7.3 -> 8.5 please use the latest version of PHP available on your OS.
+Exponential Platform Nexus supports PHP 8.3 -> 8.5 please use the latest version of PHP available on your OS.
 
 # Main Exponential Platform Nexus features
 

@@ -116,6 +116,14 @@ This is required to store the storage directory outside of the ezpublish_legacy 
 
 To see the images provided in the starter design and avoid a potential site bug of missing images perform the following commands:
 
+# Install `app` extension 
+cd ezpublish_legacy/extension/;
+
+ln -s ../../../src/AppBundle/ezpublish_legacy/extension/app .;
+
+cd ../../../;
+
+# Install `app storage dir symlink` in var siteaccess dir
 cd ezpublish_legacy/var/site/;
 
 mv storage storage-empty;
@@ -124,6 +132,7 @@ ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage .;
 
 cd ../../../;
 
+# Install `app` bundle public dir symlink in web/bundles
 cd web/bundles/;
 
 ln -s ../../src/AppBundle/Resources/public app;
