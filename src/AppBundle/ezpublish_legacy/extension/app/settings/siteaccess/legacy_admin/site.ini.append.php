@@ -13,8 +13,9 @@ RelatedSiteAccessList[]=ngadminui
 ShowHiddenNodes=true
 
 [DesignSettings]
-SiteDesign=admin2
+SiteDesign=admin3
 AdditionalSiteDesignList[]
+AdditionalSiteDesignList[]=admin3
 AdditionalSiteDesignList[]=admin
 AdditionalSiteDesignList[]=ezdemo
 

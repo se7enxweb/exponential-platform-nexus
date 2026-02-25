@@ -13,11 +13,20 @@ RelatedSiteAccessList[]=legacy_admin
 ShowHiddenNodes=true
 
 [DesignSettings]
-SiteDesign=admin2
+SiteDesign=admin3
 AdditionalSiteDesignList[]
+AdditionalSiteDesignList[]=admin3
 AdditionalSiteDesignList[]=admin
 AdditionalSiteDesignList[]=standard
 AdditionalSiteDesignList[]=base
+
+#[RegionalSettings]
+#Locale=ger-DE
+#ContentObjectLocale=ger-DE
+#ShowUntranslatedObjects=enabled
+#SiteLanguageList[]
+#SiteLanguageList[]=ger-DE
+#TextTranslation=enabled
 
 [RegionalSettings]
 Locale=eng-GB
@@ -30,17 +39,5 @@ TextTranslation=disabled
 [ContentSettings]
 CachedViewPreferences[full]=admin_navigation_content=1;admin_children_viewmode=list;admin_list_limit=1
 TranslationList=
-
-[SiteAccessRules]
-Rules[]=access;enable
-Rules[]=moduleall
-Rules[]=module;visual
-Rules[]=module;visual/templateedit
-Rules[]=module;visual/templatelist
-Rules[]=module;visual/templateview
-Rules[]=module;visual/templatecreate
-Rules[]=module;visual/toolbar
-Rules[]=module;visual/toolbarlist
-Rules[]=module;visual/menuconfig
 
 */ ?>

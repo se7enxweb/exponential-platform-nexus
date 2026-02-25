@@ -13,7 +13,7 @@ RelatedSiteAccessList[]={{ siteAccess }}
 ShowHiddenNodes=true
 
 [DesignSettings]
-SiteDesign=admin2
+SiteDesign=admin3
 AdditionalSiteDesignList[]
 AdditionalSiteDesignList[]=admin
 AdditionalSiteDesignList[]=ezdemo

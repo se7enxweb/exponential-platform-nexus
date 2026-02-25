@@ -6,21 +6,23 @@ Charset=utf8mb4
 #DatabaseImplementation=ezmysqli
 #Server=localhost
 #Port=
-#User=AdbUser
-#Password=ADBPassword
-#Database=aDatabaseName
+#User=adbuser1
+#Password=adbpassword1
+#Database=adbname1
 
 [FileSettings]
 VarDir=var/site
 
 [ExtensionSettings]
 ActiveExtensions[]
+ActiveExtensions[]=app
 ActiveExtensions[]=ngsymfonytools
 ActiveExtensions[]=ezrichtext
 ActiveExtensions[]=ezplatformsearch
 ActiveExtensions[]=ezdemo
 ActiveExtensions[]=ezjscore
 ActiveExtensions[]=ezoe
+
 
 [Session]
 SessionNameHandler=custom
@@ -44,7 +46,7 @@ AvailableSiteAccessList[]=site
 AvailableSiteAccessList[]=admin
 AvailableSiteAccessList[]=legacy_admin
 AvailableSiteAccessList[]=ngadminui
-MatchOrder=host
+MatchOrder=host;uri
 HostMatchMapItems[]
 HostMatchMapItems[]=platform.demo.se7enx.com;site
 HostMatchMapItems[]=edit.platform.demo.se7enx.com;admin
