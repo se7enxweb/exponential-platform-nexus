@@ -37,7 +37,7 @@ netgen_site_legacy:
         legacy_admin:
             injected_settings:
                 site.ini:
-                    DesignSettings/SiteDesign: admin
+                    DesignSettings/SiteDesign: admin3
                     
             injected_merge_settings:
                 site.ini:
