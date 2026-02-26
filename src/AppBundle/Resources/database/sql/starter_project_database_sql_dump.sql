@@ -2113,9 +2113,9 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,180,14,0,0,'<?xml version=\"1.
 INSERT INTO `ezcontentobject_attribute` VALUES (0,180,14,0,0,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<ezimage serial_number=\"1\" is_valid=\"\" filename=\"\" suffix=\"\" basename=\"\" dirpath=\"\" url=\"\" original_filename=\"\" mime_type=\"\" width=\"\" height=\"\" alternative_text=\"\" alias_key=\"1293033771\" timestamp=\"1472412002\"><original attribute_id=\"180\" attribute_version=\"6\" attribute_language=\"eng-GB\"/></ezimage>\n','ezimage',180,'eng-GB',3,0,'',9);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,56,0,NULL,'Design','ezstring',181,'eng-GB',3,0,'design',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Home','ezstring',226,'eng-GB',3,0,'home',98);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'eZ Platform','ezstring',226,'eng-GB',3,0,'ez platform',99);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'eZ Platform','ezstring',226,'eng-GB',3,0,'ez platform',100);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'eZ Platform','ezstring',226,'eng-GB',3,0,'ez platform',101);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Sites','ezstring',226,'eng-GB',3,0,'sites',99);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Sites','ezstring',226,'eng-GB',3,0,'sites',100);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Sites','ezstring',226,'eng-GB',3,0,'sites',101);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,62,0,NULL,'Configuration','ezstring',230,'eng-GB',3,0,'configuration',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,62,0,NULL,'Configuration','ezstring',230,'eng-GB',3,0,'configuration',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,406,63,0,NULL,'Netgen Media Site','ezstring',231,'eng-GB',2,0,'netgen media site',63);
@@ -2622,7 +2622,7 @@ INSERT INTO `ezcontentobject_attribute` VALUES (0,6,484,0,NULL,'Editor Layouts',
 INSERT INTO `ezcontentobject_attribute` VALUES (0,6,484,0,NULL,'Redakteure Layouts','ezstring',4625,'ger-DE',5,0,'redakteure layouts',2);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,7,484,0,NULL,'','ezstring',4626,'ger-DE',5,0,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,7,484,0,NULL,'','ezstring',4626,'ger-DE',5,0,'',2);
-INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'eZ Platform','ezstring',4705,'ger-DE',4,0,'ez platform',100);
+INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Sites','ezstring',4705,'ger-DE',4,0,'sites',100);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,405,61,0,NULL,'Sites','ezstring',4705,'ger-DE',4,0,'sites',101);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1308,197,NULL,3,NULL,'ezinteger',5878,'eng-GB',2,3,'',1);
 INSERT INTO `ezcontentobject_attribute` VALUES (0,1312,190,NULL,NULL,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',6261,'eng-GB',2,0,'',1);
@@ -9398,10 +9398,10 @@ INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',3,42,4,'Anonyme Benutzer','g
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',1,45,3,'Setup','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',1,56,3,'Design','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',98,61,3,'Home','eng-GB');
-INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',99,61,3,'eZ Platform','eng-GB');
-INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',100,61,3,'eZ Platform','eng-GB');
-INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',100,61,4,'eZ Platform','ger-DE');
-INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',101,61,3,'eZ Platform','eng-GB');
+INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',99,61,3,'Sites','eng-GB');
+INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',100,61,3,'Sites','eng-GB');
+INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',100,61,4,'Sites','ger-DE');
+INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',101,61,3,'Sites','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('ger-DE',101,61,4,'Sites','ger-DE');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',1,62,3,'Configuration','eng-GB');
 INSERT INTO `ezcontentobject_name` VALUES ('eng-GB',2,62,3,'Configuration','eng-GB');
