@@ -26,6 +26,8 @@ Exponential Platform Nexus (the application of interest) delivered to users worl
 With PHP we require composer to install Exponential Platform Nexus software and no other software required to run
 the application. This is an incredible improvement to the kernel (core) of Exponential Platform Nexus.
 
+Exponential Platform Nexus 1.2.0.x Releases are 100% Compatible with Ibexa OSS v4 + Netgen Suite + Exponential 6.x + Symfony 5.4
+
 ## What does Exponential Platform Nexus provide for end users building websites?
 
 Exponential Platform Nexus is a professional PHP application framework with advanced CMS (content management system) functionality. As a CMS its most notable feature
