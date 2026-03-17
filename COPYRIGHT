@@ -1,3 +1,5 @@
+Copyright (C) 1998 - 2026 7x. All rights reserved.
+
 Copyright (C) 1999-2025 Ibexa AS (formerly eZ Systems AS). All rights reserved.
 
 This source code is available separately under the following licenses:
@@ -12,7 +14,8 @@ For the full Ibexa BUL license text, please see:
 
 AND
 
-B - GNU General Public License, version 2
+B - GNU General Public License, version 2 (or any later version)
 Grants an copyleft open source license with ABSOLUTELY NO WARRANTY. For the full GPL license text, please see:
+- LICENSE.md file placed in the root of this source code, or
 - LICENSE file placed in the root of this source code, or
 - https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
