@@ -1,9 +1,9 @@
 {
-    "name": "se7enxweb/media-site-legacy",
+    "name": "se7enxweb/exponential-platform-nexus",
     "type": "project",
     "license": ["(GPL-2.0-or-later or proprietary)"],
     "description": "7x Netgen Media Site (Powered by Netgen Layouts & Ibexa DXP v4.6.0+)",
-    "homepage": "https://netgen.io",
+    "homepage": "https://platform.exponential.earth",
     "authors": [
         {
             "name": "7x",
@@ -30,7 +30,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "http-interop/http-factory-guzzle": "^1.2",
-        "ibexa/oss": "~4.6.0",
+        "se7enxweb/oss": "~4.6.0",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/flex": "^1.17|^2",
@@ -157,7 +157,7 @@
             "require": "5.4.*",
             "endpoint": [
                 "https://api.github.com/repos/ibexa/recipes/contents/index.json?ref=flex/main",
-                "https://api.github.com/repos/se7enxweb/sevenx-recipes/contents/index.json?ref=master",
+                "https://api.github.com/repos/se7enxweb/sevenx-recipes/contents/index.json?ref=flex",
                 "https://api.github.com/repos/netgen-layouts/recipes/contents/index.json?ref=flex",
                 "flex://defaults"
             ],
