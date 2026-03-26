@@ -28,7 +28,7 @@
         "site:prod": "encore production --config-name",
         "site:watch": "encore dev --watch --config-name",
         "site:server": "encore dev-server --config-name",
-        "ibexa": "encore production --config=webpack.config.ibexa.js",
+        "ez": "encore production --config=webpack.config.ez.js",
         "format:js": "prettier --write \"assets/js/**/*.js\"",
         "linter:js": "eslint \"assets/js/**/*.js\""
     },

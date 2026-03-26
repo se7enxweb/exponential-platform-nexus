@@ -1,0 +1,2 @@
+ezplatform.search:
+    resource: '@EzPlatformSearchBundle/Resources/config/routing.yaml'

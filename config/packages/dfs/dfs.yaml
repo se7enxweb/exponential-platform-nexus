@@ -40,7 +40,7 @@ ibexa_io:
                 connection: doctrine.dbal.dfs_connection
 
 # set the application handlers
-ibexa:
+ezpublish:
     system:
         default:
             io:

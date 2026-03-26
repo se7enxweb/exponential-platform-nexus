@@ -13,7 +13,7 @@ system:
         ng_content_view:
             full:
                 ng_category:
-                    template: "@ibexadesign/content/views/full/ng_category.html.twig"
+                    template: "@ezdesign/content/views/full/ng_category.html.twig"
                     controller: ngsite.controller.check_redirect
                     queries:
                         subtree:
@@ -27,12 +27,12 @@ system:
                     match:
                         Identifier\ContentType: ng_category
                 ng_landing_page:
-                    template: "@ibexadesign/content/views/full/ng_landing_page.html.twig"
+                    template: "@ezdesign/content/views/full/ng_landing_page.html.twig"
                     controller: ngsite.controller.check_redirect
                     match:
                         Identifier\ContentType: ng_landing_page
                 common:
-                    template: "@ibexadesign/content/views/full/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/full/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_article
@@ -58,12 +58,12 @@ system:
                     match: ~
             payload:
                 common:
-                    template: "@ibexadesign/content/views/payload/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/payload/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_article
                 form_common:
-                    template: "@ibexadesign/content/views/payload/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/payload/{content_type}.html.twig"
                     controller: ngsite.controller.info_collection.proxy_form_handler
                     match:
                         Identifier\ContentType:
@@ -71,11 +71,11 @@ system:
                             - ng_job_application_form
                             - ng_lead_form
                 match_all:
-                    template: "@ibexadesign/content/views/payload.html.twig"
+                    template: "@ezdesign/content/views/payload.html.twig"
                     match: ~
             line:
                 common:
-                    template: "@ibexadesign/content/views/line/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/line/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - file
@@ -91,49 +91,49 @@ system:
                             - ng_recipe
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/line.html.twig"
+                    template: "@ezdesign/content/views/line.html.twig"
                     match: ~
             link_embed:
                 form_common:
-                    template: "@ibexadesign/content/views/link_embed/form_common.html.twig"
+                    template: "@ezdesign/content/views/link_embed/form_common.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_contact_form
                             - ng_job_application_form
                             - ng_lead_form
                 match_all:
-                    template: "@ibexadesign/content/views/link_embed.html.twig"
+                    template: "@ezdesign/content/views/link_embed.html.twig"
                     match: ~
             modal:
                 form_common:
-                    template: "@ibexadesign/content/views/modal/form_common.html.twig"
+                    template: "@ezdesign/content/views/modal/form_common.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_contact_form
                             - ng_job_application_form
                             - ng_lead_form
                 match_all:
-                    template: "@ibexadesign/content/views/modal.html.twig"
+                    template: "@ezdesign/content/views/modal.html.twig"
                     match: ~
             modal_trigger:
                 form_common:
-                    template: "@ibexadesign/content/views/modal_trigger/form_common.html.twig"
+                    template: "@ezdesign/content/views/modal_trigger/form_common.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_contact_form
                             - ng_job_application_form
                             - ng_lead_form
                 common:
-                    template: "@ibexadesign/content/views/modal_trigger/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/modal_trigger/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/modal_trigger.html.twig"
+                    template: "@ezdesign/content/views/modal_trigger.html.twig"
                     match: ~
             listitem:
                 common:
-                    template: "@ibexadesign/content/views/listitem/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/listitem/{content_type}.html.twig"
                     params:
                         with_intro: false
                     match:
@@ -148,7 +148,7 @@ system:
                             - ng_recipe
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/listitem.html.twig"
+                    template: "@ezdesign/content/views/listitem.html.twig"
                     params:
                         with_intro: false
                     match: ~
@@ -158,13 +158,13 @@ system:
                     params:
                         with_intro: true
                 match_all:
-                    template: "@ibexadesign/content/views/listitem.html.twig"
+                    template: "@ezdesign/content/views/listitem.html.twig"
                     params:
                         with_intro: true
                     match: ~
             standard:
                 common:
-                    template: "@ibexadesign/content/views/standard/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/standard/{content_type}.html.twig"
                     params:
                         with_intro: false
                     match:
@@ -185,7 +185,7 @@ system:
                             - ng_recipe
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/standard.html.twig"
+                    template: "@ezdesign/content/views/standard.html.twig"
                     params:
                         with_intro: false
                     match: ~
@@ -195,20 +195,20 @@ system:
                     params:
                         with_intro: true
                 match_all:
-                    template: "@ibexadesign/content/views/standard.html.twig"
+                    template: "@ezdesign/content/views/standard.html.twig"
                     params:
                         with_intro: true
                     match: ~
             card:
                 common:
-                    template: "@ibexadesign/content/views/card/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/card/{content_type}.html.twig"
                     params:
                         with_intro: false
                     match:
                         Identifier\ContentType:
                             - ng_job_position
                 match_all:
-                    template: "@ibexadesign/content/views/card.html.twig"
+                    template: "@ezdesign/content/views/card.html.twig"
                     params:
                         with_intro: false
                     match: ~
@@ -218,13 +218,13 @@ system:
                     params:
                         with_intro: true
                 match_all:
-                    template: "@ibexadesign/content/views/card.html.twig"
+                    template: "@ezdesign/content/views/card.html.twig"
                     params:
                         with_intro: true
                     match: ~
             zigzag:
                 common:
-                    template: "@ibexadesign/content/views/zigzag/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/zigzag/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_article
@@ -232,20 +232,20 @@ system:
                             - ng_blog_post
                             - ng_news
                 match_all:
-                    template: "@ibexadesign/content/views/zigzag.html.twig"
+                    template: "@ezdesign/content/views/zigzag.html.twig"
                     match: ~
             accordion:
                 common:
-                    template: "@ibexadesign/content/views/accordion/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/accordion/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_accordion_item
                 match_all:
-                    template: "@ibexadesign/content/views/accordion.html.twig"
+                    template: "@ezdesign/content/views/accordion.html.twig"
                     match: ~
             mini:
                 common:
-                    template: "@ibexadesign/content/views/mini/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/mini/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - file
@@ -258,11 +258,11 @@ system:
                             - ng_recipe
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/mini.html.twig"
+                    template: "@ezdesign/content/views/mini.html.twig"
                     match: ~
             overlay:
                 common:
-                    template: "@ibexadesign/content/views/overlay/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/overlay/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_article
@@ -273,11 +273,11 @@ system:
                             - ng_recipe
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/overlay.html.twig"
+                    template: "@ezdesign/content/views/overlay.html.twig"
                     match: ~
             slide:
                 common:
-                    template: "@ibexadesign/content/views/slide/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/slide/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - image
@@ -287,11 +287,11 @@ system:
                             - ng_news
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/slide.html.twig"
+                    template: "@ezdesign/content/views/slide.html.twig"
                     match: ~
             gallery_thumb:
                 common:
-                    template: "@ibexadesign/content/views/gallery_thumb/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/gallery_thumb/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - image
@@ -301,11 +301,11 @@ system:
                             - ng_news
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/gallery_thumb.html.twig"
+                    template: "@ezdesign/content/views/gallery_thumb.html.twig"
                     match: ~
             gallery_grid:
                 common:
-                    template: "@ibexadesign/content/views/gallery_grid/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/gallery_grid/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - image
@@ -315,16 +315,16 @@ system:
                             - ng_news
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/gallery_grid.html.twig"
+                    template: "@ezdesign/content/views/gallery_grid.html.twig"
                     match: ~
             embed:
                 image:
-                    template: "@ibexadesign/content/views/embed/image.html.twig"
+                    template: "@ezdesign/content/views/embed/image.html.twig"
                     controller: ngsite.controller.embed_view.image
                     match:
                         Identifier\ContentType: image
                 common:
-                    template: "@ibexadesign/content/views/embed/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/embed/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - file
@@ -344,19 +344,19 @@ system:
                             - ng_video
             search:
                 common:
-                    template: "@ibexadesign/content/views/search/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/search/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - ng_video
                 match_all:
-                    template: "@ibexadesign/content/views/search.html.twig"
+                    template: "@ezdesign/content/views/search.html.twig"
                     match: ~
 
     default:
         ng_content_view:
             ngcb_preview:
                 common:
-                    template: "@ibexadesign/content/views/ngcb_preview/{content_type}.html.twig"
+                    template: "@ezdesign/content/views/ngcb_preview/{content_type}.html.twig"
                     match:
                         Identifier\ContentType:
                             - image

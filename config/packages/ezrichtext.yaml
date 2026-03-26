@@ -1,4 +1,4 @@
-ibexa_fieldtype_richtext:
+ezrichtext:
     enabled_attribute_types:
         - number
         - string

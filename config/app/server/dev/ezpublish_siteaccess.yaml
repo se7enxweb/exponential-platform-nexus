@@ -1,4 +1,4 @@
-ibexa:
+ezpublish:
     siteaccess:
         match:
             URIElement: 1

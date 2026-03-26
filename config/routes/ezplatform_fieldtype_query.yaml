@@ -1,0 +1,2 @@
+ezplatform.field_type_query:
+    resource: '@EzPlatformQueryFieldTypeBundle/Resources/config/routing/rest.yaml'

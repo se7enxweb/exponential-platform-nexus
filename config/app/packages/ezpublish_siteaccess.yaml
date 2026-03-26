@@ -1,7 +1,7 @@
 parameters:
     ngsite.admin_siteaccess_name: adminui
 
-ibexa:
+ezpublish:
     siteaccess:
         default_siteaccess: fh_eng
         list:
@@ -77,7 +77,7 @@ netgen_layouts:
         frontend_group:
             design: app
 
-ibexa_design_engine:
+ezdesign:
     design_list:
         bold:
             - bold

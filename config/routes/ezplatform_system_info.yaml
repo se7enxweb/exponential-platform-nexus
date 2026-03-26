@@ -1,0 +1,2 @@
+ezplatform.system_info:
+  resource: '@EzPlatformSystemInfoBundle/Resources/config/routing.yaml'

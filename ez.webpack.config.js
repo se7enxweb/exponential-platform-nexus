@@ -1,12 +1,12 @@
-const bundles = require('./var/encore/ibexa.config.js');
-const ibexaConfigManager = require('./ibexa.webpack.config.manager.js');
-const configManagers = require('./var/encore/ibexa.config.manager.js');
-const configSetups = require('./var/encore/ibexa.config.setup.js');
+const bundles = require('./var/encore/ez.config.js');
+const eZConfigManager = require('./ez.webpack.config.manager.js');
+const configManagers = require('./var/encore/ez.config.manager.js');
+const configSetups = require('./var/encore/ez.config.setup.js');
 const path = require('path');
 
 module.exports = (Encore) => {
-    Encore.setOutputPath('public/assets/ibexa/build')
-        .setPublicPath('/assets/ibexa/build')
+    Encore.setOutputPath('public/assets/ezplatform/build')
+        .setPublicPath('/assets/ezplatform/build')
         .addExternals({
             react: 'React',
             'react-dom': 'ReactDOM',
@@ -31,20 +31,20 @@ module.exports = (Encore) => {
         addEntries(Encore);
     });
 
-    const ibexaConfig = Encore.getWebpackConfig();
+    const eZConfig = Encore.getWebpackConfig();
 
-    ibexaConfig.name = 'ibexa';
+    eZConfig.name = 'ezplatform';
 
-    ibexaConfig.module.rules[4].oneOf[1].use[1].options.url = false;
-    ibexaConfig.module.rules[1].oneOf[1].use[1].options.url = false;
+    eZConfig.module.rules[4].oneOf[1].use[1].options.url = false;
+    eZConfig.module.rules[1].oneOf[1].use[1].options.url = false;
 
     configManagers.forEach((configManagerPath) => {
         const configManager = require(configManagerPath);
 
-        configManager(ibexaConfig, ibexaConfigManager);
+        configManager(eZConfig, eZConfigManager);
     });
 
     Encore.reset();
 
-    return ibexaConfig;
+    return eZConfig;
 };

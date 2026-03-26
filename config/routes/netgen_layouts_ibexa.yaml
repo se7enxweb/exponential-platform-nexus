@@ -1,2 +1,0 @@
-netgen_layouts_ibexa:
-    resource: '@NetgenLayoutsIbexaBundle/Resources/config/routing.yaml'

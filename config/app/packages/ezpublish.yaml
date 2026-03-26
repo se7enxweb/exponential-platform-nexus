@@ -1,4 +1,4 @@
-ibexa:
+ezpublish:
     repositories:
         default:
             fields_groups:
@@ -19,17 +19,17 @@ ibexa:
 
     system:
         frontend_group:
-            page_layout: "@ibexadesign/pagelayout.html.twig"
+            page_layout: "@ezdesign/pagelayout.html.twig"
             user:
-                login_template: "@ibexadesign/user/login.html.twig"
+                login_template: "@ezdesign/user/login.html.twig"
             field_templates:
-                - { template: "@ibexadesign/content/parts/content_fields.html.twig", priority: 5000 }
+                - { template: "@ezdesign/content/parts/content_fields.html.twig", priority: 5000 }
 
 netgen_tags:
     system:
         frontend_group:
             tag_view:
-                template: "@ibexadesign/pages/tag.html.twig"
+                template: "@ezdesign/pages/tag.html.twig"
                 related_content_list:
                     limit: 6
                     return_content_info: false
