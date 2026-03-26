@@ -50,13 +50,13 @@
         "se7enxweb/mediata-ezpage-fieldtype-bundle": "^1.0",
         "netgen/ezplatform-site-api": "^4.0",
         "netgen/ezplatform-search-extra": "^2.4",
-        "netgen/information-collection-bundle": "^3.0",
         "netgen/layouts-standard": "~1.4.0",
         "netgen/layouts-ezplatform": "~1.4.0",
         "netgen/layouts-ezplatform-site-api": "~1.4.0",
         "netgen/layouts-ezplatform-relation-list-query": "^1.4",
         "netgen/layouts-ezplatform-tags-query": "^1.4",
-        "se7enxweb/ezmigrationbundle": "^6.0"
+        "se7enxweb/ezmigrationbundle": "^6.0",
+        "se7enxweb/information-collection-bundle": "^2.0"
     },
     "require-dev": {
         "symfony/debug-bundle": "5.4.*",
