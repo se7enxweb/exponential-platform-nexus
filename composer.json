@@ -53,7 +53,7 @@
 
         "netgen/ezplatform-site-api": "^4.0",
         "netgen/ezplatform-search-extra": "^2.4",
-        "netgen/information-collection-bundle": "^2.0",
+        "netgen/information-collection-bundle": "^3.0",
 
         "netgen/layouts-standard": "~1.4.0",
         "netgen/layouts-ezplatform": "~1.4.0",
