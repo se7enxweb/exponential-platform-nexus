@@ -32,7 +32,7 @@ return [
     Overblog\GraphQLBundle\OverblogGraphQLBundle::class => ['all' => true],
     Overblog\GraphiQLBundle\OverblogGraphiQLBundle::class => ['dev' => true],
     Sentry\SentryBundle\SentryBundle::class => ['all' => true],
-    Kaliop\eZMigrationBundle\eZMigrationBundle::class => ['all' => true],
+    Kaliop\eZMigrationBundle\EzMigrationBundle::class => ['all' => true],
 
     // eZ Platform 3.3 — kernel (ezsystems/ezplatform-kernel ~1.3)
     EzSystems\EzPlatformCoreBundle\EzPlatformCoreBundle::class => ['all' => true],
