@@ -1,7 +1,9 @@
 {
     "name": "se7enxweb/exponential-platform-nexus",
     "type": "project",
-    "license": ["(GPL-2.0-or-later or proprietary)"],
+    "license": [
+        "(GPL-2.0-or-later or proprietary)"
+    ],
     "description": "Exponential Platform Nexus — eZ Platform 3.3 + Symfony 5.4 LTS + PHP 8.x + LegacyBridge + Netgen Layouts/Media Site",
     "homepage": "https://platform.exponential.earth",
     "authors": [
@@ -29,43 +31,37 @@
         "ext-mbstring": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
-
         "se7enxweb/oss": "~3.3.0",
         "se7enxweb/legacy-bridge": "^3.0",
-
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
         "symfony/flex": "^1.17|^2",
         "symfony/framework-bundle": "5.4.*",
         "symfony/runtime": "5.4.*",
         "symfony/yaml": "5.4.*",
-
         "sentry/sentry-symfony": "^4.0",
         "twig/twig": "^3.0",
         "twig/intl-extra": "^3.0",
-
         "se7enxweb/media-site-data": "~2.2.5.1",
         "se7enxweb/site-bundle": "~2.1.5.1",
         "se7enxweb/site-legacy-bundle": "^2.0",
         "netgen/site-installer-bundle": "^2.0",
         "se7enxweb/admin-ui-bundle": "^2.9",
         "se7enxweb/mediata-ezpage-fieldtype-bundle": "^1.0",
-
         "netgen/ezplatform-site-api": "^4.0",
         "netgen/ezplatform-search-extra": "^2.4",
         "netgen/information-collection-bundle": "^3.0",
-
         "netgen/layouts-standard": "~1.4.0",
         "netgen/layouts-ezplatform": "~1.4.0",
         "netgen/layouts-ezplatform-site-api": "~1.4.0",
         "netgen/layouts-ezplatform-relation-list-query": "^1.4",
-        "netgen/layouts-ezplatform-tags-query": "^1.4"
+        "netgen/layouts-ezplatform-tags-query": "^1.4",
+        "se7enxweb/ezmigrationbundle": "^6.0"
     },
     "require-dev": {
         "symfony/debug-bundle": "5.4.*",
         "symfony/maker-bundle": "^1.0",
         "symfony/web-profiler-bundle": "5.4.*",
-
         "netgen/git-hooks": "^2.5",
         "deployer/recipes": "^6.2",
         "phpstan/phpstan": "^1.10",
