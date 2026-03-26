@@ -44,8 +44,8 @@
         "twig/twig": "^3.0",
         "twig/intl-extra": "^3.0",
 
-        "se7enxweb/media-site-data": "~2.0.0",
-        "se7enxweb/site-bundle": "~2.0.0",
+        "se7enxweb/media-site-data": "~2.2.5.1",
+        "se7enxweb/site-bundle": "~2.1.5.1",
         "se7enxweb/site-legacy-bundle": "^2.0",
         "netgen/site-installer-bundle": "^2.0",
         "se7enxweb/admin-ui-bundle": "^2.9",
