@@ -29,6 +29,7 @@ yarn-error.log
 
 /bin/*
 !bin/console
+!bin/create_install_symlinks.php
 !bin/sync_db_and_var.sh
 
 /config/graphql/

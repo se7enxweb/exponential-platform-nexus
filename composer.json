@@ -128,6 +128,7 @@
         "project-scripts": [
             "@php bin/console ngsite:symlink:project",
             "@php bin/console ngsite:symlink:legacy",
+            "@php bin/create_install_symlinks.php",
             "@php bin/console ezpublish:legacy:script bin/php/ezpgenerateautoloads.php"
         ],
         "post-install-cmd": [
