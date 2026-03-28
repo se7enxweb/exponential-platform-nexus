@@ -1,10 +1,10 @@
 {# content \Netgen\IbexaSiteApi\API\Values\Content #}
 
-{% extends '@IbexaCore/content_fields.html.twig' %}
+{% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block ngenhancedlink_field %}
 {% apply spaceless %}
-    {% if not ibexa_field_is_empty(content, field) and parameters.available %}
+    {% if not ez_field_is_empty(content, field) and parameters.available %}
         {% set css_class = parameters.css_class|default('') %}
         <div {{ block('field_attributes') }}>
             {% if field.value.isTypeInternal %}
@@ -36,10 +36,8 @@
                         })
                     }}
                 {% else %}
-                    {% if ng_enhancedlink_has_location(field.value.reference) %}
-                        {% set href = path('ibexa.url.alias', { 'contentId': field.value.reference }) ~ suffix %}
-                        <a href="{{ href }}"{% if css_class is not empty %} class="{{ css_class }}"{% endif %}{% if field.value.isTargetLinkInNewTab %} target="_blank"{% endif %}>{{ label }}</a>
-                    {% endif %}
+                    {% set href = path('ez_urlalias', { 'contentId': field.value.reference }) ~ suffix %}
+                    <a href="{{ href }}"{% if css_class is not empty %} class="{{ css_class }}"{% endif %}{% if field.value.isTargetLinkInNewTab %} target="_blank"{% endif %}>{{ label }}</a>
                 {% endif %}
             {% elseif field.value.isTypeExternal %}
                 {% set label = fieldSettings.enableLabelExternal is defined and fieldSettings.enableLabelExternal and field.value.label ? field.value.label : field.value.reference %}
@@ -59,14 +57,14 @@
 
 {% block ezimage_field %}
 {% apply spaceless %}
-    {% if not ibexa_field_is_empty(content, field) %}
+    {% if not ez_field_is_empty(content, field) %}
         {% set link_href = parameters.link_href|default('') %}
         {% set link_target = parameters.link_target|default('') %}
         {% set link_title = parameters.alt_text|default(field.value.alternativeText ?: ('ngsite.read_more_about'|trans ~ ' ' ~ content.name)) %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
-        {% set image_alias = ibexa_image_alias(field, versionInfo, parameters.alias|default('original')) %}
+        {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
         {% set alt_text = parameters.alt_text|default(field.value.alternativeText ?: '') %}
-        {% set lazy_loading = ibexa.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
+        {% set lazy_loading = ezplatform.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
         {% if parameters.lazy_loading is defined %}
             {% set lazy_loading = parameters.lazy_loading %}
         {% endif %}
@@ -116,7 +114,7 @@
     {% set longitude = field.value.longitude|default(false) %}
 
     {% include
-        '@ibexadesign/parts/google_maps.html.twig' with {
+        'themes/app/parts/google_maps.html.twig' with {
             'container_id': field.id,
             'latitude': latitude,
             'longitude': longitude,
@@ -130,10 +128,10 @@
 
 {% block ezbinaryfile_field %}
 {% apply spaceless %}
-    {% if not ibexa_field_is_empty(content, field) %}
+    {% if not ez_field_is_empty(content, field) %}
         <a href="{{ path('ngsite_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
             {{ field.value.fileName }}
-        </a>&nbsp;({{ field.value.fileSize|ibexa_file_size(1) }})
+        </a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})
     {% endif %}
 {% endapply %}
 {% endblock %}

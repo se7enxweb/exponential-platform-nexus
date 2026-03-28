@@ -15,6 +15,10 @@ use function file_get_contents;
 
 final class AppExtension extends Extension implements PrependExtensionInterface
 {
+    private const PREPEND_EXTENSION_ALIASES = [
+        'ibexa' => 'ezpublish',
+    ];
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -24,10 +28,12 @@ final class AppExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         foreach ((new Finder())->in(__DIR__ . '/../../config/app/prepends')->directories() as $directory) {
+            $extensionName = self::PREPEND_EXTENSION_ALIASES[$directory->getBasename()] ?? $directory->getBasename();
+
             foreach ((new Finder())->files()->in($directory->getPathname()) as $file) {
                 /** @var array<string, mixed> $config */
                 $config = Yaml::parse((string) file_get_contents($file->getPathname()));
-                $container->prependExtensionConfig($directory->getBasename(), $config);
+                $container->prependExtensionConfig($extensionName, $config);
                 $container->addResource(new FileResource($file->getPathname()));
             }
         }

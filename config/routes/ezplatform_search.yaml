@@ -1,2 +1,4 @@
 ezplatform.search:
-    resource: '@EzPlatformSearchBundle/Resources/config/routing.yaml'
+    path: /content/search
+    defaults: { _controller: ngsite.controller.search }
+    condition: "not (request.attributes.has('siteaccess') and request.attributes.get('siteaccess').name in ['ngadminui', 'legacy_admin'])"

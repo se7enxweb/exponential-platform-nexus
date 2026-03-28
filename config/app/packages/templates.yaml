@@ -34,7 +34,8 @@ parameters:
     ngsite.default.template.errors.500: "@@ezdesign/errors/500.html.twig"
     ngsite.default.template.errors.default: "@@ezdesign/errors/default.html.twig"
 
-    ngsite.default.template.pagerfanta.ngsite: "@@ezdesign/modules/pagerfanta/ngsite.html.twig"
-    ngsite.default.template.menu: "@@ezdesign/modules/knp_menu/menu.html.twig"
+    ngsite.default.template.pagerfanta.ngsite: "themes/app/modules/pagerfanta/ngsite.html.twig"
+    ngsite.default.template.menu: "themes/app/modules/knp_menu/menu.html.twig"
 
-    ngsite.default.template.search: "@@ezdesign/pages/search.html.twig"
+    ngsite.default.template.search: "themes/app/pages/search.html.twig"
+    ngsite.adminui.template.search: "themes/admin/pages/search.html.twig"

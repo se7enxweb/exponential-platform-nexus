@@ -1,7 +1,1 @@
-ezrichtext:
-    enabled_attribute_types:
-        - number
-        - string
-        - boolean
-        - choice
-        - link
+ezrichtext: ~

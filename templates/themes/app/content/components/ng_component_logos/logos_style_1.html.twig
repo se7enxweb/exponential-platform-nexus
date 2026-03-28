@@ -49,7 +49,7 @@
         {% for logo in logos %}
             <div class="logo-grid-item">
                 {% if not logo.fields.logo_svg.empty %}
-                    <img src="{{ asset(logo.fields.logo_svg.value.id, 'ibexa_file') }}" alt="{{ logo.name }}" />
+                    <img src="{{ asset(logo.fields.logo_svg.value.id, 'ez_binary_file') }}" alt="{{ logo.name }}" />
                 {% endif %}
             </div>
         {% endfor %}

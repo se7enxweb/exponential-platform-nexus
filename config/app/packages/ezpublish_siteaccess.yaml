@@ -31,7 +31,6 @@ ezpublish:
             design: ngadmin
             languages:
                 - eng-GB
-                - ger-DE
             session:
                 name: eZSESSID
         ngadmin_group:
@@ -40,6 +39,8 @@ ezpublish:
                 - eng-GB
             session:
                 name: eZSESSID
+        frontend_group:
+            page_layout: "themes/app/pagelayout.html.twig"
         fh_group:
             design: fh
             translation_siteaccesses:
@@ -94,6 +95,8 @@ ezdesign:
             - common
             - standard
         ngadmin:
+            - ngadmin
+            - admin
             - common
         admin:
             - common

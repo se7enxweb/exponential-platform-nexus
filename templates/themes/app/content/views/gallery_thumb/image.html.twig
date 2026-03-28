@@ -1,10 +1,10 @@
 {# content \Netgen\IbexaSiteApi\API\Values\Content #}
 {# location \Netgen\IbexaSiteApi\API\Values\Location #}
 
-{% import '@ibexadesign/content/macros/slide.html.twig' as slide %}
-{% import '@NetgenToolbar/macros.html.twig' as toolbar_macros %}
+{% import 'themes/app/content/macros/slide.html.twig' as slide %}
 
-<div {{ toolbar_macros.item_params(content, location) }} class="view-type view-type-{{ view_type }} image vl3">
+
+<div class="view-type view-type-{{ view_type }} image vl3">
     {% if image_type == 'main' %}
         {{ slide.image(content, 'image', 'i1320', true) }}
     {% elseif image_type == 'thumb' %}

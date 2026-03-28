@@ -1,2 +1,4 @@
 ezplatform.system_info:
-  resource: '@EzPlatformSystemInfoBundle/Resources/config/routing.yaml'
+  resource: '@EzSystemsEzSupportToolsBundle/Resources/config/routing.yaml'
+  defaults:
+    siteaccess_group_whitelist: '%admin_group_name%'

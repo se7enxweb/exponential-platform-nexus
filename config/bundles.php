@@ -34,32 +34,32 @@ return [
     Sentry\SentryBundle\SentryBundle::class => ['all' => true],
     Kaliop\eZMigrationBundle\EzMigrationBundle::class => ['all' => true],
 
-    // eZ Platform 3.3 — kernel (ezsystems/ezplatform-kernel ~1.3)
+    // eZ Platform 3.3 — kernel (ibexa/core ~4.6 replacing ezsystems/ezplatform-kernel ~1.3)
     EzSystems\EzPlatformCoreBundle\EzPlatformCoreBundle::class => ['all' => true],
-    EzSystems\EzPlatformLegacySearchEngineBundle\EzPlatformLegacySearchEngineBundle::class => ['all' => true],
-    EzSystems\EzPlatformIOBundle\EzPlatformIOBundle::class => ['all' => true],
-    EzSystems\EzPlatformDebugBundle\EzPlatformDebugBundle::class => ['dev' => true, 'test' => true, 'behat' => true],
-    EzSystems\DoctrineSchemaBundle\DoctrineSchemaBundle::class => ['all' => true],
-    EzSystems\PlatformInstallerBundle\EzSystemsPlatformInstallerBundle::class => ['all' => true],
+    Ibexa\Bundle\Core\IbexaCoreBundle::class => ['all' => true],
+    Ibexa\Bundle\LegacySearchEngine\IbexaLegacySearchEngineBundle::class => ['all' => true],
+    Ibexa\Bundle\IO\IbexaIOBundle::class => ['all' => true],
+    Ibexa\Bundle\Debug\IbexaDebugBundle::class => ['dev' => true, 'test' => true, 'behat' => true],
+    Ibexa\Bundle\DoctrineSchema\DoctrineSchemaBundle::class => ['all' => true],
+    Ibexa\Bundle\RepositoryInstaller\IbexaRepositoryInstallerBundle::class => ['all' => true],
 
     // eZ Platform 3.3 — separate packages
-    EzSystems\EzPlatformHttpCacheBundle\EzPlatformHttpCacheBundle::class => ['all' => true],
-    EzSystems\EzPlatformRestBundle\EzPlatformRestBundle::class => ['all' => true],
-    EzSystems\EzPlatformSolrSearchEngineBundle\EzPlatformSolrSearchEngineBundle::class => ['all' => true],
-    EzSystems\EzPlatformSystemInfoBundle\EzPlatformSystemInfoBundle::class => ['all' => true],
+    Ibexa\Bundle\HttpCache\IbexaHttpCacheBundle::class => ['all' => true],
+    Ibexa\Bundle\Rest\IbexaRestBundle::class => ['all' => true],
+    EzSystems\EzPlatformSolrSearchEngineBundle\EzSystemsEzPlatformSolrSearchEngineBundle::class => ['all' => true],
+    EzSystems\EzSupportToolsBundle\EzSystemsEzSupportToolsBundle::class => ['all' => true],
     EzSystems\EzPlatformCronBundle\EzPlatformCronBundle::class => ['all' => true],
     EzSystems\EzPlatformDesignEngineBundle\EzPlatformDesignEngineBundle::class => ['all' => true],
     EzSystems\EzPlatformStandardDesignBundle\EzPlatformStandardDesignBundle::class => ['all' => true],
-    EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle::class => ['all' => true],
-    EzSystems\EzPlatformContentFormsBundle\EzPlatformContentFormsBundle::class => ['all' => true],
+    Ibexa\Bundle\FieldTypeRichText\IbexaFieldTypeRichTextBundle::class => ['all' => true],
+    Ibexa\Bundle\ContentForms\IbexaContentFormsBundle::class => ['all' => true],
     EzSystems\EzPlatformAdminUiBundle\EzPlatformAdminUiBundle::class => ['all' => true],
-    EzSystems\EzPlatformAdminUiModulesBundle\EzPlatformAdminUiModulesBundle::class => ['all' => true],
     EzSystems\EzPlatformAdminUiAssetsBundle\EzPlatformAdminUiAssetsBundle::class => ['all' => true],
     EzSystems\EzPlatformUserBundle\EzPlatformUserBundle::class => ['all' => true],
     EzSystems\EzPlatformMatrixFieldtypeBundle\EzPlatformMatrixFieldtypeBundle::class => ['all' => true],
     EzSystems\EzPlatformGraphQL\EzSystemsEzPlatformGraphQLBundle::class => ['all' => true],
-    EzSystems\EzPlatformQueryFieldTypeBundle\EzPlatformQueryFieldTypeBundle::class => ['all' => true],
-    EzSystems\EzPlatformSearchBundle\EzPlatformSearchBundle::class => ['all' => true],
+    EzSystems\EzPlatformQueryFieldType\Symfony\EzSystemsEzPlatformQueryFieldTypeBundle::class => ['all' => true],
+    Ibexa\Platform\Bundle\Search\IbexaPlatformSearchBundle::class => ['all' => true],
 
     // eZ Platform XmlText fieldtype
     EzSystems\EzPlatformXmlTextFieldTypeBundle\EzSystemsEzPlatformXmlTextFieldTypeBundle::class => ['all' => true],
@@ -69,7 +69,6 @@ return [
 
     // se7enxweb / EzCoreExtra
     Lolautruche\EzCoreExtraBundle\EzCoreExtraBundle::class => ['all' => true],
-    Novactive\Bundle\eZSEOBundle\NovaeZSEOBundle::class => ['all' => true],
     MediataCom\MediataEzpageFieldtypeBundle\MediataEzpageFieldtypeBundle::class => ['all' => true],
 
     // Netgen Content Browser
@@ -89,8 +88,8 @@ return [
     Netgen\Bundle\LayoutsEzPlatformTagsQueryBundle\NetgenLayoutsEzPlatformTagsQueryBundle::class => ['all' => true],
 
     // Netgen Site API / Site bundle
-    Netgen\Bundle\EzPlatformSiteApiBundle\NetgenEzPlatformSiteApiBundle::class => ['all' => true],
-    Netgen\Bundle\EzPlatformFormsBundle\NetgenEzPlatformFormsBundle::class => ['all' => true],
+    Netgen\Bundle\IbexaSiteApiBundle\NetgenIbexaSiteApiBundle::class => ['all' => true],
+    Netgen\Bundle\EzFormsBundle\NetgenEzFormsBundle::class => ['all' => true],
     Netgen\Bundle\EzPlatformSearchExtraBundle\NetgenEzPlatformSearchExtraBundle::class => ['all' => true],
     Netgen\Bundle\InformationCollectionBundle\NetgenInformationCollectionBundle::class => ['all' => true],
     Netgen\Bundle\SiteInstallerBundle\NetgenSiteInstallerBundle::class => ['all' => true],
@@ -101,12 +100,10 @@ return [
     Netgen\Bundle\BirthdayBundle\NetgenBirthdayBundle::class => ['all' => true],
     Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle::class => ['all' => true],
     Netgen\Bundle\MetadataBundle\NetgenMetadataBundle::class => ['all' => true],
-    Netgen\Bundle\ToolbarBundle\NetgenToolbarBundle::class => ['all' => true],
 
     // Netgen Admin UI / Legacy
     Netgen\Bundle\AdminUIBundle\NetgenAdminUIBundle::class => ['all' => true],
     Netgen\Bundle\SiteLegacyBundle\NetgenSiteLegacyBundle::class => ['all' => true],
-    Netgen\Bundle\RichTextDataTypeBundle\NetgenRichTextDataTypeBundle::class => ['all' => true],
 
     // Tags
     Netgen\TagsBundle\NetgenTagsBundle::class => ['all' => true],

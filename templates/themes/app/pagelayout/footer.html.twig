@@ -2,7 +2,7 @@
 
 <footer class="site-footer">
     <div class="container">
-        {% include '@ibexadesign/content/parts/site_logo.html.twig' %}
+        {% include 'themes/app/content/parts/site_logo.html.twig' %}
 
         <div class="footer-menu">
             {% block page_additional_menu_footer %}
@@ -18,7 +18,7 @@
 
         <nav class="footer-social" role="navigation">
             <ul>
-                {% if not site_info.fields.facebook.empty %}
+                {% if site_info.hasField('facebook') and not site_info.fields.facebook.empty %}
                     <li>
                         <a href="{{ site_info.fields.facebook.value.link }}" aria-label="{{ 'ngsite.visit_us_on_facebook'|trans }}"  target="_blank" noreferrer noopener >
                             <i class="icon-facebook"></i>
@@ -27,7 +27,7 @@
                     </li>
                 {% endif %}
 
-                {% if not site_info.fields.twitter.empty %}
+                {% if site_info.hasField('twitter') and not site_info.fields.twitter.empty %}
                     <li>
                         <a href="{{ site_info.fields.twitter.value.link }}" aria-label="{{ 'ngsite.visit_us_on_twitter'|trans }}"  target="_blank" noreferrer noopener >
                             <i class="icon-twitter"></i>
@@ -36,7 +36,7 @@
                     </li>
                 {% endif %}
 
-                {% if not site_info.fields.instagram.empty %}
+                {% if site_info.hasField('instagram') and not site_info.fields.instagram.empty %}
                     <li>
                         <a href="{{ site_info.fields.instagram.value.link }}" aria-label="{{ 'ngsite.visit_us_on_instagram'|trans }}" target="_blank" noreferrer noopener >
                             <i class="icon-instagram"></i>
@@ -45,7 +45,7 @@
                     </li>
                 {% endif %}
 
-                {% if not site_info.fields.linkedin.empty %}
+                {% if site_info.hasField('linkedin') and not site_info.fields.linkedin.empty %}
                     <li>
                         <a href="{{ site_info.fields.linkedin.value.link }}" aria-label="{{ 'ngsite.visit_us_on_linkedin'|trans }}"  target="_blank" noreferrer noopener >
                             <i class="icon-linkedin"></i>
@@ -57,11 +57,11 @@
         </nav>
 
         <div class="footer-info">
-            {% if not ngsite.siteInfoContent.fields.related_cookie_policy.empty %}
+            {% if ngsite.siteInfoContent.hasField('related_cookie_policy') and not ngsite.siteInfoContent.fields.related_cookie_policy.empty %}
                 <a href="#" class="js-open-ng-cc d-block my-2">{{ 'ngsite.layout.cookie_settings'|trans }}</a>
             {% endif %}
 
-            {% if not site_info.fields.footer_block.empty %}
+            {% if site_info.hasField('footer_block') and not site_info.fields.footer_block.empty %}
                 <div>
                     {{ ng_render_field(site_info.fields.footer_block) }}
                 </div>

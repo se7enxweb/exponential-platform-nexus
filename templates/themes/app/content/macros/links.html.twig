@@ -9,7 +9,7 @@
     {% endif %}
 
     {% set link_class = link_class|default %}
-    {% if content.fields.link.value.suffix is not null %}
+    {% if content.hasField('link') and content.fields.link.value.suffix is not null %}
         {% set url = url ~ content.fields.link.value.suffix %}
     {% endif %}
 
@@ -35,10 +35,10 @@
     {% if content.hasField('link') and content.fields.link.value.isTargetLinkInNewTab %}
         {% set open_in_new_tab = true %}
     {% endif %}
-    {% if content.fields.link.value.suffix is not null %}
+    {% if content.hasField('link') and content.fields.link.value.suffix is not null %}
         {% set url = url ~ content.fields.link.value.suffix %}
     {% endif %}
-    {% set lazy_loading = lazy_loading ?? ibexa.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
+    {% set lazy_loading = lazy_loading ?? ezplatform.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
 
     {% if url is empty %}
         <span>
@@ -65,7 +65,7 @@
     {% set url = null %}
     {% if content.hasField('link') %}
         {% if content.fields.link.value.isTypeInternal %}
-            {% set url = path("ibexa.url.alias", { contentId: content.fields.link.value.reference }) %}
+            {% set url = path("ez_urlalias", { contentId: content.fields.link.value.reference }) %}
         {% elseif content.fields.link.value.isTypeExternal %}
             {% set url = content.fields.link.value.reference %}
         {% endif %}
@@ -81,7 +81,7 @@
     {% set url = null %}
     {% if link is not null %}
         {% if link.value.isTypeInternal %}
-            {% set url = path("ibexa.url.alias", { contentId: link.value.reference }) %}
+            {% set url = path("ez_urlalias", { contentId: link.value.reference }) %}
         {% elseif link.value.isTypeExternal %}
             {% set url = link.value.reference %}
         {% endif %}
@@ -116,7 +116,7 @@
     {% set url = null %}
     {% if link is not null %}
         {% if link.value.isTypeInternal %}
-            {% set url = path("ibexa.url.alias", { contentId: link.value.reference }) %}
+            {% set url = path("ez_urlalias", { contentId: link.value.reference }) %}
         {% elseif link.value.isTypeExternal %}
             {% set url = link.value.reference %}
         {% endif %}
@@ -129,7 +129,7 @@
     {% if link.value.suffix is not null %}
         {% set url = url ~ link.value.suffix %}
     {% endif %}
-    {% set lazy_loading = lazy_loading ?? ibexa.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
+    {% set lazy_loading = lazy_loading ?? ezplatform.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
 
     {% if url is empty %}
         <span>

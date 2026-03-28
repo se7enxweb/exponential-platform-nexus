@@ -99,7 +99,7 @@ setfacl -R -m u:www-data:rwX -m g:www-data:rwX var public/var
 setfacl -dR -m u:www-data:rwX -m g:www-data:rwX var public/var
 
 # Import schema and demo data (see Section 4)
-php bin/console ibexa:install media-site-legacy
+php bin/console ibexa:install netgen-media
 
 # Generate JWT keys (required for REST API authentication)
 php bin/console lexik:jwt:generate-keypair
@@ -111,6 +111,9 @@ yarn build:dev
 
 # Build admin UI assets (see Section 8)
 composer ez-assets   # or: yarn ez   (see Section 8 for details)
+
+# Dump JS translation assets used by Admin UI
+php bin/console bazinga:js-translation:dump public/assets --merge-domains
 
 # Generate GraphQL schema
 php bin/console ezplatform:graphql:generate-schema
@@ -404,6 +407,11 @@ make ibexa-assets
 ```
 
 This runs Webpack using `webpack.config.ez.js` and outputs to `public/assets/ezplatform/build/`.
+It does not generate Bazinga JS translation assets; dump those separately:
+
+```bash
+php bin/console bazinga:js-translation:dump public/assets --merge-domains
+```
 
 ### What changes require an Admin UI asset rebuild
 

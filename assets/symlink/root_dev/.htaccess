@@ -46,8 +46,8 @@ AddDefaultCharset UTF-8
 
 DirectoryIndex index.php
 
-Options +FollowSymlinks
-Options -Indexes
+#Options +FollowSymlinks
+#Options -Indexes
 
 RewriteEngine On
 

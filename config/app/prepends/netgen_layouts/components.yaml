@@ -1,6 +1,6 @@
 system:
     default:
-        ibexa_component:
+        ezcomponent:
             parent_locations:
                 ng_component_hero: '%ngsite.default.locations.ng_component_hero.id%'
                 ng_component_quote: '%ngsite.default.locations.ng_component_quote.id%'
@@ -10,27 +10,27 @@ system:
                 ng_component_lead: '%ngsite.default.locations.ng_component_lead.id%'
 
 block_types:
-    ibexa_component_hero:
+    ezcomponent_hero:
         name: 'Hero'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-hero.svg'
         defaults:
             view_type: hero_style_1
             parameters:
                 content_type_identifier: ng_component_hero
 
-    ibexa_component_about:
+    ezcomponent_about:
         name: 'About'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-about.svg'
         defaults:
             view_type: about_style_1
             parameters:
                 content_type_identifier: ng_component_about
 
-    ibexa_component_features:
+    ezcomponent_features:
         name: 'Features'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-features.svg'
         defaults:
             view_type: features_style_1
@@ -38,27 +38,27 @@ block_types:
                 content_type_identifier: ng_component_features
                 number_of_columns: 3
 
-    ibexa_component_logos:
+    ezcomponent_logos:
         name: 'Logos'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-logos.svg'
         defaults:
             view_type: logos_style_1
             parameters:
                 content_type_identifier: ng_component_logos
 
-    ibexa_component_quote:
+    ezcomponent_quote:
         name: 'Quote'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-quote.svg'
         defaults:
             view_type: quote_style_1
             parameters:
                 content_type_identifier: ng_component_quote
 
-    ibexa_component_lead:
+    ezcomponent_lead:
         name: 'Lead'
-        definition_identifier: ibexa_component
+        definition_identifier: ezcomponent
         icon: '/images/components/icon-component-lead.svg'
         defaults:
             view_type: lead_style_1
@@ -68,9 +68,9 @@ block_types:
 block_type_groups:
     components:
         block_types:
-            - ibexa_component_hero
-            - ibexa_component_about
-            - ibexa_component_features
-            - ibexa_component_logos
-            - ibexa_component_quote
-            - ibexa_component_lead
+            - ezcomponent_hero
+            - ezcomponent_about
+            - ezcomponent_features
+            - ezcomponent_logos
+            - ezcomponent_quote
+            - ezcomponent_lead

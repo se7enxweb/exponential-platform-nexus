@@ -13,4 +13,6 @@ parameters:
 
     ngsite.default.lazy_loading.enabled: true
 
+    ngsite.default.locations.site_info.id: 65
+
     app.testing.site_domain: '%env(TEST_DOMAIN)%'

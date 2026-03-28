@@ -10,7 +10,7 @@ netgen_information_collection:
                     attachments:
                         enabled: true
                     templates:
-                        default: "@ezdesign/emails/info_collection/email.html.twig"
+                        default: "themes/app/emails/info_collection/email.html.twig"
                     default_variables:
                         sender: "%collected_info_sender%"
                         recipient: "%collected_info_recipient%"

@@ -2,9 +2,9 @@
     <nav class="breadcrumb-wrapper" aria-label="breadcrumbs">
         <ol>
             <li class="breadcrumb-item">
-                <a href="{{ ibexa_path(ibexa.rootLocation) }}">
+                <a href="{{ ez_path(ezplatform.rootLocation) }}">
                     <i class="icon-home" aria-hidden="true"></i>
-                    <span>{{ ibexa.rootLocation.content.name }}</span>
+                    <span>{{ ezplatform.rootLocation.content.name }}</span>
                 </a>
             </li>
             {% for path_item in path_array|slice(1, path_array|length - 1) %}

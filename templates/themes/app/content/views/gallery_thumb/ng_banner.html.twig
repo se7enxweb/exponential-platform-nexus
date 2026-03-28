@@ -1,11 +1,11 @@
 {# content \Netgen\IbexaSiteApi\API\Values\Content #}
 {# location \Netgen\IbexaSiteApi\API\Values\Location #}
 
-{% import '@ibexadesign/content/macros/slide.html.twig' as slide %}
-{% import "@ibexadesign/content/macros/links.html.twig" as links %}
-{% import '@NetgenToolbar/macros.html.twig' as toolbar_macros %}
+{% import 'themes/app/content/macros/slide.html.twig' as slide %}
+{% import "themes/app/content/macros/links.html.twig" as links %}
 
-<div {{ toolbar_macros.item_params(content, location) }} class="view-type view-type-{{ view_type }} ng-banner vl3 {% if show_details_on_hover %}show_details_on_hover{% endif %}">
+
+<div class="view-type view-type-{{ view_type }} ng-banner vl3 {% if show_details_on_hover %}show_details_on_hover{% endif %}">
     {% if image_type == 'main' %}
         {{ slide.image(content, 'image', 'i1320', true) }}
 

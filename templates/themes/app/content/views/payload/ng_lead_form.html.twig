@@ -2,10 +2,10 @@
 {# location \Netgen\IbexaSiteApi\API\Values\Location #}
 {# form \Symfony\Component\Form\FormView #}
 
-{% extends '@ibexadesign/forms/info_collection_base.html.twig' %}
+{% extends 'themes/app/forms/info_collection_base.html.twig' %}
 
 {% block form_body %}
-    {% form_theme form '@ibexadesign/forms/theme.html.twig' %}
+    {% form_theme form 'themes/app/forms/theme.html.twig' %}
 
     {{ form_start(form, form_parameters) }}
         {{ form_errors(form) }}
@@ -22,8 +22,8 @@
 
             {{ form_row(form.sender_message) }}
 
-            {{ form_row(form.gdpr_consent, { ngparams: { label: content.fields.gdpr_consent_label.value.xml|ibexa_richtext_to_html5} }) }}
-            {{ form_row(form.newsletter_1_consent, { ngparams: { label: content.fields.newsletter_1_label.value.xml|ibexa_richtext_to_html5} }) }}
+            {{ form_row(form.gdpr_consent, { ngparams: { label: content.fields.gdpr_consent_label.value.xml|ez_richtext_to_html5} }) }}
+            {{ form_row(form.newsletter_1_consent, { ngparams: { label: content.fields.newsletter_1_label.value.xml|ez_richtext_to_html5} }) }}
 
             {{ form_row(form.referer.value, {
                 'hidden' : true,

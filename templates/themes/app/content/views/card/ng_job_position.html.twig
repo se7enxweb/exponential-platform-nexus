@@ -1,13 +1,13 @@
 {# content \Netgen\IbexaSiteApi\API\Values\Content #}
 {# location \Netgen\IbexaSiteApi\API\Values\Location #}
 
-{% import '@ibexadesign/content/macros/content_fields.html.twig' as content_fields %}
-{% import '@NetgenToolbar/macros.html.twig' as toolbar_macros %}
+{% import 'themes/app/content/macros/content_fields.html.twig' as content_fields %}
 
-<article {{ toolbar_macros.item_params(content, location) }} class="view-type view-type-{{ view_type }} ng-job-position vl8">
+
+<article class="view-type view-type-{{ view_type }} ng-job-position vl8">
     <div class="article-content">
         <header class="article-header">
-            <h3 class="title"><a href="{{ ibexa_path(location) }}">{{ content_fields.title(content) }}</a></h3>
+            <h3 class="title"><a href="{{ ez_path(location) }}">{{ content_fields.title(content) }}</a></h3>
             <div class="info">
                 {% if not content.fields.job_location.empty %}
                     {{ ng_render_field(content.fields.job_location) }}
@@ -19,7 +19,7 @@
         </header>
 
         <div class="actions">
-            <a class="btn btn-link" href="{{ ibexa_path(location) }}">{{ 'ngsite.card.apply_now'|trans }}</a>
+            <a class="btn btn-link" href="{{ ez_path(location) }}">{{ 'ngsite.card.apply_now'|trans }}</a>
         </div>
     </div>
 </article>

@@ -30,7 +30,7 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         ibexa:
-            id: ibexa.security.user_provider
+            id: ezpublish.security.user_provider
     #!        in_memory:
     #!            memory: ~
 
@@ -40,18 +40,18 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        ibexa_forgot_password:
+        ezpublish_forgot_password:
             pattern: /user/(forgot-password|reset-password)
             security: false
 
-        ibexa_register_from_invitation:
+        ezpublish_register_from_invitation:
             pattern: /user/from-invite/register|/from-invite/register
             security: false
 
         # Uncomment the rules below to enable JSON Web Token (JWT) authentication for REST and/or GraphQL
         #ibexa_jwt_rest:
         #    request_matcher: Ibexa\Contracts\Rest\Security\AuthorizationHeaderRESTRequestMatcher
-        #    user_checker: Ibexa\Core\MVC\Symfony\Security\UserChecker
+        #    user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
         #    anonymous: ~
         #    guard:
         #        authenticators:
@@ -61,7 +61,7 @@ security:
 
         #ibexa_jwt_graphql:
         #    request_matcher: Ibexa\GraphQL\Security\NonAdminGraphQLRequestMatcher
-        #    user_checker: Ibexa\Core\MVC\Symfony\Security\UserChecker
+        #    user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
         #    anonymous: ~
         #    guard:
         #        authenticators:
@@ -69,11 +69,11 @@ security:
         #        entry_point: lexik_jwt_authentication.jwt_token_authenticator
         #    stateless: true
 
-        ibexa_front:
+        ezpublish_front:
             pattern: ^/
-            user_checker: Ibexa\Core\MVC\Symfony\Security\UserChecker
+            user_checker: eZ\Publish\Core\MVC\Symfony\Security\UserChecker
             anonymous: ~
-            ibexa_rest_session: ~
+            ezpublish_rest_session: ~
             form_login:
                 require_previous_session: false
                 csrf_token_generator: security.csrf.token_manager

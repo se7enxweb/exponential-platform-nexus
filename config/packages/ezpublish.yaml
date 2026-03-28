@@ -86,8 +86,14 @@ ezpublish:
             transformation: 'urlalias_lowercase'
 
 framework:
+    secret: '%env(APP_SECRET)%'
     translator: { fallback: '%locale_fallback%' }
     validation: { enable_annotations: true }
+    csrf_protection: true
+    form: ~
+    mailer:
+        dsn: '%env(MAILER_DSN)%'
+    session: ~
     default_locale: '%locale_fallback%'
     esi: true
     fragments: true

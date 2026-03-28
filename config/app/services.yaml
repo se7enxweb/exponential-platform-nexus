@@ -23,3 +23,35 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    ezpublish.siteaccess:
+        class: eZ\Publish\Core\MVC\Symfony\SiteAccess
+        arguments: ['%ezpublish.siteaccess.default.name%', 'uninitialized']
+        public: true
+
+    # Public aliases for legacy search plugin (ezplatformsearch) which uses direct container->get() calls
+    ezpublish.spi.search:
+        alias: ezpublish.spi.search_engine
+        public: true
+
+    ezpublish.api.persistence_handler:
+        alias: ezpublish.spi.persistence.cache
+        public: true
+
+    netgen_site_installer.media_site:
+        class: App\Installer\NetgenSiteInstaller
+        calls:
+            - [setInstallerDataPath, ['%kernel.project_dir%/vendor/se7enxweb/media-site-data/netgen-media']]
+            - [setStoragePath, ['public/var/site/storage']]
+        parent: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+        tags:
+            - { name: ezplatform.installer, type: netgen-media }
+
+    netgen_site_installer.media_site_clean:
+        class: App\Installer\NetgenSiteInstaller
+        calls:
+            - [setInstallerDataPath, ['%kernel.project_dir%/vendor/se7enxweb/media-site-data/netgen-media-clean']]
+            - [setStoragePath, ['public/var/site/storage']]
+        parent: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+        tags:
+            - { name: ezplatform.installer, type: netgen-media-clean }
