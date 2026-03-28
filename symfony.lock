@@ -2,6 +2,9 @@
     "babdev/pagerfanta-bundle": {
         "version": "v2.11.0"
     },
+    "contextualcode/ezplatform-alloyeditor-element-width": {
+        "version": "v2.0.1"
+    },
     "doctrine/annotations": {
         "version": "1.14",
         "recipe": {
@@ -50,6 +53,45 @@
             "migrations/.gitignore"
         ]
     },
+    "ezsystems/doctrine-dbal-schema": {
+        "version": "v1.0.10"
+    },
+    "ezsystems/ez-support-tools": {
+        "version": "v2.3.12"
+    },
+    "ezsystems/ezplatform-admin-ui": {
+        "version": "v2.3.39"
+    },
+    "ezsystems/ezplatform-admin-ui-assets": {
+        "version": "v5.3.5"
+    },
+    "ezsystems/ezplatform-core": {
+        "version": "v2.3.44"
+    },
+    "ezsystems/ezplatform-cron": {
+        "version": "v3.1.6"
+    },
+    "ezsystems/ezplatform-design-engine": {
+        "version": "v3.0.13"
+    },
+    "ezsystems/ezplatform-graphql": {
+        "version": "v2.3.17"
+    },
+    "ezsystems/ezplatform-matrix-fieldtype": {
+        "version": "v2.2.11"
+    },
+    "ezsystems/ezplatform-search": {
+        "version": "v1.2.7"
+    },
+    "ezsystems/ezplatform-solr-search-engine": {
+        "version": "v3.3.17"
+    },
+    "ezsystems/ezplatform-standard-design": {
+        "version": "v0.3.8"
+    },
+    "ezsystems/ezplatform-user": {
+        "version": "v2.3.12"
+    },
     "friendsofsymfony/http-cache-bundle": {
         "version": "2.18.0"
     },
@@ -77,34 +119,7 @@
             "config/packages/google_recaptcha.yaml"
         ]
     },
-    "ibexa/admin-ui": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
     "ibexa/admin-ui-assets": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/content-forms": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/core": {
         "version": "4.6",
         "recipe": {
             "repo": "github.com/ibexa/recipes",
@@ -140,24 +155,6 @@
             "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
         }
     },
-    "ibexa/design-engine": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/doctrine-schema": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
     "ibexa/fieldtype-matrix": {
         "version": "4.6",
         "recipe": {
@@ -176,34 +173,7 @@
             "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
         }
     },
-    "ibexa/fieldtype-richtext": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
     "ibexa/graphql": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/http-cache": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/notifications": {
         "version": "4.6",
         "recipe": {
             "repo": "github.com/ibexa/recipes",
@@ -282,24 +252,6 @@
             "assets/scss/welcome-page.scss"
         ]
     },
-    "ibexa/rest": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
-    "ibexa/search": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
-    },
     "ibexa/solr": {
         "version": "4.6",
         "recipe": {
@@ -329,25 +281,6 @@
     },
     "ibexa/templated-uri-bundle": {
         "version": "v3.3.2.2"
-    },
-    "ibexa/twig-components": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "f2a0508673feab7662ca3bea9e3163f37f09bb09"
-        },
-        "files": []
-    },
-    "ibexa/user": {
-        "version": "4.6",
-        "recipe": {
-            "repo": "github.com/ibexa/recipes",
-            "branch": "master",
-            "version": "4.6",
-            "ref": "575fa895eb28f9d0b7e65e02ba9e3bcb16782094"
-        }
     },
     "jms/translation-bundle": {
         "version": "1.9.1"
@@ -410,6 +343,9 @@
             "config/routes/netgen_content_browser.yaml"
         ]
     },
+    "netgen/content-browser-ezplatform": {
+        "version": "1.4.1"
+    },
     "netgen/content-browser-ibexa": {
         "version": "1.4.2"
     },
@@ -421,6 +357,9 @@
     },
     "netgen/enhanced-selection-bundle": {
         "version": "5.3.3"
+    },
+    "netgen/ez-forms-bundle": {
+        "version": "3.0.2"
     },
     "netgen/ibexa-admin-ui-extra": {
         "version": "1.6.0"
@@ -434,26 +373,8 @@
     "netgen/ibexa-scheduled-visibility": {
         "version": "1.0.2"
     },
-    "netgen/ibexa-search-extra": {
-        "version": "3.6.2"
-    },
-    "netgen/ibexa-site-api": {
-        "version": "6.3.1"
-    },
     "netgen/ibexa-xmltext-fieldtype": {
         "version": "dev-master"
-    },
-    "netgen/information-collection-bundle": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/netgen/recipes",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "0819df803b5edbe61570eac2329c36c6549ea6cd"
-        },
-        "files": [
-            "config/routes/netgen_information_collection.yaml"
-        ]
     },
     "netgen/layouts-core": {
         "version": "1.4",
@@ -466,6 +387,27 @@
         "files": [
             "config/routes/netgen_layouts.yaml"
         ]
+    },
+    "netgen/layouts-ezplatform": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/netgen-layouts/recipes",
+            "branch": "master",
+            "version": "1.3",
+            "ref": "a2b96dc2dd0361811746e0ff01c8bf80c5423f54"
+        },
+        "files": [
+            "config/routes/netgen_layouts_ezplatform.yaml"
+        ]
+    },
+    "netgen/layouts-ezplatform-relation-list-query": {
+        "version": "1.4.1"
+    },
+    "netgen/layouts-ezplatform-site-api": {
+        "version": "1.4.5"
+    },
+    "netgen/layouts-ezplatform-tags-query": {
+        "version": "1.4.1"
     },
     "netgen/layouts-ibexa": {
         "version": "1.4",
@@ -493,9 +435,6 @@
     },
     "netgen/layouts-ui": {
         "version": "1.4.5"
-    },
-    "netgen/metadata-bundle": {
-        "version": "4.0.0"
     },
     "netgen/open-graph-bundle": {
         "version": "3.1.2"
@@ -627,11 +566,44 @@
     "se7enxweb/admin-ui-bundle": {
         "version": "v4.0.0"
     },
+    "se7enxweb/ezplatform-content-forms": {
+        "version": "v1.3.18"
+    },
+    "se7enxweb/ezplatform-http-cache": {
+        "version": "v2.3.18"
+    },
+    "se7enxweb/ezplatform-kernel": {
+        "version": "1.3.x-dev"
+    },
+    "se7enxweb/ezplatform-rest": {
+        "version": "v1.3.25"
+    },
+    "se7enxweb/ezplatform-richtext": {
+        "version": "v2.3.27"
+    },
+    "se7enxweb/ezplatform-search-extra": {
+        "version": "2.6.1"
+    },
+    "se7enxweb/ezplatform-site-api": {
+        "version": "v4.3.5"
+    },
+    "se7enxweb/ezplatform-xmltext-fieldtype": {
+        "version": "v2.0.3"
+    },
     "se7enxweb/ibexa-legacy-bridge": {
         "version": "4.x-dev"
     },
+    "se7enxweb/information-collection-bundle": {
+        "version": "v2.0.3"
+    },
+    "se7enxweb/legacy-bridge": {
+        "version": "3.0.0.3"
+    },
     "se7enxweb/mediata-ezpage-fieldtype-bundle": {
         "version": "1.0.0"
+    },
+    "se7enxweb/metadata-bundle": {
+        "version": "v3.0.2"
     },
     "se7enxweb/site-bundle": {
         "version": "3.0.5.0"
@@ -663,30 +635,6 @@
             "config/packages/sentry.yaml"
         ]
     },
-    "symfony/console": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "1781ff40d8a17d87cf53f8d4cf0c8346ed2bb461"
-        },
-        "files": [
-            "bin/console"
-        ]
-    },
-    "symfony/debug-bundle": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "5aa8aa48234c8eb6dbdd7b3cd5d791485d2cec4b"
-        },
-        "files": [
-            "config/packages/debug.yaml"
-        ]
-    },
     "symfony/flex": {
         "version": "2.10",
         "recipe": {
@@ -700,49 +648,6 @@
             ".env.dev"
         ]
     },
-    "symfony/framework-bundle": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.4",
-            "ref": "3cd216a4d007b78d8554d44a5b1c0a446dab24fb"
-        },
-        "files": [
-            "config/packages/cache.yaml",
-            "config/packages/framework.yaml",
-            "config/preload.php",
-            "config/routes/framework.yaml",
-            "config/services.yaml",
-            "public/index.php",
-            "src/Controller/.gitignore",
-            "src/Kernel.php"
-        ]
-    },
-    "symfony/lock": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.2",
-            "ref": "8e937ff2b4735d110af1770f242c1107fdab4c8e"
-        },
-        "files": [
-            "config/packages/lock.yaml"
-        ]
-    },
-    "symfony/mailer": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "4.3",
-            "ref": "09051cfde49476e3c12cd3a0e44289ace1c75a4f"
-        },
-        "files": [
-            "config/packages/mailer.yaml"
-        ]
-    },
     "symfony/maker-bundle": {
         "version": "1.50",
         "recipe": {
@@ -751,18 +656,6 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
-    },
-    "symfony/messenger": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.4",
-            "ref": "8bd5f27013fb1d7217191c548e340f0bdb11912c"
-        },
-        "files": [
-            "config/packages/messenger.yaml"
-        ]
     },
     "symfony/monolog-bundle": {
         "version": "3.10",
@@ -774,18 +667,6 @@
         },
         "files": [
             "config/packages/monolog.yaml"
-        ]
-    },
-    "symfony/notifier": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.0",
-            "ref": "178877daf79d2dbd62129dd03612cb1a2cb407cc"
-        },
-        "files": [
-            "config/packages/notifier.yaml"
         ]
     },
     "symfony/phpunit-bridge": {
@@ -803,31 +684,6 @@
             "tests/bootstrap.php"
         ]
     },
-    "symfony/routing": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "85de1d8ae45b284c3c84b668171d2615049e698f"
-        },
-        "files": [
-            "config/packages/routing.yaml",
-            "config/routes.yaml"
-        ]
-    },
-    "symfony/security-bundle": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "98f1f2b0d635908c2b40f3675da2d23b1a069d30"
-        },
-        "files": [
-            "config/packages/security.yaml"
-        ]
-    },
     "symfony/swiftmailer-bundle": {
         "version": "3.5",
         "recipe": {
@@ -840,57 +696,6 @@
             "config/packages/dev/swiftmailer.yaml",
             "config/packages/swiftmailer.yaml",
             "config/packages/test/swiftmailer.yaml"
-        ]
-    },
-    "symfony/translation": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "e28e27f53663cc34f0be2837aba18e3a1bef8e7b"
-        },
-        "files": [
-            "config/packages/translation.yaml",
-            "translations/.gitignore"
-        ]
-    },
-    "symfony/twig-bundle": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.4",
-            "ref": "bb2178c57eee79e6be0b297aa96fc0c0def81387"
-        },
-        "files": [
-            "config/packages/twig.yaml",
-            "templates/base.html.twig"
-        ]
-    },
-    "symfony/validator": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "c32cfd98f714894c4f128bb99aa2530c1227603c"
-        },
-        "files": [
-            "config/packages/validator.yaml"
-        ]
-    },
-    "symfony/web-profiler-bundle": {
-        "version": "5.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.3",
-            "ref": "24bbc3d84ef2f427f82104f766014e799eefcc3e"
-        },
-        "files": [
-            "config/packages/web_profiler.yaml",
-            "config/routes/web_profiler.yaml"
         ]
     },
     "symfony/webpack-encore-bundle": {
