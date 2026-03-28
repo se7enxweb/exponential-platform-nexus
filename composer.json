@@ -34,9 +34,9 @@
         "se7enxweb/oss": "~3.3.0",
         "se7enxweb/legacy-bridge": "^3.0",
         "se7enxweb/symfony": "5.4.x-dev",
+        "se7enxweb/symfony-flex": "^1.22",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
-        "symfony/flex": "^1.17|^2",
         "symfony/framework-bundle": "5.4.*",
         "symfony/runtime": "5.4.*",
         "symfony/yaml": "5.4.*",
@@ -89,6 +89,7 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "ibexa/post-install": true,
+            "se7enxweb/symfony-flex": true,
             "symfony/flex": true,
             "symfony/runtime": true,
             "netgen/git-hooks": true,
