@@ -1,0 +1,19 @@
+services:
+    App\RepositoryInstaller\Installer\ExponentialMediaInstaller:
+        autowire: true
+        parent: Ibexa\Bundle\RepositoryInstaller\Installer\DbBasedInstaller
+        calls:
+            - [setProjectDir, ['%kernel.project_dir%']]
+            - [setStoragePath, ['public/var/site/storage']]
+        tags:
+            - { name: ibexa.installer, type: exponential-media }
+
+    App\RepositoryInstaller\Command\ExponentialInstallCommand:
+        arguments:
+            $connection: '@ibexa.persistence.connection'
+            $installers: []
+            $cachePool: '@ibexa.cache_pool'
+            $environment: "%kernel.environment%"
+            $repositoryConfigurationProvider: '@Ibexa\Bundle\Core\ApiLoader\RepositoryConfigurationProvider'
+        tags:
+            - { name: console.command }
