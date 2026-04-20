@@ -1,0 +1,40 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    # --- ExponentialInstallCommand ---
+    App\Command\ExponentialInstallCommand:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+            $installers: []  # Populated by ExponentialInstallerTagPass
+            $environment: '%kernel.environment%'
+            $repositoryConfigurationProvider: '@ezpublish.api.repository_configuration_provider'
+        tags:
+            - { name: console.command }
+
+    # --- ExponentialReindexCommand ---
+    App\Command\ExponentialReindexCommand:
+        tags:
+            - { name: console.command }
+
+    # --- ExponentialMediaInstaller ---
+    exponential_installer.media:
+        class: App\Installer\ExponentialMediaInstaller
+        parent: EzSystems\PlatformInstallerBundle\Installer\CoreInstaller
+        calls:
+            - [setProjectDir, ['%kernel.project_dir%']]
+            - [setStoragePath, ['public/var/site/storage']]
+        tags:
+            - { name: exponential.installer, type: exponential-media }
+
+    # --- SQLite gateway override ---
+    # Replaces the vendor SqliteGateway (hrtime-based IDs → collisions) with
+    # a MAX(col)+1 implementation that works correctly with seed data.
+    eZ\Publish\Core\Persistence\Legacy\SharedGateway\DatabasePlatform\SqliteGateway:
+        class: App\Persistence\Legacy\SharedGateway\ExponentialSqliteGateway
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+        tags:
+            - { name: ezplatform.persistence.legacy.gateway.shared, platform: sqlite }

@@ -34,6 +34,7 @@ final class Kernel extends BaseKernel
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CompilerPass\XslRegisterPass());
+        $container->addCompilerPass(new CompilerPass\ExponentialInstallerTagPass());
     }
 
     public function boot()
