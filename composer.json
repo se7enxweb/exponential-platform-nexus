@@ -1,8 +1,6 @@
 {
-    "name": "se7enxweb/exponential-platform-nexus",
     "type": "project",
-    "license": ["(GPL-2.0-or-later or proprietary)"],
-    "description": "7x Netgen Media Site (Powered by Netgen Layouts & Ibexa DXP v4.6.0+)",
+    "license": "proprietary",
     "homepage": "https://platform.exponential.earth",
     "authors": [
         {
@@ -46,7 +44,7 @@
         "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2",
 
         "netgen/media-site-data": "^3.3",
-        "se7enxweb/site-bundle": "3.0.5.0",
+        "se7enxweb/site-bundle": "~3.0.6",
         "se7enxweb/site-legacy-bundle": "v2.0.0",
         "netgen/site-installer-bundle": "^3.1",
         "se7enxweb/admin-ui-bundle": "^4.0",
@@ -165,9 +163,6 @@
         },
         "runtime": {
             "error_handler": "\\Ibexa\\Contracts\\Core\\MVC\\Symfony\\ErrorHandler\\Php82HideDeprecationsErrorHandler"
-        },
-        "branch-alias": {
-            "dev-master": "4.6.x-dev"
         }
     }
 }
