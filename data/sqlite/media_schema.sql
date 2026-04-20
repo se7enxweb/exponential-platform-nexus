@@ -149,9 +149,9 @@ CREATE TABLE IF NOT EXISTS `nglayouts_collection_slot` (
 CREATE TABLE IF NOT EXISTS `nglayouts_block_collection` (
   `block_id` integer NOT NULL,
   `block_status` integer NOT NULL,
+  `identifier` text(255) NOT NULL,
   `collection_id` integer NOT NULL,
   `collection_status` integer NOT NULL,
-  `identifier` text(255) NOT NULL,
   PRIMARY KEY (`block_id`, `block_status`, `identifier`),
   FOREIGN KEY (`block_id`, `block_status`)
     REFERENCES `nglayouts_block` (`id`, `status`),
