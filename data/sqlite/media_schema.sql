@@ -1,3 +1,33 @@
+-- Drop tables if they exist (for clean re-install)
+DROP TABLE IF EXISTS `sckenhancedselection`;
+DROP TABLE IF EXISTS `novaseo_meta`;
+DROP TABLE IF EXISTS `eztags_keyword`;
+DROP TABLE IF EXISTS `eztags_attribute_link`;
+DROP TABLE IF EXISTS `eztags`;
+DROP TABLE IF EXISTS `nglayouts_migration_versions`;
+DROP TABLE IF EXISTS `nglayouts_rule_condition_rule_group`;
+DROP TABLE IF EXISTS `nglayouts_rule_condition_rule`;
+DROP TABLE IF EXISTS `nglayouts_rule_condition`;
+DROP TABLE IF EXISTS `nglayouts_rule_target`;
+DROP TABLE IF EXISTS `nglayouts_rule`;
+DROP TABLE IF EXISTS `nglayouts_rule_data`;
+DROP TABLE IF EXISTS `nglayouts_rule_group_data`;
+DROP TABLE IF EXISTS `nglayouts_rule_group`;
+DROP TABLE IF EXISTS `nglayouts_role_policy`;
+DROP TABLE IF EXISTS `nglayouts_role`;
+DROP TABLE IF EXISTS `nglayouts_block_collection`;
+DROP TABLE IF EXISTS `nglayouts_collection_slot`;
+DROP TABLE IF EXISTS `nglayouts_collection_query_translation`;
+DROP TABLE IF EXISTS `nglayouts_collection_query`;
+DROP TABLE IF EXISTS `nglayouts_collection_item`;
+DROP TABLE IF EXISTS `nglayouts_collection_translation`;
+DROP TABLE IF EXISTS `nglayouts_collection`;
+DROP TABLE IF EXISTS `nglayouts_zone`;
+DROP TABLE IF EXISTS `nglayouts_block_translation`;
+DROP TABLE IF EXISTS `nglayouts_block`;
+DROP TABLE IF EXISTS `nglayouts_layout_translation`;
+DROP TABLE IF EXISTS `nglayouts_layout`;
+
 -- Auto-generated media_schema.sql for SQLite (v4/Ibexa 4.6)
 -- Extra tables not covered by the core Ibexa schema
 

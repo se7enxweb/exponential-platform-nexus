@@ -58,3 +58,14 @@ studio.json
 .php_cs.cache
 .php-cs-fixer.cache
 .php-version
+
+/vendor/
+/var/
+/node_modules/
+yarn.lock
+
+# backup / scratch files
+*.bak
+*.orig
+*~
+composer.json[0-9]*

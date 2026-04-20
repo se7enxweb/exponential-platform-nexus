@@ -79,6 +79,9 @@ netgen_layouts:
             design: app
 
 ezdesign:
+    templates_theme_paths:
+        ngadmin:
+            - '%kernel.project_dir%/templates/themes/ngadmin'
     design_list:
         bold:
             - bold

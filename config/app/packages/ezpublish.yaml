@@ -21,7 +21,7 @@ ezpublish:
         frontend_group:
             page_layout: "@EzPublishCore/pagelayout.html.twig"
             user:
-                login_template: "user/login_minimal.html.twig"
+                login_template: "themes/app/user/login.html.twig"
             field_templates:
                 - { template: "themes/app/content/parts/content_fields.html.twig", priority: 5000 }
             search_view:
