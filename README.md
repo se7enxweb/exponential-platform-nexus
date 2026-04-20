@@ -1,167 +1,469 @@
-# Exponential Platform Nexus 1.2.0.x
+# Exponential Platform Nexus 1.2.0.x is Platform v4 — 7x Netgen Media Site Variant
 
-# Exponential Platform Nexus Project Notice : 2025.08.12
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-8892BF?logo=php&logoColor=white)](https://php.net)
+[![Symfony](https://img.shields.io/badge/Symfony-5.4%20LTS-000000?logo=symfony&logoColor=white)](https://symfony.com)
+[![Platform](https://img.shields.io/badge/Platform-v4%20OSS-orange)](https://github.com/se7enxweb)
+[![License: GPL v2 (or any later version)](https://img.shields.io/badge/License-GPL%20v2%20(or%20any%20later%20version)-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
-"Please Note: This project is not associated with the original eZ Publish software or its original developer, eZ Systems or Ibexa".
+> **Exponential Platform Nexus v4** is the **7x fork and customisation** of the
+> Netgen Media Site blueprint for Ibexa DXP v4 (Open Source edition). It runs on
+> **Symfony 5.4 LTS**, **PHP 8.2+** (tested on PHP 8.5), and includes the 7x
+> `se7enxweb/site-bundle` 3.x fork that replaces `netgen/site-bundle` via Composer's
+> `replace` directive, and the `ExponentialSqliteGateway` class for SQLite-compatible
+> ID generation.
+>
+> This repository is the starting skeleton for all Nexus-branded Exponential Platform v4
+> projects. Read this file and [doc/sevenx/INSTALL.md](doc/sevenx/INSTALL.md) before
+> starting.
 
-# Exponential Platform Nexus Project Status
+---
 
-**Exponential Platform Nexus has made it beyond it's end of life in 2021 and survived. Current releases are primarily aimed at easing the requirements to support current versions of the PHP language like PHP 8.2, 8.3, 8.4 and beyond php9**
+## Table of Contents
 
-# Who is 7x
+1. [Project Notice](#project-notice)
+2. [Project Status](#project-status)
+3. [Who is 7x](#who-is-7x)
+4. [What is Exponential Platform Nexus v4?](#what-is-exponential-platform-nexus-v4)
+5. [Technology Stack](#technology-stack)
+6. [Requirements](#requirements)
+7. [Quick Start](#quick-start)
+8. [Main Features](#main-features)
+9. [Installation](#installation)
+10. [Key CLI Commands Reference](#key-cli-commands-reference)
+11. [Database Conversion](#database-conversion)
+12. [Access Points](#access-points)
+13. [Issue Tracker](#issue-tracker)
+14. [Where to Get More Help](#where-to-get-more-help)
+15. [How to Contribute](#how-to-contribute)
+16. [Copyright](#copyright)
+17. [License](#license)
+18. [Additional Documentation](#additional-documentation)
 
-[7x](https://se7enx.com) is the North American corporation driving The Continued General Use, Support, Development, Hosting, Design of Exponential Platform Nexus Enterprise Open Source Content Management System in 2025.
+---
 
-7x has been in busines supporting Exponential Platform Website Customers and Projects for over 24 years. 7x took over leadership of the project and it's development, support, adoption and community growth in 2023.
+## Project Notice
 
-7x represents a serious company leading the open source community based effort to improve Exponential Platform and it's available community resources to help users continue to adopt and use the platform to deliver the very best in web applications websites and headless applications in the cloud.
+> "This project is not associated with the original eZ Publish software or its original
+> developer, eZ Systems. It is an independent, 7x-driven continuation and customisation."
 
-Previously before 2022, 7x was called Brookins Consulting who was the outspoken leader in the active Exponential Platform Community and it's Portals for the past 24 years.
+This skeleton is developed and maintained by [7x (se7enx.com)](https://se7enx.com) and
+is used as the canonical starting point for client projects built on Exponential Platform
+v4 OSS with the Netgen Media Site technology stack.
 
-# What is Exponential Platform Nexus?
+---
 
-## Recent improvements to Exponential Platform Nexus
-Exponential Platform Nexus (the application of interest) delivered to users worldwide by a web server (PHP built-in, Apache, Nginx, lighttpd, Among others).
+## Project Status
 
-With PHP we require composer to install Exponential Platform Nexus software and no other software required to run
-the application. This is an incredible improvement to the kernel (core) of Exponential Platform Nexus.
+**Active — branch `1.2.0.x`** is the current development line.
 
-Exponential Platform Nexus 1.2.0.x Releases are 100% Compatible with Ibexa OSS v4 + Netgen Suite + Exponential 6.x + Symfony 5.4
+The Nexus v4 skeleton targets:
+- **Symfony 5.4 LTS** kernel
+- **PHP 8.2+** (PHP 8.5 is the tested and recommended runtime)
+- **Ibexa DXP 4.6 Open Source Edition**
+- **Netgen Layouts 1.4.x** with Ibexa Site API integration
+- **Netgen Media Site** content model and demo data
 
-## What does Exponential Platform Nexus provide for end users building websites?
+Ongoing work focuses on:
+- PHP 8.2 / 8.3 / 8.5 full compatibility across all dependencies
+- SQLite zero-config development database (including composite PK workaround via `ExponentialSqliteGateway`)
+- Dependency upgrades across Composer and Yarn ecosystems
 
-Exponential Platform Nexus is a professional PHP application framework with advanced CMS (content management system) functionality. As a CMS its most notable feature
-is its fully customizable and extendable content model.
-It is also suitable as a platform for general PHP development, allowing
-you to develop professional Internet applications, fast.
+---
 
-Standard CMS functionality, like news publishing and forums is
-built in and ready for you to use. Its stand-alone libraries can be
-used for cross-platform, secure, database independent PHP projects.
+## Who is 7x
 
-Exponential Platform Nexus is database, platform and browser independent. Because it is
-browser based it can be used and updated from anywhere as long as you have
-access to the Internet.
+[7x](https://se7enx.com) is the North American corporation driving the continued
+development, support, hosting, and community growth of Exponential Platform and related
+open source projects. 7x has supported Exponential Platform customers for over 24 years
+(previously as Brookins Consulting).
 
-(Referred to as `new stack` in Exponential Platform 5.x and Ibexa OSS)
+**7x offers:**
+- Commercial support subscriptions for Exponential Platform deployments
+- Hosting on the Exponential Platform cloud infrastructure (`exponential.earth`)
+- Custom development, migrations, upgrades, and training
+- Community stewardship via [share.exponential.earth](https://share.exponential.earth)
 
-# Requirements
-- PHP
-- (Optional) Web server. Used to deliver the website to the end user.
-- (Required) Database server. Used to store website content (and application information)
-- Composer. Used to download Exponential Platform Nexus software packages for installation, also notebly installs the required Zeta Components php libraries.
-- Computer to run the PHP website application.
+---
 
-## What version of PHP is required
+## What is Exponential Platform Nexus v4?
 
-Exponential Platform Nexus supports PHP 7.4 -> 8.4 please use the latest version of PHP available on your OS.
+Exponential Platform Nexus v4 is a **Symfony 5.4 LTS application skeleton** combining:
 
-# Main Exponential Platform Nexus features
+- **Ibexa DXP v4 Open Source Edition** — the Symfony-native content management
+  platform providing the content repository, REST API v2, GraphQL, and the Platform v4
+  Admin UI
+- **Netgen Media Site** — a production-grade blueprint skeleton with demo content model,
+  Netgen Layouts, Netgen Content Browser, Netgen Information Collection, and the full
+  Netgen toolkit for Ibexa
+- **7x Customisations** — the `se7enxweb/site-bundle` 3.x fork (replacing
+  `netgen/site-bundle` via Composer `replace` directive) and the
+  `ExponentialSqliteGateway` / `fixSqliteCompositePrimaryKeys()` SQLite workarounds for
+  correct ID generation and composite primary key support
 
-- User defined content classes and objects
-- Version control
-- Advanced multi-lingual support
-- Built in search engine
-- Separation of content and presentation layer
-- Fine grained role based permissions system
-- Content approval and scheduled publication
-- Multi-site support
-- Multimedia support with automatic image conversion and scaling
-- RSS feeds
-- Contact forms
-- Built in webshop
-- Flexible workflow management system
-- Full support for Unicode
-- Template engine
-- A headless CRUD REST API
-- Database abstraction layer supporting MySQL, SQLite, Postgres and Oracle
-- MVC architecture
-- Support for the latest Image and Video File Formats (webp, webm, png, jpeg, etc)
-- Support for highly available and scalable configurations (multi-server clusters)
-- XML handling and parsing library
-- SOAP communication library
-- Localisation and internationalisation libraries
-- Several other reusable libraries
-- SDK (software development kit)
-  and full documentation
-- Support for the latest Image and Video File Formats (webp, webm, png, jpeg, etc)
-- plugin API with thousands of open-source extensions available, including:
-    - content rating and commenting
-    - landing page management
-    - advanced search engine
-    - wysiwyg rich-text editor
-    - in-site content editing
-    - content geolocation
+The skeleton is distributed via the `se7enxweb/exponential-platform-nexus` GitHub
+repository and is composed using the `se7enxweb/oss` Composer metapackage.
 
-# Installation
+---
 
-Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.one/display/DEVELOPER/Step%2b1_%2bInstallation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html)
+## Technology Stack
 
-# Issue tracker
+| Component | Value |
+|---|---|
+| Language | PHP 8.2+ (PHP 8.5 recommended) |
+| Framework | Symfony 5.4 LTS |
+| CMS Core | Ibexa DXP v4 Open Source Edition |
+| ORM / DBAL | Doctrine ORM + DBAL 3.x |
+| Template Engine | Twig 3.x |
+| Frontend Build | Webpack Encore + Yarn 1.x + **Node.js 18** |
+| Page Builder | Netgen Layouts 1.4.x |
+| Search | Legacy search (default) · Solr 8.x (optional) |
+| HTTP Cache | Symfony HttpCache (default) · Varnish 6/7 (optional) |
+| App Cache | Filesystem (default) · Redis 6+ (optional) |
+| Database | SQLite 3.35+ (dev default) · MySQL 8.0+ · MariaDB 10.3+ · PostgreSQL 14+ |
+| API | REST API v2 · GraphQL (schema auto-generated) · JWT auth |
+| Admin UI | Ibexa Platform v4 Admin UI (`/adminui/`) |
+| Dependency Mgmt | Composer 2.x · Yarn 1.x |
+| Metapackage | `se7enxweb/oss ~4.6.0` |
 
-Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platfom-legacy/issues](https://github.com/se7enxweb/exponential-platfom-legacy/issues)
+---
 
-If you discover a [security issue](SECURITY.md), please responsibly report such issues via email to security@exponential.one
+## Requirements
 
-# Where to get more help
+- **PHP 8.2+** (PHP 8.5 recommended, tested on PHP 8.5.5)
+- PHP extensions: `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv`,
+  `pdo_sqlite` or `pdo_mysql` or `pdo_pgsql`
+- **Composer 2.x**
+- **Node.js 18** (via [nvm](https://github.com/nvm-sh/nvm) recommended)
+- **Yarn 1.22.x** (via corepack after `nvm use 18`)
+- A web server: Apache 2.4 or Nginx 1.18+ (or Symfony CLI for development)
+- A database: SQLite 3.35+ (dev), MySQL 8.0+, MariaDB 10.3+, or PostgreSQL 14+
 
-Exponential Platform documentation: [exponential.doc.exponential.one/display/DEVELOPER/Docuemntation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Documentation.html)
+### Full Requirements Summary
 
-Exponential Platform Community forums: [share.exponential.one/forums](https://share.exponential.one/forums) and [share.exponential.one/forums/exponential-platform](https://share.se7enx.com/forums/exponential-platform)
+| Component | Minimum | Recommended |
+|---|---|---|
+| PHP | 8.2 | 8.5 |
+| Composer | 2.x | latest 2.x |
+| Node.js | **18** | **18 LTS** (via nvm) |
+| Yarn | 1.x | 1.22.22 (corepack) |
+| MySQL | 8.0 | 8.0+ (utf8mb4) |
+| MariaDB | 10.3 | 10.6+ |
+| PostgreSQL | 14 | 16+ |
+| SQLite | 3.35 | 3.39+ (dev/testing) |
+| Redis | 6.0 | 7.x (optional) |
+| Solr | 8.x | 8.11.x (optional) |
+| Varnish | 6.0 | 7.1+ (optional) |
+| Apache | 2.4 | 2.4 (event + PHP-FPM) |
+| Nginx | 1.18 | 1.24+ |
 
-Exponential Platform Nexus Project Website: [exponential.one](https://platform.exponential.one)
+---
 
-Support Exponential Platform! Project extension support Website: [support.exponential.one](https://support.exponential.one)
+## Quick Start
 
-Share Exponential! Telegram Community Support Chat
-[https://t.me/exponentialcms](https://t.me/exponentialcms)
+```bash
+# 1. Clone the project
+git clone git@github.com:se7enxweb/exponential-platform-nexus.git
+cd exponential-platform-nexus
+git checkout 1.2.0.x
 
-# How to contribute new features and bugfixes into Exponential Platform Nexus
+# 2. Install PHP dependencies
+COMPOSER_ALLOW_SUPERUSER=1 composer install
 
-Everyone is encouraged to [contribute](CONTRIBUTING.md) to the development of new features and bugfixes for Exponential Platform Nexus 6.
+# 3. Configure environment (SQLite zero-config default — no server needed)
+cp .env .env.local
+# Edit .env.local: set APP_SECRET, and set DATABASE_URL for SQLite or MySQL/PostgreSQL
 
-# Donate and make a support subscription. 
-## Help fund Exponential Platform Nexus!
+# 4. Install the demo database (creates var/data.db automatically for SQLite)
+php bin/console exponential:install exponential-media --no-interaction
 
-You can support this project and it's community by making a donation of what ever size donation you feel willing to give to the project.
+# 5. Fix permissions for the SQLite file (web server must be able to write it)
+chmod 660 var/data.db
+chown $USER:www-data var/data.db   # replace www-data with your FPM user
 
-If we have helped you and you would like to support the project with a subscription of financial support you may. This is what helps us deliver more new features and improvements to the software. Support Exponential Platform Nexus with a subscription today!
+# 6. Activate Node.js 18
+source ~/.nvm/nvm.sh && nvm use 18
+corepack enable
 
-A wide range of donation options avaialble at [sponsor.se7enx.com](https://sponsor.se7enx.com), [paypal.com/paypalme/7xweb](https://www.paypal.com/paypalme/7xweb) and [github.com/sponsors/se7enxweb](https://github.com/sponsors/se7enxweb)
+# 7. Install Node dependencies
+yarn install
 
-# What is eZ Platform?
+# 8. Build site frontend assets (CSS/JS)
+yarn build:prod
 
-Exponential Platform is based on the successfull product, eZ Platform, is a highly extensible, pure Content Managment Platform built upon the ideals core to Symfony. It provides the same flexible content model at it's core like Exponential Platform, and has a growing amount of additional features outside the traditional CMS scope provided by means of "Bundles"
-extending it.
+# 9. Publish Symfony bundle assets and build the Admin UI
+php bin/console assets:install --symlink --relative public
+yarn ibexa:build
 
-It is built on top of the full Symfony Framework, giving developers access to "standard" tools for rapid web & application development.
+# 10. Generate JWT keypair for REST API
+php bin/console lexik:jwt:generate-keypair
 
-eZ Platform in some users view suffered a slow road to a stable datatype compatability with existing custom implementations of Exponential Platform. Today all of these conserns are now gone with a solid choice left leaving both Exponential Platform Platform and eZ Platform as serious contenders to be carefully considered. [Netgen's Media Website Core software](https://github.com/netgen/media-site) represents a much more modern eZ Platform core powered by Ibexa OSS. If your going to choose; Choose wisely.
+# 11. Generate GraphQL schema
+php bin/console ibexa:graphql:generate-schema
 
-Further reading on: [https://ezplatform.com/](http://web.archive.org/web/20200328165348/https://ezplatform.com/)
+# 12. Clear the cache
+php bin/console cache:clear
 
-# What is Ibexa DXP OSS?
+# 13. Start the Symfony CLI dev server
+symfony server:start
+```
 
-Ibexa DXP OSS, the rebranded and evolved successor of eZ Platform, is a modern and highly extensible Digital Experience Platform built on the robust Symfony framework. Staying true to the foundational principles of Exponential Platform, it retains the flexible content model at its core while expanding its capabilities to include a broad spectrum of features that go beyond traditional CMS functionality. These features are delivered through "Bundles," providing developers with powerful tools for creating advanced web and digital solutions.
+After install, the following URLs are live:
 
-Built on top of Symfony, Ibexa DXP OSS offers developers access to standardized tools for efficient and scalable web and application development. Its architecture supports rapid innovation while ensuring compatibility with modern development standards.
+| URL | Description |
+|---|---|
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/adminui/` | **Platform v4 Admin UI** (React) |
+| `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (JWT-authenticated) |
+| `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
+| `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (dev mode only) |
+| `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin |
+| `https://127.0.0.1:8000/nglayouts/app` | Netgen Layouts app (iframe editor) |
 
-Ibexa DXP OSS has matured into a robust and versatile platform, serving as a serious option for organizations seeking a cutting-edge CMS solution. For those looking to build modern web experiences, tools like Netgen's Media Website Core further enhance Ibexa OSS, showcasing its potential as a flexible and future-ready platform.
+Default credentials: **`admin` / `publish`** — change immediately after first login.
 
-If you're making a choice, choose with care—and consider the power and flexibility of Ibexa DXP OSS.
+See [doc/sevenx/INSTALL.md](doc/sevenx/INSTALL.md) for the complete step-by-step
+installation and operations guide.
 
-Further reading: [ibexa.co](https://ibexa.co/)
+---
 
-Documentation for Ibexa DXP: [doc.ibexa.co/en/latest/](https://doc.ibexa.co/en/latest/)
+## Main Features
 
-Ibexa DXP Developer Portal: [developers.ibexa.co](https://developers.ibexa.co/)
+- Full Ibexa DXP v4 OSS content repository (content classes, versions, translations, locations)
+- Netgen Layouts 1.4.x page builder with Ibexa and Ibexa Site API integration
+- Netgen Content Browser for content selection in layouts
+- Netgen Information Collection (contact forms, data collection)
+- Netgen Ibexa Site API (high-performance content read API, custom `twigGetAttribute`)
+- Netgen Tags field type (taxonomy/tagging)
+- RichText field type with XSL/AlloyEditor support
+- REST API v2 (JWT-authenticated)
+- GraphQL API (auto-generated from content model)
+- Platform v4 Admin UI (React, at `/adminui/`)
+- Netgen Layouts Admin UI (at `/nglayouts/admin`)
+- Webpack Encore frontend build pipeline (Node.js 18, Yarn 1.x)
+- SQLite zero-config database (default for development)
+- MySQL 8.0+ / MariaDB 10.3+ / PostgreSQL 14+ for production
+- Multi-siteaccess support
+- Solr search engine support (optional)
+- Varnish HTTP cache support (optional)
+- Redis application cache support (optional)
+- Sentry error tracking integration
+- Kaliop Migration Bundle for content migrations
+- Lexik JWT Authentication Bundle
+- Google reCAPTCHA v3 integration
+- `se7enxweb/mediata-ezpage-fieldtype-bundle` (Platform v4 eZPage field type)
 
+---
 
-# License
+## Installation
 
-Exponential Platform Nexus is GNU GPL licensed.
+```bash
+git clone git@github.com:se7enxweb/exponential-platform-nexus.git
+cd exponential-platform-nexus
+git checkout 1.2.0.x
+```
 
-You can choose between the GNU GPL and the Ibexa Professional License. The GNU GPL gives you the right to use, modify and redistribute Exponential Platform Nexus under certain conditions. The GNU GPL license is distributed with the software, see the file LICENSE. It is also available at http://www.gnu.org/licenses/gpl.txt
+See [doc/sevenx/INSTALL.md](doc/sevenx/INSTALL.md) for the complete installation and
+operations guide covering:
 
-Using Exponential Platform Nexus under the terms of the GNU GPL is free of charge.
+- Requirements (PHP 8.2+, Node.js 18, etc.)
+- Environment configuration (`.env.local` reference)
+- Database setup (SQLite, MySQL/MariaDB, PostgreSQL)
+- The `se7enxweb/site-bundle` 3.x fork — what it does and why
+- SQLite composite PK workaround (`ExponentialSqliteGateway`)
+- Web server setup (Apache 2.4, Nginx, Symfony CLI)
+- File & directory permissions
+- Frontend asset build (Webpack Encore / Yarn — **Node.js 18 required**)
+- Admin UI asset build
+- JWT keypair generation
+- GraphQL schema generation
+- Search index initialisation
+- Cache management
+- Day-to-day operations (start / stop / restart / deploy)
+- Production deployment checklist
+- Cron job setup
+- Solr search engine integration (optional)
+- Varnish HTTP cache integration (optional)
+- Troubleshooting
+- Database conversion (SQLite ↔ MySQL ↔ PostgreSQL)
+
+---
+
+## Key CLI Commands Reference
+
+### Symfony Core
+
+```bash
+php bin/console list                                          # list all commands
+php bin/console cache:clear                                   # clear dev cache
+php bin/console cache:clear --env=prod                        # clear prod cache
+php bin/console cache:warmup --env=prod                       # warm up prod cache
+php bin/console assets:install --symlink --relative public    # publish bundle assets
+php bin/console debug:router                                  # list all routes
+php bin/console debug:container                               # list all services
+php bin/console debug:config ibexa                            # dump Ibexa config
+```
+
+### Platform v4
+
+```bash
+php bin/console exponential:install exponential-media --no-interaction  # install demo DB
+php bin/console exponential:reindex                                      # reindex search
+php bin/console ibexa:cron:run                                           # run cron
+php bin/console ibexa:graphql:generate-schema                            # regenerate GraphQL schema
+php bin/console lexik:jwt:generate-keypair                               # generate JWT keys
+php bin/console bazinga:js-translation:dump public/assets --merge-domains  # dump JS translations
+php bin/console liip:imagine:cache:remove                                # clear image variation cache
+php bin/console fos:httpcache:invalidate:path / --all                    # purge HTTP cache
+```
+
+### Doctrine / Migrations
+
+```bash
+php bin/console doctrine:migration:migrate --allow-no-migration   # run migrations
+php bin/console doctrine:migration:status                         # migration status
+php bin/console doctrine:schema:validate                          # validate schema
+```
+
+### Frontend / Asset Build (Node.js 18 required)
+
+```bash
+# Always activate Node.js 18 first
+source ~/.nvm/nvm.sh && nvm use 18
+corepack enable
+
+# Site frontend
+yarn build:prod     # build site CSS/JS for production (minified)
+yarn build:dev      # build site CSS/JS with source maps
+yarn watch          # watch mode — auto-rebuild site assets on change
+
+# Admin UI
+yarn ibexa:build    # build Platform v4 Admin UI — production
+yarn ibexa:dev      # build Platform v4 Admin UI — dev mode
+yarn ibexa:watch    # watch Admin UI assets
+
+# Dependencies
+yarn install        # install / sync all Node dependencies
+```
+
+---
+
+## Database Conversion
+
+See **[doc/sevenx/INSTALL.md — Section 22: Database Conversion](doc/sevenx/INSTALL.md#22-database-conversion)**
+for the full command reference covering all conversion paths, tool install instructions,
+`.env.local` DSN updates, and the post-conversion checklist.
+
+Supported engines and conversion paths:
+
+| From | To | Tool |
+|---|---|---|
+| MySQL / MariaDB | SQLite | `mysql2sqlite` (MIT) |
+| PostgreSQL | SQLite | `pgloader` (BSD-like) |
+| SQLite | MySQL / MariaDB | `sqlite3-to-mysql` (MIT) |
+| SQLite | PostgreSQL | `pgloader` (BSD-like) |
+| MySQL / MariaDB | PostgreSQL | `pgloader` (BSD-like) |
+| PostgreSQL | MySQL / MariaDB | `pgloader` + CSV export |
+| Oracle | PostgreSQL | `ora2pg` (GPL v3) — then use any path above |
+
+---
+
+## Access Points
+
+After a fresh install with the Symfony CLI dev server (`symfony server:start`), all of
+the following URLs are live. Replace `https://127.0.0.1:8000` with your actual domain
+in production.
+
+| URL | Description |
+|---|---|
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/adminui/` | **Platform v4 Admin UI** (React) — login: `admin` / `publish` |
+| `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (requires JWT) |
+| `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
+| `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (APP_ENV=dev only) |
+| `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin interface |
+| `https://127.0.0.1:8000/nglayouts/app` | Netgen Layouts iframe editor |
+
+**Default credentials: `admin` / `publish` — change immediately after first login.**
+
+---
+
+## Issue Tracker
+
+Bugs, improvements and feature requests:
+https://github.com/se7enxweb/exponential-platform-nexus/issues
+
+Security issues: please report responsibly via email to
+[security@exponential.one](mailto:security@exponential.one)
+
+---
+
+## Where to Get More Help
+
+| Resource | URL |
+|---|---|
+| Platform Website | platform.exponential.earth |
+| Documentation Hub | doc.exponential.earth |
+| Community Forums | share.exponential.earth |
+| GitHub Organisation | github.com/se7enxweb |
+| This Repository | github.com/se7enxweb/exponential-platform-nexus |
+| DXP Metapackage | github.com/se7enxweb/oss |
+| Issue Tracker | [Issues](https://github.com/se7enxweb/exponential-platform-nexus/issues) |
+| Telegram Chat | t.me/exponentialcms |
+| 7x Corporate | se7enx.com |
+| Support Subscriptions | support.exponential.earth |
+
+---
+
+## How to Contribute
+
+1. Fork `se7enxweb/exponential-platform-nexus` on GitHub
+2. Clone your fork and create a feature branch: `git checkout -b feature/my-improvement`
+3. Install the dev stack per [doc/sevenx/INSTALL.md](doc/sevenx/INSTALL.md)
+4. Make your changes and test thoroughly
+5. Push your branch and open a Pull Request against `1.2.0.x`
+
+When contributing fixes that touch the `se7enxweb/site-bundle` fork, changes must be
+committed to the fork repository first, then the updated `composer.lock` committed here.
+
+---
+
+## Copyright
+
+Copyright (C) 1998–2026 7x (formerly Brookins Consulting). All rights reserved.
+
+Copyright (C) 1999–2025 Ibexa AS (formerly eZ Systems AS). All rights reserved.
+
+Copyright (C) 2013–2026 Netgen. All rights reserved.
+
+---
+
+## License
+
+This source code is available under the following licenses:
+
+**A — Ibexa Business Use License Agreement (Ibexa BUL)**
+version 2.4 or later. Granted by having a valid Ibexa DXP subscription.
+See: https://www.ibexa.co/software-information/licenses-and-agreements
+
+**AND**
+
+**B — GNU General Public License, version 2**
+Copyleft open source license with ABSOLUTELY NO WARRANTY.
+See: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+Copyright © 1998–2026 7x (se7enx.com). All rights reserved unless otherwise noted.
+
+---
+
+## Additional Documentation
+
+* [7x Installation & Operations Guide](doc/sevenx/INSTALL.md) — **start here** for all
+  installation, configuration, and operations details
+* [Netgen Install Instructions](doc/netgen/INSTALL.md) — upstream Netgen Media Site install guide
+* [Frontend Setup](doc/netgen/FRONTEND.md) — webpack/yarn frontend asset guide
+* [Search Suggestions](doc/netgen/SEARCH_SUGGESTIONS.md) — search configuration
+* [Ibexa Migrations](doc/netgen/IBEXA_MIGRATIONS.md) — Ibexa content migration guide
+* [Apache vhost example](doc/apache2/media-site-vhost.conf)
+* [Nginx vhost example](doc/nginx/media-site.conf)
+
 
