@@ -1,4 +1,8 @@
 services:
+    App\RepositoryInstaller\Command\ExponentialReindexCommand:
+        tags:
+            - { name: console.command }
+
     App\RepositoryInstaller\Installer\ExponentialMediaInstaller:
         autowire: true
         parent: Ibexa\Bundle\RepositoryInstaller\Installer\DbBasedInstaller

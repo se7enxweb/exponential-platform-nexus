@@ -1,7 +1,7 @@
 -- Auto-generated media_schema.sql for SQLite (v4/Ibexa 4.6)
 -- Extra tables not covered by the core Ibexa schema
 
-CREATE TABLE `nglayouts_layout` (
+CREATE TABLE IF NOT EXISTS `nglayouts_layout` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE `nglayouts_layout` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_layout_translation` (
+CREATE TABLE IF NOT EXISTS `nglayouts_layout_translation` (
   `layout_id` integer NOT NULL,
   `status` integer NOT NULL,
   `locale` text(255) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `nglayouts_layout_translation` (
     REFERENCES `nglayouts_layout` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_block` (
+CREATE TABLE IF NOT EXISTS `nglayouts_block` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `nglayouts_block` (
     REFERENCES `nglayouts_layout` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_block_translation` (
+CREATE TABLE IF NOT EXISTS `nglayouts_block_translation` (
   `block_id` integer NOT NULL,
   `status` integer NOT NULL,
   `locale` text(255) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `nglayouts_block_translation` (
     REFERENCES `nglayouts_block` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_zone` (
+CREATE TABLE IF NOT EXISTS `nglayouts_zone` (
   `identifier` text(255) NOT NULL,
   `layout_id` integer NOT NULL,
   `status` integer NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE `nglayouts_zone` (
     REFERENCES `nglayouts_block` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE `nglayouts_collection` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection_translation` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection_translation` (
   `collection_id` integer NOT NULL,
   `status` integer NOT NULL,
   `locale` text(255) NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE `nglayouts_collection_translation` (
     REFERENCES `nglayouts_collection` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection_item` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection_item` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `nglayouts_collection_item` (
     REFERENCES `nglayouts_collection` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection_query` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection_query` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE `nglayouts_collection_query` (
     REFERENCES `nglayouts_collection` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection_query_translation` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection_query_translation` (
   `query_id` integer NOT NULL,
   `status` integer NOT NULL,
   `locale` text(255) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `nglayouts_collection_query_translation` (
     REFERENCES `nglayouts_collection_query` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_collection_slot` (
+CREATE TABLE IF NOT EXISTS `nglayouts_collection_slot` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -146,7 +146,7 @@ CREATE TABLE `nglayouts_collection_slot` (
     REFERENCES `nglayouts_collection` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_block_collection` (
+CREATE TABLE IF NOT EXISTS `nglayouts_block_collection` (
   `block_id` integer NOT NULL,
   `block_status` integer NOT NULL,
   `collection_id` integer NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE `nglayouts_block_collection` (
     REFERENCES `nglayouts_collection` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_role_policy` (
+CREATE TABLE IF NOT EXISTS `nglayouts_role_policy` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -173,7 +173,7 @@ CREATE TABLE `nglayouts_role_policy` (
     REFERENCES `nglayouts_role` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_role` (
+CREATE TABLE IF NOT EXISTS `nglayouts_role` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -184,14 +184,14 @@ CREATE TABLE `nglayouts_role` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule_data` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_data` (
   `rule_id` integer NOT NULL,
   `enabled` integer NOT NULL,
   `priority` integer NOT NULL,
   PRIMARY KEY (`rule_id`)
 );
 
-CREATE TABLE `nglayouts_rule_target` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_target` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE `nglayouts_rule_target` (
     REFERENCES `nglayouts_rule` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule_condition` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_condition` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE `nglayouts_rule_condition` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -225,7 +225,7 @@ CREATE TABLE `nglayouts_rule` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule_group` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_group` (
   `id` integer NOT NULL,
   `status` integer NOT NULL,
   `uuid` text(36) NOT NULL,
@@ -238,14 +238,14 @@ CREATE TABLE `nglayouts_rule_group` (
   UNIQUE (`uuid`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule_group_data` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_group_data` (
   `rule_group_id` integer NOT NULL,
   `enabled` integer NOT NULL,
   `priority` integer NOT NULL,
   PRIMARY KEY (`rule_group_id`)
 );
 
-CREATE TABLE `nglayouts_rule_condition_rule` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_condition_rule` (
   `condition_id` integer NOT NULL,
   `condition_status` integer NOT NULL,
   `rule_id` integer NOT NULL,
@@ -257,7 +257,7 @@ CREATE TABLE `nglayouts_rule_condition_rule` (
     REFERENCES `nglayouts_rule` (`id`, `status`)
 );
 
-CREATE TABLE `nglayouts_rule_condition_rule_group` (
+CREATE TABLE IF NOT EXISTS `nglayouts_rule_condition_rule_group` (
   `condition_id` integer NOT NULL,
   `condition_status` integer NOT NULL,
   `rule_group_id` integer NOT NULL,

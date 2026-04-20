@@ -82,7 +82,7 @@ final class ExponentialInstallCommand extends Command
             'skip-indexing',
             null,
             InputOption::VALUE_NONE,
-            'Skip indexing (ibexa:reindex)',
+            'Skip indexing (exponential:reindex)',
         );
     }
 
@@ -181,9 +181,9 @@ final class ExponentialInstallCommand extends Command
 
     private function indexData(OutputInterface $output, ?string $siteaccess = null): void
     {
-        $output->writeln('Search engine re-indexing, executing command ibexa:reindex');
+        $output->writeln('Search engine re-indexing, executing command exponential:reindex');
 
-        $command = 'ibexa:reindex';
+        $command = 'exponential:reindex';
         if ($siteaccess) {
             $command .= \sprintf(' --siteaccess=%s', $siteaccess);
         }
