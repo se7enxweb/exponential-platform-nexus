@@ -1,4 +1,4 @@
-# Exponential Platform Nexus 1.0.0.0.3 INSTALL Instructions
+# Exponential Platform Nexus 1.0.0.x INSTALL Instructions
 
 ## Requirements
 
@@ -206,6 +206,14 @@ To see the images provided in the starter design and avoid a potential site bug 
 ```shell
 cd ezpublish_legacy/extension/;
 ln -s ../../../src/AppBundle/ezpublish_legacy/extension/app .;
+cd ../../../;
+```
+
+### Install `ngadminui` ezpublish_legacy extension (Required by 7x admin-ui-bundle/ngadminui).
+
+```shell
+cd ezpublish_legacy/extension/;
+ln -s ../../../vendor/se7enxweb/admin-ui-bundle/bundle/ezpublish_legacy/ngadminui .;
 cd ../../../;
 ```
 

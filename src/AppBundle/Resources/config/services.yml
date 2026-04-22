@@ -14,3 +14,11 @@ services:
         arguments: ['@service_container', '@cjw_publishtools.service.functions', '@ezpublish.templating.global_helper.core']
         tags:
             - { name: twig.extension }
+
+    AppBundle\Installer\ExponentialCjwInstaller:
+        autowire: true
+        parent: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+        tags:
+            - { name: ezplatform.installer, type: exponential-cjw }
