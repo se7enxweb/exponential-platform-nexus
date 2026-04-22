@@ -2,6 +2,10 @@
 parameters:
     locale_fallback: en
 
+    # ngsite location IDs — override in parameters.yml or via the installer prompt
+    # Location 2 is the standard eZ Platform "Content" root; Nexus demo data uses 168
+    ngsite.default.locations.tree_root.id: 2
+
     # A secret key that's used to generate certain security-related tokens
     secret: '%env(SYMFONY_SECRET)%'
 
