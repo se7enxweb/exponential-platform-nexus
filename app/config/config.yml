@@ -38,6 +38,8 @@ doctrine:
                 user: '%database_user%'
                 password: '%database_password%'
                 charset: '%database_charset%'
+                # Only used with pdo_sqlite driver; ignored by MySQL/MariaDB/PostgreSQL.
+                path: '%database_path%'
                 # Needs to be set to avoid Doctrine opening connection to database to get version info during situation where
                 # database is not ready yet. See: https://symfony.com/doc/current/reference/configuration/doctrine.html
                 server_version: '%database_version%'

@@ -23,6 +23,9 @@ parameters:
     # Needed by Doctrine Bundle / ORM to avoid it opening connection during situations where there is no service yet.
     # See: https://symfony.com/doc/current/reference/configuration/doctrine.html
     database_version: '%env(DATABASE_VERSION)%'
+    # Path to SQLite database file; only used when database_driver is pdo_sqlite.
+    # Defaults to var/data_{env}.db (e.g. var/data_dev.db). Override with DATABASE_PATH env var.
+    database_path: '%kernel.project_dir%/var/data_%kernel.environment%.db'
 
     # Setting for mail system, used by SwiftMailer
     mailer_host: '%env(MAILER_HOST)%'
