@@ -1,4 +1,4 @@
-# Exponential Platform Nexus 1.0.0.0.3
+# Exponential Platform Nexus 1.0.0.x
 
 # Exponential Platform Nexus Project Notice : 2025.08.12
 
