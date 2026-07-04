@@ -206,11 +206,21 @@ For development environments using SQLite:
 
 #### Option D: Console Installer (Alternative)
 
+Install using the console installer command:
+
 ```shell
+# With demo data (recommended for evaluation/testing)
 php bin/console ezplatform:install netgen-media
+
+# Clean installation without demo data (recommended for production)
+php bin/console ezplatform:install netgen-media-clean
 ```
 
-**Note:** If you use SQL files (Options A or B), skip the console installer.
+**Available installers:**
+- `netgen-media` - Includes demo content and example data
+- `netgen-media-clean` - Clean installation without demo data
+
+**Note:** If you use SQL files (Options A, B, or C), skip the console installer.
 
 **Default Admin Credentials:**
 - Username: `admin`
