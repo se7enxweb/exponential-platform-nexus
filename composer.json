@@ -193,7 +193,7 @@
             "eZ\\Bundle\\EzPublishCoreBundle\\Composer\\ScriptHandler::installWelcomeText"
         ],
         "ezplatform-install": [
-            "@php -d memory_limit=2000M bin/console ezplatform:install netgen-media"
+            "@php -d memory_limit=2000M bin/console ezplatform:install cjw-exponential-media"
         ],
         "ezplatform-assets": [
             "@php -d memory_limit=2000M bin/console bazinga:js-translation:dump web/assets --merge-domains",
@@ -202,12 +202,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/se7enxweb/cjw-exponential-media-site-data"
-        }
-    ],
     "config": {
         "bin-dir": "bin",
         "preferred-install": "dist",
