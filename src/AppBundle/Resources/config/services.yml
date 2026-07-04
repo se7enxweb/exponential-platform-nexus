@@ -1,6 +1,17 @@
 parameters:
 
 services:
+    cjw_exponential_installer.media_site:
+        class: Netgen\Bundle\SiteInstallerBundle\Installer\NetgenSiteInstaller
+        public: false
+        calls:
+            - [setInstallerDataPath, ["%kernel.project_dir%/vendor/se7enxweb/cjw-exponential-media-site-data/cjw-exponential-media"]]
+            - [setStoragePath, [ezpublish_legacy/var/site/storage]]
+        parent: ezplatform.installer.db_based_installer
+        tags:
+            - {name: ezplatform.installer, type: cjw-exponential-media}
+
+
     ngsite.layouts.block.plugin.vertical_whitespace_v2:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespaceV2Plugin
         arguments:

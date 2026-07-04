@@ -57,6 +57,7 @@
         "se7enxweb/symfony-cache": "3.4.48",
         "netgen/ezplatformsearch": "v1.2.3",
         "netgen/media-site-data": "~1.8.1",
+        "se7enxweb/cjw-exponential-media-site-data": "^1.0",
         "netgen/site-generator-bundle": "~1.5.1",
         "se7enxweb/site-legacy-bundle": "^1.4.5",
         "netgen/site-installer-bundle": "^1.3",
@@ -201,6 +202,12 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/se7enxweb/cjw-exponential-media-site-data"
+        }
+    ],
     "config": {
         "bin-dir": "bin",
         "preferred-install": "dist",
