@@ -171,62 +171,46 @@ parameters:
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
-### 6. Import Database Content
+### 6. Install Database Content
 
-Choose one of the following options:
-
-#### Option A: Full Database Import (Quickest - Recommended)
-
-Import the complete database dump with structure and content:
+Use the built-in console installer. It runs the schema + content SQL from the
+[`se7enxweb/cjw-exponential-media-site-data`](https://github.com/se7enxweb/cjw-exponential-media-site-data)
+Composer package installed automatically with step 4.
 
 ```shell
-mysql -u exponential_user -p exponential_db < src/AppBundle/Resources/database/sql/mysql/data.sql
+php bin/console ezplatform:install cjw-exponential-media
 ```
 
-#### Option B: Schema + Content Separate Import
-
-```shell
-# Import schema first
-mysql -u exponential_user -p exponential_db < src/AppBundle/Resources/database/sql/mysql/schema.sql
-
-# Then import content
-mysql -u exponential_user -p exponential_db < src/AppBundle/Resources/database/sql/mysql/clean_data.sql
-```
-
-#### Option C: SQLite (Development Only)
-
-For development environments using SQLite:
-
-```shell
-# The SQLite database file will be created automatically
-# Update parameters.yml to use:
-# env(DATABASE_DRIVER): pdo_sqlite
-# database_path: '%kernel.project_dir%/var/data_dev.db'
-```
-
-#### Option D: Console Installer (Alternative)
-
-Install using the console installer command:
-
-```shell
-# With demo data (recommended for evaluation/testing)
-php bin/console ezplatform:install netgen-media
-
-# Clean installation without demo data (recommended for production)
-php bin/console ezplatform:install netgen-media-clean
-```
-
-**Available installers:**
-- `netgen-media` - Includes demo content and example data
-- `netgen-media-clean` - Clean installation without demo data
-
-**Note:** If you use SQL files (Options A, B, or C), skip the console installer.
+This installs the full JAC Example project with content, content classes, sections,
+languages (ger-DE + eng-GB), and all required configuration.
 
 **Default Admin Credentials:**
 - Username: `admin`
 - Password: `publish`
 
 **⚠️ IMPORTANT:** Change the admin password immediately after installation!
+
+#### Available installer types
+
+| Type | Description |
+|------|-------------|
+| `cjw-exponential-media` | **Default.** Full JAC Example site with demo content |
+| `exponential-oss` | Minimal clean schema only, no content |
+
+#### SQLite (Development Only)
+
+For local development without MySQL, update `app/config/parameters.yml`:
+
+```yaml
+    env(DATABASE_DRIVER): pdo_sqlite
+```
+
+The SQLite database file is created automatically at `var/data_dev.db`.
+Then run the installer the same way:
+
+```shell
+php bin/console ezplatform:install cjw-exponential-media
+```
 
 ### 7. Install Node Dependencies & Build Frontend Assets
 
@@ -492,17 +476,6 @@ npx encore production
 cd ezpublish_legacy/extension/
 ln -s ../../../src/AppBundle/ezpublish_legacy/extension/app .
 # ... etc
-```
-
-### Database Import Errors: Character Encoding Issues
-
-**Cause:** Database not created with utf8mb4 encoding.
-
-**Solution:**
-```sql
-DROP DATABASE exponential_db;
-CREATE DATABASE exponential_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
-# Re-import SQL files
 ```
 
 ### Checking Error Logs
