@@ -25,6 +25,7 @@ Locale=ger-DE
 ContentObjectLocale=ger-DE
 ShowUntranslatedObjects=enabled
 SiteLanguageList[]
+SiteLanguageList[]=eng-GB
 SiteLanguageList[]=ger-DE
 TextTranslation=enabled
 

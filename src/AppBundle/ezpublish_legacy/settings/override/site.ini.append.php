@@ -22,6 +22,8 @@ ActiveExtensions[]=ezplatformsearch
 ActiveExtensions[]=ezdemo
 ActiveExtensions[]=ezjscore
 ActiveExtensions[]=ezoe
+ActiveExtensions[]=ngadminui
+ActiveExtensions[]=eztags
 
 
 [Session]
@@ -34,6 +36,8 @@ SiteList[]=site
 SiteList[]=admin
 SiteList[]=legacy_admin
 SiteList[]=ngadminui
+SiteList[]=en
+SiteList[]=de
 RootNodeDepth=1
 
 [UserSettings]
@@ -46,12 +50,20 @@ AvailableSiteAccessList[]=site
 AvailableSiteAccessList[]=admin
 AvailableSiteAccessList[]=legacy_admin
 AvailableSiteAccessList[]=ngadminui
+AvailableSiteAccessList[]=en
+AvailableSiteAccessList[]=de
 MatchOrder=host;uri
 HostMatchMapItems[]
 HostMatchMapItems[]=platform.demo.se7enx.com;site
 HostMatchMapItems[]=edit.platform.demo.se7enx.com;admin
 HostMatchMapItems[]=legacy.platform.demo.se7enx.com;legacy_admin
 HostMatchMapItems[]=nga.platform.demo.se7enx.com;ngadminui
+HostMatchMapItems[]=platform.cjw.alpha.se7enx.com;en
+HostMatchMapItems[]=site.platform.cjw.alpha.se7enx.com;en
+HostMatchMapItems[]=edit.platform.cjw.alpha.se7enx.com;admin
+HostMatchMapItems[]=legacy.platform.cjw.alpha.se7enx.com;legacy_admin
+HostMatchMapItems[]=editor.platform.cjw.alpha.se7enx.com;legacy_admin
+HostMatchMapItems[]=nga.platform.cjw.alpha.se7enx.com;ngadminui
 
 [DesignSettings]
 DesignLocationCache=enabled

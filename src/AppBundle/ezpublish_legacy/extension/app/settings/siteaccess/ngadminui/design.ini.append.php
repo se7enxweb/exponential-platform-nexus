@@ -2,4 +2,8 @@
 
 [StylesheetSettings]
 EditorCSSFileList[]=ngsite_ezoe.css
+
+[JavaScriptSettings]
+BackendJavaScriptList[]=contentstructuremenu/contentstructuremenu.js
+
 */ ?>

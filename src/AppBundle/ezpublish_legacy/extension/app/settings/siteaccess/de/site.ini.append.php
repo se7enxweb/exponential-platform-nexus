@@ -2,7 +2,7 @@
 
 
 [SiteAccessSettings]
-RequireUserLogin=true
+RequireUserLogin=false
 RelatedSiteAccessList[]
 RelatedSiteAccessList[]=de
 RelatedSiteAccessList[]=legacy_admin

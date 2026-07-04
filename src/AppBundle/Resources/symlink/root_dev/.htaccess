@@ -1,9 +1,9 @@
 # platform.cjw.demo.se7enx.com https + bcrypt browser authentication
 # DISABLED: Basic Auth removed - app-level auth only
-AuthType Basic
-AuthName "7x :: Restricted Content"
-AuthUserFile /var/www/vhosts/platform.cjw.alpha.se7enx.com/web/acl/nga.acl
-Require valid-user
+#AuthType Basic
+#AuthName "7x :: Restricted Content"
+#AuthUserFile /var/www/vhosts/platform.cjw.alpha.se7enx.com/web/acl/nga.acl
+#Require valid-user
 
 # Redis cache configuration
 # Use Redis for caching instead of filesystem

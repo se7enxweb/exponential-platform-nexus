@@ -18,6 +18,9 @@ netgen_site_legacy:
             injected_settings:
                 site.ini:
                     DesignSettings/SiteDesign: ngadminui
+                    RegionalSettings/SiteLanguageList:
+                        - eng-GB
+                        - ger-DE
                     
             injected_merge_settings:
                 site.ini:
