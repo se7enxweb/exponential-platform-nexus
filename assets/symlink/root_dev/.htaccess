@@ -3,13 +3,13 @@
 
 # Environment.
 # Possible values: "prod" and "dev" out-of-the-box, other values possible with proper configuration
-# Defaults to "dev" if omitted (uses SetEnvIf so value can be used in rewrite rules)
-SetEnvIf Request_URI ".*" APP_ENV=dev
+# Defaults to "prod" if omitted (uses SetEnvIf so value can be used in rewrite rules)
+SetEnvIf Request_URI ".*" APP_ENV=prod
 
 # Optional: Whether to use debugging.
 # Possible values: 0, 1 or ""
 # Defaults to enabled if APP_ENV is set to "dev" if env value is omitted or empty
-#if[APP_DEBUG] SetEnv APP_DEBUG "%APP_DEBUG%"
+SetEnv APP_DEBUG 0
 
 # Optional: Whether to use Symfony's builtin HTTP Caching Proxy.
 # Disable it if you are using an external reverse proxy (e.g. Varnish)
