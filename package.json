@@ -21,8 +21,8 @@
     "scripts": {
         "dev": "encore dev",
         "build:dev": "encore dev",
-        "prod": "encore production",
-        "build:prod": "encore production",
+        "prod": "NODE_OPTIONS=--openssl-legacy-provider encore production",
+        "build:prod": "NODE_OPTIONS=--openssl-legacy-provider encore production",
         "watch": "encore dev --watch",
         "start": "encore dev-server",
         "server": "encore dev-server",
@@ -57,8 +57,7 @@
         "sass": "^1.50.0",
         "sass-lint": "^1.12.1",
         "sass-loader": "^10.4.1",
-        "style-loader": "^1.0.0",
-        "webpack": "^4.0.0"
+        "style-loader": "^1.0.0"
     },
     "dependencies": {
         "20": "^3.1.9",

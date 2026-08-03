@@ -1,7 +1,5 @@
 // webpack.config.default.js
 const Encore = require('@symfony/webpack-encore');
-const Webpack = require('webpack'); // eslint-disable-line import/no-extraneous-dependencies
-
 const path = require('path');
 
 Encore.reset();
@@ -32,6 +30,8 @@ Encore
         loadPaths: [path.resolve(__dirname, 'node_modules')],
         outputStyle: Encore.isProduction() ? 'compressed' : 'expanded',
         includePaths: [path.resolve(__dirname, 'node_modules')],
+        quietDeps: true,
+        logger: require('sass').Logger.silent,
       };
   })
 
