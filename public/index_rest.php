@@ -6,6 +6,15 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 
- $legacyRoot = __DIR__ . DIRECTORY_SEPARATOR . '../ezpublish_legacy/';
- chdir( $legacyRoot );
- require 'index_rest.php';
+$legacyRoot = __DIR__ . DIRECTORY_SEPARATOR . '../ezpublish_legacy/';
+
+if (is_dir($legacyRoot)) {
+    chdir($legacyRoot);
+    require 'index_rest.php';
+} else {
+    // No legacy eZ Publish root installed. The new Ibexa/Symfony REST
+    // endpoints live under /api/ibexa/v2 and are served by index.php.
+    $_SERVER['SCRIPT_FILENAME'] = __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
+    $_SERVER['SCRIPT_NAME'] = '/index.php';
+    require __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
+}
