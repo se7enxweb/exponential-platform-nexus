@@ -23,6 +23,11 @@ ibexa:
             #
             # languages: [eng-GB]
             content_tree_module:
+                load_more_limit: 30
+                children_load_max_limit: 200
+                tree_max_depth: 10
+                allowed_content_types: []
+                ignored_content_types: []
                 contextual_tree_root_location_ids:
                     - 2 # Home (Content structure)
                     - 5 # Users
