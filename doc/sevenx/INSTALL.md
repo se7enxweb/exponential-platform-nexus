@@ -186,11 +186,12 @@ Browser Request
       ▼
   public/index.php  ── Symfony Kernel (Platform v5 OSS — Symfony 7.4 LTS)
       │
-      ├── URI: /adminui/**           → Platform v5 Admin UI (React)       ← siteaccess: admin
-      ├── URI: /api/ezp/v2/**        → REST API v2 (JWT-auth)             ← siteaccess: admin
-      ├── URI: /graphql              → GraphQL API                         ← siteaccess: admin
-      ├── URI: /nglayouts/**         → Netgen Layouts admin + app          ← siteaccess: admin
-      └── URI: /**                   → Platform v5 Twig/Symfony Front End  ← siteaccess: site
+      ├── URI: /adminui/**           → Platform v5 Admin UI (React)       ← siteaccess: adminui
+      ├── URI: /api/ezp/v2/**        → REST API v2 (JWT-auth)             ← siteaccess: adminui
+      ├── URI: /graphql              → GraphQL API                         ← siteaccess: adminui
+      ├── URI: /nglayouts/**         → Netgen Layouts admin + app          ← siteaccess: adminui
+      ├── URI: /bold_eng/**, /bold_ger/** → Bold Agency front end          ← siteaccess: bold_eng / bold_ger
+      └── URI: /**                   → Platform v5 Twig/Symfony Front End  ← siteaccess: fh_eng (default)
                                           Symfony controllers + Twig templates
 ```
 
@@ -234,10 +235,19 @@ project-root/
 
 ### Siteaccesses
 
-| Siteaccess | URL prefix | Purpose |
-|---|---|---|
-| `site` | `/` | Symfony/Twig public front end |
-| `admin` | `/adminui/` | Platform v5 Admin UI (React) + REST API + GraphQL |
+The siteaccesses are defined in `config/app/packages/ibexa_siteaccess.yaml` and matched by the first URI element
+(`URIElement: 1` in `config/app/server/dev/ibexa_siteaccess.yaml` and `config/app/server/prod.yaml`); a request
+without a siteaccess in its path goes to the default, `fh_eng`.
+
+| Siteaccess | URL prefix | Groups | Purpose |
+|---|---|---|---|
+| `fh_eng` | `/fh_eng/` or `/` (default) | `frontend_group`, `fh_group` | Public front end (Fit & Healthy design, English) |
+| `bold_eng` | `/bold_eng/` | `frontend_group`, `bold_group` | Public front end (Bold Agency design, English) |
+| `bold_ger` | `/bold_ger/` | `frontend_group`, `bold_group` | Public front end (Bold Agency design, German) |
+| `adminui` | `/adminui/` | `admin_group` | Platform v5 Admin UI (React) + REST API + GraphQL + Netgen Layouts |
+
+The administration siteaccess's name comes from the parameter `ngsite.admin_siteaccess_name` (`adminui`).
+This line has no `ngadminui` or `legacy_admin` siteaccess (there is no legacy kernel).
 
 ---
 
@@ -2142,7 +2152,7 @@ php bin/console liip:imagine:cache:remove                          # remove all
 php bin/console liip:imagine:cache:remove --filter=small           # one filter alias
 
 # SiteAccess config resolver
-php bin/console exponential:debug:config-resolver languages --siteaccess=site
+php bin/console exponential:debug:config-resolver languages --siteaccess=fh_eng
 php bin/console exponential:debug:config-resolver http_cache.purge_servers
 
 # Content utilities

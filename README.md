@@ -229,7 +229,7 @@ After install, the following URLs are live:
 
 | URL | Description |
 |---|---|
-| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng`, the default siteaccess; `/bold_eng/` and `/bold_ger/` for the Bold Agency site) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v5 Admin UI** (React) |
 | `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (JWT-authenticated) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
@@ -394,7 +394,7 @@ in production.
 
 | URL | Description |
 |---|---|
-| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng`, the default siteaccess; `/bold_eng/` and `/bold_ger/` for the Bold Agency site) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v5 Admin UI** (React) — login: `admin` / `publish` |
 | `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (requires JWT) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
