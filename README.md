@@ -37,7 +37,7 @@
 15. [How to Contribute](#how-to-contribute)
 16. [Copyright](#copyright)
 17. [License](#license)
-18. [Additional Documentation](#additional-documentation)
+18. [Documentation](#documentation)
 
 ---
 
@@ -459,8 +459,20 @@ Copyright © 1998–2026 7x (se7enx.com). All rights reserved unless otherwise n
 
 ---
 
-## Additional Documentation
+## Documentation
 
+* [The short installation guide](doc/INSTALL.md): a working installation of any line in the fewest safe steps.
+* [The book](doc/book/README.md): installing and running Exponential Platform Nexus on all four lines (1.0.0.x / 2.5,
+  1.1.0.x, 1.2.0.x, 1.3.0.x), from the requirements to serving the site with Exponential Velocity, databases,
+  configuration, the front end and operations, and on to
+  [upgrading between lines](doc/book/11-upgrading-between-lines.md),
+  [migrating a site into Nexus](doc/book/12-migrating-into.md), [troubleshooting](doc/book/13-troubleshooting.md) and
+  [security hardening](doc/book/14-security-hardening.md). The copy on this branch is the one released with it; the
+  newest copy is on [master](https://github.com/se7enxweb/exponential-platform-nexus/blob/master/doc/book/README.md).
+* Before going live, read [chapter 14](doc/book/14-security-hardening.md): the releases of 5 October 2026
+  (`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1`, `1.3.0.6`) fix the `dev` host switch and the cache header rewriting
+  of the 2.5 generation and wire trusted proxies and the HTTP cache switch of the newer lines; the chapter says how to
+  check an installation made from an older tag and how to take the fixes.
 * [7x Installation & Operations Guide](doc/sevenx/INSTALL.md) — **start here** for all
   installation, configuration, and operations details
 * [Netgen Install Instructions](doc/netgen/INSTALL.md) — upstream Netgen Media Site install guide
