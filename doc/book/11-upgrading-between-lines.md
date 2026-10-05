@@ -43,7 +43,7 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 | Platform | eZ Platform 2.5 (`se7enxweb/ezpublish-kernel ~7.5.40`) | Platform 3.3 (`se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3`) | Ibexa OSS 4.6 (`se7enxweb/oss ~4.6.0`) | Platform v5 (`se7enxweb/exponential-platform-dxp`, locked kernel `se7enxweb/exponential-platform-dxp-core v5.0.7`) |
 | Symfony | 3.4 (`se7enxweb/symfony v3.4.55`) | 5.4 | 5.4 | 7.4 |
 | PHP (`composer.json`) | `^7.1.3 \|\| ... \|\| ^8.6`; in practice 8.1 or newer, because the legacy kernel requires `^8.1` | `^8.0` | `>=8.2` | `>=8.4` |
-| Node.js | `master`: `.nvmrc` `v22` (added 2026-10-05), no `engines`; Webpack 4 with `NODE_OPTIONS=--openssl-legacy-provider` in every script | `.nvmrc` `v18`, `engines` `^18 \|\| ^20` | `.nvmrc` `v18`, `engines` `^18` | `.nvmrc` `v22`, `engines` `^22` |
+| Node.js | `.nvmrc` (added 2026-10-05): `v22` on `master`, `v20` on the branch `1.0.0.x`; no `engines`; Webpack 4 with `NODE_OPTIONS=--openssl-legacy-provider` in every script | `.nvmrc` `v18`, `engines` `^18 \|\| ^20` | `.nvmrc` `v18`, `engines` `^18` | `.nvmrc` `v22`, `engines` `^22` |
 | Project layout | `app/`, `src/AppBundle/`, `web/` | `config/`, `src/` (`App\`), `templates/`, `public/` | as 1.1 | as 1.1 |
 | Legacy kernel | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` | yes: `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` | yes: `se7enxweb/site-legacy-bundle v2.0.0`, which locks `se7enxweb/ibexa-legacy-bridge 4.x-dev` and `se7enxweb/exponential dev-main`; the legacy bundle is registered in `config/bundles.php` | **no** |
 | Netgen Layouts | 1.4 (`se7enxweb/layouts-ezplatform ^1.4.11`) | 1.4 (`netgen/layouts-ezplatform ~1.4.0`) | 1.4 (`netgen/layouts-ibexa ~1.4.0`, locked `layouts-core 1.4.13`) | 2.0 (`netgen/layouts-ibexa ~2.0.0`, locked fork `se7enxweb/layouts-core`) |
@@ -162,6 +162,8 @@ change at once.
 | `app/config/*.yml` | `config/packages/*.yaml`, project configuration under `config/app/` |
 | `app/config/parameters.yml` (from `parameters.yml.dist`), values as `env(...)` parameters | `.env`, overridden by `.env.local` and real environment variables |
 | `SYMFONY_ENV`, `SYMFONY_DEBUG`, `SYMFONY_SECRET` | `APP_ENV`, `APP_DEBUG`, `APP_SECRET` |
+| `SYMFONY_TRUSTED_PROXIES`, read by `web/app.php` | `TRUSTED_PROXIES`, read by `framework.trusted_proxies` in `config/packages/ezpublish.yaml` (branch head since 2026-10-05; add it yourself on `v1.1.0.7`, [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
+| `SYMFONY_HTTP_CACHE` (on by default outside `dev`), the project's `app/AppCache.php` | `APP_HTTP_CACHE` (off by default; read by `public/index.php` on the branch head only), the platform's `AppCache` |
 | `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_NAME`, ... | `DATABASE_URL` (plus `DATABASE_CHARSET`, `DATABASE_COLLATION`, `DATABASE_VERSION`) |
 | `web/` document root, front controller `web/app.php` | `public/`, front controller `public/index.php` (Symfony Runtime) |
 | `src/AppBundle/` (`AppBundle\`), templates in `src/AppBundle/Resources/views/` | `src/` (`App\`), templates in `templates/` |
@@ -246,8 +248,9 @@ to the location the 1.1.0.x project uses for them (the `ngsite:symlink:legacy` a
 ### Front end
 
 The site theme moves from `src/AppBundle/Resources/` to `assets/`, Webpack 4 with Encore 0.27 to the 1.1.0.x
-toolchain, and Node.js to version 18 or 20 (`.nvmrc` says `v18`). The admin interface assets are built with
-`yarn ez` (`webpack.config.ez.js`). See [chapter 9](09-frontend-and-themes.md).
+toolchain, and Node.js to version 18 or 20 (`.nvmrc` says `v18`). The admin interface assets are built with the
+translation dump and `yarn ez` (`webpack.config.ez.js`), which `make ibexa-assets` runs on the branch head. See
+[chapter 9](09-frontend-and-themes.md).
 
 ## 11.5 From 1.1.0.x to 1.2.0.x: Platform 3.3 to Ibexa OSS 4.6
 
@@ -286,8 +289,18 @@ namespace `ezsettings` to `ibexa.site_access.config`, configuration keys such as
 Twig functions, the back office moving to `ibexa-` CSS classes) are the vendor's; the full list is on the
 [4.0 update page](https://doc.ibexa.co/en/latest/update_and_migration/from_3.3/to_4.0/) and in
 [chapter 16.5.5 of the Exponential book](https://github.com/se7enxweb/exponential/blob/main/doc/install/16-migrating-from-ez-platform-and-ibexa.md#1655-namespaces-bundles-and-configuration-keys).
-The Exponential 4.6 forks register `exponential:*` as the primary console command names and keep `ibexa:*` and
-`ezplatform:*` as deprecated aliases, so cron entries keep working on this line.
+Console command names change with the kernel each line installs. On 1.1.0.x the 3.3 kernel fork
+`se7enxweb/ezplatform-kernel` (tags `v1.3.43` to `v1.3.45`) registers `exponential:*` primary names and keeps
+`ibexa:*` and `ezplatform:*` as deprecated aliases. The lock file of 1.2.0.x installs the upstream 4.6 kernel
+`ibexa/core` (from `github.com/ibexa/core`), whose commands are `ibexa:*` with `ezplatform:*` aliases; the 4.6 branch
+of the se7enxweb core fork that renames them is not what this line installs. Both lines add their own
+`exponential:install` and an `exponential:reindex` proxy. So cron entries and scripts that use `ibexa:*` or
+`ezplatform:*` keep working on both lines; scripts that use other `exponential:*` kernel commands written on 1.1.0.x
+need the `ibexa:` name on 1.2.0.x ([chapter 10.1](10-operations.md#101-the-operators-map-per-line)).
+
+The trusted proxy setting moves with the `framework:` block: on the 1.1.0.x branch head it is in
+`config/packages/ezpublish.yaml`, on 1.2.0.x in `config/packages/framework.yaml`; keep `TRUSTED_PROXIES` in
+`.env.local` and check that the target's file reads it ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
 
 ### Database
 
@@ -534,6 +547,21 @@ On 1.0.0.x and 1.1.0.x the legacy kernel is a Composer package installed into `e
 replaces that directory, so anything placed there by hand (rather than by the `ngsite:symlink:*` and
 `ezpublish:legacybundles:install_extensions` scripts) is lost. Platform patch releases may carry SQL of their own;
 read the release notes of the forks for the versions you pass.
+
+**Fixes that are on a branch but not yet in a tag.** `composer update` brings the forks' fixes, but files of the
+project itself (`web/app.php`, `app/AppCache.php`, `public/index.php`, `config/`, `Makefile`, `deploy/`) change only
+when you merge. On 5 October 2026 every branch received such fixes that no release contains yet (the security ones
+are listed in [chapter 14](14-security-hardening.md), the operational ones in [chapter 10](10-operations.md)). To
+see what your project lacks compared with the head of its line, and to take one file:
+
+```bash
+git fetch origin
+git log --oneline <your-tag>..origin/1.3.0.x -- public config Makefile deploy   # the line you run
+git diff <your-tag> origin/1.3.0.x -- public/index.php                          # one file
+git checkout origin/1.3.0.x -- public/index.php                                 # take it
+```
+
+Review each diff before you take it: the branch head may also carry changes you do not want yet.
 
 ## 11.10 Verify the upgrade
 
