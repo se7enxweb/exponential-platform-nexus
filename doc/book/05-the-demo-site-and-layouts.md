@@ -70,7 +70,20 @@ parameters:
 ```
 
 and the location IDs of the shared components (hero 407, quote 445, about 413, features 422, logos 420, lead 470).
-If you load other content, these IDs are what you change.
+If you load other content, these IDs are what you change. On the branches, `config/app/server/prod.yaml` (for
+`SERVER_ENVIRONMENT=prod`) repeats the same IDs. One line differs: on 1.1.0.x both `dev/app.yaml` and `prod.yaml` set
+`ngsite.bold_group.locations.tree_root.id: 2`, although the demo data of that line has Bold Agency at location 386
+too; set 386 there ([chapter 4](04-installing.md#45-the-110x-line)).
+
+A quick way to see that the IDs match your content is to ask for the root of each site through the console of
+1.3.0.x:
+
+```bash
+php bin/console dbal:run-sql "SELECT node_id, path_identification_string FROM ibexa_content_tree WHERE node_id IN (385, 386)"
+```
+
+The reference installation answers `/fit_healthy` for 385 and `/bold_agency` for 386. On 1.1.0.x and 1.2.0.x the table is
+`ezcontentobject_tree` ([chapter 7](07-databases.md#731-repository-tables-ez-up-to-120x-ibexa_-on-130x)).
 
 The user groups in `Users` come with roles for three kinds of editors: full CMS and Layouts editors, simple CMS and
 Layouts editors, and simple CMS editors who cannot touch layouts. Look at them in the administration (Admin, Roles)
@@ -123,7 +136,9 @@ The demo defines 35 content types. Apart from the platform's own (`file`, `image
 
 Forms are answered through Netgen Information Collection: a submitted contact form is stored and mailed using
 `collected_info_sender` and `collected_info_recipient`, which the demo configuration sets to Netgen's example addresses.
-Change them in `config/app/server/<env>/app.yaml` before the site sends mail.
+Change them before the site sends mail: in `config/app/server/dev/app.yaml` for `SERVER_ENVIRONMENT=dev`, through
+`COLLECTED_INFO_SENDER` and `COLLECTED_INFO_RECIPIENT` (1.2.0.x, 1.3.0.x) or `MAIL_FROM` and `MAIL_TO` (1.1.0.x) for
+the `prod.yaml` server file (section 5.11).
 
 ## 5.5 Netgen Layouts: the concepts
 
@@ -348,8 +363,17 @@ The 2.5 line (`master`) installs the CJW content instead, with `cjw-exponential-
 - the legacy extension `app` and the image storage in `src/AppBundle/ezpublish_legacy/`, linked into
   `ezpublish_legacy/` ([chapter 4](04-installing.md#step-4-the-symlinks-into-the-legacy-kernel)).
 
-The root of the CJW site is location 168 (the comment in `app/config/default_parameters.yml` on 1.0.0.x); set
-`ngsite.default.locations.tree_root.id` accordingly. The Layouts concepts of this chapter apply unchanged.
+The root of the CJW site is location 168, "JAC Example" (`/1/2/168/`), and the start page `startseite` is a child of
+it. Set `ngsite.default.locations.tree_root.id: 168` in `app/config/parameters.yml`: the `1.0.0.x` branch now ships
+that value, but `master` ships 2 and the release `v2.5.0.6` does not define the parameter at all
+([chapter 4](04-installing.md#step-1-database-settings-in-parametersyml)). The Layouts concepts of this chapter apply
+unchanged.
+
+The CJW content is a different site from the Media Site demo. It uses the Media Site's `ng_*` content types (an older
+set, with `ng_author`, `ng_feedback_form` and `ng_gallery_intro` and without the component types) plus its own
+`cjw_*` types (`cjw_banner_head`, `cjw_content_embedded`, `cjw_feedback_form`, `cjw_folder_management`) and `tmv_*`
+types for events, dates and categories; the default siteaccess `de` lists ger-DE before eng-GB. The figures of sections
+5.2 to 5.8 (290 items, 21 layouts, 18 rules) do not apply to it.
 
 ## 5.11 From demo to your own site
 
@@ -357,11 +381,16 @@ You rarely keep the demo as it is. In order of effort:
 
 1. **Keep the structure, change the content.** Edit the pages and articles, keep the layouts and mappings. Change
    `site_domain`, the Google Tag Manager code (`ngsite.default.site_settings.google_tag_manager_code` is Netgen's demo
-   code) and the mail addresses in `config/app/server/<env>/app.yaml`.
+   code in `dev`) and the mail addresses in `config/app/server/dev/app.yaml`. With `SERVER_ENVIRONMENT=prod`, the
+   `prod.yaml` of the 1.2.0.x and 1.3.0.x branches takes them from `SITE_DOMAIN`, `COLLECTED_INFO_SENDER`,
+   `COLLECTED_INFO_RECIPIENT` and `GOOGLE_TAG_MANAGER_CODE` in `.env.local` (empty: no tracking snippet), and the
+   1.1.0.x one from `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO` and `GTM_CODE`.
 2. **Remove one site.** If you only want Fit & Healthy, remove `bold_eng` and `bold_ger` from the siteaccess list,
    delete the Bold Agency subtree, and delete the Bold layouts and their mappings.
-3. **Start from a clean repository.** Install with `exponential-oss` (1.3.0.x) or `netgen-media-clean` (where it is
-   registered) for the platform content without the demo, and build content types, layouts and mappings yourself. The
+3. **Start from a clean repository.** Install with `exponential-oss` (1.3.0.x, and on the 2.5 generation through the
+   kernel fork) or `netgen-media-clean` (where it is registered) for the platform content without the demo, and build
+   content types, layouts and mappings yourself. A clean repository's site root is location 2, so set the tree root
+   parameters of your line to 2. The
    designs and the `ng_*` view configuration still expect the Media Site content types; keep them or replace the
    configuration as well.
 
