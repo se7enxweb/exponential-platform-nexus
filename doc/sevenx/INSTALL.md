@@ -853,7 +853,7 @@ yarn watch
 |---|---|
 | `assets/js/**`, `assets/sass/**` | `yarn build:dev` (or `yarn watch`) |
 | `package.json` | `yarn install && yarn build:dev` |
-| `webpack.config.project.js` | `yarn build:dev` |
+| `webpack.config.js`, `webpack.config.default.js` | `yarn build:dev` |
 
 ---
 
