@@ -388,15 +388,23 @@ proxies, `Q.webserver.proxy.trusted` (default `127.0.0.1` and `::1`), and passes
 `REMOTE_ADDR`. X-Forwarded-For is read from the right: trusted proxies are skipped and the first other address is the
 visitor.
 
-The protocol follows the same list since engine commit `380a64d` (5 October 2026, "Forwarded protocol headers are read
-only from trusted proxies"): `HTTPS` and `REQUEST_SCHEME` follow `X-Forwarded-Proto` (or the header named in
-`Q.webserver.proxy.headers.proto`), `CloudFront-Forwarded-Proto` and Cloudflare's `CF-Visitor` only when the
-connection comes from a trusted proxy, and a TLS connection is HTTPS from any client. **No release contains it yet**:
-the newest tag, `v0.0.4.43` (5 October 2026), was cut before it; the commit and a rebuilt `sbin/qbixserver.phar`
-(`f7aef7c`) are on `main`. Up to `v0.0.4.43` any client on a plain HTTP listener could send `X-Forwarded-Proto: https`
-and PHP saw `HTTPS=on`: the application then built `https://` URLs and set `Secure` cookies for a plain connection.
-Until the next release, either run Velocity from `main`, or make sure its plain listener is reachable only by your
-proxy (bind it to `127.0.0.1`) or only redirects to HTTPS.
+The protocol follows the same list since Velocity `v0.0.4.44` (tagged 5 October 2026; engine commit `380a64d`,
+"Forwarded protocol headers are read only from trusted proxies"): `HTTPS` and `REQUEST_SCHEME` follow
+`X-Forwarded-Proto` (or the header named in `Q.webserver.proxy.headers.proto`; of a comma-separated value the first
+entry counts), `CloudFront-Forwarded-Proto` and Cloudflare's `CF-Visitor` only when the connection comes from a
+trusted proxy, and a TLS connection is HTTPS from any client. Up to `v0.0.4.43` any client on a plain HTTP listener
+could send `X-Forwarded-Proto: https` and PHP saw `HTTPS=on`: the application then built `https://` URLs and set
+`Secure` cookies for a plain connection. Update to `v0.0.4.44` or newer; until you can, make sure the plain listener
+is reachable only by your proxy (bind it to `127.0.0.1`) or only redirects to HTTPS. Check the version you run:
+
+```bash
+php /opt/exponential-velocity/sbin/qbixserver.php --version     # or: qbixserver --version from the packages
+```
+
+One consequence of the fix: a proxy that sets the protocol header must now be listed in `Q.webserver.proxy.trusted`,
+which is loopback only unless configured. A TLS terminator on another machine that worked before without being listed
+makes PHP see plain HTTP after the update, which can show as a redirect loop on a site that forces HTTPS; add its
+address.
 
 Configure proxies in front of Velocity in a configuration snippet, for example
 `/etc/vc/conf-available/reverse-proxy.conf`, enabled with `qbixctl enconf reverse-proxy` (the file name is yours; the
@@ -607,7 +615,7 @@ security:
 
   To find the links before the first request, run `find public web -maxdepth 3 -type l 2>/dev/null` in the project
   root.
-- **Forwarded headers.** The visitor's address, and since engine commit `380a64d` (not yet released) the protocol,
+- **Forwarded headers.** The visitor's address, and since `v0.0.4.44` (engine commit `380a64d`) the protocol,
   are taken from forwarded headers only when the connection comes from `Q.webserver.proxy.trusted`
   ([14.6](#146-behind-a-proxy-trusted-proxies)). On `v0.0.4.43` and older, keep the plain HTTP listener away from
   visitors or let it only redirect.
@@ -679,7 +687,7 @@ has a section on Velocity-specific hardening for the legacy kernel.
 - [ ] Session cookies `Secure` and `HttpOnly`; HTTPS redirect for every host; security headers set.
 - [ ] Code not writable by the web server; uploads limited.
 - [ ] Velocity: symbolic link behaviour decided (bundle assets copied, or `followSymlinks` on for the legacy lines),
-      forwarded protocol safe (a build with `380a64d`, or no plain listener for visitors), headers configured, panel
+      forwarded protocol safe (`v0.0.4.44` or newer, or no plain listener for visitors), headers configured, panel
       password set.
 - [ ] `composer audit` clean or reviewed.
 
@@ -707,7 +715,7 @@ Exponential:
   [headers](https://github.com/se7enxweb/exponential-velocity/blob/main/docs/headers.md),
   [passwords](https://github.com/se7enxweb/exponential-velocity/blob/main/docs/passwords.md),
   [commit 380a64d](https://github.com/se7enxweb/exponential-velocity/commit/380a64d) (forwarded protocol),
-  [release v0.0.4.43](https://github.com/se7enxweb/exponential-velocity/releases/tag/v0.0.4.43)
+  [CHANGELOG, v0.0.4.44](https://github.com/se7enxweb/exponential-velocity/blob/main/CHANGELOG.md)
 
 Symfony and PHP:
 
