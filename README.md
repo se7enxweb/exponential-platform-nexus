@@ -62,7 +62,10 @@ access to the Internet.
 
 ## What version of PHP is required
 
-Exponential Platform Nexus supports PHP 8.3 -> 8.5 please use the latest version of PHP available on your OS.
+This branch (the 2.5 generation) runs on PHP 8.1 or newer: its `composer.json` accepts `^7.1.3` up to `^8.6`, but the
+Exponential legacy kernel it installs (`se7enxweb/exponential`) requires PHP `^8.1`. Please use the latest version of
+PHP available on your OS. The other lines need PHP 8.0 (1.1.0.x), 8.2 (1.2.0.x) and 8.4 (1.3.0.x) or newer; see
+[the requirements chapter](doc/book/02-requirements.md).
 
 # Main Exponential Platform Nexus features
 
