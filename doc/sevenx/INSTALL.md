@@ -17,15 +17,20 @@
 
 > **Console Command Prefix Convention**
 >
-> Commands in this distribution use the `exponential:` prefix where available.
-> The `ibexa:*` prefix remains as a deprecated alias for migrated commands.
+> The kernel of this line (`se7enxweb/exponential-platform-dxp-core` v5.0.x) renames the commands it
+> ships to the `exponential:` prefix, for example `exponential:install`, `exponential:reindex`,
+> `exponential:urls:regenerate-aliases`, `exponential:content:cleanup-versions`, `exponential:copy-subtree`
+> and `exponential:io:migrate-files`. **The old `ibexa:` names of these commands are not registered as
+> aliases**: `php bin/console ibexa:reindex` ends with `Command "ibexa:reindex" is not defined.` The only alias the kernel
+> defines is `exponential:debug:config` for `exponential:debug:config-resolver`.
 >
-> | Preferred — use this | Deprecated (functional) |
+> | Use | Not available on this line |
 > |---|---|
-> | `exponential:*` | `ibexa:*` |
+> | `exponential:install`, `exponential:reindex`, … | `ibexa:install`, `ibexa:reindex`, … |
 >
-> Commands not yet migrated retain their `ibexa:*` name (e.g. `ibexa:cron:run`,
-> `ibexa:graphql:generate-schema`).
+> Commands of the other Ibexa packages keep their `ibexa:` name (e.g. `ibexa:cron:run`,
+> `ibexa:graphql:generate-schema`, `ibexa:system-info:dump`). `php bin/console list exponential` and
+> `php bin/console list ibexa` show what your installation registers.
 
 ---
 
