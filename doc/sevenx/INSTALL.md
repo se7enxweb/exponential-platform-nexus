@@ -459,32 +459,24 @@ APP_SECRET=<random-32-char-hex-string>   # generate: openssl rand -hex 16
 
 ### MySQL / MariaDB
 
+The connection is read from `DATABASE_URL` alone (`config/packages/doctrine.yaml`); separate
+`DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER`,
+`DATABASE_PASSWORD` and `DATABASE_VERSION` variables are not read. Put the server version into the URL
+(`serverVersion`). `DATABASE_CHARSET` and `DATABASE_COLLATION` are read, for the table options of the
+schema (`config/packages/ez_doctrine_schema.yaml`).
+
 ```bash
-DATABASE_DRIVER=pdo_mysql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=3306
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="mysql://your_db_user:your_db_password@127.0.0.1:3306/your_db_name?serverVersion=mariadb-10.6.0&charset=utf8mb4"
+# MySQL: ...?serverVersion=8.0&charset=utf8mb4
 DATABASE_CHARSET=utf8mb4
 DATABASE_COLLATION=utf8mb4_unicode_520_ci
-DATABASE_VERSION=mariadb-10.6.0    # e.g. mariadb-10.6.0 or 8.0 for MySQL
-
-# Or use a full DSN (takes precedence over the vars above):
-# DATABASE_URL="mysql://user:pass@127.0.0.1:3306/dbname?serverVersion=8.0&charset=utf8mb4"
 ```
 
 ### PostgreSQL (alternative to MySQL)
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="postgresql://your_db_user:your_db_password@127.0.0.1:5432/your_db_name?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
 ```
 
 ### SQLite (zero-config — dev / testing)
@@ -630,8 +622,7 @@ DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
 MESSENGER_TRANSPORT_DSN=sync://
 ```
 
-Remove or comment out any `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`,
-`DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` lines.
+Only `DATABASE_URL` selects the database; make sure `.env.local` sets it once, to the SQLite form above.
 
 #### Step 3 — Run the install command
 
@@ -1264,7 +1255,7 @@ All tools listed below are either:
 > **Before you start — backup everything.**
 > ```bash
 > # MySQL / MariaDB:
-> mysqldump -u "$DATABASE_USER" -p"$DATABASE_PASSWORD" -h "$DATABASE_HOST" "$DATABASE_NAME" > backup_$(date +%Y%m%d).sql
+> mysqldump -u your_db_user -p -h 127.0.0.1 your_db_name > backup_$(date +%Y%m%d).sql
 > # PostgreSQL:
 > pg_dump -U pg_user exponential > backup_$(date +%Y%m%d).sql
 > # SQLite:
@@ -1348,8 +1339,7 @@ curl -LO https://raw.githubusercontent.com/dumblob/mysql2sqlite/master/mysql2sql
 chmod +x mysql2sqlite
 
 mysqldump --no-tablespaces --skip-extended-insert --compact \
-  -u "$DATABASE_USER" -p"$DATABASE_PASSWORD" \
-  -h "$DATABASE_HOST" "$DATABASE_NAME" \
+  -u your_db_user -p -h 127.0.0.1 your_db_name \
   | ./mysql2sqlite - | sqlite3 var/data_dev.db
 ```
 
@@ -1417,10 +1407,10 @@ pip install sqlite3-to-mysql
 
 sqlite3mysql \
   --sqlite-file var/data_dev.db \
-  --mysql-database "$DATABASE_NAME" \
-  --mysql-user "$DATABASE_USER" \
-  --mysql-password "$DATABASE_PASSWORD" \
-  --mysql-host "$DATABASE_HOST" \
+  --mysql-database your_db_name \
+  --mysql-user your_db_user \
+  --mysql-password 'your_db_password' \
+  --mysql-host 127.0.0.1 \
   --mysql-port 3306 \
   --chunk 1000
 ```
@@ -1428,16 +1418,10 @@ sqlite3mysql \
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_mysql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=3306
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="mysql://your_db_user:your_db_password@127.0.0.1:3306/your_db_name?serverVersion=mariadb-10.6.0&charset=utf8mb4"
 DATABASE_CHARSET=utf8mb4
 DATABASE_COLLATION=utf8mb4_unicode_520_ci
-DATABASE_VERSION=mariadb-10.6.0   # or MySQL version e.g. 8.0
-# Remove DATABASE_URL=sqlite:// and MESSENGER_TRANSPORT_DSN=sync://
+# Replace the sqlite:// DATABASE_URL; remove MESSENGER_TRANSPORT_DSN=sync:// if you set it for SQLite
 ```
 
 ---
@@ -1464,15 +1448,9 @@ pgloader /tmp/sqlite_to_pg.load
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=exponential
-DATABASE_USER=pg_user
-DATABASE_PASSWORD=pg_pass
+DATABASE_URL="postgresql://pg_user:pg_pass@127.0.0.1:5432/exponential?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
-# Remove DATABASE_URL=sqlite:// and MESSENGER_TRANSPORT_DSN=sync://
+# Replace the sqlite:// DATABASE_URL; remove MESSENGER_TRANSPORT_DSN=sync:// if you set it for SQLite
 ```
 
 ---
@@ -1511,14 +1489,8 @@ pgloader /tmp/mysql_to_pg.load
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=exponential
-DATABASE_USER=pg_user
-DATABASE_PASSWORD=pg_pass
+DATABASE_URL="postgresql://pg_user:pg_pass@127.0.0.1:5432/exponential?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
 ```
 
 ---
@@ -1528,7 +1500,7 @@ DATABASE_VERSION=16
 After any database engine switch, run through every item:
 
 ```bash
-# 1. Update .env.local with the new DATABASE_URL or database vars
+# 1. Update DATABASE_URL in .env.local for the new database
 $EDITOR .env.local
 
 # 2. Clear the Symfony container and cache (it caches the DBAL connection)
