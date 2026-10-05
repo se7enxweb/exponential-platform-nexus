@@ -69,29 +69,58 @@ variables differ, and every server configuration in this chapter has to match th
 | Line | Upstream base | Document root | Front controller | Environment variables read by the front controller |
 |---|---|---|---|---|
 | 1.0.0.x (and `master`) | eZ Platform 2.5, Symfony 3.4 | `web/` | `web/app.php` (Symfony `AppKernel`, optional `AppCache`) | `SYMFONY_ENV`, `SYMFONY_DEBUG`, `SYMFONY_HTTP_CACHE`, `SYMFONY_TRUSTED_PROXIES` |
-| 1.1.0.x | eZ Platform 3.3, Symfony 5.4 | `public/` | `public/index.php` (Symfony Runtime) | `APP_ENV`, `APP_DEBUG` (through `.env`) |
-| 1.2.0.x | Ibexa OSS 4.6, Symfony 5.4 | `public/` | `public/index.php` (Symfony Runtime) | `APP_ENV`, `APP_DEBUG` |
-| 1.3.0.x | Ibexa v5, Symfony 7.4 | `public/` | `public/index.php` (Symfony Runtime), plus `public/index_rest.php` and `public/index_cluster.php` | `APP_ENV`, `APP_DEBUG` |
+| 1.1.0.x | eZ Platform 3.3, Symfony 5.4 | `public/` | `public/index.php` (Symfony Runtime) | `APP_ENV`, `APP_DEBUG`, and on the branch `APP_HTTP_CACHE` (through `.env` or the server) |
+| 1.2.0.x | Ibexa OSS 4.6, Symfony 5.4 | `public/` | `public/index.php` (Symfony Runtime) | as 1.1.0.x |
+| 1.3.0.x | Ibexa v5, Symfony 7.4 | `public/` | `public/index.php` (Symfony Runtime), plus `public/index_rest.php` and `public/index_cluster.php` | as 1.1.0.x |
+
+On 1.1.0.x to 1.3.0.x, `TRUSTED_PROXIES` is not read by the front controller but by the framework configuration
+(section 6.10).
 
 What the files say:
 
-- On **1.1.0.x, 1.2.0.x and 1.3.0.x** `public/index.php` is the six-line Symfony Runtime front controller: it requires
-  `vendor/autoload_runtime.php` and returns a closure that builds `App\Kernel` from `APP_ENV` and `APP_DEBUG`.
-  Everything else is routed inside Symfony, so the server only has to send every request that is not a file to
-  `index.php`.
+- On **1.1.0.x, 1.2.0.x and 1.3.0.x** `public/index.php` is the Symfony Runtime front controller: it requires
+  `vendor/autoload_runtime.php` and returns a closure that builds `App\Kernel` from `APP_ENV` and `APP_DEBUG`. On the
+  branches since 2026-10-05 the closure also reads `APP_HTTP_CACHE`: when it is true (`1`, `true`, `on`, `yes`), it
+  enables the HTTP method override and returns the platform's `AppCache` (the Symfony reverse proxy) wrapped around
+  the kernel; unset or false, it returns the bare kernel as before. In the releases (`v1.1.0.7`, `v1.2.0.0`,
+  `1.3.0.5`) `index.php` is the plain six-line version and `APP_HTTP_CACHE` has no effect. Everything else is routed
+  inside Symfony, so the server only has to send every request that is not a file to `index.php`.
 - On **1.0.0.x** the front controller is `web/app.php`. `web/index.php` exists but is an **empty file**, so a server
   that falls back to `index.php` by default serves blank pages on this line; it must be told to use `app.php`
   (sections 6.3.4 and 6.4). `app.php` reads `SYMFONY_ENV` (default `prod`), `SYMFONY_DEBUG`, `SYMFONY_HTTP_CACHE`
   (wraps the kernel in `AppCache`, the Symfony reverse proxy, unless the environment is `dev`) and
   `SYMFONY_TRUSTED_PROXIES`, loads an optional `.env.php` from the project root, and answers `400 Bad Request` when the
-  front controller's own name appears in the URL. It also switches to the `dev` environment for any host name that
-  contains `dev.`; keep that in mind when you name a production host.
+  front controller's own name appears in the URL.
+- **The `dev.` host switch.** Every release of the 2.5 generation up to `v2.5.0.6`, `1.0.0.9` and `1.0.0.10` contains
+  a patch at the top of `web/app.php` that sets `SYMFONY_ENV=dev` for any request whose `Host` header contains
+  `dev.`. Since anyone can send any `Host` header, a client could switch your production site into the `dev`
+  environment with debugging on. The `master` and `1.0.0.x` branches removed it on 2026-10-05; the environment now
+  comes only from `SYMFONY_ENV` (the server or `.env.php`). On a release, delete these lines from `web/app.php`:
+
+  ```php
+  // PATCH JAC -  example.com =>  dev.example.com or example-dev.com  => enabled DEV mode
+  if ( str_contains( $_SERVER['HTTP_HOST'], 'dev.' ) ) {
+      putenv( 'SYMFONY_ENV=dev' );
+  }
+  ```
+
+  Check from outside after any deploy: a request with a forged host must not show the debug toolbar or a `dev`
+  error page.
+
+  ```bash
+  curl -s -H 'Host: dev.www.example.com' https://www.example.com/ -o /dev/null -w '%{http_code}\n'
+  ```
+
+  With the fix, the answer is the same as for your real host name (or `404`/a default page when the host matches no
+  siteaccess); it must never carry the `X-Debug-Token` header (`curl -sI ... | grep -i x-debug-token` prints nothing).
 - The `master` branch carries the 1.0.0.x layout (`web/app.php`, `app/`, `ezpublish_legacy`) with a few files of the
   later layout beside it; serve it as 1.0.0.x.
 - On **1.3.0.x** `public/index_rest.php` passes a request to the legacy `index_rest.php` when an `ezpublish_legacy/`
   directory is installed next to the project, and otherwise hands it to `index.php` (the REST API of the v5 kernel is
-  served under `/api/ibexa/v2` by `index.php`). `public/index_cluster.php` always changes into `../ezpublish_legacy/`
-  and has no fallback, so do not expose it unless the legacy cluster setup is installed.
+  served under `/api/ibexa/v2` by `index.php`). `public/index_cluster.php` does the same on the branch since
+  2026-10-05: with a legacy root it runs the legacy `index_cluster.php`, without one it hands the request to
+  `index.php`. In `1.3.0.5` it changes into `../ezpublish_legacy/` unconditionally and fails without it, so on that
+  release do not route anything to it unless the legacy cluster setup is installed.
 
 Binary files (images and other uploads) live below `<document root>/var/site/storage/` on every line: the shipped
 `var_dir` setting is `var/site` in `app/config/ezplatform.yml` (1.0.0.x) and `config/packages/ibexa.yaml` (later
@@ -247,9 +276,12 @@ The front-controller patterns are checked in order and the first one whose scrip
 and the other variables of section 6.2 in the service's environment (section 6.3.9) or in `.env.php`, which
 `app.php` loads.
 
-`web/.htaccess` on this line is a link to a development `.htaccess` that also asks for HTTP Basic authentication
-against a password file of the original authors' servers. Do not rely on it; write the routing into the site file as
-above.
+`web/.htaccess` on this line is a link to `src/AppBundle/Resources/symlink/root_dev/.htaccess`, which sets
+`SYMFONY_ENV=prod` and the rewrite rules for Apache. On the `1.0.0.x` branch and its tags that file also requires
+HTTP Basic authentication against a password file of the original authors' servers (`AuthUserFile
+/var/www/vhosts/platform.cjw.alpha.se7enx.com/web/acl/nga.acl`), so under Apache every request is refused until you
+remove those lines; on `master` (from `v2.5.0.2`, the first release that ships the file) they are commented out. Velocity's pooled workers do not apply it
+either way; write the routing into the site file as above.
 
 ### 6.3.5 The environment: APP_ENV and .env.local
 
@@ -419,9 +451,13 @@ Notes:
 
 - The `HTTP_AUTHORIZATION` line is needed under PHP-FPM for HTTP Basic authentication of the REST API.
 - The rules sit in the virtual host, with `AllowOverride None`, which is faster and safer than `.htaccess`. On
-  1.3.0.x `public/.htaccess` is listed in `.gitignore`; none is shipped.
+  1.1.0.x to 1.3.0.x `public/.htaccess` is listed in `.gitignore`, but `composer install` creates it: the
+  `ngsite:symlink:project` script links it to `assets/symlink/root_<console environment>/.htaccess`. With
+  `AllowOverride None` Apache ignores it; with `AllowOverride All` its `SetEnvIf ... APP_ENV=...` decides the web
+  environment (`prod` in `root_dev` since `1.3.0.5`, see [chapter 4](04-installing.md#47-the-130x-line)).
 - The `APP_HTTP_CACHE` and `TRUSTED_PROXIES` lines that the example carries as comments are discussed in sections
-  6.7 and 6.10; on the Symfony Runtime lines they are not read by the shipped front controller.
+  6.7 and 6.10. On the branches since 2026-10-05 both are read (`APP_HTTP_CACHE` by `public/index.php`,
+  `TRUSTED_PROXIES` by the framework configuration); in the releases neither is.
 - For **1.0.0.x** use `netgen-site-vhost.conf`: document root `web/`, `DirectoryIndex app.php`, the final rule
   `RewriteRule .* /app.php`, and the variables `SYMFONY_ENV`, `SYMFONY_DEBUG`, `SYMFONY_HTTP_CACHE`,
   `SYMFONY_TRUSTED_PROXIES`. It also carries the legacy-bridge rules for `ezpublish_legacy` design and extension
@@ -474,12 +510,24 @@ server {
 }
 ```
 
-Two adjustments to the shipped file are needed: its `fastcgi_pass` points at a PHP 7.3 socket
-(`/var/run/php/php7.3-fpm.sock`), which no line of this project supports any more, and it sets `APP_ENV dev`. Use
-the socket of your PHP 8 pool and `prod`. `ibexa_rewrite_params` sends every request that is not an image, the
-favicon, `/bundles/` or `/assets/` to `/index.php`; unlike the Apache example it has no rule for `/images/`, so add
-`rewrite "^/images/(.*)" "/images/$1" break;` if the site serves files from `public/images/`. The `http2 on;`
-directive needs nginx 1.25.1 or later; older versions write `listen 443 ssl http2;`.
+Which copy of `media-site.conf` you read matters, because only one branch has the corrected file:
+
+| Branch | `fastcgi_pass` | `APP_ENV` | `/images/` rule |
+|---|---|---|---|
+| `master` (since 2026-10-05) | `unix:/var/run/php/php8.4-fpm.sock`, with a comment naming the PHP minimum of each line | `prod` | yes |
+| `1.1.0.x`, `1.2.0.x`, `1.3.0.x` (the branches the file is for) and `1.0.0.x` | `unix:/var/run/php/php7.3-fpm.sock` | `dev` | no |
+
+So on the line branches, two adjustments are needed: point `fastcgi_pass` at the socket of your PHP 8 pool (no line
+of this project runs on PHP 7.3) and set `APP_ENV prod`; or take the file from `master`
+(`git show origin/master:doc/nginx/media-site.conf`). `ibexa_rewrite_params` sends every request that is not an
+image, the favicon, `/bundles/` or `/assets/` to `/index.php`; the line-branch copy has no rule for `/images/`, so add
+`rewrite "^/images/(.*)" "/images/$1" break;` if the site serves files from `public/images/`, as the `master` copy
+does. The `http2 on;` directive needs nginx 1.25.1 or later; older versions write `listen 443 ssl http2;`.
+
+Two comments in the `master` copy are already out of date: they say that `APP_HTTP_CACHE` and the trusted-proxy
+variables are not read on 1.1.0.x to 1.3.0.x. On the branches both are read now (sections 6.7.1 and 6.10); to use the
+Symfony proxy behind nginx, add `fastcgi_param APP_HTTP_CACHE 1;` beside `APP_ENV`, and set `TRUSTED_PROXIES` in
+`.env.local` rather than as a `fastcgi_param`, so that the console sees the same value.
 
 Test with `nginx -t` and reload.
 
@@ -558,20 +606,59 @@ when content is published, purges the affected pages. Where the purge goes is th
 | Line | Purge type set by | Purge server | TTL | Symfony proxy in the front controller |
 |---|---|---|---|---|
 | 1.0.0.x | `purge_type: local` in `app/config/default_parameters.yml`, overridden by `HTTPCACHE_PURGE_TYPE` through `app/config/env/generic.php` | `HTTPCACHE_PURGE_SERVER` | `HTTPCACHE_DEFAULT_TTL` (86400) | yes: `app.php` wraps the kernel in `AppCache` unless `SYMFONY_HTTP_CACHE=0` or the environment is `dev` |
-| 1.1.0.x, 1.2.0.x | `HTTPCACHE_PURGE_TYPE` (`env(HTTPCACHE_PURGE_TYPE): local` in `ezpublish.yaml` / `ibexa.yaml`) | `HTTPCACHE_PURGE_SERVER` | `HTTPCACHE_DEFAULT_TTL` | not in the shipped `public/index.php` |
-| 1.3.0.x | `HTTPCACHE_PURGE_TYPE`, read by the kernel's core bundle (`IbexaCoreExtension::configureGenericSetup`) | `HTTPCACHE_PURGE_SERVER` | `HTTPCACHE_DEFAULT_TTL` | not in the shipped `public/index.php` |
+| 1.1.0.x, 1.2.0.x | `HTTPCACHE_PURGE_TYPE` (`env(HTTPCACHE_PURGE_TYPE): local` in `ezpublish.yaml` / `ibexa.yaml`) | `HTTPCACHE_PURGE_SERVER` | `HTTPCACHE_DEFAULT_TTL` | branch: with `APP_HTTP_CACHE=1` (off by default); releases: no |
+| 1.3.0.x | `HTTPCACHE_PURGE_TYPE`, read by the kernel's core bundle (`IbexaCoreExtension::configureGenericSetup`) | `HTTPCACHE_PURGE_SERVER` | `HTTPCACHE_DEFAULT_TTL` | branch: with `APP_HTTP_CACHE=1` (off by default); `1.3.0.5`: no |
 
-On the three Symfony Runtime lines `public/index.php` returns the bare `App\Kernel`; nothing in the shipped files
-reads `APP_HTTP_CACHE`, which the Apache example and older guides mention. With purge type `local` and no proxy in
-front, responses carry their cache headers but nothing shared caches them. For shared HTTP caching on these lines,
-put Varnish in front.
+**1.1.0.x to 1.3.0.x.** On the branches `public/index.php` wraps the kernel in the platform's `AppCache`
+(`EzSystems\PlatformHttpCacheBundle\AppCache` on 1.1.0.x, `Ibexa\Bundle\HttpCache\AppCache` on 1.2.0.x and
+1.3.0.x) when `APP_HTTP_CACHE` is true. That gives a single server shared HTTP caching with purge on publish without
+Varnish: set, in `.env.local` or the server's environment,
+
+```bash
+APP_HTTP_CACHE=1
+HTTPCACHE_PURGE_TYPE=local
+```
+
+and clear the cache. The store is `var/cache/<env>/http_cache/`. Leave `APP_HTTP_CACHE` unset when Varnish caches
+in front; the `root_prod/.htaccess` of these lines sets it to `0` explicitly. In the releases (`v1.1.0.7`,
+`v1.2.0.0`, `1.3.0.5`) `public/index.php` returns the bare kernel whatever the variable says: with purge type
+`local` and no proxy in front, responses carry their cache headers but nothing shared caches them, so put Varnish in
+front for shared caching.
+
+To see whether a cache answers, request a public page twice and look at the `Age` header, which Symfony's
+`HttpCache` (and Varnish) set on a response served from their store:
+
+```bash
+curl -sI https://www.example.com/ | grep -i -E '^(age|cache-control):'
+sleep 5
+curl -sI https://www.example.com/ | grep -i -E '^(age|cache-control):'     # Age: 5 or so on a cache hit
+```
+
+No `Age` on the second request means nothing cached the page: the proxy is off, or the page is not public. With
+`APP_DEBUG=1` the Symfony proxy also adds an `X-Symfony-Cache` header (`miss, store`, then `fresh`). This check was
+read from Symfony's `HttpCache`, not run against a Nexus installation for the book.
+
+**The 2.5 generation and `AppCache`.** The project's `app/AppCache.php` extends the platform's class and, after the
+response is built, adjusts its cache headers. In the releases (`v2.5.0.6`, `1.0.0.9`, `1.0.0.10` and older) it turned
+any private or `no-cache` response into `public, s-maxage=3600` unless its host or path was in an exclusion list, and
+it looked for that list in `config/` instead of `app/config/`, so it always fell back to the demo servers' host names.
+On a site with signed-in users that can put one user's page into the shared cache for everyone. On the branches since
+2026-10-05 it never touches a response that is private or `no-store`, that sets a cookie or a user-context hash, or
+that answers a request with an `Authorization` header or a session cookie (`eZSESSID*`, `IBX_SESSION_ID*`,
+`PHPSESSID*`, `is_logged_in`); it always excludes the admin siteaccesses, `/nglayouts`, `/graphql`, the content
+browser (`/cb`), `/api/` and the login, logout, register and user pages; and it reads `app/config/http_cache.yml`
+plus the comma-separated `HTTP_CACHE_UNCACHED_HOSTNAMES`. Until `v2.5.0.7` is released, run a public 2.5 site from
+the branch, take `app/AppCache.php` from it, or switch the proxy off with `SYMFONY_HTTP_CACHE=0`
+([chapter 14](14-security-hardening.md#147-http-cache-safety)).
 
 ### 6.7.2 Varnish
 
 1. Install Varnish with the `xkey` module from [varnish-modules](https://github.com/varnish/varnish-modules).
 2. Use the VCL of the HTTP cache bundle that matches the line. For 1.0.0.x the repository ships
    [`doc/varnish/vcl/varnish4_xkey.vcl`](../varnish/vcl/varnish4_xkey.vcl) with
-   [`parameters.vcl`](../varnish/vcl/parameters.vcl) (Varnish 5 or later, 6.0 LTS recommended in the file). For
+   [`parameters.vcl`](../varnish/vcl/parameters.vcl) (Varnish 5 or later, 6.0 LTS recommended in the file;
+   [`doc/varnish/varnish.md`](../varnish/varnish.md) on `master` explains both and where the bundle's own VCL files
+   are). For
    1.3.0.x the installed bundle carries `vendor/ibexa/http-cache/docs/varnish/vcl/varnish7.vcl` (Varnish 7.1 or
    later) with `parameters.vcl`; for 1.2.0.x take the VCL from the 4.6 branch of
    [ibexa/http-cache](https://github.com/ibexa/http-cache/tree/4.6/docs/varnish).
@@ -586,7 +673,8 @@ put Varnish in front.
    HTTPCACHE_VARNISH_INVALIDATE_TOKEN=<a long random value>
    ```
 
-   On 1.0.0.x also set `SYMFONY_HTTP_CACHE=0`, so `AppCache` does not cache in front of Varnish.
+   On 1.0.0.x also set `SYMFONY_HTTP_CACHE=0`, so `AppCache` does not cache in front of Varnish; on 1.1.0.x to
+   1.3.0.x leave `APP_HTTP_CACHE` unset or `0`.
 5. Make the application trust Varnish as a proxy (section 6.10), so that it sees the client's scheme and address and
    answers the user-context hash requests Varnish sends.
 6. Clear the application cache (`bin/console cache:clear --env=prod`) and restart the application server.
@@ -662,20 +750,25 @@ logs the proxy's address as the client, and Varnish's user-context hash requests
 
 | Line | How to trust proxies |
 |---|---|
-| 1.0.0.x | `SYMFONY_TRUSTED_PROXIES` in the environment of the web server or PHP-FPM pool: a comma-separated list, or `TRUST_REMOTE` to trust the direct peer (only when the application is not reachable from anywhere else); read by `web/app.php` |
-| 1.1.0.x, 1.2.0.x | `framework.trusted_proxies` in `config/packages/framework.yaml`, e.g. `trusted_proxies: '%env(TRUSTED_PROXIES)%'` with `trusted_headers` set to the headers your proxy sends |
-| 1.3.0.x | the same `framework.trusted_proxies` setting, or the variable `SYMFONY_TRUSTED_PROXIES` (Symfony 7.4's FrameworkBundle reads it by default) |
+| 1.0.0.x | `SYMFONY_TRUSTED_PROXIES` in the environment of the web server or PHP-FPM pool: a comma-separated list, or `TRUST_REMOTE` to trust the direct peer (only when the application is not reachable from anywhere else); read by `web/app.php`, which trusts all `X-Forwarded-*` headers of those proxies |
+| 1.1.0.x, 1.2.0.x, 1.3.0.x (branches) | `TRUSTED_PROXIES` in `.env.local` or the environment: comma-separated addresses or CIDR ranges. The framework configuration reads it (`trusted_proxies: '%env(default::TRUSTED_PROXIES)%'` in `config/packages/ezpublish.yaml` on 1.1.0.x, `config/packages/framework.yaml` on 1.2.0.x and 1.3.0.x) and trusts `X-Forwarded-For`, `-Proto` and `-Port`, not `-Host` |
+| 1.1.0.x, 1.2.0.x, 1.3.0.x (releases) | nothing reads `TRUSTED_PROXIES`. Add the two lines above to `framework:` yourself; on `1.3.0.5` the variable `SYMFONY_TRUSTED_PROXIES` also works, because Symfony 7.4's FrameworkBundle reads it when `trusted_proxies` is not configured |
 
-The shipped `.env` of 1.1.0.x to 1.3.0.x sets `TRUSTED_PROXIES=127.0.0.1`, but on 1.3.0.x nothing in the shipped
-configuration or the installed kernel reads that variable (checked in the reference installation: no
-`framework.trusted_proxies` in `config/packages/` and no reader in the kernel bundles). For 1.1.0.x and 1.2.0.x this
-could not be checked without an installed `vendor/`; confirm on your installation with
+The shipped `.env` of 1.1.0.x to 1.3.0.x sets `TRUSTED_PROXIES=127.0.0.1`, so on the branches a proxy on the same
+machine (Varnish, Plesk's nginx in front of Apache) is trusted out of the box, and an empty value trusts none. On
+1.3.0.x the explicit setting replaces Symfony's default, so `SYMFONY_TRUSTED_PROXIES` and `SYMFONY_TRUSTED_HEADERS`
+have no effect there any more; use `TRUSTED_PROXIES`. If your proxy sets `X-Forwarded-Host` and the application must
+honour it, add `x-forwarded-host` to `trusted_headers` in the same file.
+
+Confirm what the running configuration holds:
 
 ```bash
-php bin/console debug:config framework trusted_proxies --env=prod
+php bin/console debug:config framework trusted_proxies --env=prod     # the setting, e.g. '%env(default::TRUSTED_PROXIES)%'
+php bin/console debug:container --env-var=TRUSTED_PROXIES --env=prod  # the value it resolves to
 ```
 
-and add the `framework.yaml` setting if it prints nothing useful.
+On a branch with the shipped `.env` the second shows `127.0.0.1` (or your value). If the first prints nothing or
+`null`, the configuration of your copy does not set trusted proxies at all (a release); add the setting as above.
 
 Redirect HTTP to HTTPS at the outermost layer: Velocity serves both ports and can send `Strict-Transport-Security`
 (`Q.webserver.hsts`); Apache uses a `*:80` virtual host with `Redirect permanent / https://www.example.com/`; nginx a
@@ -684,23 +777,29 @@ of the site serves HTTPS correctly.
 
 ## 6.11 Known inaccuracies in the older server documents
 
-Found while checking the files this chapter relies on:
+Found while checking the files this chapter relies on, with the state of 2026-10-05:
 
-- `doc/varnish/varnish.md` (master, 1.0.0.x) points to a `varnish5.vcl`; the directory ships `varnish4_xkey.vcl`.
-- `doc/nginx/media-site.conf` uses a PHP 7.3 socket and `APP_ENV dev`; it names the trusted-proxies variable
-  `APP_TRUSTED_PROXIES`, while the Apache example calls it `TRUSTED_PROXIES`. Neither is read by the shipped
-  `public/index.php`.
-- `doc/apache2/media-site-vhost.conf` and `doc/sevenx/INSTALL.md` (1.1.0.x to 1.3.0.x) set `APP_HTTP_CACHE`; the
-  shipped Symfony Runtime front controller does not read it.
+- `doc/varnish/varnish.md` on `1.0.0.x` points to a `varnish5.vcl`; the directory ships `varnish4_xkey.vcl`. Fixed on
+  `master`, where the page names the files this branch ships.
+- `doc/nginx/media-site.conf` on `1.0.0.x`, `1.1.0.x`, `1.2.0.x` and `1.3.0.x` uses a PHP 7.3 socket and
+  `APP_ENV dev`, and names the trusted-proxies variable `APP_TRUSTED_PROXIES`, which nothing reads (the variable is
+  `TRUSTED_PROXIES`). Fixed on `master` (PHP 8.4 socket, `prod`, an `/images/` rule); the `master` copy's comments
+  on `APP_HTTP_CACHE` and trusted proxies describe the releases, not the branches (section 6.5).
+- `doc/apache2/media-site-vhost.conf` says `APP_HTTP_CACHE` defaults to enabled outside `dev` unless
+  `TRUSTED_PROXIES` is set. The front controller of the branches leaves it off unless it is set to a true value,
+  whatever the environment; the releases ignore it.
+- `doc/sevenx/INSTALL.md` on 1.1.0.x to 1.3.0.x shows `SetEnv APP_HTTP_CACHE "1"` and `fastcgi_param APP_HTTP_CACHE 1`
+  in its virtual hosts. That works on the branches only.
 - `doc/sevenx/INSTALL.md` on 1.3.0.x, section 20, refers to `doc/varnish/`, which does not exist on that branch, and
   runs `fos:httpcache:invalidate:path / --all`; that command has no `--all` option (use the commands of
   section 6.7.3).
-- `doc/INSTALL.md` (master) recommends `chown -R www-data:www-data .` and `chmod -R 755 .` over the whole project; see
-  section 6.9 for the narrower set of writable directories.
-- `doc/docker/README.md` and the root `.env` of 1.0.0.x describe the upstream eZ Platform Docker blueprints with
-  PHP 7.3 images, which predate this project's PHP requirements.
-- `public/index_cluster.php` on 1.3.0.x changes into `../ezpublish_legacy/` without checking that it exists, unlike
-  `index_rest.php`.
+- The install guide released with `v2.5.0.6` (and the one on `1.0.0.x`) recommends `chown -R www-data:www-data .` and
+  `chmod -R 755 .` over the whole project; see section 6.9 for the narrower set of writable directories.
+- `doc/docker/README.md` and the root `.env` of `master` and `1.0.0.x` describe the upstream eZ Platform Docker
+  blueprints with PHP 7.3 images, which predate this project's PHP requirements.
+- `app/config/ezplatform_siteaccess.yml` on `master` lists the host `legacy.platform.cjw.beta.se7enx.com` twice under
+  `Map\Host` (once for `en`, once for `legacy_admin`); the later entry wins. It is one of the demo host names you
+  replace anyway.
 
 ## 6.12 Checklist
 
@@ -710,8 +809,12 @@ Found while checking the files this chapter relies on:
 - [ ] Velocity: `-t` passes, the site file names `scripts`, the workers run as the user that owns `var/`, and the
       server is restarted after `.env.local` changes and deploys.
 - [ ] HTTPS works on every host name; HTTP redirects to HTTPS.
-- [ ] Behind a proxy: trusted proxies configured and checked with `debug:config`.
-- [ ] HTTP cache: purge type and purge server match the setup; Varnish uses the VCL of the line with `xkey`.
+- [ ] 2.5 generation: `web/app.php` has no `dev.` host switch, `app/AppCache.php` is the branch version (or
+      `SYMFONY_HTTP_CACHE=0`), and on `1.0.0.x` the Basic authentication lines of `web/.htaccess` are gone.
+- [ ] Behind a proxy: trusted proxies configured (`TRUSTED_PROXIES` on the 1.1.0.x to 1.3.0.x branches) and checked
+      with `debug:config` and `debug:container --env-var`.
+- [ ] HTTP cache: purge type and purge server match the setup; `APP_HTTP_CACHE=1` only without Varnish (branches);
+      Varnish uses the VCL of the line with `xkey`.
 - [ ] Velocity's response cache is off, or skips the platform's session cookies.
 - [ ] `var/` and `public/var/` are writable by the web user and the console user, nothing else is.
 - [ ] Uploads: the server's and PHP's body-size limits allow the files editors upload.
@@ -762,7 +865,7 @@ Symfony and PHP:
   [Setting up file permissions](https://symfony.com/doc/current/setup/file_permissions.html),
   [The Runtime component](https://symfony.com/doc/current/components/runtime.html)
 - Proxies: [current](https://symfony.com/doc/current/deployment/proxies.html),
-  [5.4](https://symfony.com/doc/5.4/deployment/proxies.html), [3.4](https://symfony.com/doc/3.4/deployment/proxies.html);
+  [5.4](https://symfony.com/doc/5.x/deployment/proxies.html), [3.4](https://symfony.com/doc/3.x/deployment/proxies.html);
   [FrameworkBundle configuration](https://symfony.com/doc/current/reference/configuration/framework.html)
 - [HTTP cache](https://symfony.com/doc/current/http_cache.html)
 - PHP: [FPM configuration](https://www.php.net/manual/en/install.fpm.configuration.php); Apache:
@@ -770,7 +873,7 @@ Symfony and PHP:
 
 Upstream platform and cache documentation:
 
-- Installation guides: [eZ Platform 2.5](https://doc.ezplatform.com/en/2.5/getting_started/install_ez_platform/),
+- Installation guides: [eZ Platform 2.5](https://doc.ibexa.co/en/2.5/getting_started/install_ez_platform/),
   [3.3](https://doc.ibexa.co/en/3.3/getting_started/install_ez_platform/),
   [Ibexa 4.6](https://doc.ibexa.co/en/4.6/getting_started/install_ibexa_dxp/),
   [Ibexa 5.0](https://doc.ibexa.co/en/5.0/getting_started/install_ibexa_dxp/)
@@ -784,7 +887,7 @@ Upstream platform and cache documentation:
   [5.0](https://doc.ibexa.co/en/5.0/infrastructure_and_maintenance/security/security_checklist/)
 - FOSHttpCache: [bundle](https://foshttpcachebundle.readthedocs.io/en/latest/),
   [Varnish configuration](https://foshttpcache.readthedocs.io/en/latest/varnish-configuration.html);
-  Varnish: [documentation](https://varnish-cache.org/docs/), [varnish-modules (xkey)](https://github.com/varnish/varnish-modules)
+  Varnish: [documentation](https://www.varnish.org/docs/index.html), [varnish-modules (xkey)](https://github.com/varnish/varnish-modules)
 - Netgen Layouts: [documentation](https://docs.netgen.io/projects/layouts/en/latest/)
 - Docker Compose: [documentation](https://docs.docker.com/compose/)
 
