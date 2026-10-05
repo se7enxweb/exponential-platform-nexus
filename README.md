@@ -169,7 +169,7 @@ It is built on top of the full Symfony Framework, giving developers access to "s
 
 eZ Platform in some users view suffered a slow road to a stable datatype compatability with existing custom implementations of Exponential Platform. Today all of these conserns are now gone with a solid choice left leaving both Exponential Platform Platform and eZ Platform as serious contenders to be carefully considered. [Netgen's Media Website Core software](https://github.com/netgen/media-site) represents a much more modern eZ Platform core powered by Ibexa OSS. If your going to choose; Choose wisely.
 
-Further reading on: [https://ezplatform.com/](http://web.archive.org/web/20200328165348/https://ezplatform.com/)
+Further reading: ezplatform.com now forwards to the Ibexa Developer Portal, [developers.ibexa.co](https://developers.ibexa.co/); the eZ Platform site as it was is kept by the [Internet Archive](http://web.archive.org/web/20200328165348/https://ezplatform.com/).
 
 # What is Ibexa DXP OSS?
 
@@ -181,7 +181,7 @@ Ibexa DXP OSS has matured into a robust and versatile platform, serving as a ser
 
 If you're making a choice, choose with care—and consider the power and flexibility of Ibexa DXP OSS.
 
-Further reading: [ibexa.co](https://ibexa.co/)
+Further reading: [ibexa.ai](https://ibexa.ai/en)
 
 Documentation for Ibexa DXP: [doc.ibexa.co/en/latest/](https://doc.ibexa.co/en/latest/)
 
@@ -591,7 +591,7 @@ In essence, Netgen Site API is the bridge between a powerful content repository 
 
 Exponential Platform Nexus is GNU GPL licensed.
 
-You can not choose between the GNU GPL and the Ibexa Professional License. The GNU GPL gives you the right to use, modify and redistribute Exponential Platform Nexus under certain conditions. The GNU GPL license is distributed with the software, see the file LICENSE. It is also available at http://www.gnu.org/licenses/gpl.txt
+You can not choose between the GNU GPL and the Ibexa Professional License. The GNU GPL gives you the right to use, modify and redistribute Exponential Platform Nexus under certain conditions. The GNU GPL license is distributed with the software, see the file LICENSE. It is also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 Using Exponential Platform Nexus under the terms of the GNU GPL is free of charge.
 
