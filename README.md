@@ -105,6 +105,24 @@ Exponential Platform Nexus supports PHP 8.3 -> 8.5 please use the latest version
 
 Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html](https://exponential.doc.exponential.earth/display/DEVELOPER/Step%2b1_%2bInstallation.html)
 
+# Documentation
+
+- [The short installation guide](doc/INSTALL.md): a working installation of any line in the fewest safe steps.
+- [The book](doc/book/README.md): installing and running Exponential Platform Nexus on all four lines (1.0.0.x / 2.5,
+  1.1.0.x, 1.2.0.x, 1.3.0.x), from the requirements to serving the site with Exponential Velocity, databases,
+  configuration, the front end and operations, and on to
+  [upgrading between lines](doc/book/11-upgrading-between-lines.md),
+  [migrating a site into Nexus](doc/book/12-migrating-into.md), [troubleshooting](doc/book/13-troubleshooting.md) and
+  [security hardening](doc/book/14-security-hardening.md). The copy on this branch is the one released with it; the
+  newest copy is on [master](https://github.com/se7enxweb/exponential-platform-nexus/blob/master/doc/book/README.md).
+- Before going live, read [chapter 14](doc/book/14-security-hardening.md): the releases of 5 October 2026
+  (`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1`, `1.3.0.6`) fix the `dev` host switch and the cache header rewriting
+  of the 2.5 generation and wire trusted proxies and the HTTP cache switch of the newer lines; the chapter says how to
+  check an installation made from an older tag and how to take the fixes.
+- Examples and notes: [Apache](doc/apache2/), [nginx](doc/nginx/), [Varnish](doc/varnish/varnish.md),
+  [logrotate](doc/logrotate/), the [Netgen Media Site notes](doc/netgen/) carried over from upstream, and
+  [UPGRADE.md](UPGRADE.md).
+
 # Default Installation Starter Demo Design Bundle Database 'admin' Password is 'publish' (all lowercase).
 
 Read [Reseting the admin password in eZ publish](https://ezpedia.se7enx.com/en/solution/reseting_the_admin_password_in_ez_publish#eztoc507_1_1) on database sql to use to reset any user's password.
