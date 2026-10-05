@@ -15,15 +15,14 @@
 
 > **Console Command Prefix Convention**
 >
-> Commands in this distribution use the `exponential:` prefix where available.
-> The `ibexa:*` prefix remains as a deprecated alias for migrated commands.
+> This project adds two commands of its own, `exponential:install` and `exponential:reindex`
+> (`src/Command/`). They are separate commands, not new names for the kernel's: `ibexa:install` and
+> `ibexa:reindex` still exist and are not deprecated. `exponential:install` has one type on this line,
+> `exponential-media`; `exponential:reindex` runs `ibexa:reindex` and accepts only `--siteaccess`.
 >
-> | Preferred — use this | Deprecated (functional) |
-> |---|---|
-> | `exponential:*` | `ibexa:*` |
->
-> Commands not yet migrated retain their `ibexa:*` name (e.g. `ibexa:cron:run`,
-> `ibexa:graphql:generate-schema`). All `ibexa:*` commands have `ezplatform:*` aliases.
+> Every other command keeps its kernel name (e.g. `ibexa:cron:run`, `ibexa:graphql:generate-schema`).
+> The kernel, cron and GraphQL commands also answer to their old `ezplatform:*` names, which are
+> deprecated aliases.
 
 ---
 
@@ -924,17 +923,25 @@ The GraphQL endpoint is at `/graphql`. The GraphiQL browser UI is at
 php bin/console exponential:reindex
 ```
 
-### Incremental reindex
+`exponential:reindex` is the project's own command (`src/Command/ExponentialReindexCommand.php`). It accepts
+only `--siteaccess` and runs the kernel's `ibexa:reindex` with no other option. For anything more, call
+`ibexa:reindex` directly.
+
+### Smaller batches or refreshing recent changes
 
 ```bash
-php bin/console exponential:reindex --iteration-count=100
+php bin/console ibexa:reindex --iteration-count=100                # 100 objects per iteration (default 50)
+php bin/console ibexa:reindex --since="-1 day"                     # refresh what changed since then, no purge
 ```
 
-### Reindex a specific content type
+### Reindex part of the content
 
 ```bash
-php bin/console exponential:reindex --content-type=article
+php bin/console ibexa:reindex --subtree=<location-id>              # one subtree, including the location
+php bin/console ibexa:reindex --content-ids=<id>,<id>              # selected content items
 ```
+
+`ibexa:reindex` has no option to select a content type.
 
 ---
 
@@ -1614,13 +1621,14 @@ php bin/console doctrine:database:create                           # create the 
 ```bash
 # Install — initial database setup (run ONCE on a fresh install)
 php bin/console exponential:install exponential-media --no-interaction
-# Alternate install types:
-php bin/console exponential:install exponential-oss --no-interaction
+# Other install types come from the kernel's installer (exponential:install has only exponential-media here):
+php bin/console ibexa:install ibexa-oss --no-interaction            # clean repository, no demo content
+php bin/console ibexa:install netgen-media --no-interaction         # upstream Netgen Media Site demo
 
 # Search index
 php bin/console exponential:reindex                                # full reindex
-php bin/console exponential:reindex --iteration-count=100         # batched
-php bin/console exponential:reindex --content-type=article        # one content type
+php bin/console ibexa:reindex --iteration-count=100               # batched (exponential:reindex takes only --siteaccess)
+php bin/console ibexa:reindex --subtree=<location-id>             # one subtree
 
 # Cron
 php bin/console ibexa:cron:run                                     # run cron scheduler
