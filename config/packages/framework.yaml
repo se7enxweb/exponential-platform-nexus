@@ -2,6 +2,13 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    # Proxies (Varnish, a load balancer, a TLS terminator) whose X-Forwarded-* headers are trusted,
+    # read from the TRUSTED_PROXIES environment variable that .env and the vhost examples set
+    # (comma separated IPs or CIDR ranges). Unset or empty trusts none. X-Forwarded-Host stays
+    # untrusted, as in the Platform front controllers this setting replaces.
+    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
