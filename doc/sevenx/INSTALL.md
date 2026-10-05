@@ -1152,7 +1152,8 @@ php bin/console cache:clear
    ```
 2. Deploy the included VCL (`doc/varnish/` if available) or the upstream eZ Platform VCL
 3. Reload Varnish: `systemctl reload varnish`
-4. Clear the cache: `php bin/console fos:httpcache:invalidate:path / --all`
+4. Clear the cache: `php bin/console fos:httpcache:invalidate:tag ez-all --env=prod` (every response the
+   platform caches carries the tag `ez-all`)
 
 ---
 
@@ -1627,7 +1628,8 @@ php bin/console ibexa:graphql:generate-schema                      # regenerate 
 # alias: php bin/console ezplatform:graphql:generate-schema
 
 # HTTP cache
-php bin/console fos:httpcache:invalidate:path / --all              # purge all paths
+php bin/console fos:httpcache:invalidate:tag ez-all                # purge everything the platform tagged
+php bin/console fos:httpcache:invalidate:path /some/page          # purge one path
 php bin/console fos:httpcache:invalidate:tag <tag>                 # purge by tag
 
 # Image variations

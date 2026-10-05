@@ -311,7 +311,7 @@ php bin/console exponential:reindex                                      # reind
 php bin/console ibexa:cron:run                                           # run cron (alias: ezplatform:cron:run)
 php bin/console ibexa:graphql:generate-schema                            # regenerate GraphQL schema
 php bin/console liip:imagine:cache:remove                                # clear image variation cache
-php bin/console fos:httpcache:invalidate:path / --all                    # purge HTTP cache
+php bin/console fos:httpcache:invalidate:tag ez-all                      # purge HTTP cache (all tagged pages)
 ```
 
 ### Doctrine / Migrations
