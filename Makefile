@@ -33,9 +33,10 @@ vendor: ## Run composer install
 
 .PHONY: ibexa-assets
 .ONESHELL:
-ibexa-assets: ## Generate Ibexa Admin UI assets
+ibexa-assets: ## Generate the admin interface assets (translations dump and yarn ez)
 	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
-	$(COMPOSER_RUN) ibexa-assets
+	$(PHP_RUN) bin/console bazinga:js-translation:dump public/assets --merge-domains --env=$(APP_ENV)
+	yarn ez
 
 .PHONY: assets
 .ONESHELL:
