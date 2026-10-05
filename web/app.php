@@ -12,11 +12,6 @@ if (in_array('phar', stream_get_wrappers())) {
 setlocale(LC_CTYPE, 'C.UTF-8');
 require __DIR__ . '/../vendor/autoload.php';
 
-// PATCH JAC -  example.com =>  dev.example.com or example-dev.com  => enabled DEV mode
-if ( str_contains( $_SERVER['HTTP_HOST'], 'dev.' ) ) {
-    putenv( 'SYMFONY_ENV=dev' );
-}
-
 // PATCH JAC - LOAD ENV VARIABLES - #11002
 if( file_exists( __DIR__ . '/../.env.php' ) )
     require_once __DIR__ . '/../.env.php';
