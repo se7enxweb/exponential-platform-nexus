@@ -27,7 +27,8 @@ the legacy bridge, and ends with how a change is applied and checked.
 3. [Environment variables and .env files](#83-environment-variables-and-env-files)
    1. [The .env cascade (1.1.0.x and later)](#831-the-env-cascade-110x-and-later)
    2. [Variable reference](#832-variable-reference)
-   3. [1.0.0.x: parameters and environment variables](#833-100x-parameters-and-environment-variables)
+   3. [A production .env.local, worked example](#833-a-production-envlocal-worked-example)
+   4. [1.0.0.x: parameters and environment variables](#834-100x-parameters-and-environment-variables)
 4. [Secrets](#84-secrets)
 5. [Siteaccesses](#85-siteaccesses)
    1. [Lists, groups and the scope order](#851-lists-groups-and-the-scope-order)
@@ -124,7 +125,7 @@ project's own directory:
 | 3 | `config/app/packages/*.yaml` | the project's per-bundle configuration: siteaccesses, images, templates, Content Browser |
 | 4 | `config/app/services.yaml`, `config/app/services/**/*.yaml` | the project's services |
 | 5 | `config/app/app.yaml` | project parameters |
-| 6 | `config/app/app_legacy.yaml` (1.2.0.x only) | ImageMagick settings for the legacy kernel |
+| 6 | `config/app/app_legacy.yaml` (1.2.0.x; 1.1.0.x since 5 October 2026) | ImageMagick settings for the legacy kernel |
 | 7 | `config/app/server/<SERVER_ENVIRONMENT>.yaml` | per-server values: location IDs, domains, matchers |
 | 8 | `config/app/prepends/<extension>/*.yaml` | prepended to that extension's configuration by `App\DependencyInjection\AppExtension` |
 | routes | `config/routes/*.yaml`, `config/app/routes/*.yaml`, `config/app/routes.yaml` | routing |
@@ -174,17 +175,31 @@ from the real environment or from the `.env` files ([8.3](#83-environment-variab
 defaults to on in `dev` and off otherwise. The committed `.env` sets `APP_ENV=dev`; a production host sets
 `APP_ENV=prod` in `.env.local` or in the server's environment.
 
-**1.0.0.x.** `web/app.php` reads `SYMFONY_ENV` (default `prod`), `SYMFONY_DEBUG` (default on in `dev`) and
-`SYMFONY_HTTP_CACHE` (default: the Symfony reverse proxy `AppCache` is used outside `dev`). Two project patches in
-`web/app.php` change that behaviour and are worth knowing:
+On these lines `APP_HTTP_CACHE` decides whether the Symfony reverse proxy (`AppCache`) runs in front of the kernel.
+On the branch heads since 5 October 2026 `public/index.php` reads it (true: on; unset, empty or `0`: off); the
+releases `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` ignore it and never run the proxy
+([chapter 10.4](10-operations.md#104-http-cache-and-purging)).
 
-- if the request's host name contains `dev.`, `SYMFONY_ENV` is set to `dev` for that request;
-- if a file `.env.php` exists in the installation root, it is included before the environment is read, so it can
-  `putenv()` values.
+**1.0.0.x.** `web/app.php` reads `SYMFONY_ENV` (default `prod`), `SYMFONY_DEBUG` (default on in `dev`) and
+`SYMFONY_HTTP_CACHE` (default: the Symfony reverse proxy `AppCache` is used outside `dev`). If a file `.env.php`
+exists in the installation root, `web/app.php` and `bin/console` include it before the environment is read, so it can
+`putenv()` values:
+
+```php
+<?php
+// .env.php in the project root, not committed
+putenv('SYMFONY_ENV=prod');
+putenv('SYMFONY_SECRET=' . 'a-long-random-value');
+```
+
+Up to the releases `v2.5.0.6` and `1.0.0.10` `web/app.php` also switched to `dev` for any request whose host name
+contains `dev.`. The branches removed that on 5 October 2026 (commits `dddc937de` and `4598c1942`); see
+[chapter 14.4](14-security-hardening.md#144-debug-mode-and-the-environment) if your installation still has it.
 
 `bin/console` on 1.0.0.x uses `--env`, else `SYMFONY_ENV`, else **`dev`**, so a production host must pass
 `--env=prod` or export `SYMFONY_ENV=prod` for console commands; otherwise the console works against the `dev`
-container while the web runs `prod`.
+container while the web runs `prod`. The symptom is a `cache:clear` that "does nothing": it cleared
+`var/cache/dev/`, and the site reads `var/cache/prod/`.
 
 ### 8.2.2 The server environment
 
@@ -212,9 +227,19 @@ cp -r config/app/server/dev config/app/server/prod
 echo 'SERVER_ENVIRONMENT=prod' >> .env.local
 ```
 
-The 1.1.0.x `prod` server file reads `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO` and `GTM_CODE` from the environment.
-None of these four is defined in the committed `.env`; define them in `.env.local` before selecting `prod`, or the
-container will not compile.
+The 1.1.0.x `prod` server file reads `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO` and `GTM_CODE` from the environment. Up
+to `v1.1.0.7` none of the four is defined in the committed `.env`, and selecting `prod` stops the container build with
+an "environment variable not found" error. On the `1.1.0.x` branch since 5 October 2026 (commit `db8cc46ea`) `.env`
+gives each a default (`localhost` for `APP_DOMAIN`, empty for the mail addresses and the Tag Manager ID, which leaves
+the snippet out); either way, set real values in `.env.local`:
+
+```dotenv
+SERVER_ENVIRONMENT=prod
+APP_DOMAIN=www.example.com
+MAIL_FROM=web@example.com
+MAIL_TO=office@example.com
+GTM_CODE=
+```
 
 ---
 
@@ -241,7 +266,8 @@ when present, is read instead of parsing the `.env` files on every request.
 ### 8.3.2 Variable reference
 
 The variables of the committed `.env` on 1.3.0.x, grouped by what they configure. 1.1.0.x and 1.2.0.x have the same
-set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`.
+set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`; the `1.1.0.x` branch also defines
+`APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO`, `GTM_CODE` and `TEST_DOMAIN` since 5 October 2026.
 
 | Variable | Configures | Shipped value or note |
 |---|---|---|
@@ -258,7 +284,8 @@ set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`.
 | `HTTPCACHE_PURGE_TYPE` | `local` (Symfony proxy) or `varnish` | commented; defaults to `local` |
 | `HTTPCACHE_DEFAULT_TTL` | default TTL of content responses | `86400` |
 | `HTTPCACHE_PURGE_SERVER`, `HTTPCACHE_VARNISH_INVALIDATE_TOKEN` | where purges go | `http://localhost:80`, empty |
-| `TRUSTED_PROXIES` | proxies whose `X-Forwarded-*` headers are trusted | `127.0.0.1` |
+| `TRUSTED_PROXIES` | proxies whose `X-Forwarded-*` headers are trusted (`framework.trusted_proxies`) | `127.0.0.1`; read on the branch heads since 5 October 2026, not read at all by the releases ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
+| `APP_HTTP_CACHE` | wraps the kernel in the Symfony reverse proxy (`AppCache`) | not in `.env` (off); read by `public/index.php` on the branch heads since 5 October 2026, ignored by the releases |
 | `SESSION_HANDLER_ID`, `SESSION_SAVE_PATH` | session storage | native files under `var/sessions/<env>` |
 | `MAILER_DSN` | Symfony Mailer transport | `null://null` (mail discarded) |
 | `MESSENGER_TRANSPORT_DSN` | Messenger transport | `doctrine://default?auto_setup=0` |
@@ -270,13 +297,54 @@ set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`.
 | `SENTRY_DSN` | error reporting | empty |
 | `IBEXA_EDITION` | edition name shown by system information | `oss` |
 
-Two parameters read variables that the committed `.env` does not define: `app.testing.site_domain` reads
-`TEST_DOMAIN` (in `config/app/app.yaml` on 1.2.0.x and 1.3.0.x), and the 1.1.0.x `prod` server file reads the four
-variables named in [8.2.2](#822-the-server-environment). Symfony resolves an environment variable only when a
-service actually uses it, so a missing one surfaces as an error the first time that service is built, not at
-install time.
+Some parameters read variables that the committed `.env` does not define: `app.testing.site_domain` reads
+`TEST_DOMAIN` (in `config/app/app.yaml`; defined in `.env` only on the `1.1.0.x` branch), and the 1.1.0.x `prod`
+server file reads the four variables named in [8.2.2](#822-the-server-environment) (defined only on the branch head).
+Symfony resolves an environment variable only when a service actually uses it, so a missing one surfaces as an error
+the first time that service is built, not at install time. To list what the container reads and where each value
+comes from:
 
-### 8.3.3 1.0.0.x: parameters and environment variables
+```bash
+php bin/console debug:container --env-vars --env=prod     # every %env()% the container uses, missing ones flagged
+php bin/console debug:dotenv --env=prod                   # which .env file set each variable (Symfony 5.4 and later)
+```
+
+### 8.3.3 A production .env.local, worked example
+
+A production server of 1.3.0.x on MySQL, with Varnish on the same machine and Solr, needs no more than this in
+`.env.local` (mode `0640`, owned by the deploying user and the web server's group):
+
+```dotenv
+APP_ENV=prod
+APP_DEBUG=0
+APP_SECRET=6f0c...   # openssl rand -hex 32
+SERVER_ENVIRONMENT=prod
+DATABASE_URL="mysql://nexus:change-me@127.0.0.1:3306/nexus?serverVersion=10.11.6-MariaDB&charset=utf8mb4"
+SEARCH_ENGINE=solr
+SOLR_DSN=http://127.0.0.1:8983/solr
+SOLR_CORE=nexus
+HTTPCACHE_PURGE_TYPE=varnish
+HTTPCACHE_PURGE_SERVER=http://127.0.0.1:6081
+TRUSTED_PROXIES=127.0.0.1
+MAILER_DSN=smtp://mail.example.com:587
+JWT_PASSPHRASE=another-random-value
+```
+
+The same file works on 1.1.0.x and 1.2.0.x. `SERVER_ENVIRONMENT=prod` needs a `prod` server file: 1.1.0.x ships one
+(set the variables of [8.2.2](#822-the-server-environment) too); on 1.2.0.x and 1.3.0.x create it as 8.2.2 describes,
+or keep `dev`. After writing it:
+
+```bash
+php bin/console debug:dotenv --env=prod | grep -E 'APP_ENV|SERVER_ENVIRONMENT|TRUSTED_PROXIES'
+php bin/console cache:clear --env=prod
+```
+
+`debug:dotenv` shows each variable with the file that set it last; a value still coming from `.env` means a typo in
+the name in `.env.local`. What can go wrong: a password with `@`, `:` or `/` in `DATABASE_URL` must be URL-encoded;
+a real environment variable of the same name (set in the PHP-FPM pool, or exported in the shell) wins over
+`.env.local` silently.
+
+### 8.3.4 1.0.0.x: parameters and environment variables
 
 On 1.0.0.x the root `.env` is **not** read by Symfony: it holds Docker Compose defaults (`COMPOSE_FILE`, image names,
 the database name and user of the containers). Symfony's settings come from parameters:
@@ -295,12 +363,26 @@ the database name and user of the containers). Symfony's settings come from para
   `CACHE_POOL` (it loads `app/config/cache_pool/<pool>.yml` when such a file exists) and the `DFS_*` cluster
   settings. Change one of these and the container has to be rebuilt.
 
-The SQLite path is the parameter `database_path`, defaulting to `var/data_<environment>.db`; see
-[chapter 7](07-databases.md).
+On the `1.0.0.x` branch the SQLite path is the parameter `database_path`, defaulting to `var/data_<environment>.db`
+in `default_parameters.yml` and passed to Doctrine as `path:` in `app/config/config.yml`. No environment variable is
+read for it: to use another file, set `database_path` in `parameters.yml` (commit `e1f3c69a4` corrected the comments
+that said otherwise). `master` passes no `path:` to Doctrine. See [chapter 7](07-databases.md).
 
-One inconsistency to watch: `parameters.yml.dist` sets `ngsite.default.locations.tree_root.id: 2` (a clean install)
-while `default_parameters.yml` sets `168` (the demo content). The value in `parameters.yml` wins, so set it to the
-root location of the content you actually installed.
+**The root location of the site.** `ngsite.default.locations.tree_root.id` decides where the front end's content
+tree starts, and a wrong value shows as a 404 on the home page. The two branches ship different values:
+
+| Branch | `parameters.yml.dist` | `default_parameters.yml` | Fits |
+|---|---|---|---|
+| `master` | `2` | not set | the Content root: a clean repository; for the CJW demo check the root with the query below |
+| `1.0.0.x` | `168` | `168` (since commit `8ac75c15c`; the two files used to disagree) | the site root of the database this branch ships (the starter SQL dump, `data/content.sql`, the `exponential-cjw` seed); use `2` after `ezplatform:install netgen-media`, whose location 168 is an article, or on an empty repository |
+
+The value in `parameters.yml` wins over both. Look the root up rather than guessing:
+
+```sql
+-- the Content root (2) and the locations directly below it; a site root is usually one of these
+SELECT node_id, parent_node_id, path_identification_string FROM ezcontentobject_tree
+ WHERE node_id = 2 OR parent_node_id = 2 ORDER BY node_id;
+```
 
 ---
 
@@ -428,8 +510,11 @@ What each line ships:
   example for the reference host.
 - **1.0.0.x:** `Map\URI` for `de` and `en`, `Map\URI` for `nga` and `ngadminui`, and `Map\Host` lists for the
   project's demonstration host names. The comment above them explains why they matter beyond routing: the project's
-  `AppCache` uses the host to siteaccess map to decide whether a response may be cached publicly or must stay
-  private, so an administration host missing from the map can end up publicly cached.
+  `AppCache` reads the `Map\Host` list to find the siteaccess of a host and never makes a response of an
+  administration siteaccess public. On the releases up to `v2.5.0.6` and `1.0.0.10` that class read its settings from
+  the wrong directory and used built-in demo host names instead, and rewrote private responses to public; the
+  branches fixed both on 5 October 2026 ([chapter 14.7](14-security-hardening.md#147-http-cache-safety)). Replace the
+  demo host names with yours either way.
 
 ### 8.5.4 Designs and the theme fallback
 
@@ -657,10 +742,17 @@ liip_imagine:
 The `liip_imagine.filter_sets` entry of the same name sets the output quality; `i30`, the placeholder used for lazy
 loading (`ngsite.default.lazy_loading.initial_image_alias` on 1.0.0.x), is deliberately saved at quality 20.
 
-ImageMagick is configured by `imagemagick.path` (1.0.0.x, parameter `imagemagick_path`) or by the parameters
-`ibexa.image.imagemagick.enabled` and `ibexa.image.imagemagick.executable_path` from `IMAGEMAGICK_PATH`
-(`config/app/app_legacy.yaml` on 1.1.0.x and 1.2.0.x). Note that 1.1.0.x's kernel does not import
-`config/app/app_legacy.yaml`, so that file has no effect there.
+ImageMagick is configured by `imagemagick.path` (1.0.0.x, parameter `imagemagick_path`) or, for the legacy kernel's
+image handling on 1.1.0.x and 1.2.0.x, by `config/app/app_legacy.yaml`, which reads `IMAGEMAGICK_PATH`
+(`/usr/bin` in `.env`):
+
+| Line | `app_legacy.yaml` loaded | Parameter names in it |
+|---|---|---|
+| 1.1.0.x, `v1.1.0.7` and older | no (the kernel does not import it, so the file has no effect) | `ibexa.image.imagemagick.*`, which nothing on this line reads |
+| 1.1.0.x branch since 5 October 2026 (commit `e8c19aee4`) | yes | `ezpublish.image.imagemagick.enabled`, `ezpublish.image.imagemagick.executable_path`, the names the 3.3 legacy bridge reads |
+| 1.2.0.x | yes | `ibexa.image.imagemagick.enabled`, `ibexa.image.imagemagick.executable_path` |
+
+Check the result with `php bin/console debug:container --parameters | grep imagemagick`.
 
 When a variation's filters change, the stored renditions are stale; they are removed with the commands in
 [chapter 10](10-operations.md).
@@ -758,7 +850,9 @@ The live reference installation of the 1.3.0.x line runs with:
 | `MESSENGER_TRANSPORT_DSN` | `doctrine://default?auto_setup=0` |
 | Secrets vault | none; no `config/secrets/` and no `config/jwt/` key files |
 
-Its configuration matches the 1.3.0.x branch file for file, with these local differences:
+Its configuration matches the 1.3.0.x branch as it was before 5 October 2026, file for file (it predates that
+day's fixes: its `config/packages/framework.yaml` sets no `trusted_proxies` and its `public/index.php` does not read
+`APP_HTTP_CACHE`), with these local differences:
 
 - `config/bundles.php` and `config/packages/nova_ezseo.yaml` add the Novactive SEO bundle (with its `llms.txt`
   feature) and `config/routes/novaezseo.yaml` its routes.
@@ -787,6 +881,10 @@ detailed errors; a production site sets `APP_ENV=prod`.
 - [ ] Production host names are in a `Map\Host` matcher before `URIElement` (on 1.0.0.x: every administration host is in the map).
 - [ ] `languages` of the administration siteaccess include every language content is translated into.
 - [ ] `SEARCH_ENGINE`, `CACHE_POOL` and the purge settings are what this server provides.
+- [ ] `TRUSTED_PROXIES` lists exactly the proxies in front of PHP, and your `framework` configuration reads it
+      (branch heads do; releases need the block of [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
+- [ ] `APP_HTTP_CACHE` is on only when no Varnish is in front (1.1.0.x and later); `SYMFONY_HTTP_CACHE=0` with Varnish
+      on 1.0.0.x.
 - [ ] On the legacy lines, no credentials are in committed `injected_settings`.
 - [ ] `cache:clear --env=prod` has been run and Velocity reloaded (or PHP-FPM serving the new container).
 - [ ] `debug:config` shows the values you expect.
@@ -798,7 +896,7 @@ detailed errors; a production site sets `APP_ENV=prod`.
 In this repository (`master`):
 
 - [doc/netgen/TRANSLATIONS.md](../netgen/TRANSLATIONS.md): editable translations in the administration (1.0.0.x)
-- [doc/netgen/INSTALL.md](../netgen/INSTALL.md), [doc/INSTALL.md](../INSTALL.md): the earlier installation guides
+- [doc/INSTALL.md](../INSTALL.md): the short installation guide; [doc/netgen/INSTALL.md](../netgen/INSTALL.md): the upstream guide, corrected for this repository
 - 1.0.0.x configuration: [app/config/config.yml](../../app/config/config.yml),
   [app/config/ezplatform.yml](../../app/config/ezplatform.yml),
   [app/config/ezplatform_siteaccess.yml](../../app/config/ezplatform_siteaccess.yml),
@@ -821,7 +919,9 @@ On the other line branches:
   [config/app/prepends/netgen_layouts/blocks.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.3.0.x/config/app/prepends/netgen_layouts/blocks.yaml)
 - 1.2.0.x: [config/app/packages/ibexa_siteaccess.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.2.0.x/config/app/packages/ibexa_siteaccess.yaml),
   [config/app/packages/legacy.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.2.0.x/config/app/packages/legacy.yaml)
-- 1.1.0.x: [config/app/packages/ezpublish_siteaccess.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/config/app/packages/ezpublish_siteaccess.yaml),
+- 1.1.0.x: [config/app/app_legacy.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/config/app/app_legacy.yaml),
+  [config/packages/ezpublish.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/config/packages/ezpublish.yaml),
+  [config/app/packages/ezpublish_siteaccess.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/config/app/packages/ezpublish_siteaccess.yaml),
   [config/app/server/prod.yaml](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/config/app/server/prod.yaml),
   [src/DependencyInjection/AppExtension.php](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.1.0.x/src/DependencyInjection/AppExtension.php)
 
@@ -840,16 +940,16 @@ Symfony:
   [.env files](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-env-files),
   [secrets](https://symfony.com/doc/current/configuration/secrets.html),
   [environment variable processors](https://symfony.com/doc/current/configuration/env_var_processors.html),
-  [Symfony 3.4 configuration](https://symfony.com/doc/3.4/configuration.html) for 1.0.0.x
+  [Symfony 3.x configuration](https://symfony.com/doc/3.x/configuration.html) for 1.0.0.x
 - [Runtime component](https://symfony.com/doc/current/components/runtime.html),
-  [Dotenv component](https://symfony.com/doc/current/components/dotenv.html)
+  [Dotenv component](https://github.com/symfony/dotenv)
 
 Upstream platform documentation (for the configuration keys underneath):
 
 - SiteAccess: [current](https://doc.ibexa.co/en/latest/multisite/siteaccess/siteaccess/),
   [matchers](https://doc.ibexa.co/en/latest/multisite/siteaccess/siteaccess_matching/),
   [2.5](https://doc.ibexa.co/en/2.5/guide/siteaccess/)
-- [Image variations](https://doc.ibexa.co/en/latest/content_management/images/image_variations/),
+- [Image variations](https://doc.ibexa.co/en/latest/content_management/images/images/#image-variations),
   [languages](https://doc.ibexa.co/en/latest/multisite/languages/languages/),
   [design engine](https://doc.ibexa.co/en/latest/templating/design_engine/design_engine/)
 - Netgen Site API: <https://docs.netgen.io/projects/site-api/en/latest/>
