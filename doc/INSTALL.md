@@ -1,809 +1,218 @@
-# Exponential Platform Nexus 1.1.0.x — Installation & Operations Guide
+# Installing Exponential Platform Nexus: the short guide
 
----
+> This copy lives on the `1.1.0.x` branch (Platform 3.3, Symfony 5.4). The book covers every release line; the newest copy is on
+> master: <https://github.com/se7enxweb/exponential-platform-nexus/blob/master/doc/INSTALL.md>
 
-## Table of Contents
+This page gets a working Exponential Platform Nexus installation with the demo site on any of the four lines, in the
+fewest steps that are safe. Every step links to the chapter of [the book](book/README.md) that explains it, lists
+the options and says what can go wrong. For a production site, read the book's chapters on serving the site
+([6](book/06-serving-the-site.md)) and security hardening ([14](book/14-security-hardening.md)) before going live.
 
-1. [Requirements](#1-requirements)
-2. [First-Time Installation](#2-first-time-installation)
-   - [2a. GitHub (git clone)](#2a-github-git-clone)
-   - [2b. Composer create-project](#2b-composer-create-project)
-3. [Environment Configuration (.env.local)](#3-environment-configuration-envlocal)
-4. [Database Setup](#4-database-setup)
-5. [Web Server Setup](#5-web-server-setup)
-   - [5a. Apache 2.4](#5a-apache-24)
-   - [5b. Nginx](#5b-nginx)
-   - [5c. Symfony CLI (development only)](#5c-symfony-cli-development-only)
-6. [File & Directory Permissions](#6-file--directory-permissions)
-7. [Frontend Assets (Site CSS/JS)](#7-frontend-assets-site-cssjs)
-8. [Backend/Admin Assets (eZ Platform Admin UI)](#8-backendadmin-assets-ez-platform-admin-ui)
-9. [Search Index](#9-search-index)
-10. [Image Variations](#10-image-variations)
-11. [Cache Management](#11-cache-management)
-12. [Day-to-Day Operations: Start / Stop / Restart](#12-day-to-day-operations-start--stop--restart)
-13. [Updating the Codebase](#13-updating-the-codebase)
-14. [Cron Jobs](#14-cron-jobs)
-15. [Solr Search Engine (optional)](#15-solr-search-engine-optional)
-16. [Varnish HTTP Cache (optional)](#16-varnish-http-cache-optional)
-17. [Troubleshooting](#17-troubleshooting)
+## 1. Pick a line
 
----
+| Line | Branch | Platform | Symfony | PHP | Legacy kernel | Node.js |
+|---|---|---|---|---|---|---|
+| 2.5 generation (1.0.0.x) | `master`, also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 on `master`, 20 on `1.0.0.x` (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
+| 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 18 or 20 |
+| 1.2.0.x | `1.2.0.x` | Ibexa OSS 4.6 | 5.4 | 8.2 or newer | yes | 18 |
+| 1.3.0.x | `1.3.0.x` | Platform v5 | 7.4 | 8.4 or newer | no | 22 |
 
-## 1. Requirements
+A new project without legacy code should start on 1.3.0.x. Choose an older line when you need the legacy kernel
+(Exponential 6) beside the Symfony stack, or when you move a site of that platform generation into Nexus.
+Details: [chapter 1](book/01-introduction.md), [chapter 2](book/02-requirements.md).
 
-### PHP
+## 2. Requirements at a glance
 
-- **PHP 8.0–8.3** (PHP 8.2 or 8.3 strongly recommended)
-- Required extensions: `gd` or `imagick`, `redis`, `curl`, `json`, `pdo_mysql` or `pdo_pgsql`, `xsl`, `xml`, `intl`, `mbstring`, `opcache`
-- `memory_limit` ≥ 256M (set in `php.ini` or `.htaccess`; restart web server after changes)
-- `date.timezone` must be set in `php.ini` or `.htaccess` — see https://php.net/manual/en/timezones.php
-- `max_execution_time` ≥ 90 (recommended 300 for CLI)
+- **PHP** at the version of your line, with at least `ctype`, `curl`, `dom`, `fileinfo`, `gd` (or `imagick` in
+  addition), `iconv`, `intl`, `mbstring`, `opcache`, `pdo` with the driver of your database (`pdo_mysql`,
+  `pdo_pgsql`, or `pdo_sqlite` and `sqlite3`), `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter`, `xsl` and
+  `zip`; `apcu` for the 2.5 generation's configuration as shipped; `date.timezone` set. The complete list per line,
+  with the reason for each extension, is in [chapter 2](book/02-requirements.md).
+- **A database**: MySQL or MariaDB with `utf8mb4`, PostgreSQL, or SQLite ([chapter 7](book/07-databases.md)).
+- **Composer 2**, **Node.js** at the version above and **Yarn 1** (or npm).
+- **A web server**: Exponential Velocity (recommended), or Apache or nginx with PHP-FPM
+  ([chapter 6](book/06-serving-the-site.md)).
 
-### Web Server
+## 3. Create the database
 
-- **Apache 2.4** with `mod_rewrite`, `mod_deflate` enabled; run in `event` or `worker` mode with PHP-FPM
-  (prefork mode also works but is not recommended for performance)  
-  _or_
-- **Nginx 1.18+** with PHP-FPM
-
-### Node.js & Yarn
-
-- **Node.js 18** (managed via [nvm](https://github.com/nvm-sh/nvm); `.nvmrc` is present in the project root)
-- **Yarn 1.x** (`npm install -g yarn`)
-
-### Composer
-
-- **Composer 2.x** — `composer self-update` to ensure you are on the latest 2.x release
-
-### Database
-
-- **MySQL 8.0+** with `utf8mb4` character set and `utf8mb4_unicode_520_ci` collation  
-  _or_
-- **MariaDB 10.3+**  
-  _or_
-- **PostgreSQL 14+**
-
-### Optional
-
-- **Redis 6+** — recommended for production caching and sessions
-- **Solr 7.7 or 8.11.1+** — for advanced full-text search (default engine is `legacy`)
-- **Varnish 6.0 or 7.1+** with [`varnish-modules`](https://github.com/varnish/varnish-modules) — for HTTP reverse-proxy caching
-- **ImageMagick** — for advanced image processing (`IMAGEMAGICK_PATH` env var, default `/usr/bin`)
-
----
-
-## 2. First-Time Installation
-
-### 2a. GitHub (git clone)
-
-```bash
-# Clone the repository
-git clone git@github.com:se7enxweb/exponential-platform-nexus.git
-cd exponential-platform-nexus
-
-# Check out the correct branch
-git checkout 1.1.0.x
-
-# Install PHP dependencies
-composer install --keep-vcs
-
-# Copy and edit environment file (see Section 3)
-cp .env .env.local
-$EDITOR .env.local
-
-# Create the database (see Section 4)
-# mysql -u root -p -e "CREATE DATABASE exponential CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;"
-
-# Set permissions (see Section 6)
-setfacl -R -m u:www-data:rwX -m g:www-data:rwX var public/var
-setfacl -dR -m u:www-data:rwX -m g:www-data:rwX var public/var
-
-# Import schema and demo data (see Section 4)
-php bin/console ibexa:install netgen-media
-
-# Generate JWT keys (required for REST API authentication)
-php bin/console lexik:jwt:generate-keypair
-
-# Build frontend assets (see Section 7)
-nvm use
-yarn install
-yarn build:dev
-
-# Build admin UI assets (see Section 8)
-composer ez-assets   # or: yarn ez   (see Section 8 for details)
-
-# Dump JS translation assets used by Admin UI
-php bin/console bazinga:js-translation:dump public/assets --merge-domains
-
-# Generate GraphQL schema
-php bin/console ezplatform:graphql:generate-schema
-
-# Clear cache
-php bin/console cache:clear
-```
-
-Or, using the Makefile shortcut (runs all of the above after vendor install):
-
-```bash
-make build          # dev
-APP_ENV=prod make build    # production
-```
-
-### 2b. Composer create-project
-
-```bash
-mkdir exponential-platform-nexus
-cd exponential-platform-nexus
-composer create-project se7enxweb/exponential-platform-nexus:~1.1.0.1 .
-```
-
-Then follow the environment configuration, database, assets and permission steps from §2a above.
-
----
-
-## 3. Environment Configuration (.env.local)
-
-**Never commit `.env.local`.** It overrides `.env` with host-specific secrets.
-
-Create: `cp .env .env.local`
-
-Minimum required changes:
-
-```dotenv
-# Application
-APP_ENV=prod            # or dev
-APP_SECRET=<random-32-char-string>
-
-# Database (MySQL/MariaDB example)
-DATABASE_URL="mysql://db_user:db_pass@127.0.0.1:3306/exponential?serverVersion=8.0&charset=utf8mb4"
-
-# Database (PostgreSQL example)
-# DATABASE_URL="postgresql://db_user:db_pass@127.0.0.1:5432/exponential?serverVersion=16&charset=utf8"
-
-# Search engine: "legacy" (default) or "solr"
-SEARCH_ENGINE=legacy
-
-# HTTP cache
-HTTPCACHE_PURGE_TYPE=local       # or "varnish" when using Varnish
-HTTPCACHE_DEFAULT_TTL=86400
-HTTPCACHE_PURGE_SERVER=http://localhost:80
-
-# Cache backend: "cache.tagaware.filesystem" (default), "cache.redis", "cache.memcached"
-CACHE_POOL=cache.tagaware.filesystem
-```
-
-For **Redis** caching:
-
-```dotenv
-CACHE_POOL=cache.redis
-CACHE_DSN=redis://localhost:6379
-```
-
-For **Solr** search:
-
-```dotenv
-SEARCH_ENGINE=solr
-SOLR_DSN=http://localhost:8983/solr
-SOLR_CORE=collection1
-```
-
-For **Varnish**:
-
-```dotenv
-HTTPCACHE_PURGE_TYPE=varnish
-HTTPCACHE_PURGE_SERVER=http://127.0.0.1:6081
-HTTPCACHE_VARNISH_INVALIDATE_TOKEN=<secret-token>
-```
-
-Other common variables:
-
-```dotenv
-MAILER_DSN=smtp://localhost:25
-SENTRY_DSN=                 # optional: Sentry error reporting
-SERVER_ENVIRONMENT=dev      # controls which config/app/server/<value>/ files are loaded
-IMAGEMAGICK_PATH=/usr/bin   # path to ImageMagick binaries
-```
-
----
-
-## 4. Database Setup
-
-### Create the database
+MySQL or MariaDB:
 
 ```sql
-CREATE DATABASE exponential
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_520_ci;
+CREATE DATABASE nexus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+CREATE USER 'nexus'@'localhost' IDENTIFIED BY 'change-me';
+GRANT ALL PRIVILEGES ON nexus.* TO 'nexus'@'localhost';
 ```
 
-### Import schema and demo data
+PostgreSQL (make the application user the owner; on PostgreSQL 15 and later a plain `GRANT` on the database does not
+allow it to create tables):
 
 ```bash
-php bin/console ibexa:install media-site-legacy
+sudo -u postgres psql -c "CREATE USER nexus WITH PASSWORD 'change-me';"
+sudo -u postgres psql -c "CREATE DATABASE nexus OWNER nexus ENCODING 'UTF8';"
 ```
 
-The demo data creates an administrator user: **username** `admin`, **password** `publish`. Change this immediately after installation.
+SQLite needs no server; the file is named in the configuration ([chapter 7](book/07-databases.md)).
 
-### Run Doctrine migrations (on updates)
+## 4. Get the code
 
 ```bash
-php bin/console doctrine:migration:migrate --allow-no-migration
-# or via Makefile:
-make migrations
+git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x, 1.0.0.x
+cd nexus
+git checkout 1.3.0.6            # the newest tag of the line: git tag -l '1.3.0.*' --sort=version:refname
+composer install                # the 2.5 generation: composer install --keep-vcs --ignore-platform-reqs
 ```
 
----
+Always name the branch: a clone without `-b` gives `master`, the 2.5 generation. Run Composer with the same PHP
+version the site will use. The Composer scripts publish assets and, on the lines with the legacy kernel, install it
+into `ezpublish_legacy/` and link the project's legacy files into it.
+
+The releases of 2026-10-05 (`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1`, `1.3.0.6`) carry fixes that matter for a
+public site: the `dev.` host switch and the cache handling of `AppCache` on the 2.5 generation, trusted proxies and
+the Symfony HTTP cache proxy on 1.1.0.x to 1.3.0.x. Install from one of them or newer, not from an older tag;
+[chapter 1](book/01-introduction.md#the-fixes-of-5-october-2026) lists what the older releases lack.
+
+With `composer create-project` instead of a clone, **always give a version**
+(`se7enxweb/exponential-platform-nexus:1.3.0.6`, `:v1.2.0.1`, `:v1.1.0.8`, `:1.0.0.11`, `:v2.5.0.7`): without one,
+Composer installs the upstream Media Site 3.1.6, which Packagist lists under the same name. Details:
+[chapter 3](book/03-getting-the-code.md).
+
+## 5. Install
+
+### The 2.5 generation (`master`)
+
+1. Edit `app/config/parameters.yml` (created from `parameters.yml.dist` by `composer install`): the `env(DATABASE_*)`
+   values and `env(SYMFONY_SECRET)`. Generate the secret with `openssl rand -hex 32`; the shipped placeholder is public.
+   Check that `ngsite.default.locations.tree_root.id` is `168`, the root of the CJW content: `master` and `v2.5.0.7` ship
+   168 (an older `master` shipped 2), and `v2.5.0.6` does not define it at all
+   ([chapter 4](book/04-installing.md#step-1-database-settings-in-parametersyml)).
+2. Install the demo content:
 
-## 5. Web Server Setup
-
-### 5a. Apache 2.4
-
-Enable required modules:
-
-```bash
-a2enmod rewrite deflate headers expires
-```
-
-Use the provided virtual host template as a starting point:
-
-```bash
-cp doc/apache2/media-site-vhost.conf /etc/apache2/sites-available/exponential.conf
-# Edit ServerName, DocumentRoot and log paths, then:
-a2ensite exponential
-systemctl reload apache2
-```
-
-Key directives (inside `<VirtualHost>`):
-
-```apache
-DocumentRoot /var/www/exponential-platform-nexus/public
-
-# Production environment
-SetEnvIf Request_URI ".*" APP_ENV=prod
-SetEnv APP_DEBUG "0"
-SetEnv APP_HTTP_CACHE "1"    # disable when using Varnish
-
-<Directory /var/www/exponential-platform-nexus/public>
-    AllowOverride None
-    Require all granted
-</Directory>
-```
-
-> See `doc/apache2/media-site-vhost.conf` for the full rewrite rule set (image paths, asset paths, `index.php` routing).
-> Use `doc/apache2/media-site.conf` if you prefer to keep rewrite rules in `.htaccess`.
-
-### 5b. Nginx
-
-Use the provided template:
-
-```bash
-cp doc/nginx/media-site.conf /etc/nginx/sites-available/exponential.conf
-# Edit server_name, root and fastcgi_pass (PHP-FPM socket/host), then:
-ln -s /etc/nginx/sites-available/exponential.conf /etc/nginx/sites-enabled/
-nginx -t && systemctl reload nginx
-```
-
-Key directives:
-
-```nginx
-root /var/www/exponential-platform-nexus/public;
-
-location ~ ^/index\.php(/|$) {
-    fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
-    fastcgi_param APP_ENV prod;
-    fastcgi_param APP_DEBUG 0;
-    fastcgi_param APP_HTTP_CACHE 1;
-    include fastcgi_params;
-}
-```
-
-> See `doc/nginx/media-site.conf` and `doc/nginx/ibexa_params.d/` for the full configuration including image variation rewrite rules.
-
-### 5c. Symfony CLI (development only)
-
-```bash
-symfony server:start          # starts HTTPS dev server on https://127.0.0.1:8000
-symfony server:start -d       # run in background (daemon)
-symfony server:stop           # stop the background server
-symfony server:log            # tail the server log
-```
-
----
-
-## 6. File & Directory Permissions
-
-Replace `www-data` with your actual web server user (e.g. `apache`, `nginx`, `_www` on macOS):
-
-```bash
-setfacl -R  -m u:www-data:rwX -m g:www-data:rwX var public/var
-setfacl -dR -m u:www-data:rwX -m g:www-data:rwX var public/var
-```
-
-If `setfacl` is unavailable, use `chmod`/`chown`:
-
-```bash
-chown -R www-data:www-data var public/var
-chmod -R 775 var public/var
-```
-
-Refer to the [Symfony file permissions guide](https://symfony.com/doc/5.4/setup/file_permissions.html) for full details.
-
----
-
-## 7. Frontend Assets (Site CSS/JS)
-
-The project uses Webpack Encore + Yarn. The Ibexa Admin UI webpack config is kept **separate** in `webpack.config.ez.js` / `ez.webpack.config.js` — the site's own `webpack.config.js` / `webpack.config.default.js` is used here.
-
-### Install Node dependencies (first time or after `package.json` changes)
-
-```bash
-nvm use           # activates Node 18 per .nvmrc
-yarn install
-```
-
-### Build for development (with source maps)
-
-```bash
-yarn build:dev
-# or:
-make assets
-```
-
-### Build for production (minified)
-
-```bash
-yarn build:prod
-# or:
-APP_ENV=prod make assets-prod
-```
-
-### Watch mode (auto-rebuild on file change during development)
-
-```bash
-yarn watch
-# or:
-make assets-watch
-```
-
-### Dev server (HMR / hot module replacement)
-
-```bash
-yarn start     # or: yarn server
-```
-
-### Per-siteaccess builds
-
-When working on a specific siteaccess design only:
-
-```bash
-yarn site:dev   <config-name>
-yarn site:prod  <config-name>
-yarn site:watch <config-name>
-```
-
-### What to rebuild after changes
-
-| Changed files | Command |
-|---|---|
-| `assets/js/**`, `assets/scss/**` | `yarn build:dev` (or `yarn watch`) |
-| `package.json` | `yarn install && yarn build:dev` |
-| `webpack.config.js`, `webpack.config.default.js` | `yarn build:dev` |
-
----
-
-## 8. Backend/Admin Assets (eZ Platform Admin UI)
-
-The Admin UI assets are **not** rebuilt automatically on `composer install` or `composer update` (intentional — no Node.js needed on production servers). Deploy pre-built assets or build them on demand.
-
-### Build Admin UI assets
-
-```bash
-nvm use
-composer ez-assets
-# or equivalently:
-yarn ez
-# or via Makefile:
-make ibexa-assets
-```
-
-This runs Webpack using `webpack.config.ez.js` and outputs to `public/assets/ezplatform/build/`.
-It does not generate Bazinga JS translation assets; dump those separately:
-
-```bash
-php bin/console bazinga:js-translation:dump public/assets --merge-domains
-```
-
-### What changes require an Admin UI asset rebuild
-
-| Changed | Rebuild needed? |
-|---|---|
-| `ez.webpack.config.js` or `ez.webpack.config.manager.js` | Yes |
-| Any bundle's `Resources/public/` JS or CSS | Yes (`composer ez-assets`) |
-| Admin richtext editor configuration | Yes |
-| `composer update` pulled a new admin-ui / richtext bundle version | Yes |
-
-### Re-enabling automatic Admin UI asset building on Composer (optional)
-
-Add to the `symfony-scripts` section of `composer.json`:
-
-```json
-"@php bin/console bazinga:js-translation:dump public/assets --merge-domains",
-"yarn install",
-"yarn ez"
-```
-
-> **Note:** `yarn ez` uses the renamed `webpack.config.ez.js` — do not rename it back.
-
-### Install Symfony public assets (bundle `public/` directories → `public/bundles/`)
-
-This is run automatically by `composer install`/`update`, but can be run manually:
-
-```bash
-php bin/console assets:install --symlink --relative public
-```
-
----
-
-## 9. Search Index
-
-### Reindex (rebuild from scratch)
-
-Required after fresh install, after importing content, or after switching search engines.
-
-```bash
-php bin/console ezplatform:reindex
-# or:
-make reindex
-```
-
-### Refresh index (incremental update)
-
-```bash
-php bin/console ezplatform:reindex --iteration-count=100
-```
-
-For Solr only — force a commit after indexing:
-
-```bash
-curl http://localhost:8983/solr/collection1/update?commit=true
-```
-
----
-
-## 10. Image Variations
-
-Generate pre-sized image variations to avoid on-demand generation load:
-
-```bash
-php bin/console ngsite:content:generate-image-variations \
-    --variations=i30,i160,i320,i480,nglayouts_app_preview,ngcb_thumbnail
-# or:
-make images
-```
-
-Limit to a subtree or content type:
-
-```bash
-php bin/console ngsite:content:generate-image-variations \
-    --variations=i320,i480 \
-    --subtree=/1/2/ \
-    --content-type=ng_image
-```
-
-List all options:
-
-```bash
-php bin/console ngsite:content:generate-image-variations --help
-```
-
----
-
-## 11. Cache Management
-
-### Clear Symfony application cache
-
-```bash
-php bin/console cache:clear                    # clears current APP_ENV
-php bin/console cache:clear --env=prod         # clears prod cache
-# or:
-make clear-cache
-APP_ENV=prod make clear-cache
-```
-
-### Warm up cache (production)
-
-```bash
-php bin/console cache:warmup --env=prod
-```
-
-### Clear cache pool (Redis, filesystem, etc.)
-
-```bash
-php bin/console cache:pool:clear cache.redis   # or cache.tagaware.filesystem
-# or:
-make clear-all-cache
-```
-
-### Purge HTTP cache (Varnish/local)
-
-```bash
-php bin/console fos:httpcache:invalidate:path / --all
-```
-
-### Clear legacy kernel cache
-
-```bash
-php bin/console ezpublish:legacy:clear-cache
-```
-
----
-
-## 12. Day-to-Day Operations: Start / Stop / Restart
-
-### Apache
-
-```bash
-systemctl start apache2
-systemctl stop apache2
-systemctl restart apache2
-systemctl reload apache2    # graceful reload (no dropped connections)
-```
-
-### Nginx
-
-```bash
-systemctl start nginx
-systemctl stop nginx
-systemctl reload nginx      # graceful reload
-nginx -s reload             # alternative graceful reload
-```
-
-### PHP-FPM
-
-```bash
-systemctl restart php8.2-fpm
-systemctl reload php8.2-fpm     # graceful reload (for config changes)
-```
-
-### Redis (if used)
-
-```bash
-systemctl start redis
-systemctl restart redis
-```
-
-### Symfony CLI dev server
-
-```bash
-symfony server:start -d         # start in background
-symfony server:stop             # stop
-symfony server:log              # view logs
-```
-
-### After deploying code changes (production checklist)
-
-```bash
-# 1. Pull code
-git pull --rebase
-
-# 2. Install/update vendors
-composer install --no-dev -o
-
-# 3. Run migrations
-php bin/console doctrine:migration:migrate --allow-no-migration --env=prod
-
-# 4. Install public assets (bundle Resources/public → public/bundles/)
-php bin/console assets:install --symlink --relative public --env=prod
-
-# 5. Rebuild Admin UI assets (if admin-ui bundle updated)
-nvm use && yarn ez
-
-# 6. Rebuild frontend assets (if theme/JS/CSS changed)
-nvm use && yarn build:prod
-
-# 7. Clear & warm up cache
-php bin/console cache:clear --env=prod
-php bin/console cache:warmup --env=prod
-
-# 8. Reindex if content model changed
-# php bin/console ezplatform:reindex --env=prod
-```
-
-Or as a single Makefile command:
-
-```bash
-make refresh        # git pull + full build (dev)
-APP_ENV=prod make refresh    # git pull + full build (prod)
-```
-
----
-
-## 13. Updating the Codebase
-
-### Pull latest code and rebuild
-
-```bash
-git pull --rebase
-composer install
-php bin/console doctrine:migration:migrate --allow-no-migration
-php bin/console cache:clear
-# or all-in-one:
-make refresh
-```
-
-### Update Composer packages
-
-```bash
-# Update all packages within constraints
-composer update
-
-# Update a single package
-composer update se7enxweb/site-bundle
-
-# After update, always run:
-php bin/console doctrine:migration:migrate --allow-no-migration
-php bin/console cache:clear
-php bin/console ezplatform:reindex   # if search engine schema may have changed
-```
-
-### Update Node packages
-
-```bash
-yarn upgrade           # update within semver constraints
-yarn build:dev         # rebuild after update
-```
-
----
-
-## 14. Cron Jobs
-
-Add the following to crontab (`crontab -e -u www-data`):
-
-```cron
-# eZ Platform / Exponential Platform cron runner (every 5 minutes)
-*/5 * * * * /usr/bin/php /var/www/exponential-platform-nexus/bin/console ezplatform:cron:run --env=prod >> /var/log/exponential-cron.log 2>&1
-
-# Legacy cron runner (if using LegacyBridge)
-*/5 * * * * /usr/bin/php /var/www/exponential-platform-nexus/runcronjobs.php --siteaccess legacy_admin >> /var/log/exponential-legacy-cron.log 2>&1
-```
-
----
-
-## 15. Solr Search Engine (optional)
-
-### Switch from legacy to Solr
-
-1. Set `SEARCH_ENGINE=solr` and `SOLR_DSN`/`SOLR_CORE` in `.env.local`
-2. Clear cache: `php bin/console cache:clear`
-3. Set up the Solr core with the eZ Platform schema:
    ```bash
-   php bin/console ezplatform:solr:create-core --cores=default
-   ```
-4. Reindex all content:
-   ```bash
-   php bin/console ezplatform:reindex
+   php bin/console ezplatform:install cjw-exponential-media
    ```
 
-### Switch back to legacy search
+   `cjw-exponential-media` installs the CJW demo ("JAC Example", German and English) from the package
+   `se7enxweb/cjw-exponential-media-site-data`. The kernel also offers `exponential-oss`, a clean repository without
+   demo content. The `1.0.0.x` branch uses other types ([chapter 4](book/04-installing.md)).
+3. Build the site theme (Webpack 4; the npm scripts of the branch set the OpenSSL option current Node.js needs):
 
-```dotenv
-SEARCH_ENGINE=legacy
-```
+   ```bash
+   nvm use                 # .nvmrc
+   npm install
+   npm run build:prod      # or: yarn install && yarn build:prod
+   ```
 
-```bash
-php bin/console cache:clear
-```
+   The `package.json` of the release `v2.5.0.6` lacks that option; there, run
+   `NODE_OPTIONS=--openssl-legacy-provider npm run build:prod`, or the build stops with `ERR_OSSL_EVP_UNSUPPORTED`.
 
----
+4. Link the project's legacy files into the legacy kernel, which Composer replaces on every update:
 
-## 16. Varnish HTTP Cache (optional)
+   ```bash
+   ln -s ../../src/AppBundle/ezpublish_legacy/extension/app ezpublish_legacy/extension/app
+   mv ezpublish_legacy/var/site/storage ezpublish_legacy/var/site/storage-empty
+   ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage ezpublish_legacy/var/site/storage
+   ln -s ../../src/AppBundle/Resources/public web/bundles/app
+   ```
 
-1. Set env vars (see §3):
+   A link that already exists was made by a Composer script; leave it. Repeat the storage link after every
+   `composer update` that updates `se7enxweb/exponential`.
+5. Make `var/`, `web/var/` and `ezpublish_legacy/var/` writable for the web server's user, and clear the cache as that
+   user (not as root):
+
+   ```bash
+   sudo setfacl -R  -m u:www-data:rwX -m u:$(whoami):rwX var web/var ezpublish_legacy/var
+   sudo setfacl -dR -m u:www-data:rwX -m u:$(whoami):rwX var web/var ezpublish_legacy/var
+   sudo -u www-data php bin/console cache:clear --env=prod
+   ```
+
+6. Replace the demo host names in `app/config/ezplatform_siteaccess.yml` (`Map\Host`) and `app/config/http_cache.yml`
+   with yours. The siteaccesses are `de` (default), `en`, `admin`, `ngadminui` and `legacy_admin`.
+
+The document root is `web/` and the front controller `web/app.php`. Full walk-through: [chapter 4](book/04-installing.md).
+
+### 1.1.0.x, 1.2.0.x and 1.3.0.x
+
+1. Create `.env.local` with at least:
+
    ```dotenv
-   HTTPCACHE_PURGE_TYPE=varnish
-   HTTPCACHE_PURGE_SERVER=http://127.0.0.1:6081
-   HTTPCACHE_VARNISH_INVALIDATE_TOKEN=<your-secret>
-   TRUSTED_PROXIES=127.0.0.1
+   APP_ENV=prod
+   APP_SECRET=<output of: openssl rand -hex 32>
+   DATABASE_URL="mysql://nexus:change-me@127.0.0.1:3306/nexus?serverVersion=8.0&charset=utf8mb4"
+   JWT_PASSPHRASE=<another random value>
    ```
-2. Set `APP_HTTP_CACHE=0` in your web server vhost (let Varnish handle caching).
-3. Load the eZ Platform Varnish VCL — see Ibexa/eZ Platform documentation for the appropriate `.vcl` file for eZ Platform 3.3.
 
----
+   The shipped `.env` sets `APP_ENV=dev` and placeholder secrets (an empty `APP_SECRET` on 1.3.0.x). Set `APP_ENV`
+   here before installing, so that the console and the web server agree (since 1.3.0.5 the linked `public/.htaccess`
+   forces `prod` for web requests). On SQLite,
+   `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"` and
+   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On 1.1.0.x and 1.2.0.x the
+   `exponential-media` type ships its extra schema for SQLite only; on MySQL or PostgreSQL use SQLite for the demo or
+   the `netgen-media` type ([chapter 4](book/04-installing.md#45-the-110x-line)).
+2. Install the demo content. On 1.3.0.x update the core package first: the locked `v5.0.7` does not create the Netgen
+   Layouts tables, `v5.0.9` does ([chapter 4](book/04-installing.md#47-the-130x-line)).
 
-## 17. Troubleshooting
+   ```bash
+   composer update se7enxweb/exponential-platform-dxp-core      # 1.3.0.x only
+   php bin/console exponential:install exponential-media --no-interaction
+   ```
 
-### White screen / 500 error
+3. Build and generate:
 
-```bash
-# Check Symfony logs
-tail -f var/log/dev.log
-tail -f var/log/prod.log
+   ```bash
+   nvm use                                         # Node.js from .nvmrc
+   yarn install
+   yarn build:prod                                 # the site theme
+   php bin/console assets:install --symlink --relative public
+   make ibexa-assets                               # admin assets (1.1.0.x: yarn ez; 1.2.0.x, 1.3.0.x: composer ibexa-assets)
+   php bin/console lexik:jwt:generate-keypair
+   php bin/console ibexa:graphql:generate-schema
+   php bin/console cache:clear
+   ```
 
-# Check PHP-FPM / Apache / Nginx error logs
-tail -f /var/log/apache2/error.log
-tail -f /var/log/nginx/error.log
+4. On 1.3.0.x, check that Composer's recipes did not remove the Netgen Layouts bundles:
+   `git diff config/bundles.php config/routes/` must show no removed `NetgenLayouts*` lines.
+5. Make `var/` and `public/var/` writable for the web server's user, as above.
 
-# Switch to dev mode temporarily
-APP_ENV=dev php bin/console cache:clear
-```
+The document root is `public/`. The siteaccesses are `fh_eng` (default), `bold_eng`, `bold_ger` and the admin
+siteaccess `adminui` (`/adminui/`); 1.1.0.x and 1.2.0.x also have `ngadminui` and `legacy_admin`. Full walk-through
+per line: [chapter 4](book/04-installing.md).
 
-### "Class not found" after composer update
+## 6. Serve the site
 
-```bash
-composer dump-autoload -o
-php bin/console cache:clear
-```
+- **Exponential Velocity**, the recommended way: one process that serves HTTP and HTTPS and runs PHP itself
+  ([chapter 6](book/06-serving-the-site.md)).
+- **Apache or nginx with PHP-FPM**: examples in [doc/apache2](apache2/) and [doc/nginx](nginx/); `netgen-site*` for
+  the 2.5 generation (`web/`), `media-site*` for the later lines (`public/`). Adapt them as chapter 6 describes.
 
-### Assets not loading (404 on `/bundles/` or `/assets/`)
+For a quick look on a development machine, `symfony server:start` serves `public/` on the later lines.
 
-```bash
-# Reinstall public assets
-php bin/console assets:install --symlink --relative public
+## 7. First login and the next steps
 
-# Rebuild frontend
-yarn build:dev
+- Sign in to the administration interface as `admin` with the password the project README gives for the demo data,
+  and **change it at once**.
+- Before going live: production environment, real secrets, admin access restricted, trusted proxies, HTTP cache
+  rules, security headers ([chapter 14](book/14-security-hardening.md) and its checklist).
+- Cron, workers, caches, backups: [chapter 10](book/10-operations.md).
 
-# Rebuild Admin UI
-yarn ez
-```
+## 8. When something goes wrong
 
-### Cache not clearing / stale content
+| Symptom | Where to look |
+|---|---|
+| Composer refuses the PHP version | Run Composer with the site's PHP; [chapter 13.2](book/13-troubleshooting.md#132-composer-and-dependencies) |
+| `EntrypointNotFoundException ... "photoswipe-init"` | The site theme was not built; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
+| `ERR_OSSL_EVP_UNSUPPORTED` during the build (2.5 generation) | Use the npm scripts, which set the OpenSSL option; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
+| `Unable to create the store directory` | `var/` not writable for the web server; [chapter 13.8](book/13-troubleshooting.md#138-files-and-permissions) |
+| The new project's `composer.json` says `"name": "netgen/media-site"` | `create-project` ran without a version and installed upstream; start again with a version ([chapter 3](book/03-getting-the-code.md#31-branches-tags-and-packagist-versions)) |
+| `no such table: nglayouts_...` during the install (1.3.0.x) | Update `se7enxweb/exponential-platform-dxp-core` to `v5.0.9`; [chapter 4.7](book/04-installing.md#47-the-130x-line) |
+| The site shows an empty database while the console works (SQLite) | Web and console use different `APP_ENV`; [chapter 4.10](book/04-installing.md#410-what-can-go-wrong-across-lines) |
+| `Container extension "netgen_layouts" is not registered` (1.3.0.x) | Restore `config/bundles.php`; [chapter 13.6](book/13-troubleshooting.md#136-netgen-layouts) |
+| Images missing after `composer update` (2.5 generation) | Recreate the storage link of step 4; [chapter 13.2](book/13-troubleshooting.md#132-composer-and-dependencies) |
+| Anything else | The log: `var/logs/prod.log` (2.5 generation) or `var/log/prod.log`; then [chapter 13](book/13-troubleshooting.md) |
 
-```bash
-# Nuclear option: delete cache directory
-rm -rf var/cache/dev var/cache/prod
+## 9. More
 
-# Then warm up
-php bin/console cache:warmup --env=prod
-```
-
-If using Redis:
-
-```bash
-php bin/console cache:pool:clear cache.redis
-```
-
-### Image variations missing
-
-```bash
-php bin/console ngsite:content:generate-image-variations \
-    --variations=i30,i160,i320,i480
-```
-
-### Search results outdated
-
-```bash
-php bin/console ezplatform:reindex
-```
-
-### Permission denied writing to `var/` or `public/var/`
-
-```bash
-setfacl -R  -m u:www-data:rwX -m g:www-data:rwX var public/var
-setfacl -dR -m u:www-data:rwX -m g:www-data:rwX var public/var
-```
-
-### JWT authentication errors (REST API)
-
-```bash
-php bin/console lexik:jwt:generate-keypair --overwrite
-php bin/console cache:clear
-```
-
-### Legacy bridge errors
-
-```bash
-php bin/console ezpublish:legacy:clear-cache
-php bin/console assets:install --symlink --relative public
-```
-
-Check legacy autoloads:
-
-```bash
-composer run-script project-scripts
-```
-
----
-
-*For additional context, see [doc/netgen/INSTALL.md](netgen/INSTALL.md) and the Apache/Nginx server config templates in `doc/apache2/` and `doc/nginx/`.*
-
+- [The book](book/README.md): every chapter, and which ones you need
+- [Upgrading between lines](book/11-upgrading-between-lines.md), [migrating a site into Nexus](book/12-migrating-into.md)
+- Issues: <https://github.com/se7enxweb/exponential-platform-nexus/issues>; security problems privately, as
+  [SECURITY.md](../SECURITY.md) says
+- License: [LICENSE.md](../LICENSE.md)
