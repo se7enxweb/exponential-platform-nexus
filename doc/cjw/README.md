@@ -11,9 +11,9 @@ It integrates most of Netgen open source tools and bundles, including [Netgen La
 
 # eZ Platform
 
-[![Build Status](https://img.shields.io/travis/ezsystems/ezplatform.svg?style=flat-square)](https://travis-ci.org/ezsystems/ezplatform)
+[![Build Status](https://img.shields.io/travis/ezsystems/ezplatform.svg?style=flat-square)](https://app.travis-ci.com/ezsystems/ezplatform)
 [![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezplatform.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform)
-[![Latest release](https://img.shields.io/github/release/ezsystems/ezplatform.svg?style=flat-square)](https://github.com/ezsystems/ezplatform/releases)
+[![Latest release](https://img.shields.io/github/v/release/ezsystems/ezplatform.svg?style=flat-square)](https://github.com/ezsystems/ezplatform/releases)
 [![License](https://img.shields.io/packagist/l/ezsystems/ezplatform.svg?style=flat-square)](../../LICENSE)
 
 ## What is eZ Platform?
@@ -36,9 +36,9 @@ It has been in development since 2011, and integral part of the *eZ Publish Plat
 
 eZ Platform is fully open source and it is the foundation for the commercial *eZ Platform Enterprise Edition* software, which adds advanced features for editorial teams, entirely built on top of *eZ Platform* APIs.
 
-- eZ Platform Developer Hub: [ezplatform.com](https://ezplatform.com/)
-- [eZ Platform Open Source and Enterprise Edition roadmap](http://doc.ez.no/roadmap)
-- eZ Systems (commercial products and services): [ez.no](https://ez.no/)
+- eZ Platform Developer Hub: [developers.ibexa.co](https://developers.ibexa.co/)
+- [eZ Platform Open Source and Enterprise Edition roadmap](https://doc.ibexa.co/en/latest/) (the old roadmap page now leads to the vendor documentation)
+- eZ Systems (commercial products and services): [ibexa.ai](https://ibexa.ai/en)
 
 
 ## Installation
@@ -46,7 +46,7 @@ eZ Platform is fully open source and it is the foundation for the commercial *eZ
 **Note:** For simplified installation, consider using community-supported [eZ Launchpad](https://ezsystems.github.io/launchpad/) which takes care of the whole server setup for you.
 
 Installation instructions below are for installing a clean installation of eZ Platform in latest version with _no_ demo content or demo website.
-Full installation documentation is [in the online docs](https://doc.ezplatform.com/en/latest/getting_started/install_using_composer/).
+Full installation documentation is [in the online docs](https://doc.ibexa.co/en/latest/getting_started/install_ez_platform/).
 It includes instructions on installing other distributions _(like [ezplatform-ee](https://github.com/ezsystems/ezplatform-ee) enterprise edition)_, or other versions.
 
 #### Prerequisites
@@ -56,10 +56,10 @@ These instructions assume you have already installed:
 - PHP _(7.1 or higher)_
 - Web Server _(Recommeneded: Apache / Nginx. Use of PHP's built-in development server is also possible)_
 - Database server _(MySQL 5.5+ or MariaDB 10.0+)_
-- [Composer](https://doc.ezplatform.com/en/latest/getting_started/about_composer/)
+- [Composer](https://getcomposer.org/)
 - Git _(for development)_
 
-For more details on requirements, see [online documentation](https://doc.ezplatform.com/en/latest/getting_started/requirements_and_system_configuration/).
+For more details on requirements, see [online documentation](https://doc.ibexa.co/en/latest/getting_started/requirements/).
 
 
 #### Install eZ Platform _(clean distribution)_
@@ -78,15 +78,18 @@ The configuration details will be placed in `<ezplatform>/app/config/parameters.
 
 Next you will receive instructions on how to install data into the database, and how to run a simplified dev server using the `bin/console server:run` command.
 
-**Tip:** For a more complete and better performing setup using Apache or Nginx, see how to [install eZ Platform manually](https://doc.ezplatform.com/en/latest/getting_started/install_manually/).
+**Tip:** For a more complete and better performing setup using Apache or Nginx, see how to [install eZ Platform manually](https://doc.ibexa.co/en/latest/getting_started/install_ez_platform/).
 
 ## Issue tracker
-Submitting bugs, improvements and stories is possible on [https://jira.ez.no/browse/EZP](https://jira.ez.no/browse/EZP).
-If you discover a security issue, please see how to responsibly report such issues in ["Reporting security issues in eZ Systems products"](https://doc.ezplatform.com/en/latest/guide/reporting_issues/#reporting-security-issues-in-ez-systems-products).
+The eZ Systems JIRA this text pointed to (jira.ez.no, now redirected to issues.ibexa.co) is the upstream vendor's tracker,
+not this project's. Report problems
+with Exponential Platform Nexus at [github.com/se7enxweb/exponential-platform-nexus/issues](https://github.com/se7enxweb/exponential-platform-nexus/issues).
+Report a security issue in Exponential Platform Nexus privately as [SECURITY.md](../../SECURITY.md) says; the vendor's own
+process is ["Reporting security issues"](https://doc.ibexa.co/en/latest/infrastructure_and_maintenance/security/reporting_issues/).
 
 ## Backwards compatibility
 eZ Platform aims to be **fully content compatible** with eZ Publish 5.x, meaning that the content in these versions of the CMS can be upgraded using
-[online documentation](https://doc.ezplatform.com/en/latest/migrating/migrating_from_ez_publish_platform/) to eZ Platform.
+[online documentation](https://doc.ibexa.co/en/latest/update_and_migration/migrate_to_ibexa_dxp/migrating_from_ez_publish_platform/) to eZ Platform.
 
 Unlike eZ Publish Platform 5.x, eZ Platform does not ship with eZ Publish Legacy (4.x). But this is available by optional installing [LegacyBridge](https://github.com/ezsystems/LegacyBridge/releases/) to allow eZ Platform and eZ Publish Legacy to run together, this is only recommended for migration use cases and not for new installations.
 
@@ -94,4 +97,4 @@ Unlike eZ Publish Platform 5.x, eZ Platform does not ship with eZ Publish Legacy
 Copyright (C) 1999-2020 eZ Systems AS. All rights reserved.
 
 ## LICENSE
-http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GNU General Public License v2
