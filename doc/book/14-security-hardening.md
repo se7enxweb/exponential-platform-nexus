@@ -170,6 +170,13 @@ Where to put secrets:
   `SYMFONY_DECRYPTION_SECRET` instead.
 - For production speed, `composer dump-env prod` compiles the `.env` files into `.env.local.php`; that file holds the
   secrets in clear text, so treat it like `.env.local`.
+- **The Deployer example uploads a committed file.** On 1.1.0.x to 1.3.0.x the task `server:upload_env` copies
+  `deploy/files/.env.local.<stage>` to the server's `shared/.env.local` (on 1.0.0.x `deploy/files/.env.<stage>` to
+  `shared/.env`). The repository commits `deploy/files/.env.local.prod` with `APP_SECRET=ThisIbexaPlatformTokenIsNotSoSecret_PleaseChangeIt`
+  and `DATABASE_URL=mysql://root@localhost/ibexa`, although the comment in `deploy.php` says such files are not to be
+  committed. `dep deploy prod` would put that placeholder secret on the server. Replace the file's values before the
+  first deploy, keep the real file out of Git (add `/deploy/files/.env.local.*` to `.gitignore` in your project), or
+  remove `server:upload_env` from the task list and place `.env.local` on the server by hand.
 
 Check before every commit that nothing secret is staged:
 
@@ -671,7 +678,8 @@ has a section on Velocity-specific hardening for the legacy kernel.
 - [ ] Scripts below `var/` refused; `app_dev.php` removed (1.0.0.x); no directory listings; the `1.0.0.x` branch's
       Basic authentication lines removed or pointed at your own password file.
 - [ ] Unknown host names refused by the web server; `trusted_hosts` set.
-- [ ] `APP_SECRET` (`SYMFONY_SECRET` on 1.0.0.x), `JWT_PASSPHRASE`, purge token and database password replaced; none
+- [ ] `APP_SECRET` (`SYMFONY_SECRET` on 1.0.0.x), `JWT_PASSPHRASE`, purge token and database password replaced, also in
+      `deploy/files/.env.local.prod` if you deploy with Deployer; none
       of them in Git; `.gitignore` covers `.env.local`, `.env.*.local`, `.env.local.php` (and `.env.php` on 1.0.0.x).
 - [ ] `APP_ENV=prod`, `APP_DEBUG=0`; `/_profiler` not reachable; on 1.0.0.x the `dev.` host patch absent from
       `web/app.php` and console commands run with `--env=prod`.
