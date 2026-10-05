@@ -40,7 +40,6 @@ ezpublish:
                 legacy.platform.cjw.alpha.se7enx.com: legacy_admin
                 editor.platform.cjw.alpha.se7enx.com: legacy_admin
                 nga.platform.cjw.alpha.se7enx.com: ngadminui
-                legacy.platform.cjw.beta.se7enx.com: en
                 platform.cjw.beta.se7enx.com: en
                 site.platform.cjw.beta.se7enx.com: en
                 edit.platform.cjw.beta.se7enx.com: admin
