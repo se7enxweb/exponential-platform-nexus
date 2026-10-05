@@ -33,9 +33,9 @@ vendor: ## Run composer install
 
 .PHONY: ibexa-assets
 .ONESHELL:
-ibexa-assets: ## Generate Ibexa Admin UI assets
+ibexa-assets: ## Generate the eZ Platform admin interface assets (composer ezplatform-assets)
 	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
-	$(COMPOSER_RUN) ibexa-assets
+	$(COMPOSER_RUN) ezplatform-assets
 
 .PHONY: assets
 .ONESHELL:
