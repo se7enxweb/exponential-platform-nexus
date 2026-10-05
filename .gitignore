@@ -7,6 +7,13 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+###< symfony/framework-bundle ###
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
