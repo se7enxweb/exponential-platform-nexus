@@ -1,3 +1,6 @@
+# Legacy (ngadminui) image handling: let the legacy kernel convert images with ImageMagick.
+# On this line the legacy bridge reads the ezpublish.image.imagemagick.* parameters
+# (the ibexa.image.imagemagick.* names belong to the 4.x line).
 parameters:
-    ibexa.image.imagemagick.enabled: true
-    ibexa.image.imagemagick.executable_path: '%env(IMAGEMAGICK_PATH)%'
+    ezpublish.image.imagemagick.enabled: true
+    ezpublish.image.imagemagick.executable_path: '%env(IMAGEMAGICK_PATH)%'
