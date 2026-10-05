@@ -192,7 +192,7 @@ yarn build:prod
 
 # 9. Publish Symfony bundle assets and build the Admin UI
 php bin/console assets:install --symlink --relative public
-yarn ibexa:build
+composer ibexa-assets   # dumps the JS translations, then runs yarn ibexa
 
 # 10. Generate JWT keypair for REST API
 php bin/console lexik:jwt:generate-keypair
@@ -339,9 +339,9 @@ yarn build:dev      # build site CSS/JS with source maps
 yarn watch          # watch mode — auto-rebuild site assets on change
 
 # Admin UI
-yarn ibexa:build    # build Platform v4 Admin UI — production
-yarn ibexa:dev      # build Platform v4 Admin UI — dev mode
-yarn ibexa:watch    # watch Admin UI assets
+yarn ibexa          # build Platform v4 Admin UI — production (composer ibexa-assets also dumps translations first)
+yarn encore dev --config=webpack.config.ibexa.js          # build Platform v4 Admin UI — dev mode
+yarn encore dev --watch --config=webpack.config.ibexa.js  # watch Admin UI assets
 
 # Dependencies
 yarn install        # install / sync all Node dependencies

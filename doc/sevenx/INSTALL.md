@@ -429,7 +429,7 @@ yarn build:prod
 
 ```bash
 php bin/console assets:install --symlink --relative public
-yarn ibexa:build
+composer ibexa-assets   # dumps the JS translations, then runs yarn ibexa
 ```
 
 #### Step 7 — Generate JWT keypair
@@ -910,7 +910,7 @@ the site frontend. They are not rebuilt automatically on `composer install`.
 ### Prerequisites
 
 The `var/encore/` directory must be populated by `assets:install` before any
-`ibexa:*` build can run:
+Admin UI build can run:
 
 ```bash
 php bin/console assets:install --symlink --relative public
@@ -923,19 +923,24 @@ and `var/encore/ibexa.config.manager.js` files.
 ### Build Admin UI assets — production
 
 ```bash
-nvm use 18 && yarn ibexa:build
+nvm use 18 && yarn ibexa
 ```
+
+`composer ibexa-assets` runs the whole sequence the project defines: it dumps the JavaScript
+translations (`bazinga:js-translation:dump public/assets --merge-domains`) and then runs
+`yarn ibexa`. The `package.json` of this branch has no `ibexa:build`, `ibexa:dev` or `ibexa:watch`
+scripts; `yarn ibexa` is `encore production --config=webpack.config.ibexa.js`.
 
 ### Build Admin UI assets — development (with source maps)
 
 ```bash
-nvm use 18 && yarn ibexa:dev
+nvm use 18 && yarn encore dev --config=webpack.config.ibexa.js
 ```
 
 ### Watch mode
 
 ```bash
-nvm use 18 && yarn ibexa:watch
+nvm use 18 && yarn encore dev --watch --config=webpack.config.ibexa.js
 ```
 
 ### Dump JS translation assets (required for Admin UI i18n)
@@ -948,10 +953,10 @@ php bin/console bazinga:js-translation:dump public/assets --merge-domains
 
 | Change | Rebuild needed |
 |---|---|
-| `composer update` pulled a new bundle version | Yes — `yarn ibexa:build` |
-| Any bundle's `Resources/public/` JS or SCSS changed | Yes — `yarn ibexa:build` |
-| `webpack.config.js` modified | Yes — `yarn ibexa:build` |
-| Admin RichText editor configuration changed | Yes — `yarn ibexa:build` |
+| `composer update` pulled a new bundle version | Yes — `yarn ibexa` |
+| Any bundle's `Resources/public/` JS or SCSS changed | Yes — `yarn ibexa` |
+| `webpack.config.js` modified | Yes — `yarn ibexa` |
+| Admin RichText editor configuration changed | Yes — `yarn ibexa` |
 | Translation strings changed | Yes — dump translations |
 
 ---
@@ -1122,7 +1127,7 @@ php bin/console doctrine:migration:migrate --allow-no-migration --env=prod
 php bin/console assets:install --symlink --relative public --env=prod
 
 # 5. Rebuild Platform v4 Admin UI assets (if admin-ui bundle updated)
-source ~/.nvm/nvm.sh && nvm use 18 && yarn ibexa:build
+source ~/.nvm/nvm.sh && nvm use 18 && yarn ibexa
 
 # 6. Rebuild frontend site assets (if theme/JS/CSS changed)
 yarn build:prod
@@ -1307,7 +1312,7 @@ php bin/console cache:clear
 ```bash
 php bin/console assets:install --symlink --relative public
 yarn build:prod         # rebuild site assets
-yarn ibexa:build        # rebuild Admin UI assets
+yarn ibexa              # rebuild Admin UI assets
 ```
 
 ### Search results outdated
@@ -1331,7 +1336,7 @@ php bin/console lexik:jwt:generate-keypair --overwrite
 php bin/console cache:clear
 ```
 
-### `yarn ibexa:build` fails with "Module not found" or Node version error
+### `yarn ibexa` fails with "Module not found" or Node version error
 
 ```bash
 # Check Node.js version:
@@ -1344,9 +1349,9 @@ nvm use 18
 php bin/console assets:install --symlink --relative public
 
 # If still failing, reinstall node_modules:
-rm -rf node_modules yarn.lock
+rm -rf node_modules
 yarn install
-yarn ibexa:build
+yarn ibexa
 ```
 
 ---
@@ -1853,9 +1858,9 @@ yarn watch                             # watch mode — auto-rebuild on change
 yarn start                             # webpack dev server
 
 # Admin UI asset builds
-yarn ibexa:dev                         # build Platform v4 Admin UI — dev mode
-yarn ibexa:build                       # build Platform v4 Admin UI — production
-yarn ibexa:watch                       # watch Admin UI assets
+yarn encore dev --config=webpack.config.ibexa.js   # build Platform v4 Admin UI — dev mode
+yarn ibexa                             # build Platform v4 Admin UI — production
+yarn encore dev --watch --config=webpack.config.ibexa.js  # watch Admin UI assets
 
 # Code quality
 yarn format:js                         # format JS with Prettier
