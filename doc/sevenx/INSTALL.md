@@ -1023,7 +1023,8 @@ php bin/console ibexa:reindex --content-type=article
 ## 14. Image Variations
 
 Image variations are generated on demand by Liip Imagine. Configuration lives in
-`config/packages/ibexa.yaml` under `ibexa.system.<siteaccess>.image_variations`.
+`config/app/packages/image.yaml` under `ibexa.system.default.image_variations` (a siteaccess or
+group name in place of `default` overrides them there).
 
 ### Clear generated variation cache
 
