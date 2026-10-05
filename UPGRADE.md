@@ -7,6 +7,11 @@ Upgrading Exponential Platform Nexus is described in the book:
   swaps, the SQL of each step and the Netgen Layouts, Site API and Tags changes, and patch updates inside a line.
 * [Migrating into Nexus](doc/book/12-migrating-into.md): bringing a site from eZ Publish 4.x and 5.x, eZ Platform,
   Ibexa, Exponential Platform Legacy or Exponential 6 into Nexus.
+* [Patch updates inside a line](doc/book/11-upgrading-between-lines.md#119-patch-updates-inside-a-line):
+  `composer update` brings the forks' fixes, but files of the project itself (`web/app.php`, `app/AppCache.php`,
+  `public/index.php`, `config/`, `Makefile`) change only when you merge a newer tag or take the file from the branch.
+  The fixes the branches received on 5 October 2026 are in no tag yet; the
+  [security chapter](doc/book/14-security-hardening.md#which-code-do-i-run) lists them and how to check for them.
 
 The upstream platform update pages are at
 https://doc.ibexa.co/en/latest/update_and_migration/update_ibexa_dxp/ (also mirrored at
