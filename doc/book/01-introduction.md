@@ -3,9 +3,10 @@
 This chapter explains what Exponential Platform Nexus is before you install it: a complete website project made of a
 Symfony content platform, the Exponential legacy kernel on the lines that carry it, the Netgen Media Site design and
 demo content, Netgen Layouts, Netgen Tags and the Netgen Site API. It sets out the release lines side by side (the
-platform generation, Symfony, PHP and the legacy kernel of each), explains how Nexus relates to Exponential 6 and to
-Exponential Platform Legacy, helps you choose a line, tours the directories of an installation, explains how this book
-is organised and ends with a glossary. The later chapters assume the vocabulary introduced here.
+platform generation, Symfony, PHP and the legacy kernel of each) together with the fixes that are on the branches but
+not yet in a release, explains how Nexus relates to Exponential 6 and to Exponential Platform Legacy, helps you choose
+a line and avoid the two commands that install the wrong one, tours the directories of an installation, explains how
+this book is organised and ends with a glossary. The later chapters assume the vocabulary introduced here.
 
 [Contents](README.md) · Next: [2. Requirements](02-requirements.md)
 
@@ -31,9 +32,13 @@ packages that break on current PHP with `se7enxweb/*` forks, added installers th
 MySQL alike, and renamed the console commands to the `exponential:` prefix.
 
 The licence of the 2.5 generation is the GNU General Public License, version 2 or later (`composer.json`:
-`GPL-2.0-or-later`). The `composer.json` of the 1.1.0.x line declares `(GPL-2.0-or-later or proprietary)`, and that of
-the 1.2.0.x and 1.3.0.x lines `proprietary` (the value the upstream skeleton carried); the README of every line states
-that Nexus is GNU GPL licensed. Check the `LICENSE` file of the tag you install.
+`GPL-2.0-or-later`; `LICENSE` and `LICENSE.md` carry the GPL text). The `composer.json` of the 1.1.0.x line declares
+`(GPL-2.0-or-later or proprietary)`, and that of the 1.2.0.x and 1.3.0.x lines `proprietary`, the value the upstream
+skeleton carried. The licence files differ in the same way: 1.1.0.x and 1.2.0.x ship the GPL text as `LICENSE.md`
+beside the upstream skeleton's `LICENSE` (which offers the upstream business licence or the GPL), while 1.3.0.x ships
+only the upstream skeleton's `COPYRIGHT` and `LICENSE-bul` and no GPL text at all. The README of every line states
+that Nexus is GNU GPL licensed. Until the metadata of the newer lines is corrected, read the README and the licence
+files of the tag you install, and ask 7x if your legal review needs a statement in writing.
 
 > **A note on names.** Nexus is built on products with older names, and the code keeps them on purpose. PHP
 > namespaces stay upstream (`eZ\Publish\...` and `EzSystems\...` on the 2.5 and 3.3 generations, `Ibexa\...` on 4.6
@@ -74,8 +79,8 @@ release tag; [chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-v
 
 | Line | Branch | Release tags | Platform generation (upstream) | Symfony | PHP (`composer.json`) | Exponential legacy kernel |
 |---|---|---|---|---|---|---|
-| **2.5** | `master` (default branch) | `v2.5.0.0` to `v2.5.0.6`, also `1.0.0.8` to `1.0.0.10` | 2.5 (eZ Platform 2.5 LTS): `se7enxweb/ezpublish-kernel ~7.5.40` | 3.4: `se7enxweb/symfony v3.4.55` | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ... \|\| ^8.6` (`v2.5.0.0` and `v2.5.0.1`: `^7.1.3 \|\| ^8.1 \|\| ^8.2`) | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` |
-| **1.0.0.x** | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7` | as 2.5 | 3.4 | as 2.5 | yes, as 2.5 |
+| **2.5** | `master` (default branch) | `v2.5.0.0` to `v2.5.0.6`, also `1.0.0.8` and `1.0.0.10` | 2.5 (eZ Platform 2.5 LTS): `se7enxweb/ezpublish-kernel ~7.5.40` | 3.4: `se7enxweb/symfony v3.4.55` | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ... \|\| ^8.6` (`v2.5.0.0` and `v2.5.0.1`: `^7.1.3 \|\| ^8.1 \|\| ^8.2`); in practice 8.1 or newer, see below | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` |
+| **1.0.0.x** | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9` | as 2.5 | 3.4 | as 2.5 | yes, as 2.5 |
 | **1.1.0.x** | `1.1.0.x` | `v1.1.0.0` to `v1.1.0.7` | 3.3 (eZ Platform 3.3): `se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3` | 5.4 (`symfony/framework-bundle 5.4.*`) | `^8.0` | yes: `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` |
 | **1.2.0.x** | `1.2.0.x` | `v1.2.0.0` | 4.6 (Ibexa OSS 4.6): `se7enxweb/oss ~4.6.0` | 5.4 | `>=8.2` | yes: `se7enxweb/site-legacy-bundle v2.0.0` pulls `se7enxweb/ibexa-legacy-bridge 4.x` and `se7enxweb/exponential` |
 | **1.3.0.x** | `1.3.0.x` | `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` (the newest release) | 5 (Ibexa OSS 5.0): `se7enxweb/exponential-platform-dxp dev-master` | 7.4 (`symfony/framework-bundle 7.4.*`) | `>=8.4` | no |
@@ -87,11 +92,16 @@ How to read the table:
   installs the CJW demo content from the package `se7enxweb/cjw-exponential-media-site-data` (since `v2.5.0.4`).
   `1.0.0.x` installs the Netgen demo content from `netgen/media-site-data ~1.8.1`, ships SQL dumps of the CJW content
   in the repository and adds an SQLite installer type (since `1.0.0.6`). Both run the same Symfony 3.4 stack, the same
-  kernel and the same legacy kernel. The tags `1.0.0.8` to `1.0.0.10` were cut from `master`, not from `1.0.0.x`.
+  kernel and the same legacy kernel. The four-part `1.0.0.y` tags do not all sit on one branch: `1.0.0.8` and
+  `1.0.0.10` were cut from `master`, `1.0.0.9` from `1.0.0.x`. A Composer constraint such as `~1.0.0.7` therefore ends
+  on `1.0.0.10`, which is `master` code with the CJW demo package, not the `1.0.0.x` branch
+  ([chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-versions)).
 - **The PHP column is what Composer checks, not what was tested.** The 2.5 generation declares every PHP version up
-  to 8.6, but its own install guide still tells you to run Composer with `--ignore-platform-reqs` because some of its
-  dependencies declare older limits, and the README of `master` says PHP 8.3 to 8.5. The 7x guides of the newer lines
-  recommend PHP 8.5 and say the lines were tested on PHP 8.5.5. [Chapter 2](02-requirements.md#22-php) has the detail.
+  to 8.6, but the legacy kernel it installs (`se7enxweb/exponential`) requires PHP 8.1, so 8.1 is the real minimum.
+  The install guide of the line still tells you to run Composer with `--ignore-platform-reqs`, because some
+  dependencies of the Symfony 3.4 stack declare older limits. The README of `master` now says "PHP 8.1 or newer"
+  (the README released with `v2.5.0.6` said "PHP 8.3 -> 8.5"). The 7x guides of the newer lines recommend PHP 8.5
+  and say the lines were tested on PHP 8.5.5. [Chapter 2](02-requirements.md#22-php) has the detail.
 - **The legacy kernel goes away with the 5 generation.** The 2.5, 3.3 and 4.6 lines install the Exponential 6 kernel
   into `ezpublish_legacy/` and offer its administration as the `legacy_admin` siteaccess; 1.3.0.x is a Symfony-only
   project.
@@ -109,13 +119,40 @@ How to read the table:
 | `1.3.0.4` | 2026-08-03 | a default configuration fix for the JWT token settings |
 | `v2.5.0.6` | 2026-07-04 | `netgen/media-site-data` (about 180 MB) moved from `require` to `suggest` |
 | `v2.5.0.4` | 2026-07-04 | the installer type `cjw-exponential-media`, its data moved to `se7enxweb/cjw-exponential-media-site-data` |
-| `1.0.0.10` | 2026-07-04 | a rewritten `doc/INSTALL.md` and rebuilt front-end assets |
+| `1.0.0.10` (from `master`) | 2026-07-04 | a rewritten `doc/INSTALL.md` and rebuilt front-end assets |
+| `1.0.0.9` (from `1.0.0.x`) | 2026-07-04 | UTF-8 corruption in the MySQL installer SQL fixed (Layouts block translations) |
+| `1.0.0.8` (from `master`) | 2026-07-04 | the same SQL fix, and `NODE_OPTIONS=--openssl-legacy-provider` removed from `package.json` (it came back later on `master`) |
 | `1.0.0.6` | 2026-04-22 | the installer type `exponential-cjw` with full SQLite seed data |
 | `v1.2.0.0` | 2026-04-20 | the first release of the 4.6 line: `exponential:install`, SQLite support, `ngadminui` |
 | `v1.1.0.7` | 2026-04-20 | `exponential:install exponential-media` with SQLite support, the SQLite gateway override |
 
 The release notes of `v1.2.0.0` call the line "Symfony 6.4 LTS, PHP 8.1+"; its `composer.json` requires
 `symfony/framework-bundle 5.4.*` and PHP `>=8.2`, which is what Composer enforces and what this book uses.
+
+### Fixed on the branches, not yet released
+
+On 2026-10-05 every branch received fixes that no release tag contains yet. They will reach Composer users with the
+next release of each line: `v2.5.0.7` on `master` and the next tag of `1.0.0.x`, `1.1.0.x`, `1.2.0.x` and
+`1.3.0.x`. Until those tags exist, they are **upcoming**; a site installed from `v2.5.0.6`, `1.0.0.9`, `v1.1.0.7`,
+`v1.2.0.0` or `1.3.0.5` does not have them, and a clone of the branch does. The ones that change what you do:
+
+| Fix | Lines | Where the book covers it |
+|---|---|---|
+| `web/app.php` no longer switches to the `dev` environment when the `Host` header contains `dev.` | 2.5, 1.0.0.x | [6.2](06-serving-the-site.md#62-how-a-request-reaches-the-application-per-line) |
+| `app/AppCache.php` no longer turns private (per-user) responses into public, cacheable ones | 2.5, 1.0.0.x | [6.7](06-serving-the-site.md#67-the-http-cache-symfony-proxy-varnish-and-foshttpcache) |
+| `TRUSTED_PROXIES` is read (`framework.trusted_proxies`); before, nothing read it | 1.1.0.x, 1.2.0.x, 1.3.0.x | [6.10](06-serving-the-site.md#610-https-reverse-proxies-and-trusted-proxies) |
+| `APP_HTTP_CACHE=1` puts the Symfony HTTP cache proxy in front of the kernel; before, nothing read it | 1.1.0.x, 1.2.0.x, 1.3.0.x | [6.7](06-serving-the-site.md#67-the-http-cache-symfony-proxy-varnish-and-foshttpcache) |
+| `config/app/server/prod.yaml` exists, so `SERVER_ENVIRONMENT=prod` builds | 1.2.0.x, 1.3.0.x (1.1.0.x had it; its `.env` now defines the variables it reads) | [4.10](04-installing.md#410-what-can-go-wrong-across-lines) |
+| `.nvmrc` on the 2.5 generation (`v22` on `master`, `v20` on `1.0.0.x`), and the `Makefile` passes its version to `nvm install` | all | [2.5](02-requirements.md#25-nodejs-and-yarn) |
+| `make clear-all-cache` empties the configured cache pools; `make ibexa-assets` builds the admin assets | all | [chapter 10](10-operations.md) |
+| `make reindex` calls `exponential:reindex`; `public/index_cluster.php` works without a legacy root | 1.3.0.x | [6.2](06-serving-the-site.md#62-how-a-request-reaches-the-application-per-line) |
+| The front-end root location defaults to 168, the root of the CJW content | 1.0.0.x | [4.4](04-installing.md#44-the-100x-branch) |
+| `.gitignore` ignores `.env.local`, `.env.*.local` and `.env.php` | 2.5, 1.0.0.x, 1.1.0.x | [chapter 14](14-security-hardening.md) |
+
+One fix lives in a dependency rather than in this repository: `se7enxweb/exponential-platform-dxp-core` `v5.0.9`
+(released 2026-10-05) makes the 1.3.0.x installer find the Netgen Layouts schema of the `se7enxweb/layouts-core`
+fork. The lock file of `1.3.0.5` and of the branch still pins `v5.0.7`;
+[chapter 4](04-installing.md#47-the-130x-line) says what to do about it.
 
 ## 1.4 Nexus, Exponential 6 and Exponential Platform Legacy
 
@@ -152,7 +189,8 @@ compares the two directions from the other side.
 | To move an existing site of the 2.5 generation without changing generation | the **2.5** line (`master`, `v2.5.0.x`) or **1.0.0.x** |
 | The CJW demo content in German and English | the **2.5** line (`cjw-exponential-media`), or `1.0.0.x` (SQL dumps, `exponential-cjw` on SQLite) |
 | The Netgen Media Site demo (Fit & Healthy, Bold Agency) | **1.1.0.x**, **1.2.0.x** or **1.3.0.x** (`exponential-media`) |
-| PHP 8.0 or 8.1 servers | 1.1.0.x, or the 2.5 generation |
+| PHP 8.0 servers | 1.1.0.x only (the 2.5 generation's legacy kernel needs 8.1) |
+| PHP 8.1 servers | 1.1.0.x, or the 2.5 generation |
 | PHP 8.4 or 8.5 | 1.3.0.x; the older lines are declared for these versions too (see [chapter 2](02-requirements.md)) |
 | A site without a separate database server | 1.1.0.x, 1.2.0.x and 1.3.0.x install onto SQLite; on the 2.5 generation only `1.0.0.x` has an SQLite installer |
 
@@ -162,6 +200,28 @@ Rules of thumb:
   later ([chapter 11](11-upgrading-between-lines.md)).
 - **Start new projects on 1.3.0.x** unless you need the legacy kernel.
 - **Install the newest release of the line, then keep its lock file.** Several dependencies are branches.
+
+### Two ways to get the wrong line by accident
+
+Both have caught real installations. Name the line every time.
+
+1. **`composer create-project` without a version installs upstream Media Site 3.1.6.** Packagist lists the upstream
+   tags of `netgen/media-site` under the Nexus package name, and `3.1.6` is the highest stable version number there.
+   So
+
+   ```bash
+   composer create-project se7enxweb/exponential-platform-nexus nexus
+   ```
+
+   installs Netgen's Media Site 3.1.6 (built on upstream `ibexa/oss ~4.5.0`, `netgen/*` packages, no 7x forks, no
+   legacy kernel, no `exponential:install`), not any Nexus line. You notice it when `composer.json` in the new directory says
+   `"name": "netgen/media-site"`. Always give a version: `se7enxweb/exponential-platform-nexus:1.3.0.5`.
+2. **`git clone` without a branch gives `master`, which is the 2.5 generation.** The default branch is the oldest
+   platform generation, with `app/`, `web/` and Symfony 3.4. If you wanted 1.3.0.x, clone with `-b 1.3.0.x` or run
+   `git checkout 1.3.0.x` before `composer install`. `ls web/app.php` succeeding is the sign that you are on the 2.5
+   generation.
+
+[Chapter 3](03-getting-the-code.md) gives the exact commands per line.
 
 ## 1.6 The parts of an installation
 
@@ -215,7 +275,7 @@ design and languages. Every request is matched to exactly one siteaccess. The li
 
 | Line | Siteaccesses | Default | How they are matched |
 |---|---|---|---|
-| 2.5 (`master`, `1.0.0.x`) | `de`, `en` (public, design `cjw_app`), `admin` (platform admin), `ngadminui` (Netgen admin UI), `legacy_admin` (legacy kernel) | `de` | `Map\URI` for `de`, `en` (and `ngadminui` on `master`), `Map\Host` for all, with the host names of the CJW demo servers, which you replace |
+| 2.5 (`master`, `1.0.0.x`) | `de`, `en` (public, design `cjw_app`), `admin` (platform admin), `ngadminui` (Netgen admin UI), `legacy_admin` (legacy kernel) | `de` | `Map\URI` for `de`, `en` (and `ngadminui` on `master`), `Map\Host` for all, with the host names of the CJW demo servers, which you replace; `admin` and `legacy_admin` are reachable only by host name |
 | 1.1.0.x, 1.2.0.x | `fh_eng` (Fit & Healthy), `bold_eng`, `bold_ger` (Bold Agency), `adminui`, `ngadminui`, `legacy_admin` | `fh_eng` | `URIElement: 1` (the first path element) |
 | 1.3.0.x | `fh_eng`, `bold_eng`, `bold_ger`, `adminui` | `fh_eng` | `URIElement: 1`; a `Map\Host` example is commented out |
 
@@ -245,7 +305,9 @@ The short version of the install is [doc/INSTALL.md](../INSTALL.md).
 - **Settings.** Environment variables are written as they appear in `.env` (`DATABASE_URL=...`); YAML keys with their
   full path (`ibexa.siteaccess.list`).
 - **Verified facts.** Package names, constraints, commands and file names in this book were read from the branches
-  and tags of the repository, from `composer.lock` where one is committed, and from a running 1.3.0.x installation.
+  and tags of the repository, from `composer.lock` where one is committed, from the package metadata Packagist
+  serves, and from a running 1.3.0.x installation. Chapters 1 to 7 were checked against the branches as they stood on
+  2026-10-05, after that day's fixes; where a release tag behaves differently from its branch, the text says which.
   Where the repository's own guides disagree with the code, the book follows the code and says so. Steps that could
   not be checked against the code are marked as such.
 
@@ -291,7 +353,8 @@ In this repository:
 - [The short installation guide](../INSTALL.md).
 - The project README of each line (`README.md` on the branch you install).
 - The 7x installation and operations guides: `doc/sevenx/INSTALL.md` on 1.1.0.x, 1.2.0.x and 1.3.0.x;
-  [doc/INSTALL.md](../INSTALL.md) on the 2.5 line.
+  `doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release (`git show v2.5.0.6:doc/INSTALL.md`). On `master`,
+  [doc/INSTALL.md](../INSTALL.md) is now the short guide into this book.
 - The upstream Netgen notes: [doc/netgen/INSTALL.md](../netgen/INSTALL.md), [doc/netgen/FRONTEND.md](../netgen/FRONTEND.md),
   [doc/netgen/LAUNCHPAD.md](../netgen/LAUNCHPAD.md) (these describe `netgen/media-site`, not Nexus).
 - The CJW notes in [doc/cjw/README.md](../cjw/README.md).
@@ -300,7 +363,9 @@ External:
 
 - Source code: [github.com/se7enxweb/exponential-platform-nexus](https://github.com/se7enxweb/exponential-platform-nexus);
   the starter of the 5 generation: [github.com/se7enxweb/exponential-platform-nexus-starter](https://github.com/se7enxweb/exponential-platform-nexus-starter).
-- Composer package: [packagist.org/packages/se7enxweb/exponential-platform-nexus](https://packagist.org/packages/se7enxweb/exponential-platform-nexus).
+- Composer package: [packagist.org/packages/se7enxweb/exponential-platform-nexus](https://packagist.org/packages/se7enxweb/exponential-platform-nexus);
+  the version list Composer itself reads: [repo.packagist.org/p2/se7enxweb/exponential-platform-nexus.json](https://repo.packagist.org/p2/se7enxweb/exponential-platform-nexus.json).
+- Release notes: [github.com/se7enxweb/exponential-platform-nexus/releases](https://github.com/se7enxweb/exponential-platform-nexus/releases).
 - Exponential 6: [the Exponential 6 book](https://github.com/se7enxweb/exponential/blob/main/doc/install/README.md);
   Exponential Platform Legacy: [github.com/se7enxweb/exponential-platform-legacy](https://github.com/se7enxweb/exponential-platform-legacy).
 - Netgen: [Netgen Layouts documentation](https://docs.netgen.io/projects/layouts/en/latest/),
