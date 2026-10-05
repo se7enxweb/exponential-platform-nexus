@@ -5,7 +5,7 @@ warmed after a change, the HTTP cache is purged when content changes in ways the
 tasks run, the search index follows the content, image variations are generated and cleaned, logs are rotated before
 they fill the disk, and the database and the binary files are backed up in a way that can actually be restored. This
 chapter is the operator's handbook for all four lines. It names the exact console commands of each line (they differ:
-`ezplatform:*` on 1.0.0.x, `ibexa:*` on 1.1.0.x and 1.2.0.x, and partly `exponential:*` on 1.3.0.x), the files
+`ezplatform:*` on 1.0.0.x, `exponential:*` with the old names as aliases on 1.1.0.x, `ibexa:*` on 1.2.0.x, and partly `exponential:*` on 1.3.0.x), the files
 those commands read and write, and the order in which a deploy should run them, with Exponential Velocity first.
 
 [Previous: 9. Front end and themes](09-frontend-and-themes.md) · [Next: 11. Upgrading between lines](11-upgrading-between-lines.md) ·
@@ -52,16 +52,29 @@ chapter; every row is explained in the sections that follow.
 | Logs | `var/logs/` | `var/log/` | `var/log/` | `var/log/` |
 | Binary files (images, files) | `web/var/site/storage/` | `public/var/site/storage/` | `public/var/site/storage/` | `public/var/site/storage/` |
 | Cron runner | `ezplatform:cron:run` | `ibexa:cron:run` (alias `ezplatform:cron:run`) | `ibexa:cron:run` (alias `ezplatform:cron:run`) | `ibexa:cron:run` |
-| Reindex | `ezplatform:reindex` | `ibexa:reindex` (alias `ezplatform:reindex`) | `ibexa:reindex` (alias `ezplatform:reindex`) | `exponential:reindex` |
+| Reindex | `ezplatform:reindex` | `exponential:reindex` (aliases `ibexa:reindex`, `ezplatform:reindex`; see below) | `ibexa:reindex` (alias `ezplatform:reindex`); the project adds `exponential:reindex` | `exponential:reindex` |
 | Legacy kernel (`ezpublish_legacy/`) | yes, through the legacy bridge | yes | yes | no |
 | Messenger configured | no | no | `config/packages/messenger.yaml`, no transport | `sync://` transport plus the Ibexa Messenger bundle |
 
-The command names were checked against the console command classes of the installations built from each line on the
-reference server: `setName('ezplatform:cron:run')` and `setName('ezplatform:reindex')` in the 2.5 kernel;
-`ibexa:cron:run` and `ibexa:reindex` with `getDeprecatedAliases()` returning the `ezplatform:` names in the 3.3 and
-4.6 kernels; and `#[AsCommand(name: 'exponential:reindex')]` with no `ibexa:reindex` alias in the 1.3.0.x kernel
-(`se7enxweb/exponential-platform-dxp-core`). The v5 cron command kept its `ibexa:` name. When in doubt on your own
-installation, `php bin/console list ibexa`, `list ezplatform` and `list exponential` show what is there.
+Where the reindex names come from, per line:
+
+- **1.0.0.x**: the 2.5 kernel, `setName('ezplatform:reindex')`.
+- **1.1.0.x**: the line has no lock file, so the kernel is whatever `se7enxweb/ezplatform-kernel ~1.3` resolves to.
+  Its tags `v1.3.43` to `v1.3.45` register `exponential:reindex` with `ibexa:reindex` and `ezplatform:reindex` as
+  deprecated aliases (an older installation of the 3.3 kernel answers to `ibexa:reindex` with the `ezplatform:`
+  alias). The project also ships its own `exponential:reindex` (`src/Command/ExponentialReindexCommand.php`), a proxy
+  that only takes `--siteaccess` and runs `ibexa:reindex`. Two commands with one name: the console keeps one of them.
+  `php bin/console exponential:reindex --help` tells you which: if it lists only `--siteaccess`, the proxy answers,
+  and the kernel's command with all the options of [10.7.2](#1072-reindexing) is reachable as `ibexa:reindex`.
+- **1.2.0.x**: the lock file installs the upstream kernel `ibexa/core` 4.6, whose command is `ibexa:reindex` (alias
+  `ezplatform:reindex`). The project adds the same proxy, `exponential:reindex`
+  (`src/RepositoryInstaller/Command/ExponentialReindexCommand.php`), with only `--siteaccess`.
+- **1.3.0.x**: the kernel `se7enxweb/exponential-platform-dxp-core` v5.0.7, `#[AsCommand(name: 'exponential:reindex')]`
+  with no `ibexa:reindex` alias.
+
+The cron runner kept its upstream name on every line (`ezplatform:cron:run` on 2.5, `ibexa:cron:run` later). When
+in doubt on your own installation, `php bin/console list ibexa`, `list ezplatform` and `list exponential` show what
+is there.
 
 Chapter [8. Configuration](08-configuration.md) explains the environments, the `.env` files and where each setting
 lives; this chapter assumes them.
@@ -98,9 +111,16 @@ directory by hand. Deployer does both in its own steps (`deploy:cache:clear`, `d
 
 On 1.0.0.x the environment comes from `--env` or `SYMFONY_ENV`; `bin/console` falls back to `dev`, while
 `web/app.php` falls back to `prod`. A `cache:clear` without `--env=prod` on a 1.0.0.x production server therefore
-clears the wrong directory. Two project patches also affect it: `bin/console` and `web/app.php` load a `.env.php`
-file from the project root when it exists, and `web/app.php` switches to `dev` for any host name that contains
-`dev.`; check both before you wonder which environment a request ran in.
+clears the wrong directory. A project patch also affects it: `bin/console` and `web/app.php` load a `.env.php` file
+from the project root when it exists, so a `putenv('SYMFONY_ENV=...')` there decides for both. Installations made
+from the releases up to `v2.5.0.6` and `1.0.0.10` also switch to `dev` for any host name that contains `dev.`; the
+branches removed that on 5 October 2026 ([chapter 14.4](14-security-hardening.md#144-debug-mode-and-the-environment)).
+Check both before you wonder which environment a request ran in:
+
+```bash
+ls -l .env.php 2>/dev/null; grep -n "dev\." web/app.php      # 1.0.0.x
+ls -d var/cache/*/                                            # the environments that have built a cache
+```
 
 The cache directory can be large in `dev`: the reference v5 installation holds 2.8 GB in `var/cache/dev/`. Production
 caches are much smaller and should not be cleared on every request-path problem; clear them when the code or
@@ -165,9 +185,19 @@ php bin/console cache:pool:clear cache.tagaware.filesystem --env=prod   # or cac
 ```
 
 The `Makefile` of every line has a `clear-all-cache` target that runs `cache:clear` and then
-`cache:pool:clear $(CACHE_POOL)`, with `CACHE_POOL = cache.redis` hard-coded at the top of the file. On an
-installation that uses the default filesystem pool, the `cache.redis` service does not exist and the target fails;
-call it as `make clear-all-cache APP_ENV=prod CACHE_POOL=cache.tagaware.filesystem`.
+`cache:pool:clear $(CACHE_POOL)`. Since 5 October 2026 the branches set `CACHE_POOL ?= cache.global_clearer`, which
+empties every pool the application defines, whichever adapter it uses:
+
+```bash
+make clear-all-cache APP_ENV=prod                              # every pool
+make clear-all-cache APP_ENV=prod CACHE_POOL=cache.redis       # one pool
+```
+
+Up to then (every release tag) the file said `CACHE_POOL = cache.redis`; on an installation with the default
+filesystem pool that service does not exist and the target stopped with an error naming the missing service
+`cache.redis`. On such a checkout pass the pool: `make clear-all-cache APP_ENV=prod CACHE_POOL=cache.global_clearer`.
+Because the new line uses `?=`, a `CACHE_POOL` exported in the shell (for example for Symfony) now also decides which
+pool `make` clears; unset it or pass the pool on the command line.
 
 ## 10.4 HTTP cache and purging
 
@@ -186,22 +216,43 @@ the **purge type**:
 Like `CACHE_POOL`, the purge type is set at container build time; clear the Symfony cache after changing it. Other
 variables: `HTTPCACHE_DEFAULT_TTL` (default `86400` seconds, the `default_ttl` of content responses) and
 `TRUSTED_PROXIES` (`127.0.0.1` in the shipped `.env`), which must list Varnish and any load balancer so that the
-client address and `https` are recognised.
+client address and `https` are recognised. The framework configuration reads `TRUSTED_PROXIES` on the branch heads
+since 5 October 2026; on the releases nothing reads it until you add the setting
+([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
 
 ### 10.4.2 The local proxy per line
 
 - **1.0.0.x.** `web/app.php` wraps the kernel in `AppCache` unless `SYMFONY_HTTP_CACHE` is set to `0`; in any
-  environment but `dev` it is on by default. The project's `app/AppCache.php` extends the platform's class and reads
-  `app/config/http_cache.yml`, which lists host names, siteaccesses (`ngadminui`, `admin`, `legacy_admin`) and URL
-  patterns (`^/admin`, `^/api/`, `^/login`, `^/user`, ...) that are never cached publicly. **Edit the
-  `uncached_hostnames` list for your own host names**: the shipped file names the project's demonstration hosts.
-- **1.1.0.x, 1.2.0.x and 1.3.0.x.** The shipped `public/index.php` is the plain Symfony Runtime front controller and
-  does not wrap the kernel in `AppCache`. With `HTTPCACHE_PURGE_TYPE=local` and no Varnish, there is therefore no
-  reverse proxy in front of PHP at all: responses carry cache headers, browsers honour them, and purges go to a store
-  that serves nothing. This is safe, but it means every page is rendered by PHP. For a busy site, put Varnish in
-  front (chapter [6](06-serving-the-site.md)), or wrap the kernel as the platform documentation for your version
-  describes. The `README.md` of these lines lists "Symfony HttpCache (default)"; that is not what the shipped front
-  controller does.
+  environment but `dev` it is on by default. The project's `app/AppCache.php` extends the platform's class and
+  adjusts `Cache-Control` after the response is built. On the branches since 5 October 2026 it never makes a private
+  or personal response public, keeps the administration siteaccesses, Layouts, GraphQL, the Content Browser, the REST
+  API and the user pages out of the shared cache whatever the configuration says, and reads
+  `app/config/http_cache.yml` (host names, siteaccesses and URL patterns that stay uncached) plus the
+  `HTTP_CACHE_UNCACHED_HOSTNAMES` environment variable. **Edit the `uncached_hostnames` list for your own host
+  names**: the shipped file names the project's demonstration hosts. The class of the releases up to `v2.5.0.6` and
+  `1.0.0.10` rewrote private responses to public and never read that file; [chapter 14.7](14-security-hardening.md#147-http-cache-safety)
+  says how to tell which one you have and how to replace it. With Varnish in front, set `SYMFONY_HTTP_CACHE=0`.
+- **1.1.0.x, 1.2.0.x and 1.3.0.x, branch heads.** Since 5 October 2026 (commits `7f8d95f29` on `1.1.0.x`,
+  `c5e6aca42` on `1.2.0.x`, `ac3f43a74` on `1.3.0.x`) `public/index.php` wraps the kernel in the platform's
+  `AppCache` and enables HTTP method override when `APP_HTTP_CACHE` is true. It stays off when the variable is unset,
+  empty or `0`, which is the shipped state. Turn it on for a site without Varnish:
+
+  ```dotenv
+  # .env.local
+  APP_HTTP_CACHE=1
+  HTTPCACHE_PURGE_TYPE=local
+  ```
+
+  After `cache:clear` and a reload of PHP (or Velocity), a second request for the same anonymous page is answered
+  from `var/cache/<env>/http_cache/` without rendering; with debug on, the `X-Symfony-Cache` response header shows
+  `fresh` or `stale` (it is not sent with debug off). Leave it off when Varnish does the caching: two caches in a
+  row purge only the inner one.
+- **1.1.0.x to 1.3.0.x, releases** (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` and older). `public/index.php` is the plain
+  Symfony Runtime front controller and ignores `APP_HTTP_CACHE`. With `HTTPCACHE_PURGE_TYPE=local` and no Varnish
+  there is no reverse proxy in front of PHP at all: responses carry cache headers, browsers honour them, and purges
+  go to a store that serves nothing. This is safe, but every page is rendered by PHP. Put Varnish in front
+  (chapter [6](06-serving-the-site.md)), or take `public/index.php` from the branch of your line. The `README.md` of
+  these lines lists "Symfony HttpCache (default)"; on the releases that is not what the front controller does.
 
 ### 10.4.3 Varnish
 
@@ -388,15 +439,41 @@ database directly. The command of the 1.3.0.x line, verified in the reference in
 On a SQLite database, use `--processes=1`: parallel writers gain nothing on a single-file database
 (chapter [7. Databases](07-databases.md)).
 
-Three shipped helpers use names that do not match the line they are on:
+The shipped helpers and their names, as of 5 October 2026:
 
-- the `reindex` target of the `Makefile` calls `ibexa:reindex` on 1.3.0.x, which does not exist there; use
-  `exponential:reindex` until the target is corrected;
-- the Deployer task `solr:reindex` in `deploy/tasks/server.php` calls `ibexa:reindex` on every line, which is wrong on
-  1.0.0.x (`ezplatform:reindex`) and on 1.3.0.x (`exponential:reindex`);
-- the `README.md` and `doc/sevenx/INSTALL.md` of 1.1.0.x and 1.2.0.x give `exponential:reindex`, which exists only
-  on 1.3.0.x; the 1.3.0.x `INSTALL.md` says that `ibexa:*` remains as an alias for migrated commands, which is not
-  the case for `exponential:reindex` in the reference installation.
+| Helper | `master`, `1.0.0.x` | `1.1.0.x` | `1.2.0.x` | `1.3.0.x` |
+|---|---|---|---|---|
+| `make reindex` | `ezplatform:reindex` | `ezplatform:reindex` (deprecated alias, prints a warning) | `ezplatform:reindex` (deprecated alias) | `exponential:reindex` (since commit `1635061cf`; `ibexa:reindex` before, which does not exist there) |
+| Deployer task `solr:reindex` | `ezplatform:reindex` | `ibexa:reindex` | `ibexa:reindex` | `exponential:reindex` (same commit) |
+| `exponential:install` runs | not applicable | `exponential:reindex` | `exponential:reindex` | `exponential:reindex` |
+
+So a release checkout of 1.3.0.x (`1.3.0.5` and older) still has the broken `make reindex` and Deployer task; call
+`php bin/console exponential:reindex` directly there, or take `Makefile` and `deploy/tasks/server.php` from the
+branch.
+
+The guides of the newer lines have two errors of their own: the `doc/sevenx/INSTALL.md` of 1.1.0.x and 1.2.0.x shows
+`exponential:reindex --iteration-count=100` and `--content-type=...`, options that the project's proxy command does
+not accept (use `ibexa:reindex` for them); and the 1.3.0.x `INSTALL.md` says that `ibexa:*` remains as an alias for
+migrated commands, which is not the case for `exponential:reindex` in the reference installation.
+
+What a full reindex prints on 1.3.0.x (read from the command's code; the progress bar counts iterations of
+`--iteration-count` items, not items):
+
+```text
+$ php bin/console exponential:reindex --env=prod --no-interaction
+Re-indexing started for search engine: legacy
+
+Purging index...
+Re-creating index for <N> items across <N/50> iteration(s), using <P> parallel child processes:
+ <progress bar with elapsed and estimated time and memory>
+
+Finished re-indexing
+```
+
+With `--processes=0` or `1` the command first prints a warning about single-process mode (xdebug, the environment,
+`memory_limit`, `--iteration-count`) and asks "Continue?"; answer it, or pass `--no-interaction` in scripts. "Could
+not find any items to index, aborting." with exit status 1 means the command reached an empty repository: check
+`DATABASE_URL` and the environment.
 
 ### 10.7.3 Solr
 
@@ -463,26 +540,48 @@ Those files grow without limit. The reference installation, which runs in `dev`,
 environment.
 
 The project ships two logrotate examples, [`doc/logrotate/ibexa`](../logrotate/ibexa) (1.1.0.x and later) and
-[`doc/logrotate/ezplatform`](../logrotate/ezplatform) (1.0.0.x). Both rotate only `dev.log`, under
-`/var/www/html/*/`, for the user `www-data`. Adapt them before use: your path, your web user, and every file the
-installation writes. A version that covers a production installation:
+[`doc/logrotate/ezplatform`](../logrotate/ezplatform) (1.0.0.x). Up to 5 October 2026 both rotated only `dev.log`,
+so `prod.log`, `dev.deprecation.log` and the rest grew without limit; they now rotate every `*.log` in the log
+directory (`var/logs/*.log` in the 1.0.0.x file):
 
 ```logrotate
-/var/www/example/var/log/*.log {
+/var/www/html/*/var/log/*.log {
     daily
     rotate 14
+    maxsize 100M
     missingok
     notifempty
     compress
     delaycompress
     copytruncate
-    su example example
+    su www-data www-data
 }
 ```
 
-`copytruncate` keeps the files PHP has open valid without a reload; drop it and add a `postrotate` reload of PHP-FPM
-or Exponential Velocity if you prefer exact rotation. On 1.3.0.x, deprecation messages in `prod` go to standard
-error, which ends up in the PHP-FPM log or in Velocity's log; rotate those too.
+Copy the file for your line to `/etc/logrotate.d/<site>`, then replace the path (`/var/www/html/*/` matches every
+project below that directory) and the user and group with the ones that run PHP. Check it without rotating anything,
+then once for real:
+
+```bash
+sudo logrotate -d /etc/logrotate.d/nexus      # debug: prints what it would do, changes nothing
+sudo logrotate -f /etc/logrotate.d/nexus      # force one rotation now
+ls -l var/log/                                # prod.log empty again, prod.log.1 next to it
+```
+
+What the directives are for, and what goes wrong without them:
+
+- `su`: `var/log/` is writable by the web server's user, and logrotate refuses to rotate in such a directory as root
+  ("because parent directory has insecure permissions"); `su` makes it act as that user.
+- `copytruncate`: PHP-FPM workers and Exponential Velocity's persistent workers keep the log file open; renaming it
+  would leave them writing into the renamed file. Copying and truncating keeps them writing into the right file, at
+  the cost of a few lines written during the copy. If those lines matter, drop it and reload PHP-FPM or Velocity in a
+  `postrotate` script.
+- `maxsize`: rotates early on a day that writes a lot, which is what an error loop or a site left in `dev` does.
+
+The legacy kernel's own logs (`ezpublish_legacy/var/log/*.log` and `ezpublish_legacy/var/<site>/log/*.log`, on
+1.0.0.x to 1.2.0.x) are rotated by the legacy kernel itself when they reach their size limit; leave them out. On
+1.1.0.x and later, deprecation messages in `prod` go to standard error, which ends up in the PHP-FPM log or in
+Velocity's log; rotate those too.
 
 Errors can also be sent to Sentry: every line requires `sentry/sentry-symfony` and reads `SENTRY_DSN`.
 
@@ -587,7 +686,8 @@ substitute the names from [10.1](#101-the-operators-map-per-line) for the other 
    tested steps; see chapter [3](03-getting-the-code.md)). Its `post-install-cmd` scripts run `cache:clear`,
    `assets:install` and `ngsite:symlink:project`, plus the legacy asset and autoload steps on the legacy lines.
 3. Build the front end: `yarn install` and `yarn build:prod`, and the administration assets with
-   `composer ibexa-assets` on 1.2.0.x and 1.3.0.x (chapter [9](09-frontend-and-themes.md)).
+   `make ibexa-assets` on every line (chapter [9](09-frontend-and-themes.md)), which runs `composer ibexa-assets` on
+   1.2.0.x and 1.3.0.x, `composer ezplatform-assets` on 1.0.0.x and the translation dump plus `yarn ez` on 1.1.0.x.
 4. Run database migrations: `doctrine:migrations:migrate --allow-no-migration` and, where the project uses them, the
    Kaliop migrations (`kaliop:migration:migrate`).
 5. Generate the GraphQL schema if you use GraphQL: `ibexa:graphql:generate-schema` (`ezplatform:` on 1.0.0.x).
@@ -616,6 +716,15 @@ workers without a full reload.
 
 If Velocity's response cache is enabled for the site, also run `qbixconsole cache:clear`, which touches the cache's
 generation marker so every stored page counts as stale ([10.4.6](#1046-velocitys-response-cache)).
+
+Step 2 puts the bundle asset links back (`assets:install --symlink --relative` in the Composer scripts), and Velocity
+answers 403 for links that leave the document root. On 1.3.0.x run `php bin/console assets:install public --env=prod`
+after it, before the reload; on the lines with the legacy kernel, decide once whether the site uses copies or
+`followSymlinks` ([chapter 14.11](14-security-hardening.md#1411-exponential-velocity)). A quick check after a deploy:
+
+```bash
+find public -maxdepth 2 -type l     # links Velocity will refuse if they lead out of public/
+```
 
 The Exponential 6 command `exp:velocity deploy` belongs to the Exponential 6 kernel and is not part of Nexus; on
 Nexus the steps above are run with the Symfony console and `qbixctl`. These Velocity steps follow Velocity's own
@@ -647,7 +756,9 @@ Before using it, replace every example value in `deploy/hosts.php` and `deploy/p
 paths, the repository URL (`git@bitbucket.org:netgen/example.git`), the Sentry organisation and tokens, and the PHP
 path. `shared_dirs` contains `public/var/site/storage`, so the binary files survive releases, and `shared_files`
 contains `.env.local`. Deployer only resets PHP-FPM's OPcache through cachetool; add a task that runs `qbixctl graceful` when
-the site is served by Velocity. Mind the reindex task's command name ([10.7.2](#1072-reindexing)).
+the site is served by Velocity, and one that runs `assets:install public` (copies) after `deploy:vendors` (chapter
+[14.11](14-security-hardening.md#1411-exponential-velocity)). The reindex task names the right command on every
+branch head; on a 1.3.0.x release it still calls `ibexa:reindex` ([10.7.2](#1072-reindexing)).
 
 ### 10.12.5 The Makefile
 
@@ -658,20 +769,32 @@ it explicitly:
 |---|---|
 | `vendor` | `composer install` (`--no-dev -o` with `APP_ENV=prod`) |
 | `assets`, `assets-prod`, `assets-watch` | `yarn install` and `yarn build:dev`, `build:prod` or `watch`, after `nvm use` |
-| `ibexa-assets` | `composer ibexa-assets` |
+| `ibexa-assets` | the administration assets: `composer ezplatform-assets` (1.0.0.x), translation dump and `yarn ez` (1.1.0.x), `composer ibexa-assets` (1.2.0.x, 1.3.0.x) |
 | `graphql-schema` | `ezplatform:graphql:generate-schema` (1.0.0.x to 1.2.0.x), `ibexa:graphql:generate-schema` (1.3.0.x) |
 | `clear-cache`, `clear-all-cache` | `cache:clear`; plus `cache:pool:clear $(CACHE_POOL)` |
 | `images` | `ngsite:content:generate-image-variations` with the list in [10.8](#108-images-and-image-variations) |
 | `migrations` | `doctrine:migration:migrate --allow-no-migration` |
-| `reindex` | `ezplatform:reindex` (1.0.0.x to 1.2.0.x), `ibexa:reindex` (1.3.0.x) |
+| `reindex` | `ezplatform:reindex` (1.0.0.x to 1.2.0.x), `exponential:reindex` (1.3.0.x) |
 | `build` | `vendor`, `migrations`, `reindex`, assets, `ibexa-assets`, `graphql-schema`, `clear-cache` |
 | `refresh` | `git pull --rebase` (stashing local changes), then `build` |
 
-Known problems in the shipped file: `clear-all-cache` assumes the Redis pool ([10.3](#103-the-persistence-cache-pool));
-`reindex` on 1.3.0.x names a command that does not exist there ([10.7.2](#1072-reindexing)); and `ibexa-assets`
-calls a Composer script that exists only on 1.2.0.x and 1.3.0.x (1.0.0.x has `ezplatform-assets`, 1.1.0.x neither),
-so `make build` stops there on the two older lines. `build` also runs a full reindex on every call, which is slow on a
-large site. Treat `make refresh` as a development convenience, not a production deploy.
+The branches fixed these targets on 5 October 2026; a checkout of an earlier release still has the old ones:
+
+| Target | Up to the releases | On the branch heads |
+|---|---|---|
+| `clear-all-cache` | clears `cache.redis`, which does not exist with the default filesystem pool | clears `cache.global_clearer`, every pool ([10.3](#103-the-persistence-cache-pool)) |
+| `reindex` (1.3.0.x) | `ibexa:reindex`, which does not exist there | `exponential:reindex` ([10.7.2](#1072-reindexing)) |
+| `ibexa-assets` (1.0.0.x, 1.1.0.x) | calls `composer ibexa-assets`, a script these lines do not have, so `make build` stops there | runs the line's own administration build |
+| every Node.js target | `nvm install $(cat .nvmrc)` expands to `nvm install` without a version | `$$(cat .nvmrc)`, and 1.0.0.x has an `.nvmrc` ([chapter 9.3](09-frontend-and-themes.md#93-installing-nodejs-and-yarn)) |
+
+`build` also runs a full reindex on every call, which is slow on a large site. Treat `make refresh` as a development
+convenience, not a production deploy. What `make build` runs, in order:
+
+```bash
+make build APP_ENV=prod
+# vendor (composer install, --no-dev -o with APP_ENV=prod), migrations, reindex, assets-prod (assets in dev),
+# ibexa-assets, graphql-schema, clear-cache; the first target that fails stops the run
+```
 
 ## 10.13 Checklist
 
@@ -680,7 +803,8 @@ large site. Treat `make refresh` as a development convenience, not a production 
 - [ ] `CACHE_POOL` is chosen deliberately; with Redis, each installation has its own `CACHE_NAMESPACE`.
 - [ ] The HTTP cache is understood: on 1.1.0.x and later there is no proxy unless Varnish (or a wrapped kernel) is
       added; `TRUSTED_PROXIES` lists every proxy.
-- [ ] On 1.0.0.x, `app/config/http_cache.yml` lists your own administration host names.
+- [ ] On 1.0.0.x, `app/AppCache.php` is the fixed class (14.7) and `app/config/http_cache.yml` lists your own
+      administration host names.
 - [ ] The crontab runs the platform's cron runner, the legacy cron parts on the legacy lines, and
       `ngscheduledvisibility:update` if scheduled visibility is enabled.
 - [ ] Messenger workers run under a process manager only if something is routed to a queue.
