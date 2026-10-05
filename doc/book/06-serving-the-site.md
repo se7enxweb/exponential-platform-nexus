@@ -242,6 +242,24 @@ mirrors the rules of the shipped Apache example (section 6.4) plus the Encore ou
 - `compat.ini` overrides the preset's PHP limits (the `ini` key of the preset, written into `Q.compat`).
 - A pooled worker does not read `.htaccess` itself; rewrites to a script other than `index.php` have to be written as
   `frontControllers` (engine documentation, "Only the entry points run").
+- **Links that leave the document root answer 403.** Since engine `v0.0.4.25` (23 September 2026) Velocity refuses
+  any static file or script whose real path, after every symbolic link is followed, lies outside the document root;
+  a link that stays inside the root still works. Nexus serves several things through links that leave it:
+  `public/bundles/*` (`web/bundles/*` on 1.0.0.x), which `assets:install --symlink --relative` links into `vendor/`
+  and `src/`; on 1.0.0.x to 1.2.0.x the legacy kernel's `design`, `extension`, `share` and `var` directories, linked
+  into `ezpublish_legacy/`; and the files `ngsite:symlink:project` links into the root. On **1.3.0.x** install the
+  bundle assets as copies, again after every `composer install` or `update` (the Composer scripts put the links
+  back):
+
+  ```bash
+  php bin/console assets:install public --env=prod     # no --symlink: copies
+  find public -maxdepth 3 -type l                      # what is still a link
+  ```
+
+  On the **lines with the legacy kernel** (1.0.0.x to 1.2.0.x) the legacy directories are served through links by
+  design; set `"followSymlinks": true` under `Q.webserver` in the site file (read once per server process; restart
+  Velocity after changing it) and keep `web.static.paths` as narrow as above. Chapter
+  [14.11](14-security-hardening.md#1411-exponential-velocity) has the links per line and what the setting allows.
 
 ```bash
 sudo cp nexus.conf /etc/vc/sites-available/nexus.conf
@@ -524,10 +542,11 @@ image, the favicon, `/bundles/` or `/assets/` to `/index.php`; the line-branch c
 `rewrite "^/images/(.*)" "/images/$1" break;` if the site serves files from `public/images/`, as the `master` copy
 does. The `http2 on;` directive needs nginx 1.25.1 or later; older versions write `listen 443 ssl http2;`.
 
-Two comments in the `master` copy are already out of date: they say that `APP_HTTP_CACHE` and the trusted-proxy
-variables are not read on 1.1.0.x to 1.3.0.x. On the branches both are read now (sections 6.7.1 and 6.10); to use the
-Symfony proxy behind nginx, add `fastcgi_param APP_HTTP_CACHE 1;` beside `APP_ENV`, and set `TRUSTED_PROXIES` in
-`.env.local` rather than as a `fastcgi_param`, so that the console sees the same value.
+The `master` copy's comments on `APP_HTTP_CACHE` and `TRUSTED_PROXIES` describe the current state: `public/index.php`
+reads `APP_HTTP_CACHE`, and `framework.trusted_proxies` reads `TRUSTED_PROXIES`, on the branch heads of 1.1.0.x to
+1.3.0.x since 5 October 2026, while the releases `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` read neither (sections 6.7.1
+and 6.10). To use the Symfony proxy behind nginx, uncomment `fastcgi_param APP_HTTP_CACHE "1";` beside `APP_ENV`,
+and set `TRUSTED_PROXIES` in `.env.local` rather than as a `fastcgi_param`, so that the console sees the same value.
 
 Test with `nginx -t` and reload.
 
@@ -770,6 +789,15 @@ php bin/console debug:container --env-var=TRUSTED_PROXIES --env=prod  # the valu
 On a branch with the shipped `.env` the second shows `127.0.0.1` (or your value). If the first prints nothing or
 `null`, the configuration of your copy does not set trusted proxies at all (a release); add the setting as above.
 
+When **Velocity** serves the site, a proxy in front of it is trusted by Velocity's own list,
+`Q.webserver.proxy.trusted` (default `127.0.0.1` and `::1`), not by `TRUSTED_PROXIES`: Velocity works out the
+visitor's address and passes it to PHP as `REMOTE_ADDR`. Since engine `v0.0.4.44` (5 October 2026) the forwarded
+protocol (`X-Forwarded-Proto`, `CloudFront-Forwarded-Proto`, Cloudflare's `CF-Visitor`) is also taken only from a
+connection that comes from that list; up to `v0.0.4.43` any client of a plain HTTP listener could send
+`X-Forwarded-Proto: https` and PHP saw `HTTPS=on`. After the update, a TLS terminator on another machine must be
+listed there, or PHP sees plain HTTP (a redirect loop on a site that forces HTTPS). Chapter
+[14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies) shows the configuration snippet.
+
 Redirect HTTP to HTTPS at the outermost layer: Velocity serves both ports and can send `Strict-Transport-Security`
 (`Q.webserver.hsts`); Apache uses a `*:80` virtual host with `Redirect permanent / https://www.example.com/`; nginx a
 `return 301 https://$host$request_uri;` server. Start HSTS with a short `max-age` and raise it once every host name
@@ -783,8 +811,8 @@ Found while checking the files this chapter relies on, with the state of 2026-10
   `master`, where the page names the files this branch ships.
 - `doc/nginx/media-site.conf` on `1.0.0.x`, `1.1.0.x`, `1.2.0.x` and `1.3.0.x` uses a PHP 7.3 socket and
   `APP_ENV dev`, and names the trusted-proxies variable `APP_TRUSTED_PROXIES`, which nothing reads (the variable is
-  `TRUSTED_PROXIES`). Fixed on `master` (PHP 8.4 socket, `prod`, an `/images/` rule); the `master` copy's comments
-  on `APP_HTTP_CACHE` and trusted proxies describe the releases, not the branches (section 6.5).
+  `TRUSTED_PROXIES`). Fixed on `master` (PHP 8.4 socket, `prod`, an `/images/` rule, and comments that say which
+  branch heads and releases read `APP_HTTP_CACHE` and `TRUSTED_PROXIES`; section 6.5).
 - `doc/apache2/media-site-vhost.conf` says `APP_HTTP_CACHE` defaults to enabled outside `dev` unless
   `TRUSTED_PROXIES` is set. The front controller of the branches leaves it off unless it is set to a true value,
   whatever the environment; the releases ignore it.
