@@ -39,7 +39,7 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 
 | | 1.0.0.x (the 2.5 generation) | 1.1.0.x | 1.2.0.x | 1.3.0.x |
 |---|---|---|---|---|
-| Branches and release tags | `master`: `v2.5.0.0` to `v2.5.0.6` and `1.0.0.8` to `1.0.0.10`; branch `1.0.0.x`: `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7` | `1.1.0.x`: `v1.1.0.0` to `v1.1.0.7` | `1.2.0.x`: `v1.2.0.0` | `1.3.0.x`: `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` |
+| Branches and release tags | `master`: `v2.5.0.0` to `v2.5.0.6`, `1.0.0.8` and `1.0.0.10`; branch `1.0.0.x`: `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7` and `1.0.0.9` | `1.1.0.x`: `v1.1.0.0` to `v1.1.0.7` | `1.2.0.x`: `v1.2.0.0` | `1.3.0.x`: `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` |
 | Platform | eZ Platform 2.5 (`se7enxweb/ezpublish-kernel ~7.5.40`) | Platform 3.3 (`se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3`) | Ibexa OSS 4.6 (`se7enxweb/oss ~4.6.0`) | Platform v5 (`se7enxweb/exponential-platform-dxp`, locked kernel `se7enxweb/exponential-platform-dxp-core v5.0.7`) |
 | Symfony | 3.4 (`se7enxweb/symfony v3.4.55`) | 5.4 | 5.4 | 7.4 |
 | PHP (`composer.json`) | `^7.1.3 \|\| ... \|\| ^8.6`; in practice 8.1 or newer, because the legacy kernel requires `^8.1` | `^8.0` | `>=8.2` | `>=8.4` |
@@ -57,7 +57,8 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 Two warnings about the tag list. First, the repository also carries the tags of the upstream Netgen media site it was
 forked from (`1.0.0` to `3.1.6`, without a fourth position): those are not Nexus releases. Second, the 2.5
 generation has two branches that share their history up to early 2026: `master`, which carries the `v2.5.0.x` tags
-and the tags `1.0.0.8` to `1.0.0.10`, and the branch `1.0.0.x` with the older `1.0.0.x` tags. Both run the same
+and the tags `1.0.0.8` and `1.0.0.10`, and the branch `1.0.0.x` with the older `1.0.0.x` tags and `1.0.0.9`. Because
+Composer orders `1.0.0.10` after `1.0.0.9`, a constraint such as `~1.0.0.9` installs master code. Both run the same
 Symfony 3.4 stack, kernel and legacy kernel; they differ in the demo content and its installer type
 ([chapter 4](04-installing.md)). In this chapter "1.0.0.x" means that generation, whichever of the two branches you
 run. List the releases before choosing a target:

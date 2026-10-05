@@ -172,7 +172,7 @@ tells you which one you run.
 - **Fix:** use the version in `.nvmrc`:
 
   ```bash
-  nvm install && nvm use       # reads .nvmrc: v18 on 1.1.0.x and 1.2.0.x, v22 on 1.3.0.x
+  nvm install && nvm use       # reads .nvmrc: v22 on master, v20 on the 1.0.0.x branch, v18 on 1.1.0.x and 1.2.0.x, v22 on 1.3.0.x
   node --version
   ```
 
@@ -189,7 +189,7 @@ tells you which one you run.
 - **Symptom:** `nvm install` runs without a version (and installs the newest Node.js), or `make build` ends with
   Composer reporting that the command `ibexa-assets` is not defined (1.0.0.x, 1.1.0.x).
 - **Cause:** up to 5 October 2026 every line's `Makefile` wrote `$(cat .nvmrc)`, which `make` expands to nothing, and
-  1.0.0.x had no `.nvmrc`; the `ibexa-assets` target of 1.0.0.x and 1.1.0.x called a Composer script those lines do
+  1.0.0.x had no `.nvmrc` (now `v22` on `master`, `v20` on the `1.0.0.x` branch); the `ibexa-assets` target of 1.0.0.x and 1.1.0.x called a Composer script those lines do
   not have. The branch heads fixed both ([chapter 10.12.5](10-operations.md#10125-the-makefile)).
 - **Fix:** on an older checkout, run `nvm install && nvm use` yourself first, and build the administration assets by
   hand: `composer ezplatform-assets` (1.0.0.x), or
@@ -220,6 +220,30 @@ tells you which one you run.
   connection).
 - **Fix:** `php bin/console exponential:install exponential-media --no-interaction`, then make the file writable for
   the web server's user ([13.8](#138-files-and-permissions)).
+
+### The Layouts admin fails with a missing `nglayouts_*` table after a clean install (1.3.0.x)
+
+- **Symptom:** after `php bin/console exponential:install exponential-oss` (or `ibexa-oss`), opening `/nglayouts/`
+  or a page with a layout rule fails with a "table not found" error for `nglayouts_layout` or another `nglayouts_*`
+  table.
+- **Cause:** the 1.3.0.x lock file pins `se7enxweb/exponential-platform-dxp-core v5.0.7`. Its `CoreInstaller` looks
+  for the Netgen Layouts schema only under `vendor/netgen/layouts-core`, but this line installs the fork
+  `se7enxweb/layouts-core` (in `vendor/se7enxweb/layouts-core`), so the schema step is skipped without a message
+  (read from the code). `v5.0.9`, released on 5 October 2026, checks the fork first and prints which file it
+  imported. The demo installer type `exponential-media` also imports its own schema file and is not known to be
+  affected.
+- **Fix:** update the kernel, then install again (on an empty database):
+
+  ```bash
+  composer update se7enxweb/exponential-platform-dxp-core
+  composer show se7enxweb/exponential-platform-dxp-core | grep versions    # v5.0.9 or newer
+  php bin/console exponential:install exponential-oss
+  ```
+
+  On a database that already has content, create the tables from the schema file instead, for MySQL
+  `vendor/se7enxweb/layouts-core/resources/data/schema.mysql.sql` (`schema.pgsql.sql` for PostgreSQL). For SQLite
+  the installer reads `tests/_fixtures/schema/schema.sqlite.sql` of the package, which a Composer dist install may
+  leave out; install from source (`composer reinstall --prefer-source se7enxweb/layouts-core`) if it is missing.
 
 ### `Migration can only be executed safely on MySQL.`
 
