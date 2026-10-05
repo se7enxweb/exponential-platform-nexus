@@ -66,6 +66,9 @@ the correct database connection for the site.
 
 ### Generate frontend assets
 
+Use the Node.js version the branch names in `.nvmrc` (22; `nvm install && nvm use` in the project root). The npm
+scripts set `NODE_OPTIONS=--openssl-legacy-provider`, which the Webpack 4 build needs on Node.js 17 and later.
+
 Run the following to generate development versions of the assets:
 
 ```
