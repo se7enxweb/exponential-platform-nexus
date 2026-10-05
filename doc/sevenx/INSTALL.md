@@ -173,13 +173,17 @@ Browser Request
       ▼
   public/index.php  ── Symfony Kernel (Platform v4 OSS — Symfony 5.4 LTS)
       │
-      ├── URI: /adminui/**           → Platform v4 Admin UI (React)       ← siteaccess: admin
-      ├── URI: /api/ezp/v2/**        → REST API v2 (JWT-auth)             ← siteaccess: admin
-      ├── URI: /graphql              → GraphQL API                        ← siteaccess: admin
-      ├── URI: /nglayouts/**         → Netgen Layouts admin + app         ← siteaccess: admin
-      └── URI: /**                   → Platform v4 Twig/Symfony Front End ← siteaccess: site
+      ├── URI: /adminui/**           → Platform v4 Admin UI (React)       ← siteaccess: adminui
+      ├── URI: /ngadminui/**         → Netgen Admin UI                    ← siteaccess: ngadminui
+      ├── URI: /legacy_admin/**      → Legacy Exponential Admin           ← siteaccess: legacy_admin
+      ├── URI: /bold_eng/**, /bold_ger/** → Bold Agency front end         ← siteaccess: bold_eng / bold_ger
+      └── URI: /**                   → Platform v4 Twig/Symfony Front End ← siteaccess: fh_eng (default)
                                            Symfony controllers + Twig templates
 ```
+
+Siteaccess matching uses `URIElement: 1` (`config/app/server/dev/ibexa_siteaccess.yaml`) — the
+first URI path segment selects the siteaccess. The default siteaccess (`fh_eng`) is served at
+the root `/`.
 
 ### Key Directories
 
@@ -225,8 +229,16 @@ project-root/
 
 | Siteaccess | URL prefix | Purpose |
 |---|---|---|
-| `site` | `/` | Symfony/Twig public front end |
-| `admin` | `/adminui/` | Platform v4 Admin UI (React) + REST API + GraphQL |
+| `fh_eng` | `/fh_eng/` or `/` (default) | Public front end (Fit & Healthy design, English) |
+| `bold_eng` | `/bold_eng/` | Public front end (Bold Agency design, English) |
+| `bold_ger` | `/bold_ger/` | Public front end (Bold Agency design, German) |
+| `adminui` | `/adminui/` | Platform v4 Admin UI (React) + REST API + GraphQL + Netgen Layouts |
+| `ngadminui` | `/ngadminui/` | Netgen Admin UI |
+| `legacy_admin` | `/legacy_admin/` | Legacy Exponential Admin (legacy mode) |
+
+Groups: `admin_group` (`adminui`), `ngadmin_group` (`ngadminui`, `legacy_admin`),
+`frontend_group` (the three front ends), `fh_group` (`fh_eng`) and `bold_group`
+(`bold_eng`, `bold_ger`), all in `config/app/packages/ibexa_siteaccess.yaml`.
 
 ---
 
@@ -459,8 +471,10 @@ All access points after install:
 
 | URL | Description |
 |---|---|
-| `https://127.0.0.1:8000/` | Platform v4 Symfony/Twig public site |
+| `https://127.0.0.1:8000/` | Platform v4 Symfony/Twig public site (`fh_eng`) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v4 Admin UI** (React) |
+| `https://127.0.0.1:8000/ngadminui/` | Netgen Admin UI |
+| `https://127.0.0.1:8000/legacy_admin/` | Legacy Exponential Admin |
 | `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin |

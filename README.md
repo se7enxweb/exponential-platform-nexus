@@ -121,7 +121,7 @@ repository and is composed using the `se7enxweb/oss` Composer metapackage.
 | App Cache | Filesystem (default) · Redis 6+ (optional) |
 | Database | SQLite 3.35+ (dev default) · MySQL 8.0+ · MariaDB 10.3+ · PostgreSQL 14+ |
 | API | REST API v2 · GraphQL (schema auto-generated) · JWT auth |
-| Admin UI | Ibexa Platform v4 Admin UI (`/adminui/`) |
+| Admin UI | Ibexa Platform v4 Admin UI (`/adminui/`) · Netgen Admin UI (`/ngadminui/`) · Legacy Admin (`/legacy_admin/`) |
 | Dependency Mgmt | Composer 2.x · Yarn 1.x |
 | Metapackage | `se7enxweb/oss ~4.6.0` |
 
@@ -211,8 +211,10 @@ After install, the following URLs are live:
 
 | URL | Description |
 |---|---|
-| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng` siteaccess, the default; `/bold_eng/` and `/bold_ger/` for Bold Agency) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v4 Admin UI** (React) |
+| `https://127.0.0.1:8000/ngadminui/` | Netgen Admin UI |
+| `https://127.0.0.1:8000/legacy_admin/` | Legacy Exponential Admin |
 | `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (JWT-authenticated) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (dev mode only) |
@@ -375,8 +377,10 @@ in production.
 
 | URL | Description |
 |---|---|
-| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`site` siteaccess) |
+| `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng` siteaccess, the default; `/bold_eng/` and `/bold_ger/` for Bold Agency) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v4 Admin UI** (React) — login: `admin` / `publish` |
+| `https://127.0.0.1:8000/ngadminui/` | Netgen Admin UI |
+| `https://127.0.0.1:8000/legacy_admin/` | Legacy Exponential Admin |
 | `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (requires JWT) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (APP_ENV=dev only) |
