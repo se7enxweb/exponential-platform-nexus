@@ -10,7 +10,7 @@ Software requirements
 
 * [Docker](https://docs.docker.com)
 * [eZ Launchpad](https://ezsystems.github.io/launchpad/)
-* [Yarn](https://yarnpkg.com/en/)
+* [Yarn 1](https://classic.yarnpkg.com/en/)
 
 Installation instructions
 -------------------------
