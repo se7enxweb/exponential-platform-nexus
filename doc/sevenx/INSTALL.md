@@ -1219,8 +1219,13 @@ php bin/console exponential:reindex --iteration-count=100
 ### Reindex a specific content type
 
 ```bash
-php bin/console exponential:reindex --content-type=article
+php bin/console exponential:reindex --content-type=ng_article
 ```
+
+`exponential:reindex` (from `se7enxweb/exponential-platform-dxp-core`) accepts the options of the upstream
+`ibexa:reindex`: `--iteration-count` (`-c`), `--no-commit`, `--no-purge`, `--since`, `--content-ids`, `--subtree`,
+`--processes` and `--content-type`. `--content-type` takes a content type identifier (the Media Site types are
+named `ng_*`) and cannot be combined with `--since`, `--subtree` or `--content-ids`.
 
 ---
 
@@ -2134,7 +2139,7 @@ php bin/console exponential:install ibexa-oss --no-interaction
 # Search index
 php bin/console exponential:reindex                                # full reindex
 php bin/console exponential:reindex --iteration-count=100         # batched
-php bin/console exponential:reindex --content-type=article        # one content type
+php bin/console exponential:reindex --content-type=ng_article     # one content type
 php bin/console exponential:reindex --subtree=45                  # one subtree
 php -d memory_limit=-1 bin/console exponential:reindex --env=prod # production (no limit)
 
