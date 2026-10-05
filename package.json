@@ -32,7 +32,7 @@
         "site:server": "NODE_OPTIONS=--openssl-legacy-provider encore dev-server --config-name",
         "ezplatform": "NODE_OPTIONS=--openssl-legacy-provider encore production --config=webpack.config.ezplatform.js",
         "build:parallel": "NODE_OPTIONS=--openssl-legacy-provider parallel -j2 'encore' ::: dev production",
-        "site:parallel": "NODE_OPTIONS=--openssl-legacy-provider echo '--config-name'; | parallel -j2 'encore' {} ::: dev production"
+        "site:parallel": "NODE_OPTIONS=--openssl-legacy-provider sh -c 'parallel -j2 encore {} --config-name \"$0\" ::: dev production'"
     },
     "private": true,
     "devDependencies": {
@@ -60,7 +60,6 @@
         "style-loader": "^1.0.0"
     },
     "dependencies": {
-        "20": "^3.1.9",
         "@babel/polyfill": "^7.8.3",
         "@fortawesome/fontawesome-free": "^5.8.1",
         "@netgen/javascript-cookie-control": "^0.0.6",
@@ -70,7 +69,6 @@
         "jquery": "^3.4.0",
         "jquery-observe": "^0.2.3",
         "magnific-popup": "^1.1.0",
-        "node": "^25.6.1",
         "popper.js": "^1.16.1",
         "swiper": "^4.5.0"
     }
