@@ -6,7 +6,10 @@ ifeq ("$(wildcard $(COMPOSER_PATH))","")
 	COMPOSER_PATH = /usr/local/bin/composer
 endif
 COMPOSER_RUN = $(PHP_RUN) $(COMPOSER_PATH)
-CACHE_POOL = cache.redis
+# Pools emptied by clear-all-cache. cache.global_clearer empties every cache pool the application
+# defines (the default filesystem pool, and APCu or Redis when configured). To clear a single
+# pool instead: make clear-all-cache CACHE_POOL=cache.redis
+CACHE_POOL ?= cache.global_clearer
 STASH_HASH := $(shell git stash create)
 
 .PHONY: help
