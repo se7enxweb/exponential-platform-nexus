@@ -91,13 +91,5 @@ return [
     Netgen\Bundle\AdminUIBundle\NetgenAdminUIBundle::class => ['all' => true],
     Netgen\Bundle\SiteLegacyBundle\NetgenSiteLegacyBundle::class => ['all' => true],
     Netgen\Bundle\RichTextDataTypeBundle\NetgenRichTextDataTypeBundle::class => ['all' => true],
-    Netgen\Bundle\SiteAccessRoutesBundle\NetgenSiteAccessRoutesBundle::class => ['all' => true],
-    Netgen\Bundle\OpenGraphBundle\NetgenOpenGraphBundle::class => ['all' => true],
-    Netgen\Bundle\IbexaFormsBundle\NetgenIbexaFormsBundle::class => ['all' => true],
-    Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle::class => ['all' => true],
-    Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle::class => ['all' => true],
-    Netgen\Bundle\BirthdayBundle\NetgenBirthdayBundle::class => ['all' => true],
-    Netgen\Bundle\SiteBundle\NetgenSiteBundle::class => ['all' => true],
     Netgen\Bundle\MetadataBundle\NetgenMetadataBundle::class => ['all' => true],
-    Netgen\Bundle\SiteLegacyBundle\NetgenSiteLegacyBundle::class => ['all' => true],
 ];
