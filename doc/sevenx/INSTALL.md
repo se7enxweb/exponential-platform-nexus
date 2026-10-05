@@ -582,9 +582,8 @@ CREATE DATABASE your_db_name
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_520_ci;
 
-GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost'
-  IDENTIFIED BY 'your_db_password';
-FLUSH PRIVILEGES;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost';
 ```
 
 Then run the installer:
@@ -596,10 +595,13 @@ php bin/console exponential:install exponential-media --no-interaction
 ### 6b. PostgreSQL
 
 ```bash
-psql -U postgres -c "CREATE DATABASE your_db_name ENCODING 'UTF8';"
 psql -U postgres -c "CREATE USER your_db_user WITH PASSWORD 'your_db_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_db_user;"
+psql -U postgres -c "CREATE DATABASE your_db_name OWNER your_db_user ENCODING 'UTF8';"
 ```
+
+Make the application user the **owner** of the database. On PostgreSQL 15 and later an ordinary user can no
+longer create tables in the `public` schema of a database it does not own, so `GRANT ALL PRIVILEGES ON
+DATABASE` alone is not enough there.
 
 Then run the installer:
 
@@ -1404,9 +1406,8 @@ Create the target database first:
 CREATE DATABASE your_db_name
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_520_ci;
-GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost'
-  IDENTIFIED BY 'your_db_password';
-FLUSH PRIVILEGES;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost';
 ```
 
 Then convert using [sqlite3-to-mysql](https://github.com/techouse/sqlite3-to-mysql) (MIT, Python):
@@ -1446,7 +1447,8 @@ DATABASE_VERSION=mariadb-10.6.0   # or MySQL version e.g. 8.0
 Use [pgloader](https://pgloader.io/):
 
 ```bash
-psql -U postgres -c "CREATE DATABASE exponential ENCODING 'UTF8';"
+psql -U postgres -c "CREATE USER pg_user WITH PASSWORD 'pg_pass';"     # if the user does not exist yet
+psql -U postgres -c "CREATE DATABASE exponential OWNER pg_user ENCODING 'UTF8';"
 
 cat > /tmp/sqlite_to_pg.load <<EOF
 LOAD DATABASE
@@ -1480,7 +1482,8 @@ DATABASE_VERSION=16
 Use [pgloader](https://pgloader.io/):
 
 ```bash
-psql -U postgres -c "CREATE DATABASE exponential ENCODING 'UTF8';"
+psql -U postgres -c "CREATE USER pg_user WITH PASSWORD 'pg_pass';"     # if the user does not exist yet
+psql -U postgres -c "CREATE DATABASE exponential OWNER pg_user ENCODING 'UTF8';"
 
 cat > /tmp/mysql_to_pg.load <<'EOF'
 LOAD DATABASE
