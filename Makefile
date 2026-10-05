@@ -34,27 +34,27 @@ vendor: ## Run composer install
 .PHONY: ibexa-assets
 .ONESHELL:
 ibexa-assets: ## Generate Ibexa Admin UI assets
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	$(COMPOSER_RUN) ibexa-assets
 
 .PHONY: assets
 .ONESHELL:
 assets: ## Build frontend assets for DEV environment
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn build:dev
 
 .PHONY: assets-prod
 .ONESHELL:
 assets-prod: ## Build frontend assets for PROD environment
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn build:prod
 
 .PHONY: assets-watch
 .ONESHELL:
 assets-watch: ## Watch frontend assets (during development)
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn watch
 
