@@ -32,7 +32,7 @@
         "site:server": "NODE_OPTIONS=--openssl-legacy-provider encore dev-server --config-name",
         "ezplatform": "NODE_OPTIONS=--openssl-legacy-provider encore production --config=webpack.config.ezplatform.js",
         "build:parallel": "NODE_OPTIONS=--openssl-legacy-provider parallel -j2 encore ::: dev production",
-        "site:parallel": "NODE_OPTIONS=--openssl-legacy-provider echo '--config-name'; | parallel -j2 encore {} ::: dev production"
+        "site:parallel": "NODE_OPTIONS=--openssl-legacy-provider sh -c 'parallel -j2 encore {} --config-name \"$0\" ::: dev production'"
     },
     "private": true,
     "devDependencies": {
