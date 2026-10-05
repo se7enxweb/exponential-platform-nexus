@@ -1,7 +1,34 @@
-/var/www/html/*/var/log/dev.log {
+# logrotate example for the 1.1.0.x, 1.2.0.x and 1.3.0.x lines (Symfony 5.4 and 7.4).
+#
+# Copy it to /etc/logrotate.d/<site>, then replace the path and the user. The path below matches every
+# project under /var/www/html/; name your own project directory instead.
+#
+# Symfony writes var/log/<environment>.log: prod.log in production (JSON lines, errors only, through the
+# fingers_crossed handler), dev.log and dev.deprecation.log in development (every message; these grow by
+# gigabytes on a busy site), test.log in tests. Files you add yourself there, such as a cron.log, are
+# rotated as well. Deprecations in prod go to php://stderr, which ends up in the PHP-FPM or Velocity log;
+# rotate that log where it is written.
+#
+# copytruncate keeps the files that PHP-FPM workers and Exponential Velocity's persistent workers hold open
+# valid without a reload. A few lines written during the copy can be lost; if that matters, drop
+# copytruncate and reload PHP-FPM or Velocity in a postrotate script instead.
+#
+# su is needed because var/log/ is writable by the web server's user, not only by root; without it
+# logrotate refuses to rotate ("insecure permissions"). Use the user and group that run PHP.
+#
+# On 1.1.0.x and 1.2.0.x the legacy kernel's own logs (ezpublish_legacy/var/log/*.log and
+# ezpublish_legacy/var/<site>/log/*.log) are rotated by the legacy kernel itself when they reach their size
+# limit; leave them out of logrotate.
+#
+# Check a change without rotating anything: logrotate -d /etc/logrotate.d/<site>
+/var/www/html/*/var/log/*.log {
     daily
+    rotate 14
+    maxsize 100M
     missingok
-    rotate 3
+    notifempty
     compress
-    create 664 www-data www-data
+    delaycompress
+    copytruncate
+    su www-data www-data
 }
