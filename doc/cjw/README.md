@@ -3,18 +3,18 @@
 Netgen Media Site is a blueprint installation of eZ Platform used by Netgen to bootstrap new client projects.
 It integrates most of Netgen open source tools and bundles, including [Netgen Layouts](https://github.com/netgen-layouts).
 
-* [Installation instructions](/doc/netgen/INSTALL.md)
-* [Installation with Docker and eZ Launchpad](/doc/netgen/LAUNCHPAD.md)
-* [Frontend setup](/doc/netgen/FRONTEND.md)
-* [Search suggestions](/doc/netgen/SEARCH_SUGGESTIONS.md)
-* [Translations](/doc/netgen/TRANSLATIONS.md)
+* [Installation instructions](../netgen/INSTALL.md)
+* [Installation with Docker and eZ Launchpad](../netgen/LAUNCHPAD.md)
+* [Frontend setup](../netgen/FRONTEND.md)
+* [Search suggestions](../netgen/SEARCH_SUGGESTIONS.md)
+* [Translations](../netgen/TRANSLATIONS.md)
 
 # eZ Platform
 
 [![Build Status](https://img.shields.io/travis/ezsystems/ezplatform.svg?style=flat-square)](https://travis-ci.org/ezsystems/ezplatform)
 [![Downloads](https://img.shields.io/packagist/dt/ezsystems/ezplatform.svg?style=flat-square)](https://packagist.org/packages/ezsystems/ezplatform)
 [![Latest release](https://img.shields.io/github/release/ezsystems/ezplatform.svg?style=flat-square)](https://github.com/ezsystems/ezplatform/releases)
-[![License](https://img.shields.io/packagist/l/ezsystems/ezplatform.svg?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/packagist/l/ezsystems/ezplatform.svg?style=flat-square)](../../LICENSE)
 
 ## What is eZ Platform?
 *eZ Platform* is a fully open source professional CMS (Content Management System) developed by eZ Systems and the eZ Community.
