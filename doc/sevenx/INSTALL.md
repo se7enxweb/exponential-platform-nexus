@@ -1452,11 +1452,14 @@ php bin/console cache:clear
    TRUSTED_PROXIES=127.0.0.1
    ```
 2. Set `APP_HTTP_CACHE=0` in your web server vhost (let Varnish handle caching)
-3. Load the Platform v5 Varnish VCL from `doc/varnish/` (if present)
+3. Load the Varnish VCL that the HTTP cache bundle ships. This branch has no `doc/varnish/` directory; after
+   `composer install` the files are in `vendor/ibexa/http-cache/docs/varnish/vcl/`: `varnish7.vcl` (also
+   `varnish6.vcl` and `varnish5.vcl` for older Varnish versions) and `parameters.vcl`, which `varnish7.vcl`
+   includes from `/etc/varnish/parameters.vcl`. The VCL needs the `xkey` Varnish module.
 4. Clear cache:
    ```bash
    php bin/console cache:clear
-   php bin/console fos:httpcache:invalidate:path / --all
+   php bin/console fos:httpcache:invalidate:tag ez-all     # every response the platform has tagged
    ```
 
 ---
@@ -2151,7 +2154,8 @@ php bin/console ibexa:cron:run --quiet                             # suppress ou
 php bin/console ibexa:graphql:generate-schema                      # regenerate schema
 
 # HTTP cache
-php bin/console fos:httpcache:invalidate:path / --all              # purge all paths
+php bin/console fos:httpcache:invalidate:tag ez-all                # purge every tagged response
+php bin/console fos:httpcache:invalidate:path /some/page           # purge one path
 php bin/console fos:httpcache:invalidate:tag <tag>                 # purge by tag
 
 # Admin UI translations

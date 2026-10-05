@@ -328,7 +328,7 @@ php bin/console ibexa:graphql:generate-schema                            # regen
 php bin/console lexik:jwt:generate-keypair                               # generate JWT keys
 php bin/console bazinga:js-translation:dump public/assets --merge-domains  # dump JS translations
 php bin/console liip:imagine:cache:remove                                # clear image variation cache
-php bin/console fos:httpcache:invalidate:path / --all                    # purge HTTP cache
+php bin/console fos:httpcache:invalidate:tag ez-all                     # purge HTTP cache (every tagged response)
 ```
 
 ### Doctrine / Migrations
