@@ -89,8 +89,21 @@ A legacy-only site has no Symfony stack yet. The path is:
 1. **Bring the database to the Exponential 6 schema** with chapter
    [14](https://github.com/se7enxweb/exponential/blob/main/doc/install/14-migrating-from-4x.md) of the Exponential book
    (from 4.x) or chapter [11](https://github.com/se7enxweb/exponential/blob/main/doc/install/11-upgrading.md) (from an
-   older 6.0.x). Port your extensions to PHP 8 there; Nexus 1.0.0.x installs `se7enxweb/exponential ^6.0.12`, whose
-   `composer.json` requires PHP `^8.1`.
+   older 6.0.x). Port your extensions to PHP 8 there; Nexus 1.0.0.x installs `se7enxweb/exponential ^6.0.12`, which
+   resolves to the newest tag, `v6.0.14`, whose `composer.json` requires PHP `^8.1`.
+
+   That chapter checks the result against the kernel's reference schema with `bin/php/ezsqldiff.php`. Mind the
+   argument order, which the Exponential book now spells out: the tool prints the SQL that turns the **second**
+   schema into the **first**, so the reference schema comes first and your database second:
+
+   ```bash
+   cd ezpublish_legacy     # or the Exponential 6 installation you migrate with
+   php bin/php/ezsqldiff.php --type=mysql --host=HOST --user=USER --password=PASSWORD share/db_schema.dba DATABASE > to-6.0.sql
+   grep -c '^CREATE TABLE' to-6.0.sql; grep '^DROP TABLE' to-6.0.sql
+   ```
+
+   The other way round, the output is a list of `DROP TABLE` statements for the legacy tables. Read the file before
+   you run it (`mysql -u USER -p DATABASE < to-6.0.sql`, never with `--force`).
 2. **Add the tables the 2.5 kernel expects** that a legacy-only database lacks. The 2.5 schema is the legacy one plus a
    few tables of the Symfony stack (`ezcontentclass_attribute_ml`, `eznotification`, `ezgmaplocation`, the comments
    and star rating tables). Compare the table list of your database with `data/mysql/schema.sql` of the
@@ -137,6 +150,31 @@ What Nexus adds:
 - **Twig templates.** Your templates keep working on the same generation. Nexus adds its own themes and design
   engine configuration; decide per siteaccess whether it uses your templates, the Nexus themes, or a mix
   ([chapter 9](09-frontend-and-themes.md)).
+- **The legacy tables, when you land on 1.1.0.x or 1.2.0.x.** These lines run the legacy kernel through the bridge
+  (`legacy_admin`, `ngadminui`), and the legacy kernel needs the tables that the vendor's 3.0 notes allow a 3.x or
+  4.x site to drop (shop, workflow, collaboration, information collection, RSS and the rest, about 80). If your
+  source dropped them, or was installed from a 3.x or 4.x schema that never had them, recreate them before the first
+  request to a legacy siteaccess. The same comparison as in path B of the Exponential book
+  ([chapter 16.6.4](https://github.com/se7enxweb/exponential/blob/main/doc/install/16-migrating-from-ez-platform-and-ibexa.md#1664-the-database-step-by-step))
+  does it, reference schema first:
+
+  ```bash
+  cd ezpublish_legacy
+  php bin/php/ezsqldiff.php --type=mysql --host=HOST --user=USER --password=PASSWORD share/db_schema.dba DATABASE > ../var/legacy-tables.sql
+  grep -c '^CREATE TABLE' ../var/legacy-tables.sql      # large on a 3.x or 4.x database: the dropped tables
+  ```
+
+  Keep the `CREATE TABLE` and `ALTER TABLE ... ADD` statements; delete every `DROP TABLE` and `DROP COLUMN` line,
+  which would remove what the Symfony stack needs (`ezcontentclass_attribute_ml`, `ibexa_*`, `is_thumbnail`,
+  `password_updated_at`, ...); read the changed column definitions one by one (a statement that makes a column
+  narrower than the data in it fails in strict mode or cuts values). Then give
+  `ezkeyword_attribute_link.version` a default ([chapter 11.4](11-upgrading-between-lines.md#114-from-100x-to-110x-platform-25-to-33-symfony-34-to-54)).
+  `ezsqldiff.php` speaks MySQL and PostgreSQL (`--type=postgresql`), not SQLite.
+- **Console command names.** On 1.1.0.x the kernel fork's commands are `exponential:*` with the old names as
+  aliases; on 1.2.0.x the locked upstream kernel keeps `ibexa:*`; both projects add `exponential:install` and an
+  `exponential:reindex` proxy; on 1.3.0.x the renamed kernel commands exist only as `exponential:*`
+  ([chapter 10.1](10-operations.md#101-the-operators-map-per-line), and chapter 16.5.4 of the Exponential book).
+  Rewrite cron entries and deployment scripts for the target line.
 - **The admin siteaccess** of lines 1.1.0.x to 1.3.0.x is named by the parameter `ngsite.admin_siteaccess_name`
   (`adminui`); if your source used another name (`admin` is common), either set the parameter to your name or update
   every link, host map and role assignment that names the siteaccess.
@@ -189,7 +227,7 @@ configuration names locations by id. After pointing Nexus at your database, go t
 | Parameter | Lines | What it must point at |
 |---|---|---|
 | `ngsite.default.locations.site_info.id` | 1.0.0.x (`parameters.yml.dist`: `65`), 1.1.0.x (`config/app/app.yaml`: `65`) | The site info object the templates read the site name, logo and social links from |
-| `ngsite.default.locations.tree_root.id` | 1.0.0.x (`2`) | The root of the public tree |
+| `ngsite.default.locations.tree_root.id` | 1.0.0.x: `2` on `master`; `168` on the branch `1.0.0.x` (the root of its shipped data), in `parameters.yml.dist` and `default_parameters.yml` | The root of the public tree; a wrong value shows as a 404 on the home page ([chapter 8.3.4](08-configuration.md#834-100x-parameters-and-environment-variables)) |
 | `ngsite.fh_group.locations.tree_root.id`, `ngsite.bold_group.locations.tree_root.id` | 1.1.0.x to 1.3.0.x, used as `content_tree_root` per siteaccess group | The roots of the two demo designs' trees |
 | `ngsite.default.locations.ng_component_hero.id`, `...ng_component_quote.id` | 1.3.0.x (`config/app/prepends/netgen_layouts/components.yaml`) | The component containers Layouts reads |
 
@@ -244,6 +282,27 @@ php bin/console nglayouts:export rule <uuid>[,<uuid>...] > rules.json
 php bin/console nglayouts:export rule_group <uuid> > group.json        # where rule groups exist
 php bin/console nglayouts:import layouts.json --mode=copy              # copy (default), overwrite or skip
 ```
+
+The commands take UUIDs, which the Layouts admin shows in its URLs; to list them from the database:
+
+```sql
+SELECT uuid, name, shared FROM nglayouts_layout WHERE status = 1 ORDER BY name;    -- published layouts
+SELECT uuid FROM nglayouts_rule WHERE status = 1;                                   -- published rules
+```
+
+A worked move of one shared layout and the layouts that use it, from a staging installation to production:
+
+```bash
+# on staging
+php bin/console nglayouts:export layout 3c4f...,8a1b... --env=prod > layouts.json
+# copy layouts.json to production, then there
+php bin/console nglayouts:import layouts.json --mode=skip --env=prod     # keeps what already exists
+php bin/console cache:clear --env=prod
+```
+
+Export a shared layout together with the layouts whose zones link to it, so the links find their target. `--mode=skip`
+is the safe first run: entities that already exist are skipped and reported ("Skipped importing ..."), new ones are
+imported; repeat with `--mode=overwrite` only for the entities you mean to replace.
 
 The export refers to content by **remote id**, not by id: collection items and location-based rule targets are
 written as remote ids and turned back into ids on import (`toLocationRemoteId()` and `toLocationId()` in the
