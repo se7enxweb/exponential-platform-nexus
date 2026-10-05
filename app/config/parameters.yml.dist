@@ -31,8 +31,10 @@ parameters:
     ngsite.default.site_domain: localhost
     ngsite.default.locations.site_info.id: 65
     # Content tree root location ID for front-end siteaccesses.
-    # Use 2 for a standard eZ Platform install; use 168 for the Nexus demo content.
-    ngsite.default.locations.tree_root.id: 2
+    # 168 is the site root (JAC Example) in the database this branch ships: the starter SQL dump,
+    # data/content.sql and the exponential-cjw installer seed. Use 2, the Content root, after
+    # ezplatform:install netgen-media (its node 168 is an article) or on an empty repository.
+    ngsite.default.locations.tree_root.id: 168
 
     # SQLite path defaults to var/data_{env}.db (set per-environment automatically).
     # Override by setting DATABASE_PATH in the environment or in parameters.yml:
