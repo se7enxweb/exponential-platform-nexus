@@ -1150,7 +1150,10 @@ php bin/console cache:clear
    HTTPCACHE_VARNISH_INVALIDATE_TOKEN=<your-secret>
    TRUSTED_PROXIES=127.0.0.1
    ```
-2. Deploy the included VCL (`doc/varnish/` if available) or the upstream eZ Platform VCL
+2. Deploy the VCL that the HTTP cache bundle ships (this branch has no `doc/varnish/`):
+   `vendor/se7enxweb/ezplatform-http-cache/docs/varnish/vcl/varnish7.vcl` for Varnish 7.1 or later, or
+   `varnish5.vcl` in the same directory for Varnish 6.0. Both include `parameters.vcl` (`varnish7.vcl` from
+   `/etc/varnish/parameters.vcl`, `varnish5.vcl` from its own directory) and need the xkey vmod (varnish-modules)
 3. Reload Varnish: `systemctl reload varnish`
 4. Clear the cache: `php bin/console fos:httpcache:invalidate:tag ez-all --env=prod` (every response the
    platform caches carries the tag `ez-all`)
