@@ -1,0 +1,50 @@
+# Server configuration for SERVER_ENVIRONMENT=prod (see deploy/files/.env.local.prod).
+#
+# src/Kernel.php imports config/app/server/<SERVER_ENVIRONMENT>.yaml on every
+# boot, so this file must exist for a production server. It carries the same
+# parameters as dev.yaml, because the site configuration refers to them, but
+# without the development defaults: the domain and the information collection
+# addresses come from the environment, and no demo tracking code is set.
+#
+# Set the variables below in .env.local (or the server environment) before
+# going live. The location ids match the demo content; change them when the
+# site runs on its own content tree.
+
+parameters:
+    env(SITE_DOMAIN): localhost
+    env(COLLECTED_INFO_SENDER): 'noreply@localhost'
+    env(COLLECTED_INFO_RECIPIENT): 'webmaster@localhost'
+    env(GOOGLE_TAG_MANAGER_CODE): ''
+
+    ngsite.fh_group.site_domain: '%env(SITE_DOMAIN)%'
+    ngsite.bold_group.site_domain: '%env(SITE_DOMAIN)%'
+
+    ngsite.fh_group.locations.site_info.id: 65
+    ngsite.bold_group.locations.site_info.id: 442
+
+    ngsite.fh_group.locations.tree_root.id: 385
+    ngsite.bold_group.locations.tree_root.id: 386
+
+    ngsite.fh_group.locations.showcase.id: 357
+    ngsite.bold_group.locations.showcase.id: 357
+
+    ngsite.default.locations.ng_component_hero.id: 407
+    ngsite.default.locations.ng_component_quote.id: 445
+    ngsite.default.locations.ng_component_about.id: 413
+    ngsite.default.locations.ng_component_features.id: 422
+    ngsite.default.locations.ng_component_logos.id: 420
+    ngsite.default.locations.ng_component_lead.id: 470
+
+    collected_info_sender: '%env(COLLECTED_INFO_SENDER)%'
+    collected_info_recipient: '%env(COLLECTED_INFO_RECIPIENT)%'
+
+    # Empty means no Google Tag Manager snippet is rendered.
+    ngsite.default.site_settings.google_tag_manager_code: '%env(GOOGLE_TAG_MANAGER_CODE)%'
+
+ibexa:
+    siteaccess:
+        match:
+            # A production site usually maps host names to siteaccesses, e.g.:
+            #Map\Host:
+            #    www.example.com: fh_eng
+            URIElement: 1
