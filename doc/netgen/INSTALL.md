@@ -1,12 +1,17 @@
 Netgen Site install instructions
 ================================
 
+This page comes from the upstream Netgen Media Site and has been corrected for this repository. For installing
+Exponential Platform Nexus, the [short installation guide](../INSTALL.md) and [the book](../book/README.md) are the
+primary documents.
+
 Software requirements
 ---------------------
 
 * PHP built in server / Apache 2.4+ / Nginx 1.12+
 * MySQL 5.7+
-* PHP 7.3+ (with `gd`, `imagick`, `curl`, `json`, `mysql`, `xsl`, `xml`, `intl` and `mbstring` extensions)
+* PHP 8.1+ (the Exponential legacy kernel this branch installs requires `^8.1`), with `gd`, `imagick`, `curl`,
+  `json`, `pdo_mysql`, `xsl`, `xml`, `intl` and `mbstring` extensions
 * ImageMagick
 
 Optional dependencies
@@ -29,34 +34,32 @@ CREATE DATABASE <db_name> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
 ### Create the new project based on this repo
 
 ```
-composer create-project "netgen/media-site:^1.9"
+composer create-project se7enxweb/exponential-platform-nexus:v2.5.0.6 nexus
 ```
+
+`v2.5.0.6` is the newest release of this branch on Packagist (`1.0.0.10` is cut from the same branch). The command
+`composer create-project "netgen/media-site:^1.9"` of the upstream guide installs Netgen's own media site, not this
+project.
 
 ### Create project for contribution
 
-If you are a developer wishing to contribute to the `media-site`, do not use the above `composer create-project` command.
+If you are a developer wishing to contribute, do not use the above `composer create-project` command.
 
 Instead, do the following:
 
 ```
-git clone git@github.com:netgen/media-site.git
-cd media-site
+git clone git@github.com:se7enxweb/exponential-platform-nexus.git
+cd exponential-platform-nexus
 ```
 
 If you are contributing to the latest version, skip the next step. Otherwise, take care to checkout the branch you wish to contribute to, for example:
 
 ```
-git checkout 1.9
+git checkout 1.3.0.x
 ```
 
-As either way you will not be developing on a tagged (stable) version, you need to modify `composer.json`, please add the following:
-
-```
-"minimum-stability": "dev",
-"prefer-stable": true,
-```
-
-After this, you can run `composer install`, and follow the rest of the instructions.
+The project's `composer.json` already sets `"minimum-stability": "dev"` and `"prefer-stable": true`, so you can run
+`composer install` directly, and follow the rest of the instructions.
 
 Near the end of vendor installation procedure, when asked, be sure to specify
 the correct database connection for the site.
@@ -83,20 +86,12 @@ This repo completely replaces the default `webpack.config.js` file coming from e
 Netgen Site specific version which is used **only** for frontend of the project. The eZ Systems provided
 file is renamed to `webpack.config.ezplatform.js` without changes.
 
-Also, automatic building of eZ Platform Admin UI assets on every `composer install` or `composer update`
-has been disabled so there's no need to install `nodejs` or `yarn` on your production servers to build
-those assets. Either deploy them via your deployment procedures, or commit the entire `web/assets` folder
-to the git repository. You can build the eZ Platform Admin UI assets on demand simply by executing
-`composer ezplatform-assets`.
-
-If, however, you wish to bring back building eZ Platform Admin UI assets when running Composer, add the
-`web/assets/` folder to `.gitignore` and add the following to `symfony-scripts` in your `composer.json`:
-
-```json
-"@php bin/console bazinga:js-translation:dump web/assets --merge-domains",
-"yarn install",
-"yarn ezplatform"
-```
+Unlike the upstream Netgen Media Site, this branch does build assets on every `composer install` and
+`composer update`: its `symfony-scripts` in `composer.json` run
+`bin/console bazinga:js-translation:dump web/assets --merge-domains`, `yarn install` and the Encore compile step
+(`EzSystems\EzPlatformEncoreBundle\Composer\ScriptHandler::compileAssets`), so Node.js and Yarn have to be available
+wherever you run Composer. You can also build the eZ Platform Admin UI assets on demand by executing
+`composer ezplatform-assets` (which runs the translation dump and `yarn ezplatform`).
 
 Note that you do NOT need to rename `webpack.config.ezplatform.js` back to its old name since
 `yarn ezplatform` takes the new name into account.
@@ -112,8 +107,11 @@ after `bin/console` if running in prod mode):
 php bin/console ezplatform:install <SITE_NAME>
 ```
 
-where `<SITE_NAME>` is the name of wanted site, e.g. `netgen-media`,
-or `netgen-media-clean` for the clean version, without demo data.
+where `<SITE_NAME>` is the name of wanted site. On this branch that is `cjw-exponential-media` (the CJW demo,
+from the package `se7enxweb/cjw-exponential-media-site-data`, which `composer.json` requires), or `exponential-oss`
+for a clean repository without demo data. The upstream types `netgen-media` and `netgen-media-clean` of
+`netgen/site-installer-bundle` need the package `netgen/media-site-data`, which this branch only suggests; require it
+first if you want them.
 
 Import the translations to the database with:
 
@@ -171,12 +169,12 @@ at `doc/apache2/netgen-site.conf`
 
 ### Setup folder permissions
 
-You need to setup file and directory permissions so eZ Platform can write to cache,
+You need to setup file and directory permissions so eZ Platform and the legacy kernel can write to cache,
 log and var folders:
 
 ```bash
-$ setfacl -R -m u:<web-user>:rwX -m g:<web-user>:rwX var web/var
-$ setfacl -dR -m u:<web-user>:rwX -m g:<web-user>:rwX var web/var
+$ setfacl -R -m u:<web-user>:rwX -m g:<web-user>:rwX var web/var ezpublish_legacy/var
+$ setfacl -dR -m u:<web-user>:rwX -m g:<web-user>:rwX var web/var ezpublish_legacy/var
 ```
 
 In case `setfacl` is not available on your system, refer to [Symfony installation instructions]
