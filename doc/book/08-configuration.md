@@ -211,14 +211,31 @@ the contact form addresses and the siteaccess matchers.
 |---|---|---|---|
 | 1.0.0.x | parameter `server_environment` in `parameters.yml` (default `dev` in `parameters.yml.dist`) | `app/config/server/<name>.yml` and what it imports | `dev` |
 | 1.1.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`, `prod` |
-| 1.2.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev` |
-| 1.3.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev` |
+| 1.2.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` on the branch head since 5 October 2026 |
+| 1.3.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` on the branch head since 5 October 2026 |
 
-The committed `.env` of 1.1.0.x, 1.2.0.x and 1.3.0.x sets `SERVER_ENVIRONMENT=dev`. On 1.2.0.x and 1.3.0.x there is
-no `prod` server file, so a production server either keeps `dev` (whose values suit the demo data) or gets its own
-file. The `.env.local.dist` file describes the intended way: copy `config/app/server/dev.yaml` and the
-`config/app/server/dev/` directory to a new name such as `local` or `prod`, adjust the values, and set
-`SERVER_ENVIRONMENT` to that name in `.env.local`.
+The committed `.env` of 1.1.0.x, 1.2.0.x and 1.3.0.x sets `SERVER_ENVIRONMENT=dev`. `src/Kernel.php` imports
+`config/app/server/<SERVER_ENVIRONMENT>.yaml` on every boot, so the name must have a file.
+
+**1.2.0.x and 1.3.0.x, branch heads.** Since 5 October 2026 (commits `cb7e181b8` and `88c4a4b35`) both ship
+`config/app/server/prod.yaml`, which the Deployer example `deploy/files/.env.local.prod` selects. It defines the
+same parameters as `dev.yaml`, with the location IDs of the demo content, but takes the values that differ per site
+from the environment, with harmless defaults, and sets no demo tracking code:
+
+| Variable | Parameter | Default in `prod.yaml` |
+|---|---|---|
+| `SITE_DOMAIN` | `ngsite.fh_group.site_domain`, `ngsite.bold_group.site_domain` | `localhost` |
+| `COLLECTED_INFO_SENDER` | `collected_info_sender` | `noreply@localhost` |
+| `COLLECTED_INFO_RECIPIENT` | `collected_info_recipient` | `webmaster@localhost` |
+| `GOOGLE_TAG_MANAGER_CODE` | `ngsite.default.site_settings.google_tag_manager_code` | empty: no Tag Manager snippet |
+
+Its siteaccess matching is `URIElement: 1`, as in `dev`, with a commented `Map\Host` example. Set the variables in
+`.env.local` and change the location IDs when the site runs on its own content tree.
+
+**1.2.0.x and 1.3.0.x releases** (`v1.2.0.0`, `1.3.0.5` and older) have no `prod` server file, so a production
+server either keeps `dev` (whose values suit the demo data) or gets its own file. The `.env.local.dist` file
+describes the intended way: copy `config/app/server/dev.yaml` and the `config/app/server/dev/` directory to a new
+name such as `local` or `prod`, adjust the values, and set `SERVER_ENVIRONMENT` to that name in `.env.local`.
 
 ```bash
 cp config/app/server/dev.yaml config/app/server/prod.yaml
@@ -330,9 +347,18 @@ MAILER_DSN=smtp://mail.example.com:587
 JWT_PASSPHRASE=another-random-value
 ```
 
-The same file works on 1.1.0.x and 1.2.0.x. `SERVER_ENVIRONMENT=prod` needs a `prod` server file: 1.1.0.x ships one
-(set the variables of [8.2.2](#822-the-server-environment) too); on 1.2.0.x and 1.3.0.x create it as 8.2.2 describes,
-or keep `dev`. After writing it:
+`SERVER_ENVIRONMENT=prod` needs a `prod` server file ([8.2.2](#822-the-server-environment)). On the 1.2.0.x and
+1.3.0.x branch heads it ships and reads four more variables; add them to the file above:
+
+```dotenv
+SITE_DOMAIN=www.example.com
+COLLECTED_INFO_SENDER=web@example.com
+COLLECTED_INFO_RECIPIENT=office@example.com
+GOOGLE_TAG_MANAGER_CODE=
+```
+
+1.1.0.x ships a `prod` file that reads `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO` and `GTM_CODE` instead (8.2.2); on the
+1.2.0.x and 1.3.0.x releases create the file yourself, or keep `dev`. After writing `.env.local`:
 
 ```bash
 php bin/console debug:dotenv --env=prod | grep -E 'APP_ENV|SERVER_ENVIRONMENT|TRUSTED_PROXIES'
