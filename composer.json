@@ -1,6 +1,7 @@
 {
+    "name": "se7enxweb/exponential-platform-nexus",
     "type": "project",
-    "license": "proprietary",
+    "license": "GPL-2.0-or-later",
     "homepage": "https://platform.exponential.earth",
     "authors": [
         {
