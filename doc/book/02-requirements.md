@@ -13,11 +13,11 @@ repository's own guides say something different, the chapter follows the code an
 
 | Requirement | 2.5 (`master`) and 1.0.0.x | 1.1.0.x | 1.2.0.x | 1.3.0.x |
 |---|---|---|---|---|
-| PHP | 7.1.3 and later in `composer.json`; 8.3 to 8.5 in the README; Composer run with `--ignore-platform-reqs` | 8.0 or later; 8.5 recommended | 8.2 or later; 8.5 recommended | 8.4 or later; 8.5 recommended |
+| PHP | 8.1 or later (the legacy kernel's minimum; `composer.json` alone accepts 7.1.3 to 8.6); Composer run with `--ignore-platform-reqs` | 8.0 or later; 8.5 recommended | 8.2 or later; 8.5 recommended | 8.4 or later; 8.5 recommended |
 | PHP extensions | see [2.3](#23-php-extensions); APCu is used by the shipped configuration | `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv` and a PDO driver | as 1.1.0.x | as 1.1.0.x |
 | Database | MySQL 5.7+ or MariaDB 10.2+ (utf8mb4); PostgreSQL per the guide; SQLite 3 on 1.0.0.x only | MySQL 8.0+, MariaDB 10.3+, PostgreSQL 14+ or SQLite 3.35+ | as 1.1.0.x | as 1.1.0.x |
 | Composer | 2.x | 2.x | 2.x | 2.x |
-| Node.js | 20 (the guide), builds also on newer releases with the OpenSSL legacy provider | 18 or 20 (`engines`), `.nvmrc`: 18 | 18 (`engines`, `.nvmrc`) | 22 (`engines`, `.nvmrc`) |
+| Node.js | `master`: 22 (`.nvmrc`); `1.0.0.x`: 20 (`.nvmrc`, the guide); both builds need the OpenSSL legacy provider on Node.js 17 and later | 18 or 20 (`engines`), `.nvmrc`: 18 | 18 (`engines`, `.nvmrc`) | 22 (`engines`, `.nvmrc`) |
 | Yarn | 1.x, needed by `composer install` itself | 1.22 | 1.22 | 1.22 |
 | Web server | Apache 2.4 or nginx with PHP-FPM; PHP's built-in server for development | Apache 2.4 or nginx 1.18+ with PHP-FPM; Symfony CLI for development | as 1.1.0.x | as 1.1.0.x |
 | Document root | `web/` | `public/` | `public/` | `public/` |
@@ -31,9 +31,10 @@ The sections below explain each row.
 
 | Line | `composer.json` | What the line's documentation says |
 |---|---|---|
-| 2.5 (`v2.5.0.3` and later, `master`) | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ^8.1 \|\| ^8.2 \|\| ^8.3 \|\| ^8.4 \|\| ^8.5 \|\| ^8.6` | README: "supports PHP 8.3 -> 8.5"; `doc/INSTALL.md`: "PHP 8.1+ (8.5 branch strongly recommended)" |
+| 2.5 (`v2.5.0.3` and later, `master`) | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ^8.1 \|\| ^8.2 \|\| ^8.3 \|\| ^8.4 \|\| ^8.5 \|\| ^8.6` | README of `master`: "PHP 8.1 or newer" (the README of `v2.5.0.6`: "supports PHP 8.3 -> 8.5"); the guide of `v2.5.0.6`: "PHP 8.1+ (8.5 branch strongly recommended)" |
 | 2.5 (`v2.5.0.0`, `v2.5.0.1`) | `^7.1.3 \|\| ^8.1 \|\| ^8.2` | as above |
 | 1.0.0.x | as 2.5 (`v1.0.0.0.3`: the same list without `^8.0`) | "The latest version of the 8.5 branch is strongly recommended" |
+| the legacy kernel of the 2.5 generation (`se7enxweb/exponential` 6.0) | `^8.1 \|\| ... \|\| ^8.8` | the effective minimum of the line: Composer would refuse it on PHP 8.0, were the check not switched off |
 | 1.1.0.x | `^8.0` | "PHP 8.0+ (PHP 8.5 strongly recommended)"; tested on PHP 8.5.5 |
 | 1.2.0.x | `>=8.2` | "PHP 8.2+ (PHP 8.5 strongly recommended)"; tested on PHP 8.5.5 |
 | 1.3.0.x | `>=8.4` | "PHP 8.4 minimum is non-negotiable"; tested on PHP 8.5 |
@@ -41,12 +42,14 @@ The sections below explain each row.
 Three things follow from the table:
 
 1. **The 2.5 generation needs `--ignore-platform-reqs`.** Its `composer.json` accepts current PHP, but the install
-   guides of both branches say the flag is still required "due to ongoing package definition updates across
+   guides of the line (`doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release) say the flag is still required "due to ongoing package definition updates across
    repositories": some dependencies of the Symfony 3.4 stack declare older PHP limits than the versions 7x has made them
    work on. The flag makes Composer skip the PHP and extension checks entirely, so you have to check them yourself
    ([2.3](#23-php-extensions)).
 2. **Use the newest PHP the line accepts.** 7x tests the 1.1.0.x, 1.2.0.x and 1.3.0.x lines on PHP 8.5 and runs the
-   reference installation of 1.3.0.x on PHP 8.5. On the 2.5 generation, PHP 8.3 to 8.5 is what the README states.
+   reference installation of 1.3.0.x on PHP 8.5. On the 2.5 generation the floor is PHP 8.1, set by the legacy
+   kernel; because `--ignore-platform-reqs` hides that check, nothing stops an installation on PHP 8.0, which the
+   kernel does not support. Prefer 8.3 to 8.5, the versions the 7x READMEs name.
 3. **1.3.0.x refuses anything older than 8.4.** Its 7x forks (`se7enxweb/layouts-core`, `se7enxweb/fieldtype-richtext`,
    `se7enxweb/site-bundle`) exist because upstream packages broke under PHP 8.4 and Twig 3.24, and they rely on PHP 8.4
    language features.
@@ -72,7 +75,7 @@ example `/opt/plesk/php/8.5/bin/php bin/console`.
 
 | Setting | Value | Why |
 |---|---|---|
-| `memory_limit` | 2.5 generation: at least 464M (the install guide); 1.1.0.x to 1.3.0.x: at least 256M, 512M recommended | the container compilation and the installers load large configuration and SQL files. The Composer scripts of the 2.5 generation already run the console with `-d memory_limit=2000M`. |
+| `memory_limit` | 2.5 generation: at least 464M (the install guides of `1.0.0.x` and `v2.5.0.6`); 1.1.0.x to 1.3.0.x: at least 256M, 512M recommended | the container compilation and the installers load large configuration and SQL files. The Composer scripts of the 2.5 generation already run the console with `-d memory_limit=2000M`. |
 | `date.timezone` | set, for example `Europe/Berlin` or `UTC` | required by every line's guide ([list of time zones](https://www.php.net/manual/en/timezones.php)) |
 | `max_execution_time` | 120 or more for the web, 300 or more (or unlimited) for the command line | the 7x guides; long imports and reindexing run on the command line |
 | `opcache.enable` | `1` in production | performance |
@@ -111,7 +114,7 @@ Plus the PDO driver of your database:
 | SQLite | `pdo_sqlite` and `sqlite3` |
 
 The 2.5 generation declares no extensions in `composer.json` (and is installed with `--ignore-platform-reqs`, which
-would skip them anyway). Its install guide lists these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
+would skip them anyway). Its install guide (`v2.5.0.6`, and with the same list `1.0.0.x`) names these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
 `hash`, `iconv`, `intl`, `json`, `mbstring`, `openssl`, `pcre`, `pdo`, `pdo_mysql` (or `pdo_pgsql`, `pdo_sqlite`),
 `phar`, `session`, `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter` and `zlib`; and `curl`, `gd` or `imagick`,
 `opcache`, `apcu` and `zip` as strongly recommended. Add `xsl`: the legacy kernel's XML text and the RichText field
@@ -146,7 +149,16 @@ composer check-platform-reqs                        # after an install: what com
 ```
 
 `composer check-platform-reqs` reads the lock file, so it also reports extensions that dependencies (not only the
-project) require. It is the quickest way to find what `--ignore-platform-reqs` hid on the 2.5 generation.
+project) require. It is the quickest way to find what `--ignore-platform-reqs` hid on the 2.5 generation. Each line
+names a requirement, the version found and a verdict; what needs action is every line that does not end in
+`success`. Two such lines, in the shape Composer prints them (the package names depend on your lock file):
+
+```text
+ext-intl    n/a       <package> requires ext-intl (*)                      missing
+php         8.0.30    se7enxweb/exponential requires php (^8.1 || ^8.2 ...)   failed
+```
+
+The command exits with a non-zero status when anything is missing, so it can guard a deploy script.
 
 ## 2.4 Databases
 
@@ -178,8 +190,8 @@ the production server ([chapter 9](09-frontend-and-themes.md)).
 
 | Line | Node.js | Where it is declared | Yarn | Build tool |
 |---|---|---|---|---|
-| 2.5 (`master`) | 20 in `doc/INSTALL.md`; the scripts of `package.json` set `NODE_OPTIONS=--openssl-legacy-provider`, which lets the old webpack 4 build run on current Node.js (7x built the assets on Node.js 25) | no `engines`, no `.nvmrc` | 1.x; npm works for the site build | `@symfony/webpack-encore ^0.27.0` (webpack 4) |
-| 1.0.0.x | 20 (`nvm install 20` in `doc/INSTALL.md`) | no `engines`, no `.nvmrc` | 1.x | as 2.5 |
+| 2.5 (`master`) | 22 (`.nvmrc`, added 2026-10-05); the scripts of `package.json` set `NODE_OPTIONS=--openssl-legacy-provider`, which lets the old webpack 4 build run on current Node.js (7x built the assets on Node.js 25) | `.nvmrc`: `v22`; no `engines`. The `v2.5.0.6` release has no `.nvmrc`, its guide says Node.js 18 or 20, and its scripts do **not** set the OpenSSL option | 1.x; npm works for the site build | `@symfony/webpack-encore ^0.27.0` (webpack 4) |
+| 1.0.0.x | 20 (`nvm install 20` in `doc/INSTALL.md`) | `.nvmrc`: `v20` (added 2026-10-05, in no release yet); no `engines`. The scripts set the OpenSSL option, as on `master` | 1.x | as 2.5 |
 | 1.1.0.x | 18 or 20 | `"engines": {"node": "^18 \|\| ^20"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
 | 1.2.0.x | 18 | `"engines": {"node": "^18"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
 | 1.3.0.x | 22 | `"engines": {"node": "^22"}`, `.nvmrc`: `v22` | 1.22 via corepack | Webpack Encore with `@ibexa/frontend-config` |
@@ -189,17 +201,39 @@ Notes:
 - **On the 2.5 generation, Composer itself calls Yarn.** The `symfony-scripts` that run after `composer install` and
   `composer update` contain `yarn install` and `EzSystems\EzPlatformEncoreBundle\Composer\ScriptHandler::compileAssets`.
   Install Node.js and Yarn before Composer on these branches, or the scripts stop with an error.
+- **Webpack 4 and OpenSSL 3.** Node.js 17 and later ship OpenSSL 3, whose default provider no longer offers the MD4
+  hash webpack 4 uses. A webpack 4 build without `NODE_OPTIONS=--openssl-legacy-provider` stops with
+  `Error: error:0308010C:digital envelope routines::unsupported` (`code: 'ERR_OSSL_EVP_UNSUPPORTED'`). The
+  `package.json` of `master` and `1.0.0.x` sets the option in every script; the `package.json` released in `v2.5.0.6`
+  (and `1.0.0.8`, `1.0.0.10`) does not, so with those tags either build on Node.js 16 or set it yourself:
+
+  ```bash
+  NODE_OPTIONS=--openssl-legacy-provider yarn build:prod
+  ```
+
 - **On 1.3.0.x, Node.js 22 is not optional.** The 7x guide: "The `@ibexa/frontend-config` package and its webpack
   configurations are not compatible with Node.js 20."
 - **Use nvm.** The `.nvmrc` file lets `nvm use` (without a version) pick the right Node.js in the project root, and
-  `corepack enable` activates the Yarn 1.22 that Node.js ships:
+  `corepack enable` activates the Yarn 1.22 that Node.js ships. The `make assets`, `make assets-prod` and
+  `make ibexa-assets` targets run `nvm use || nvm install $(cat .nvmrc)` themselves; before 2026-10-05 the Makefile
+  wrote that as `$(cat .nvmrc)` inside make, which expanded to nothing, so on an older checkout run `nvm install`
+  yourself first.
 
 ```bash
 # install nvm once, see https://github.com/nvm-sh/nvm
-nvm install          # reads .nvmrc (1.1.0.x to 1.3.0.x); on the 2.5 generation: nvm install 20
+nvm install          # reads .nvmrc; on a release without one (v2.5.0.6, 1.0.0.x tags): nvm install 20
 nvm use
 corepack enable      # makes the yarn command available
 node -v && yarn -v
+```
+
+Expected output on 1.3.0.x (the patch versions will differ):
+
+```text
+Found '/var/www/nexus/.nvmrc' with version <v22>
+Now using node v22.x.y (npm v10.x.y)
+v22.x.y
+1.22.x
 ```
 
 ## 2.6 Composer
@@ -274,7 +308,10 @@ on the lines that have one) by the content you expect: uploaded images and their
 In this repository:
 
 - The project README and the 7x guide of each line: `README.md`, `doc/sevenx/INSTALL.md` (1.1.0.x to 1.3.0.x),
-  [doc/INSTALL.md](../INSTALL.md) (2.5 line).
+  `doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release (`git show v2.5.0.6:doc/INSTALL.md`). On `master`,
+  [doc/INSTALL.md](../INSTALL.md) is the short guide into this book.
+- `.nvmrc`, `package.json` and `Makefile` of the branch you install; `composer.json` of `se7enxweb/exponential` for the
+  legacy kernel's PHP constraint ([Packagist](https://packagist.org/packages/se7enxweb/exponential)).
 - [doc/netgen/INSTALL.md](../netgen/INSTALL.md) and [doc/netgen/FRONTEND.md](../netgen/FRONTEND.md) (upstream notes).
 - [doc/apache2/](../apache2/Readme.md), [doc/nginx/](../nginx/Readme.md), [doc/varnish/](../varnish/).
 - Chapters [6. Serving the site](06-serving-the-site.md), [7. Databases](07-databases.md),
@@ -287,7 +324,7 @@ External:
 - Composer: [download](https://getcomposer.org/download/), [command line interface](https://getcomposer.org/doc/03-cli.md).
 - Symfony: [setting up](https://symfony.com/doc/current/setup.html), [file permissions](https://symfony.com/doc/current/setup/file_permissions.html),
   [Symfony CLI server](https://symfony.com/doc/current/setup/symfony_cli.html), [Encore installation](https://symfony.com/doc/current/frontend/encore/installation.html).
-- Node.js: [releases](https://nodejs.org/en/about/previous-releases), [nvm](https://github.com/nvm-sh/nvm),
+- Node.js: [releases](https://nodejs.org/en/about/previous-releases), [the OpenSSL 3 change in Node.js 17](https://nodejs.org/en/blog/release/v17.0.0), [nvm](https://github.com/nvm-sh/nvm),
   [corepack](https://github.com/nodejs/corepack), [Yarn 1](https://classic.yarnpkg.com/en/docs/install).
 - Upstream requirements: [2.5](https://doc.ibexa.co/en/2.5/getting_started/requirements/),
   [3.3](https://doc.ibexa.co/en/3.3/getting_started/requirements/), [4.6](https://doc.ibexa.co/en/4.6/getting_started/requirements/),
