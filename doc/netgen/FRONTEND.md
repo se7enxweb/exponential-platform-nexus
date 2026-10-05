@@ -10,8 +10,8 @@ Authors
 Prerequisites
 -------------
 
-* Node JS
-* Yarn
+* Node.js: the version in `.nvmrc` (22 on this branch; `nvm install && nvm use` in the project root)
+* Yarn 1 (or npm, which reads the committed `package-lock.json`)
 
 Usage
 -----
@@ -95,4 +95,4 @@ Resources
 ---------
 
 * [Yarn](https://yarnpkg.com)
-* [Webpack Encore](http://symfony.com/doc/current/frontend.html)
+* [Webpack Encore](https://symfony.com/doc/current/frontend.html)
