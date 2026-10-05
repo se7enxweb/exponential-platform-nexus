@@ -345,7 +345,7 @@ yarn install        # install / sync all Node dependencies
 
 ## Database Conversion
 
-See **[doc/sevenx/INSTALL.md — Section 22: Database Conversion](doc/sevenx/INSTALL.md#22-database-conversion)**
+See **[doc/sevenx/INSTALL.md — Section 21: Database Conversion](doc/sevenx/INSTALL.md#21-database-conversion)**
 for the full command reference covering all conversion paths, tool install instructions,
 `.env.local` DSN updates, and the post-conversion checklist.
 
