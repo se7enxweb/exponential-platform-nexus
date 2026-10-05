@@ -60,7 +60,7 @@ assets-watch: ## Watch frontend assets (during development)
 
 .PHONY: graphql-schema
 graphql-schema: ## Generate graphql schema
-	$(PHP_RUN) bin/console ezplatform:graphql:generate-schema --env=$(APP_ENV)
+	$(PHP_RUN) bin/console ibexa:graphql:generate-schema --env=$(APP_ENV)
 
 .PHONY: clear-cache
 clear-cache: ## Clear caches for specified environment (default: APP_ENV=dev)
@@ -81,7 +81,7 @@ migrations: ## Run Doctrine migrations for specified environment (default: APP_E
 
 .PHONY: reindex
 reindex: ## Recreate or refresh search engine index for specified environment (default: APP_ENV=dev)
-	$(PHP_RUN) bin/console ezplatform:reindex --env=$(APP_ENV)
+	$(PHP_RUN) bin/console ibexa:reindex --env=$(APP_ENV)
 
 .PHONY: build
 build: ## Build the project (install vendor, migrations, reindex, build assets, clear cache) for specified environment (default: APP_ENV=dev)
