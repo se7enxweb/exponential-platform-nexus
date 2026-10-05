@@ -9,7 +9,7 @@ the options and says what can go wrong. For a production site, read the book's c
 
 | Line | Branch | Platform | Symfony | PHP | Legacy kernel | Node.js |
 |---|---|---|---|---|---|---|
-| 2.5 generation (1.0.0.x) | `master` (this branch), also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
+| 2.5 generation (1.0.0.x) | `master` (this branch), also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 on `master`, 20 on `1.0.0.x` (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
 | 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 18 or 20 |
 | 1.2.0.x | `1.2.0.x` | Ibexa OSS 4.6 | 5.4 | 8.2 or newer | yes | 18 |
 | 1.3.0.x | `1.3.0.x` | Platform v5 | 7.4 | 8.4 or newer | no | 22 |
@@ -53,15 +53,26 @@ SQLite needs no server; the file is named in the configuration ([chapter 7](book
 ## 4. Get the code
 
 ```bash
-git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x
+git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x, 1.0.0.x
 cd nexus
-git checkout 1.3.0.5            # the newest tag of the line: git tag -l --sort=version:refname
-composer install
+git checkout 1.3.0.5            # the newest tag of the line: git tag -l '1.3.0.*' --sort=version:refname
+composer install                # the 2.5 generation: composer install --keep-vcs --ignore-platform-reqs
 ```
 
-Run Composer with the same PHP version the site will use. The Composer scripts publish assets and, on the lines with
-the legacy kernel, install it into `ezpublish_legacy/` and link the project's legacy files into it. Details and the
-`composer create-project` alternative: [chapter 3](book/03-getting-the-code.md).
+Always name the branch: a clone without `-b` gives `master`, the 2.5 generation. Run Composer with the same PHP
+version the site will use. The Composer scripts publish assets and, on the lines with the legacy kernel, install it
+into `ezpublish_legacy/` and link the project's legacy files into it.
+
+The branches carry fixes of 2026-10-05 that no release has yet (`v2.5.0.7` and the next tag of each line are
+upcoming): the `dev.` host switch and the cache handling of `AppCache` on the 2.5 generation, trusted proxies and the
+Symfony HTTP cache proxy on 1.1.0.x to 1.3.0.x. For a public site, stay on the branch tip (skip the `git checkout`
+of the tag) until the next release, or read [chapter 1](book/01-introduction.md#fixed-on-the-branches-not-yet-released)
+for what each release lacks.
+
+With `composer create-project` instead of a clone, **always give a version**
+(`se7enxweb/exponential-platform-nexus:1.3.0.5`, `:v1.2.0.0`, `:v1.1.0.7`, `:1.0.0.9`, `:v2.5.0.6`): without one,
+Composer installs the upstream Media Site 3.1.6, which Packagist lists under the same name. Details:
+[chapter 3](book/03-getting-the-code.md).
 
 ## 5. Install
 
@@ -69,6 +80,8 @@ the legacy kernel, install it into `ezpublish_legacy/` and link the project's le
 
 1. Edit `app/config/parameters.yml` (created from `parameters.yml.dist` by `composer install`): the `env(DATABASE_*)`
    values and `env(SYMFONY_SECRET)`. Generate the secret with `openssl rand -hex 32`; the shipped placeholder is public.
+   Set `ngsite.default.locations.tree_root.id: 168`, the root of the CJW content: `master` ships 2 and `v2.5.0.6`
+   does not define it at all ([chapter 4](book/04-installing.md#step-1-database-settings-in-parametersyml)).
 2. Install the demo content:
 
    ```bash
@@ -78,12 +91,16 @@ the legacy kernel, install it into `ezpublish_legacy/` and link the project's le
    `cjw-exponential-media` installs the CJW demo ("JAC Example", German and English) from the package
    `se7enxweb/cjw-exponential-media-site-data`. The kernel also offers `exponential-oss`, a clean repository without
    demo content. The `1.0.0.x` branch uses other types ([chapter 4](book/04-installing.md)).
-3. Build the site theme (Webpack 4; the npm scripts set the OpenSSL option current Node.js needs):
+3. Build the site theme (Webpack 4; the npm scripts of the branch set the OpenSSL option current Node.js needs):
 
    ```bash
+   nvm use                 # .nvmrc
    npm install
    npm run build:prod      # or: yarn install && yarn build:prod
    ```
+
+   The `package.json` of the release `v2.5.0.6` lacks that option; there, run
+   `NODE_OPTIONS=--openssl-legacy-provider npm run build:prod`, or the build stops with `ERR_OSSL_EVP_UNSUPPORTED`.
 
 4. Link the project's legacy files into the legacy kernel, which Composer replaces on every update:
 
@@ -121,12 +138,18 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    JWT_PASSPHRASE=<another random value>
    ```
 
-   The shipped `.env` sets `APP_ENV=dev` and placeholder secrets (an empty `APP_SECRET` on 1.3.0.x). On SQLite,
+   The shipped `.env` sets `APP_ENV=dev` and placeholder secrets (an empty `APP_SECRET` on 1.3.0.x). Set `APP_ENV`
+   here before installing, so that the console and the web server agree (on 1.3.0.5 the linked `public/.htaccess`
+   forces `prod` for web requests). On SQLite,
    `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"` and
-   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)).
-2. Install the demo content:
+   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On 1.1.0.x and 1.2.0.x the
+   `exponential-media` type ships its extra schema for SQLite only; on MySQL or PostgreSQL use SQLite for the demo or
+   the `netgen-media` type ([chapter 4](book/04-installing.md#45-the-110x-line)).
+2. Install the demo content. On 1.3.0.x update the core package first: the locked `v5.0.7` does not create the Netgen
+   Layouts tables, `v5.0.9` does ([chapter 4](book/04-installing.md#47-the-130x-line)).
 
    ```bash
+   composer update se7enxweb/exponential-platform-dxp-core      # 1.3.0.x only
    php bin/console exponential:install exponential-media --no-interaction
    ```
 
@@ -137,7 +160,7 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    yarn install
    yarn build:prod                                 # the site theme
    php bin/console assets:install --symlink --relative public
-   yarn ez                                         # admin assets on 1.1.0.x; 1.2.0.x and 1.3.0.x: composer ibexa-assets
+   make ibexa-assets                               # admin assets (1.1.0.x: yarn ez; 1.2.0.x, 1.3.0.x: composer ibexa-assets)
    php bin/console lexik:jwt:generate-keypair
    php bin/console ibexa:graphql:generate-schema
    php bin/console cache:clear
@@ -176,6 +199,9 @@ For a quick look on a development machine, `symfony server:start` serves `public
 | `EntrypointNotFoundException ... "photoswipe-init"` | The site theme was not built; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
 | `ERR_OSSL_EVP_UNSUPPORTED` during the build (2.5 generation) | Use the npm scripts, which set the OpenSSL option; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
 | `Unable to create the store directory` | `var/` not writable for the web server; [chapter 13.8](book/13-troubleshooting.md#138-files-and-permissions) |
+| The new project's `composer.json` says `"name": "netgen/media-site"` | `create-project` ran without a version and installed upstream; start again with a version ([chapter 3](book/03-getting-the-code.md#31-branches-tags-and-packagist-versions)) |
+| `no such table: nglayouts_...` during the install (1.3.0.x) | Update `se7enxweb/exponential-platform-dxp-core` to `v5.0.9`; [chapter 4.7](book/04-installing.md#47-the-130x-line) |
+| The site shows an empty database while the console works (SQLite) | Web and console use different `APP_ENV`; [chapter 4.10](book/04-installing.md#410-what-can-go-wrong-across-lines) |
 | `Container extension "netgen_layouts" is not registered` (1.3.0.x) | Restore `config/bundles.php`; [chapter 13.6](book/13-troubleshooting.md#136-netgen-layouts) |
 | Images missing after `composer update` (2.5 generation) | Recreate the storage link of step 4; [chapter 13.2](book/13-troubleshooting.md#132-composer-and-dependencies) |
 | Anything else | The log: `var/logs/prod.log` (2.5 generation) or `var/log/prod.log`; then [chapter 13](book/13-troubleshooting.md) |
