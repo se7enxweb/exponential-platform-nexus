@@ -57,7 +57,7 @@ that matters, and take a backup first ([section 7.9](#79-backups-and-restores)).
 | Default shipped in the repository | `pdo_mysql` (`parameters.yml.dist`) | PostgreSQL URL in `.env` | PostgreSQL URL in `.env` | PostgreSQL URL in `.env` |
 | Repository table prefix | `ez` | `ez` | `ez` (plus a few `ibexa_` tables) | `ibexa_` |
 | Netgen Layouts tables | `nglayouts_*` | `nglayouts_*` | `nglayouts_*` | `nglayouts_*` |
-| Install command | `ezplatform:install` | `ibexa:install` (alias `ezplatform:install`) | `ibexa:install` (alias `ezplatform:install`) | `exponential:install` |
+| Install command | `ezplatform:install` | `exponential:install` (the project's, since `v1.1.0.7`), and the upstream `ibexa:install` (alias `ezplatform:install`) | `exponential:install` (the project's), and the upstream `ibexa:install` (alias `ezplatform:install`) | `exponential:install` (the core package's) |
 
 The table is taken from each branch's committed configuration and from the four reference installations on the
 development server (`site.v2.nexus`, `site.v3.nexus`, `site.v4.nexus` and `site.v5.nexus`), whose SQLite files were
@@ -246,7 +246,7 @@ match ([section 7.6](#76-mysql-and-mariadb)).
 
 ### 7.2.5 The legacy kernel shares the same database
 
-On the lines that carry Exponential Platform Legacy through the legacy bridge (1.0.0.x and 1.1.0.x), the legacy
+On the lines that carry the Exponential legacy kernel through a legacy bridge (1.0.0.x, 1.1.0.x and 1.2.0.x), the legacy
 kernel does not have its own database settings. The bridge (`se7enxweb/legacy-bridge`,
 `bundle/LegacyMapper/Configuration.php`) reads the Doctrine connection's parameters at every legacy kernel build and
 injects them into `site.ini [DatabaseSettings]`:
@@ -257,8 +257,9 @@ injects them into `site.ini [DatabaseSettings]`:
 | `driver` | `DatabaseImplementation`: `pdo_mysql` becomes `ezmysqli`, `pdo_pgsql` becomes `ezpostgresql`, `oci8` becomes `ezoracle`, `pdo_sqlite` becomes `sqlite3` |
 | `path` (SQLite only) | `Database`, the absolute path of the shared file |
 
-This was read in the bridge installed on the v2 (1.0.0.x) and v3 (1.1.0.x) reference installations. Do not set
-database values in the legacy `settings/override/site.ini.append.php` on these lines; they are overwritten. On SQLite,
+This was read in the bridge installed on the v2 (1.0.0.x) and v3 (1.1.0.x) reference installations, and in
+`se7enxweb/ibexa-legacy-bridge` (`bundle/LegacyMapper/Configuration.php`) on the v4 (1.2.0.x) one, which maps the
+same parameters the same way. Do not set database values in the legacy `settings/override/site.ini.append.php` on these lines; they are overwritten. On SQLite,
 both kernels open the same file, and the legacy side then uses Exponential's own SQLite driver, which the
 [Exponential 6 book, chapter 9](https://github.com/se7enxweb/exponential/blob/main/doc/install/09-databases.md)
 describes in detail.
@@ -350,13 +351,14 @@ against an existing site only when you mean to start that site again from nothin
 |---|---|---|
 | `master` | `php bin/console ezplatform:install cjw-exponential-media` | `cjw-exponential-media` (data from `se7enxweb/cjw-exponential-media-site-data`), plus those of the installed bundles |
 | 1.0.0.x | `php bin/console ezplatform:install <type>` | `exponential-cjw` (from `src/AppBundle`), and on the v2 reference installation also `clean`, `exponential-oss`, `netgen-media`, `netgen-media-clean`, `netgen-media-remote-clean` |
-| 1.1.0.x | `php bin/console ibexa:install <type>` (alias `ezplatform:install`) | on the v3 reference installation: `clean`, `ibexa-oss`, `exponential-media`, `netgen-media`, `netgen-media-clean` |
-| 1.2.0.x | `php bin/console ibexa:install <type>` (alias `ezplatform:install`) | on the v4 reference installation: `ibexa-oss`, `exponential-media`, `netgen-media`, `netgen-media-legacy` |
-| 1.3.0.x | `php bin/console exponential:install <type>` | `ibexa-oss` (the default), `exponential-oss`, `exponential-media`, and `netgen-media` from `netgen/site-installer-bundle` |
+| 1.1.0.x | `php bin/console exponential:install exponential-media` (`src/Command/ExponentialInstallCommand.php`, since `v1.1.0.7`) | `exponential:install` knows only the types tagged `exponential.installer`: `exponential-media`. The upstream `ibexa:install` (alias `ezplatform:install`) knows the types tagged `ezplatform.installer`: `clean`, `ibexa-oss`, `netgen-media`, `netgen-media-clean` |
+| 1.2.0.x | `php bin/console exponential:install exponential-media` (`src/RepositoryInstaller/Command/`, since `v1.2.0.0`) | `exponential:install` collects every type tagged `ibexa.installer`: `exponential-media`, `ibexa-oss` (its default), `netgen-media` and the other types of `netgen/site-installer-bundle`; the upstream `ibexa:install` sees the same types |
+| 1.3.0.x | `php bin/console exponential:install <type>` (from the core package) | `ibexa-oss` (the default), `exponential-oss`, `exponential-media`, and `netgen-media` from `netgen/site-installer-bundle` |
 
-The README of 1.1.0.x and 1.2.0.x names `exponential:install exponential-media`. The v3 and v4 reference
-installations register `ibexa:install` with the alias `ezplatform:install`, and no `exponential:install`. The
-installed core package decides which name exists; before you install, list what yours offers:
+On 1.1.0.x and 1.2.0.x both commands exist side by side: the project's `exponential:install` (with SQLite support
+and the media installer) and the platform's `ibexa:install`. Use `exponential:install` for the demo, as the READMEs
+of both lines do; the earlier 1.1.0.x tags (`v1.1.0.0` to `v1.1.0.6`) have only `ibexa:install`, which is also what
+the v3 reference installation, made from `v1.1.0.6`, shows. Before you install, list what your copy offers:
 
 ```bash
 php bin/console list | grep -E ':install'
@@ -385,13 +387,26 @@ Read in `InstallPlatformCommand` and `CoreInstaller` of the core package on the 
    administrator password.
 8. Clears the repository cache pool and runs `exponential:reindex`, unless you pass `--skip-indexing`.
 
-On the v5 reference installation step 5 looks for `vendor/netgen/layouts-core/...`, while the package is installed as
-`vendor/se7enxweb/layouts-core` (which `replace`s `netgen/layouts-core`). The Layouts tables there were created by
-the Layouts migrations instead: `nglayouts_migration_versions` lists the migrations up to `Version010300`. If the
-`nglayouts_*` tables are missing after an install, run the Layouts migrations as shown in the next section.
+**Step 5 depends on the core version.** Up to core `v5.0.7`, the version the lock file of `1.3.0.5` and of the branch
+pins and the one the v5 reference installation runs, step 5 looks only for `vendor/netgen/layouts-core/...`, while
+this line installs the fork as `vendor/se7enxweb/layouts-core` (which `replace`s `netgen/layouts-core`). The step is
+then skipped without a message, no `nglayouts_*` table is created, and loading the `exponential-media` data, which
+holds about 1,200 `INSERT`s into those tables, fails. On the reference installation the Layouts tables were created
+by the Layouts migrations instead: `nglayouts_migration_versions` lists the migrations up to `Version010300`. Core
+`v5.0.9` (released 2026-10-05) checks `vendor/se7enxweb/layouts-core` first and `vendor/netgen/layouts-core` second,
+prints `Importing Netgen Layouts schema from <file>`, and says so when it finds neither. Update the core before a
+fresh install:
 
-When the database cannot be created, the command's error message tells you to check `app/config/parameters.yml`.
-That file does not exist on 1.3.0.x: check `DATABASE_URL` instead.
+```bash
+composer update se7enxweb/exponential-platform-dxp-core
+```
+
+If the `nglayouts_*` tables are missing after an install all the same, run the Layouts migrations as shown in the next
+section.
+
+When the database cannot be created, core `v5.0.7` tells you to check `app/config/parameters.yml`, a file 1.3.0.x
+does not have; check `DATABASE_URL` in `.env.local` instead. Core `v5.0.9` names `.env.local` and `DATABASE_URL` in
+the message itself.
 
 ---
 
@@ -427,8 +442,10 @@ php bin/console doctrine:migrations:migrate --configuration=vendor/se7enxweb/lay
 The first form is the one in [`doc/cjw/PACKAGE_CHANGELOG.md`](../cjw/PACKAGE_CHANGELOG.md); the configuration files
 were found at those paths on the v2 to v4 and the v5 reference installations respectively.
 
-**Content migrations.** 1.3.0.x requires `mrk-te/ibexa-migration-bundle2`, and 1.0.0.x carries
-`se7enxweb/ezmigrationbundle`. These migrate content and content types, not the schema; see
+**Content migrations.** Each line carries a content migration bundle: `se7enxweb/ezmigrationbundle ^5.9.4` on the
+2.5 generation (`master`, `1.0.0.x`), `se7enxweb/ezmigrationbundle ^6.0` on 1.1.0.x,
+`tanoconsulting/ibexa-migration-bundle ^1.0` on 1.2.0.x and `mrk-te/ibexa-migration-bundle2 ^3.0` on 1.3.0.x. These
+migrate content and content types, not the schema; see
 [chapter 5](05-the-demo-site-and-layouts.md) and the upstream `doc/netgen/IBEXA_MIGRATIONS.md` of each line.
 
 ---
@@ -605,11 +622,17 @@ On 1.0.0.x set the driver to SQLite in `app/config/parameters.yml`:
 The file is `database_path`, which `default_parameters.yml` sets to `var/data_<environment>.db`. Two remarks from
 reading the 1.0.0.x files:
 
-- The comments in `default_parameters.yml` and `parameters.yml.dist` say the path can be overridden with a
-  `DATABASE_PATH` environment variable. The parameter is defined as a fixed string, not as `%env(DATABASE_PATH)%`, so
-  an environment variable has no effect. Override it by setting `database_path:` in `app/config/parameters.yml`.
-- On `master`, `config.yml` has no `path:` line and no `database_path` parameter, although `doc/INSTALL.md` there says
-  the file is created at `var/data_dev.db`. Use the 1.0.0.x configuration for SQLite.
+- `database_path` is a fixed string, not `%env(DATABASE_PATH)%`, so no environment variable moves the file. Override
+  it by setting `database_path:` in `app/config/parameters.yml`, which is imported after `default_parameters.yml`:
+
+  ```yaml
+      database_path: /var/www/nexus/var/nexus.db
+  ```
+
+  Up to the release `1.0.0.9` the comments in both files claimed a `DATABASE_PATH` environment variable would work;
+  the branch corrected them on 2026-10-05.
+- On `master`, `config.yml` has no `path:` line and no `database_path` parameter, although the install guide
+  released with `v2.5.0.6` says the file is created at `var/data_dev.db`. Use the 1.0.0.x configuration for SQLite.
 
 The legacy kernel opens the same file through the bridge ([section 7.2.5](#725-the-legacy-kernel-shares-the-same-database)).
 
@@ -683,7 +706,7 @@ Whichever way you choose:
 - Carry the `nglayouts_*` tables and `nglayouts_migration_versions` across, or Layouts migrations try to run again.
 - Expect differences in sorting and comparison: MySQL's `utf8mb4_unicode_520_ci` compares case-insensitively,
   PostgreSQL and SQLite compare case-sensitively by default.
-- Change `DATABASE_URL` (or the `DATABASE_*` parameters), clear the cache, and on 1.0.0.x and 1.1.0.x remember that
+- Change `DATABASE_URL` (or the `DATABASE_*` parameters), clear the cache, and on 1.0.0.x to 1.2.0.x remember that
   the legacy kernel follows automatically through the bridge.
 - Keep the old database untouched until the new site has been checked page by page.
 
@@ -711,7 +734,8 @@ Whichever way you choose:
 
 In this repository (`master`):
 
-- [doc/INSTALL.md](../INSTALL.md): the 1.0.0.x installation guide, sections on creating the database and SQLite
+- [doc/INSTALL.md](../INSTALL.md): the short installation guide (on `1.0.0.x` and in `v2.5.0.6`, `doc/INSTALL.md` is
+  the line's own guide, with sections on creating the database and SQLite)
 - [app/config/config.yml](../../app/config/config.yml), [app/config/default_parameters.yml](../../app/config/default_parameters.yml),
   [app/config/parameters.yml.dist](../../app/config/parameters.yml.dist): the Symfony 3.4 connection
 - [app/config/env/generic.php](../../app/config/env/generic.php) (DFS variables),
@@ -737,6 +761,10 @@ On the other branches (GitHub):
   [doc/sevenx/INSTALL.md](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.3.0.x/doc/sevenx/INSTALL.md),
   [doc/netgen/IBEXA_MIGRATIONS.md](https://github.com/se7enxweb/exponential-platform-nexus/blob/1.3.0.x/doc/netgen/IBEXA_MIGRATIONS.md)
 
+The 1.3.0.x core package: [se7enxweb/exponential-platform-dxp-core](https://packagist.org/packages/se7enxweb/exponential-platform-dxp-core)
+(source [se7enxweb/core](https://github.com/se7enxweb/core); the installer is
+`src/bundle/RepositoryInstaller/Installer/CoreInstaller.php`).
+
 Other chapters: [2. Requirements](02-requirements.md), [4. Installing](04-installing.md),
 [5. The demo site and Netgen Layouts](05-the-demo-site-and-layouts.md), [6. Serving the site](06-serving-the-site.md),
 [8. Configuration](08-configuration.md), [10. Operations](10-operations.md).
@@ -755,13 +783,13 @@ External:
   [secrets](https://symfony.com/doc/current/configuration/secrets.html)
 - PHP: [PDO](https://www.php.net/manual/en/book.pdo.php), [PDO_MYSQL](https://www.php.net/manual/en/ref.pdo-mysql.php),
   [PDO_PGSQL](https://www.php.net/manual/en/ref.pdo-pgsql.php), [PDO_SQLITE](https://www.php.net/manual/en/ref.pdo-sqlite.php)
-- Ibexa documentation (upstream of 1.2.0.x and 1.3.0.x): <https://doc.ibexa.co/>, including its update notes from
+- Ibexa documentation (upstream of 1.2.0.x and 1.3.0.x): <https://doc.ibexa.co/en/5.0/>, including its update notes from
   4.6 to 5.0 for the table rename
-- Netgen documentation (Layouts, Site API, Tags): <https://docs.netgen.io/>
+- Netgen documentation (Layouts, Site API, Tags): <https://docs.netgen.io/en/latest/>
 - MySQL: [the utf8mb4 character set](https://dev.mysql.com/doc/refman/8.0/en/charset-unicode-utf8mb4.html),
   [mysqldump](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html),
   [CREATE USER](https://dev.mysql.com/doc/refman/8.0/en/create-user.html); MariaDB:
-  [mariadb-dump](https://mariadb.com/kb/en/mariadb-dump/)
+  [mariadb-dump](https://mariadb.com/docs/server/clients-and-utilities/backup-restore-and-import-clients/mariadb-dump)
 - PostgreSQL: [CREATE DATABASE](https://www.postgresql.org/docs/current/sql-createdatabase.html),
   [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html),
   [pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html)
