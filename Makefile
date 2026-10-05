@@ -78,7 +78,7 @@ migrations: ## Run Doctrine migrations for specified environment (default: APP_E
 
 .PHONY: reindex
 reindex: ## Recreate or refresh search engine index for specified environment (default: APP_ENV=dev)
-	$(PHP_RUN) bin/console ibexa:reindex --env=$(APP_ENV)
+	$(PHP_RUN) bin/console exponential:reindex --env=$(APP_ENV)
 
 .PHONY: build
 build: ## Build the project (install vendor, migrations, reindex, build assets, clear cache) for specified environment (default: APP_ENV=dev)
