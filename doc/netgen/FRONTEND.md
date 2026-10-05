@@ -55,17 +55,22 @@ Read more about [Yarn](https://yarnpkg.com)
 Using Webpack Encore
 --------------------
 
-Start Webpack Encore with `yarn run encore`.
+To build dev assets use `yarn build:dev`.
+To build minified production assets use `yarn build:prod`.
+To build and watch `.sass` and `.js` files for changes use `yarn watch`.
+To start webpack dev server use `yarn server`.
 
-To build dev assets use `yarn build:dev` or `yarn encore dev`.
-To build minified production assets use `yarn build:prod` or `yarn encore production`.
-To build and watch `.sass` and `.js` files for changes use `yarn watch` or `yarn encore dev --watch`.
-To start webpack dev server use `yarn server` or `yarn encore dev-server`.
+Use these scripts rather than calling `encore` directly: this branch builds with Webpack 4, and every script in
+`package.json` sets `NODE_OPTIONS=--openssl-legacy-provider`, without which Node.js 17 and later stop with
+`ERR_OSSL_EVP_UNSUPPORTED`. If you do call Encore yourself, set it too:
+`NODE_OPTIONS=--openssl-legacy-provider yarn encore dev`.
 
 What Webpack Encore does
 ------------------------
 
-1. Watches `public/sass` and `public/es6` directories if started with `--watch`
+1. Watches `src/AppBundle/Resources/sass` and `src/AppBundle/Resources/es6` directories if started with `--watch`
+   (the entry points are `src/AppBundle/Resources/es6/app.js` and `photoswipe-init.js`, set in
+   `webpack.config.default.js`)
 2. Compiles Sass and ES6 files
 3. Copies all assets (images, fonts...) referenced in CSS to `web/assets/app/build` folder (or `web/assets/app/build_dev` in development environment)
 4. Adds vendor prefixes to css (`-moz`, `-webkit` ...)
@@ -84,7 +89,7 @@ php bin/console cache:clear
 Conventions
 -----------
 
-Main scss file is `sass/style.scss`
+Main scss file is `src/AppBundle/Resources/sass/style.scss` (imported by `es6/app.js`)
 
 Resources
 ---------
