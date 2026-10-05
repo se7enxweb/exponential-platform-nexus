@@ -117,6 +117,12 @@ Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.eart
   [upgrading between lines](doc/book/11-upgrading-between-lines.md),
   [migrating a site into Nexus](doc/book/12-migrating-into.md), [troubleshooting](doc/book/13-troubleshooting.md) and
   [security hardening](doc/book/14-security-hardening.md).
+- Before going live, read [chapter 14](doc/book/14-security-hardening.md): several fixes made to the branches on
+  5 October 2026 (the `dev` host switch and the cache header rewriting of the 2.5 generation, trusted proxies and the
+  HTTP cache switch of the newer lines) are in no release tag yet, and the chapter says how to check and take them.
+- Examples and notes: [Apache](doc/apache2/), [nginx](doc/nginx/), [Varnish](doc/varnish/varnish.md),
+  [logrotate](doc/logrotate/), the [Netgen Media Site notes](doc/netgen/) carried over from upstream, and
+  [UPGRADE.md](UPGRADE.md).
 
 # Default Installation Starter Demo Design Bundle Database 'admin' Password is 'publish' (all lowercase).
 
