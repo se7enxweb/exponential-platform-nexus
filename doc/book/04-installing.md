@@ -21,6 +21,7 @@ front-end build needs the bundles that Composer installed, and the cache must be
 | 4. Link files kept outside `vendor/` | the legacy directory is replaced on updates | manual symlinks | manual symlinks | automatic (Composer scripts) | automatic | not needed |
 | 5. Front-end assets | CSS and JavaScript of the site | `yarn build:prod` (also run by Composer) | as 2.5 | `yarn build:prod` | `yarn build:prod` | `yarn build:prod` |
 | 6. Admin assets | the administration interface's JavaScript | `composer ezplatform-assets` | as 2.5 | `yarn ez` | `composer ibexa-assets` | `composer ibexa-assets` |
+| | (`make ibexa-assets` runs the right one on every line) | | | | | |
 | 7. JWT keys | the REST API signs tokens with them | not used | not used | `lexik:jwt:generate-keypair` | same | same |
 | 8. GraphQL schema | the admin interface and the `/graphql` endpoint | `ezplatform:graphql:generate-schema` | same | `ibexa:graphql:generate-schema` | same | same |
 | 9. Permissions | PHP-FPM writes caches, logs, uploads, the SQLite file | `var/`, `web/var`, `ezpublish_legacy/var` | same | `var/`, `public/var`, `ezpublish_legacy/var` | same | `var/`, `public/var` |
@@ -79,7 +80,16 @@ writable `var/` directory.
 ## 4.3 The 2.5 line (`master`, `v2.5.0.x`)
 
 This line installs the CJW demo ("JAC Example", German and English) on MySQL or MariaDB, with the legacy kernel
-beside the Symfony 3.4 stack. The steps follow the line's [doc/INSTALL.md](../INSTALL.md), corrected where noted.
+beside the Symfony 3.4 stack. The steps follow the line's install guide as released in `v2.5.0.6`
+(`git show v2.5.0.6:doc/INSTALL.md`; on `master`, `doc/INSTALL.md` is now [the short guide](../INSTALL.md)),
+corrected where noted.
+
+**Release or branch.** `v2.5.0.6` is the newest release; `v2.5.0.7` is upcoming. The `master` branch has four fixes
+that the release lacks and that matter for a public site: `web/app.php` no longer runs a request in the `dev`
+environment because its `Host` header contains `dev.`, `app/AppCache.php` no longer makes private pages public, the
+build scripts set the OpenSSL option current Node.js needs, and `.gitignore` keeps `.env.php` and `.env.local` out of
+git. Install from the branch (`git clone -b master ...`, [chapter 3](03-getting-the-code.md#33-git-clone-and-composer-install))
+or carry those changes into your copy of `v2.5.0.6`.
 
 ### Step 1: database settings in `parameters.yml`
 
@@ -101,12 +111,24 @@ parameters:
     imagemagick_path: /usr/bin/convert
     ngsite.default.site_domain: localhost
     ngsite.default.locations.site_info.id: 65
-    ngsite.default.locations.tree_root.id: 2
+    ngsite.default.locations.tree_root.id: 168     # the root of the CJW content ("JAC Example")
 ```
 
 Generate the secret with `openssl rand -hex 32`. The shipped placeholder
 (`ThisEzPlatformTokenIsNotSoSecret_PleaseChangeIt`) is public, and the secret signs session-related and CSRF tokens.
 `DATABASE_VERSION` tells Doctrine which SQL dialect to use without connecting first; set it to your server's version.
+
+**The tree root must be 168.** The CJW content puts its site, "JAC Example", at location 168 (`/1/2/168/`), and the
+public siteaccesses serve `index_page: /startseite`, a page below it. `ngsite.default.locations.tree_root.id` sets
+the front-end root of `de` and `en` and the legacy kernel's `RootNode`. What the line ships does not get this right:
+
+| Version | `ngsite.default.locations.tree_root.id` as shipped | Result |
+|---|---|---|
+| `v2.5.0.6` | not defined in `parameters.yml.dist` or `default_parameters.yml` | the container does not build: `You have requested a non-existent parameter "ngsite.default.locations.tree_root.id"` |
+| `master` | `2` in `parameters.yml.dist` | the site starts, but at the content root above "JAC Example"; seen from there the start page's URL alias is `jac_example/startseite`, so `index_page: /startseite` points at nothing |
+
+Write `168` into `app/config/parameters.yml` as above. (The `1.0.0.x` branch now ships 168,
+[4.4](#44-the-100x-branch).)
 
 ### Step 2: install the schema and the content
 
@@ -121,13 +143,26 @@ script `composer ezplatform-install`. The data files are MySQL dumps, so this ty
 
 What can go wrong:
 
-- **Unknown install type.** The command lists the types it knows. `netgen-media` is not among them on `master` since
-  `v2.5.0.6`: its data package `netgen/media-site-data` (about 180 MB) is only suggested now. Install it with
-  `composer require netgen/media-site-data:~1.8.1` if you want the Netgen demo instead.
-- **`exponential-oss`.** The guide of `master` lists an `exponential-oss` type for an empty schema; the branch's own
-  configuration does not register it. Run `php bin/console ezplatform:install --help` to see what your checkout has.
+- **Which types exist.** Three sources register types on this line: the project (`cjw-exponential-media`), the kernel
+  fork `se7enxweb/ezpublish-kernel` (`clean` and `exponential-oss`, both an empty repository; checked in `v7.5.41`, the
+  version `~7.5.40` resolves to today) and `netgen/site-installer-bundle` (`netgen-media`, `netgen-media-clean`,
+  `netgen-media-remote-clean`). An unknown type ends the command with the list of known ones.
+- **`netgen-media` is registered but has no data.** Since `v2.5.0.6` the data package `netgen/media-site-data`
+  (about 180 MB) is only suggested, so the type exists while its SQL and images do not, and the installer fails when
+  it reads them. Install the package first if you want the Netgen demo instead:
+  `composer require --ignore-platform-reqs netgen/media-site-data:~1.8.1`. The Netgen demo's root is location 2, so
+  set `ngsite.default.locations.tree_root.id: 2` for it.
 - **SQLite.** The guide describes `pdo_sqlite` for development, but on `master` the SQLite file path is not wired into
   `app/config/config.yml` (it is on `1.0.0.x`, [4.4](#44-the-100x-branch)), and the CJW data files are MySQL dumps.
+- **A second run.** The command drops every table it knows and asks first; see [4.11](#411-running-the-install-again).
+
+A successful run ends after the schema, the data and the search index; look for the CJW data file in its output and
+check the result with one query:
+
+```bash
+mysql -u nexus -p nexus -e "SELECT path_identification_string FROM ezcontentobject_tree WHERE node_id = 168;"
+# jac_example
+```
 
 ### Step 3: the front-end assets
 
@@ -135,13 +170,17 @@ The site's CSS and JavaScript are built with Webpack Encore from `src/AppBundle/
 `yarn install` and built them; after a change, or if that step failed:
 
 ```bash
-nvm use 20            # see chapter 2 for the Node.js versions
+nvm use               # master: .nvmrc says v22; v2.5.0.6 has no .nvmrc, use: nvm use 20
 yarn install          # or: npm install
 yarn build:prod       # or: npm run build:prod
 ```
 
-The `package.json` scripts set `NODE_OPTIONS=--openssl-legacy-provider` so the webpack 4 build also runs on Node.js
-releases with OpenSSL 3. If the build is skipped, the site fails with HTTP 500 and
+On `master` the `package.json` scripts set `NODE_OPTIONS=--openssl-legacy-provider` so the webpack 4 build also runs on
+Node.js releases with OpenSSL 3. The `package.json` of `v2.5.0.6` does not: there the build stops with
+`ERR_OSSL_EVP_UNSUPPORTED` on Node.js 17 and later unless you run
+`NODE_OPTIONS=--openssl-legacy-provider yarn build:prod` ([chapter 2](02-requirements.md#25-nodejs-and-yarn)). The
+same applies to the `yarn install` and asset build that `composer install` runs. If the build is skipped, the site
+fails with HTTP 500 and
 `EntrypointNotFoundException: Could not find the entry "photoswipe-init"`: the templates ask for an entry point that
 was never built. The administration's assets are built by `composer ezplatform-assets` (it dumps the JavaScript
 translations and runs `yarn ezplatform`).
@@ -159,7 +198,7 @@ ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage ezpublish_legacy/
 ln -s ../../src/AppBundle/Resources/public web/bundles/app
 ```
 
-These are the links of the line's guide, written from the project root (the guide `cd`s into each directory). Each
+These are the links of the line's guide (`v2.5.0.6`), written from the project root (the guide `cd`s into each directory). Each
 link target is relative to the directory that holds the link. The guide writes the first target as `../../../src/...`; seen from
 `ezpublish_legacy/extension/`, three levels up is the directory *above* the project root, so that link dangles unless
 your layout differs. A working 2.5 installation checked for this book uses `../../src/...`, as above. Check each link
@@ -203,13 +242,39 @@ and the shipped host names are those of the CJW demo servers. Replace them with 
 ```
 
 Two host names (one public, one for editors) is what the guide recommends. The front-end siteaccesses serve the
-`index_page: /startseite` of the CJW content; their tree root is `ngsite.default.locations.tree_root.id`, which must be
-the location of the site's root in the content you installed. Then continue with [4.9](#49-the-first-login).
+`index_page: /startseite` of the CJW content; their tree root is `ngsite.default.locations.tree_root.id`, 168 for the
+CJW content (step 1).
+
+Two more files carry the demo servers' host names:
+
+- `app/config/http_cache.yml` lists the hosts, siteaccesses and paths whose responses `app/AppCache.php` must never
+  make public (`uncached_hostnames`, `uncached_siteaccesses`, `uncached_url_patterns`). Replace the demo host names
+  with your editors' host names. On `master`, `AppCache` also always excludes the admin siteaccesses, `/nglayouts`,
+  `/graphql`, `/api/` and the login pages, and reads extra host names from the comma-separated environment variable
+  `HTTP_CACHE_UNCACHED_HOSTNAMES` ([chapter 6](06-serving-the-site.md#67-the-http-cache-symfony-proxy-varnish-and-foshttpcache)).
+- `web/.htaccess` links to `src/AppBundle/Resources/symlink/root_dev/.htaccess`, which sets `SYMFONY_ENV=prod`. On
+  `1.0.0.x` that file also requires HTTP Basic authentication against a password file of the demo servers; on `master`
+  those lines are commented out. See [chapter 6](06-serving-the-site.md#634-serve-webappphp-the-100x-line).
+
+A quick test from the server itself, before DNS points at it (the host name must be one of your `Map\Host` entries):
+
+```bash
+curl -sI -H 'Host: www.example.com' http://127.0.0.1/ | head -1     # the German start page
+curl -sI -H 'Host: www.example.com' http://127.0.0.1/en | head -1   # the English start page
+```
+
+Expect `200` (or a `301`/`302` to the start page). A `404` usually means a wrong tree root; a `500` is explained in
+`var/logs/prod.log`. This check was not run against a 2.5 installation for the book; it only uses what the
+configuration above defines.
+
+Then continue with [4.9](#49-the-first-login).
 
 ## 4.4 The 1.0.0.x branch
 
-The `1.0.0.x` branch shares the stack of the 2.5 line and differs in its demo data. There are three ways to fill the
-database:
+The `1.0.0.x` branch shares the stack of the 2.5 line and differs in its demo data. Its newest release is `1.0.0.9`
+(`1.0.0.10` is `master` code, [chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-versions)); the
+branch has the same fixes to `web/app.php`, `AppCache` and `.gitignore` as `master` (section
+[4.3](#43-the-25-line-master-v250x)), an `.nvmrc` (`v20`) and the tree root fix below, none of them released yet. There are three ways to fill the database:
 
 | Way | Database | Content |
 |---|---|---|
@@ -217,14 +282,23 @@ database:
 | `ezplatform:install exponential-cjw` (from `1.0.0.6`) | SQLite (on MySQL it falls back to the clean platform data) | the CJW content from `src/AppBundle/Resources/database/sql/sqlite/` |
 | import the SQL dumps | MySQL, MariaDB | the CJW content: `src/AppBundle/Resources/database/sql/starter_project_database_sql_dump.sql` (all), or `schema/schema.sql` plus `data/content.sql` |
 
+**The tree root.** The CJW content's site root is location 168. The branch now ships 168 in both
+`parameters.yml.dist` and `default_parameters.yml` (since 2026-10-05). Up to the release `1.0.0.9`,
+`default_parameters.yml` said 168 but `parameters.yml.dist` said 2, and because `parameters.yml` is imported after
+`default_parameters.yml`, the 2 won. Whatever you installed, check `app/config/parameters.yml`: 168 for the CJW
+content (SQL dumps, `exponential-cjw`), 2 for `netgen-media` (whose location 168 is an article) or an empty
+repository.
+
 ### SQLite with `exponential-cjw`
 
-The branch reads `database_path` (default `var/data_<env>.db`) for the `pdo_sqlite` driver. In
-`app/config/parameters.yml`:
+The branch reads `database_path` (default `var/data_<env>.db`, set in `default_parameters.yml`) for the `pdo_sqlite`
+driver. In `app/config/parameters.yml`:
 
 ```yaml
     env(DATABASE_DRIVER): pdo_sqlite
     ngsite.default.locations.tree_root.id: 168     # the root of the CJW content
+    # optional, another file than var/data_<env>.db; no environment variable is read for it:
+    # database_path: /var/www/nexus/var/nexus.db
 ```
 
 Then:
@@ -244,8 +318,9 @@ primary keys of the versioned tables) and loads `sqlite/data.sql`. Expect lines 
 mysql -u nexus -p nexus < src/AppBundle/Resources/database/sql/starter_project_database_sql_dump.sql
 ```
 
-Set `ngsite.default.locations.tree_root.id: 168` for the CJW content (the comment in `default_parameters.yml`:
-"Location 2 is the standard ... Content root; Nexus demo data uses 168"). Then do steps 3 to 6 of
+Keep `ngsite.default.locations.tree_root.id: 168` for the CJW content (the comment in `default_parameters.yml`:
+"168 is the site root of the shipped database; use 2 (the Content root) with netgen-media data or an empty
+repository"). Then do steps 3 to 6 of
 [4.3](#43-the-25-line-master-v250x): the guide of this branch has the same symlinks, permissions and cache clear.
 
 ## 4.5 The 1.1.0.x line
@@ -293,7 +368,13 @@ Why:
   `var/data_prod.db` for `prod`. The web server and the console must use the same environment, or they see two
   different databases ([4.10](#410-what-can-go-wrong-across-lines)).
 - **`SERVER_ENVIRONMENT`** selects `config/app/server/<value>.yaml`, which holds the location IDs of the demo content.
-  This line ships `dev` and `prod`. It is independent of `APP_ENV`.
+  This line ships `dev` and `prod`. It is independent of `APP_ENV`. `prod.yaml` reads `APP_DOMAIN`, `MAIL_FROM`,
+  `MAIL_TO` and `GTM_CODE`, and `config/app/app.yaml` reads `TEST_DOMAIN`; until 2026-10-05 no `.env` defined them and
+  `SERVER_ENVIRONMENT=prod` failed with `Environment variable not found: "APP_DOMAIN"`, so with `v1.1.0.7` define
+  them in `.env.local` yourself (the branch's `.env` now gives each a default). Both files of this line
+  set `ngsite.bold_group.locations.tree_root.id: 2`, while the Bold Agency site of the demo data is location 386;
+  set 386 in the file you use (`config/app/server/dev/app.yaml` or `prod.yaml`) if `bold_eng` should start at the
+  Bold Agency home page.
 - **`MESSENGER_TRANSPORT_DSN`.** The committed default is `doctrine://default?auto_setup=0`. The 7x guide sets `sync://`
   for SQLite; the 1.3.0.x reference installation runs SQLite with the default and works. `sync://` is the simpler choice
   for a single server.
@@ -338,8 +419,8 @@ When the console ran as another user than PHP-FPM, give the database file to the
 that writes (logins, edits) fails with `attempt to write a readonly database`:
 
 ```bash
-chown <fpm-user>:<fpm-group> var var/data_dev.db
-chmod 660 var/data_dev.db
+chown <fpm-user>:<fpm-group> var var/data_<env>.db     # data_dev.db with APP_ENV=dev
+chmod 660 var/data_<env>.db
 ```
 
 SQLite also writes a journal file next to the database, which is why the directory `var/` must be writable too.
@@ -389,12 +470,12 @@ The 4.6 generation with Symfony 5.4. The procedure is that of 1.1.0.x with these
 | Node.js | 18 (`.nvmrc`: `v18`) |
 | Install command | `exponential:install` from `src/RepositoryInstaller/`; it knows every type tagged `ibexa.installer`: `exponential-media`, `netgen-media` (from `netgen/site-installer-bundle 3.1`), and the platform's clean type. Its default type is `ibexa-oss`, so always name the type. |
 | Admin assets | `composer ibexa-assets` (dumps JavaScript translations, runs `yarn ibexa`) |
-| `SERVER_ENVIRONMENT` | only `config/app/server/dev.yaml` ships; keep `dev` or create your own file ([4.10](#410-what-can-go-wrong-across-lines)) |
+| `SERVER_ENVIRONMENT` | `dev`, and on the branch since 2026-10-05 also `prod` (`config/app/server/prod.yaml`, which reads `SITE_DOMAIN`, `COLLECTED_INFO_SENDER`, `COLLECTED_INFO_RECIPIENT` and `GOOGLE_TAG_MANAGER_CODE`, with defaults); `v1.2.0.0` ships only `dev` ([4.10](#410-what-can-go-wrong-across-lines)) |
 | Legacy kernel | installed through `se7enxweb/site-legacy-bundle` and `se7enxweb/ibexa-legacy-bridge` |
 
 ```bash
 php bin/console exponential:install exponential-media --no-interaction
-chown <fpm-user>:<fpm-group> var var/data_dev.db      # SQLite only
+chown <fpm-user>:<fpm-group> var var/data_<env>.db    # SQLite only
 nvm use && corepack enable
 yarn install && yarn build:prod
 php bin/console assets:install --symlink --relative public
@@ -425,29 +506,63 @@ the 7x guide's remark that SQLite "is the default already set in `.env`" is true
 this branch. Set:
 
 ```dotenv
+APP_ENV=prod
 APP_SECRET=<output of: openssl rand -hex 32>
 DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
 SERVER_ENVIRONMENT=dev
 ```
 
-Only the `dev` server configuration ships: `config/app/server/dev.yaml`, which imports `dev/app.yaml` and
-`dev/ibexa_siteaccess.yaml`. `dev/app.yaml` sets the location IDs the designs need (Fit & Healthy root 385, Bold
-Agency root 386, site info 65 and 442) and the domains (`localhost`).
+**Choose `APP_ENV` before you install, and use the same one everywhere.** The committed `.env` says `APP_ENV=dev`,
+but since `1.3.0.5` the file `assets/symlink/root_dev/.htaccess` sets `APP_ENV=prod` and `APP_DEBUG 0`, and
+`ngsite:symlink:project` (run by `composer install`) links it as `public/.htaccess`. Under Apache every web request
+then runs in `prod`, while a console without `APP_ENV` in `.env.local` runs in `dev`. With the SQLite URL above the
+two use different files, `var/data_prod.db` and `var/data_dev.db`, and the site shows an empty database although the
+install "worked". Setting `APP_ENV=prod` in `.env.local`, as above, makes the console, the installer and the web
+agree. For development set `APP_ENV=dev` there and give the web server the same value (section
+[4.10](#410-what-can-go-wrong-across-lines)).
+
+`SERVER_ENVIRONMENT` selects `config/app/server/<value>.yaml`. `dev.yaml` imports `dev/app.yaml` and
+`dev/ibexa_siteaccess.yaml`; `dev/app.yaml` sets the location IDs the designs need (Fit & Healthy root 385, Bold
+Agency root 386, site info 65 and 442) and the domains (`localhost`). Since 2026-10-05 the branch also ships
+`prod.yaml` with the same location IDs, the domain and the information collection addresses taken from
+`SITE_DOMAIN`, `COLLECTED_INFO_SENDER` and `COLLECTED_INFO_RECIPIENT`, and an empty Google Tag Manager code instead of
+the demo's; `1.3.0.5` ships only `dev.yaml`. `deploy/files/.env.local.prod` sets `SERVER_ENVIRONMENT=prod`, which
+therefore only works from the branch.
 
 ### Step 2: install
+
+**First, update the core package.** The installer lives in `se7enxweb/exponential-platform-dxp-core`. The lock file
+of `1.3.0.5` and of the branch pins its `v5.0.7`, whose installer looks for the Netgen Layouts schema only in
+`vendor/netgen/layouts-core/`. This line installs the fork `se7enxweb/layouts-core` instead (it `replace`s the
+upstream name and lives in `vendor/se7enxweb/layouts-core/`), so `v5.0.7` skips the `nglayouts_*` tables without a
+word, and the demo data, which fills those tables, then fails with `no such table: nglayouts_...` (or the MySQL and
+PostgreSQL equivalent). `v5.0.9`, released on 2026-10-05, looks in both places and says which file it used. Update
+that one package before the first install:
+
+```bash
+composer update se7enxweb/exponential-platform-dxp-core
+composer show se7enxweb/exponential-platform-dxp-core | grep -E '^versions'    # versions : * v5.0.9
+```
+
+(The behaviour of `v5.0.7` was read from its code, not reproduced for the book. If you cannot update, create the
+Layouts tables with the Layouts migrations, [chapter 7](07-databases.md#75-migrations), before you run the install.)
+
+Then install:
 
 ```bash
 php bin/console exponential:install exponential-media
 ```
 
-The command now comes from `se7enxweb/exponential-platform-dxp-core` (`Ibexa\Bundle\RepositoryInstaller\Command\InstallPlatformCommand`,
+The command comes from `se7enxweb/exponential-platform-dxp-core` (`Ibexa\Bundle\RepositoryInstaller\Command\InstallPlatformCommand`,
 named `exponential:install`), and so does the data: `vendor/se7enxweb/exponential-platform-dxp-core/data/<engine>/`
-contains `media_schema.sql` and `media_data.sql` for MySQL, PostgreSQL and SQLite alike. Typical output:
+contains `media_schema.sql` and `media_data.sql` for MySQL, PostgreSQL and SQLite alike. Typical output with `v5.0.9`
+on SQLite (shortened; `<n>` stands for a count):
 
 ```
 SQLite detected — skipping doctrine:database:create (file will be created automatically).
 Executing <n> queries on database ... (sqlite)
-Executing <n> queries from .../netgen/layouts-core/tests/_fixtures/schema/schema.sqlite.sql on database ...
+Importing Netgen Layouts schema from .../vendor/se7enxweb/layouts-core/tests/_fixtures/schema/schema.sqlite.sql
+Executing <n> queries from .../vendor/se7enxweb/layouts-core/tests/_fixtures/schema/schema.sqlite.sql on database ...
 Executing <n> queries from .../data/sqlite/media_schema.sql on database ...
 Executing <n> queries from .../data/sqlite/media_data.sql on database ...
 Copying storage directory to .../public/var/site/storage
@@ -458,12 +573,29 @@ Copying storage directory to .../public/var/site/storage
 Search engine re-indexing, executing command exponential:reindex
 ```
 
+If the line `Importing Netgen Layouts schema` is missing, or you see `Netgen Layouts schema not imported: no
+layouts-core package found`, stop: the Layouts tables were not created, and the demo will not load.
+
+Check the result:
+
+```bash
+php bin/console dbal:run-sql "SELECT COUNT(*) FROM nglayouts_layout WHERE status = 1"     # 21
+php bin/console dbal:run-sql "SELECT COUNT(*) FROM ibexa_content WHERE status = 1"        # 290
+```
+
+(The figures are those of the reference installation, [chapter 5](05-the-demo-site-and-layouts.md); `dbal:run-sql`
+prints them as a small table; `doctrine:query:sql` is its deprecated older name.)
+
 Differences from the older lines:
 
 - **The admin password is changed during the install** when the command runs interactively: it asks until
   `ibexa:user:update-user` accepts a password that meets the password rules. With `--no-interaction` the question is
   skipped and the password stays `publish`; change it at the first login.
-- **The installer creates the Netgen Layouts tables itself** from `netgen/layouts-core`'s schema file.
+- **The installer creates the Netgen Layouts tables itself** from the schema file of the installed layouts-core
+  package (with core `v5.0.9`: the fork `se7enxweb/layouts-core` first, then `netgen/layouts-core`).
+- **The database error names the right file** with core `v5.0.9`: when the database cannot be created, the message
+  points to `DATABASE_URL` in `.env.local`. Older cores tell you to check `app/config/parameters.yml`, a file this
+  line does not have.
 - **The images** come from `vendor/netgen/media-site-data/netgen-media/storage` and are copied to
   `public/var/site/storage`, unless that directory already has files (`... already exists and is not empty, skipping`).
 - Available types: `exponential-media` (the demo), `exponential-oss` (the clean platform content; registered by the
@@ -474,7 +606,7 @@ Differences from the older lines:
 ### Step 3: assets, keys, schema, cache
 
 ```bash
-chown <fpm-user>:<fpm-group> var var/data_dev.db      # SQLite only
+chown <fpm-user>:<fpm-group> var var/data_prod.db     # SQLite only; data_<APP_ENV>.db
 nvm use                                                # .nvmrc: v22
 corepack enable
 yarn install
@@ -549,7 +681,11 @@ It takes a few minutes. Run it as the PHP-FPM user, because it writes into `publ
 | Symptom | Cause | Fix |
 |---|---|---|
 | The site shows an empty database or "no such table" while the console works | the web server runs another `APP_ENV` than the console, and the SQLite path contains `%kernel.environment%`. `ngsite:symlink:project` (run by Composer) links `public/.htaccess` to `assets/symlink/root_<console environment>/.htaccess`, and on 1.3.0.5 `root_dev/.htaccess` sets `APP_ENV=prod` for every web request, so the web server reads `var/data_prod.db` while a `dev` console install wrote `var/data_dev.db` | install with the same environment as the web server (`php bin/console exponential:install exponential-media --env=prod`), or use a fixed file name in `DATABASE_URL` (`var/data.db`) |
-| `Unable to find file ".../config/app/server/prod.yaml"` (or similar) | `SERVER_ENVIRONMENT` names a file that does not exist (1.2.0.x and 1.3.0.x ship only `dev`) | keep `SERVER_ENVIRONMENT=dev`, or copy `config/app/server/dev.yaml` and `dev/` to your own name and adapt the IDs and domains |
+| `Unable to find file ".../config/app/server/prod.yaml"` (or similar) | `SERVER_ENVIRONMENT` names a file that does not exist: the releases `v1.2.0.0` and `1.3.0.5` ship only `dev` (the branches have `prod` since 2026-10-05), and any other name needs its own file | keep `SERVER_ENVIRONMENT=dev`, take `prod.yaml` from the branch, or copy `config/app/server/dev.yaml` and `dev/` to your own name and adapt the IDs and domains |
+| `Environment variable not found: "APP_DOMAIN"` (1.1.0.x) | `SERVER_ENVIRONMENT=prod` with the `.env` of `v1.1.0.7` | define `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO`, `GTM_CODE` and `TEST_DOMAIN` in `.env.local` |
+| `no such table: nglayouts_...` during `exponential:install` (1.3.0.x) | the locked core `v5.0.7` did not create the Layouts tables | `composer update se7enxweb/exponential-platform-dxp-core`, then install again ([4.7](#47-the-130x-line)) |
+| Bold Agency (`bold_eng`) shows the whole content tree (1.1.0.x) | the server files set its tree root to 2 | set `ngsite.bold_group.locations.tree_root.id: 386` |
+| The 2.5 site answers `404` at `/` or the container reports a non-existent `tree_root.id` parameter | the tree root is 2 or not defined | `ngsite.default.locations.tree_root.id: 168` in `app/config/parameters.yml` ([4.3](#43-the-25-line-master-v250x)) |
 | `attempt to write a readonly database` | the SQLite file or `var/` belongs to the user who ran the install | give `var/` and the file to the PHP-FPM user |
 | HTTP 500, `Could not find the entry "..."` | the site's assets were not built | `yarn build:prod` |
 | Admin interface without styles or blank | the admin assets were not built | the admin build of your line ([4.1](#41-overview-the-same-steps-on-every-line)) |
@@ -571,7 +707,10 @@ empty.
 
 - [ ] The database exists with `utf8mb4` / `utf8mb4_unicode_520_ci` (MySQL, MariaDB) or is owned by its user
   (PostgreSQL); nothing to do for SQLite.
-- [ ] `parameters.yml` (2.5 generation) or `.env.local` (newer lines) has your `DATABASE_URL` and a new secret.
+- [ ] `parameters.yml` (2.5 generation: the `env(DATABASE_*)` values, the tree root 168 for the CJW content) or
+  `.env.local` (newer lines: `DATABASE_URL`, `APP_ENV`) has your values and a new secret.
+- [ ] On 1.3.0.x, `se7enxweb/exponential-platform-dxp-core` is `v5.0.9` or newer before the install, and the
+  `nglayouts_*` tables exist after it.
 - [ ] The install command finished without an error and the search index was built.
 - [ ] On the 2.5 generation the legacy symlinks exist.
 - [ ] Site assets and admin assets are built; on 1.1.0.x to 1.3.0.x the JWT keys and the GraphQL schema exist.
@@ -586,7 +725,10 @@ empty.
 
 In this repository:
 
-- [doc/INSTALL.md](../INSTALL.md) (2.5 line) and `doc/sevenx/INSTALL.md` on the 1.1.0.x, 1.2.0.x and 1.3.0.x branches.
+- The install guides of each line: `doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release, `doc/sevenx/INSTALL.md`
+  on the 1.1.0.x, 1.2.0.x and 1.3.0.x branches; on `master`, [doc/INSTALL.md](../INSTALL.md) is the short guide.
+- `app/config/parameters.yml.dist` and `default_parameters.yml` (2.5 generation), `config/app/server/` (newer lines),
+  `assets/symlink/root_*/.htaccess` (the `.htaccess` that `ngsite:symlink:project` links into `public/`).
 - [doc/netgen/INSTALL.md](../netgen/INSTALL.md): the upstream Media Site install notes (image variations, GraphQL,
   translations); [doc/netgen/LAUNCHPAD.md](../netgen/LAUNCHPAD.md) describes the upstream eZ Launchpad Docker setup for
   `netgen/media-site` and was not adapted to Nexus.
@@ -607,6 +749,8 @@ External:
 - Doctrine: [connection URLs](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url).
 - MySQL: [CREATE USER](https://dev.mysql.com/doc/refman/8.0/en/create-user.html); PostgreSQL:
   [schema privileges](https://www.postgresql.org/docs/current/ddl-schemas.html).
+- The 1.3.0.x core package: [se7enxweb/exponential-platform-dxp-core on Packagist](https://packagist.org/packages/se7enxweb/exponential-platform-dxp-core)
+  (source [se7enxweb/core](https://github.com/se7enxweb/core), the installer in `src/bundle/RepositoryInstaller/`).
 - Netgen: [Media Site documentation](https://docs.netgen.io/projects/media-site/en/latest/),
   [Netgen Layouts installation into an existing project](https://docs.netgen.io/projects/layouts/en/latest/getting_started/install_existing_project.html).
 - [The Exponential 6 book](https://github.com/se7enxweb/exponential/blob/main/doc/install/README.md) for the legacy
