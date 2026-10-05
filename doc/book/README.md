@@ -79,6 +79,12 @@ compares them package by package.
 - "Line" means one of the four release lines above. Facts that differ per line say which line they apply to; files on
   another branch than the one you have checked out are read with `git show <branch>:<path>`.
 - `example.com`, `USER`, `DATABASE` and similar are placeholders.
+- Facts are dated: the chapters were checked against the branches and tags on 5 October 2026. That day the branches
+  received fixes (the `dev` host switch and the cache header rewriting of the 2.5 generation, trusted proxies, the
+  HTTP cache switch, `Makefile` targets) that no release tag contains yet. Where they matter, a chapter says what the
+  branch head does and what an installation made from a tag still does; [chapter 14](14-security-hardening.md#which-code-do-i-run)
+  shows how to tell which one you run, and [chapter 11.9](11-upgrading-between-lines.md#119-patch-updates-inside-a-line)
+  how to take such a fix.
 - Product names: Exponential Platform Nexus, Exponential (the legacy kernel, version 6), Exponential Platform Legacy,
   Exponential Velocity. Older product names appear only where they identify an upstream package or the system you
   migrate from.
@@ -89,7 +95,8 @@ compares them package by package.
 - The per-line installation and operations notes on the newer branches: `doc/sevenx/INSTALL.md` on `1.1.0.x`,
   `1.2.0.x` and `1.3.0.x` (`git show 1.3.0.x:doc/sevenx/INSTALL.md`)
 - The Netgen documents carried over from the upstream media site: [doc/netgen](../netgen/)
-- Web server examples: [doc/apache2](../apache2/), [doc/nginx](../nginx/), [doc/varnish](../varnish/)
+- Web server examples: [doc/apache2](../apache2/), [doc/nginx](../nginx/), [doc/varnish](../varnish/); log rotation:
+  [doc/logrotate](../logrotate/)
 - [The project README](../../README.md), [SECURITY.md](../../SECURITY.md), [UPGRADE.md](../../UPGRADE.md)
 - The Exponential 6 book, for the legacy kernel and for migrations:
   [doc/install in se7enxweb/exponential](https://github.com/se7enxweb/exponential/blob/main/doc/install/README.md)
