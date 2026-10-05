@@ -1,547 +1,189 @@
-# Exponential Platform Nexus 1.0.0.x Installation Guide
+# Installing Exponential Platform Nexus: the short guide
 
-## Table of Contents
+This page gets a working Exponential Platform Nexus installation with the demo site on any of the four lines, in the
+fewest steps that are safe. Every step links to the chapter of [the book](book/README.md) that explains it, lists
+the options and says what can go wrong. For a production site, read the book's chapters on serving the site
+([6](book/06-serving-the-site.md)) and security hardening ([14](book/14-security-hardening.md)) before going live.
 
-1. [Requirements](#requirements)
-2. [Installation Steps](#installation-steps)
-3. [Post-Installation Configuration](#post-installation-configuration)
-4. [Troubleshooting](#troubleshooting)
+## 1. Pick a line
 
----
+| Line | Branch | Platform | Symfony | PHP | Legacy kernel | Node.js |
+|---|---|---|---|---|---|---|
+| 2.5 generation (1.0.0.x) | `master` (this branch), also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
+| 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 18 or 20 |
+| 1.2.0.x | `1.2.0.x` | Ibexa OSS 4.6 | 5.4 | 8.2 or newer | yes | 18 |
+| 1.3.0.x | `1.3.0.x` | Platform v5 | 7.4 | 8.4 or newer | no | 22 |
 
-## Requirements
+A new project without legacy code should start on 1.3.0.x. Choose an older line when you need the legacy kernel
+(Exponential 6) beside the Symfony stack, or when you move a site of that platform generation into Nexus.
+Details: [chapter 1](book/01-introduction.md), [chapter 2](book/02-requirements.md).
 
-### Web Server
+## 2. Requirements at a glance
 
-- **Apache 2.x** (prefork mode) or **Nginx**
-- mod_rewrite enabled (Apache) or equivalent URL rewriting (Nginx)
+- **PHP** at the version of your line, with at least `ctype`, `curl`, `dom`, `fileinfo`, `gd` (or `imagick` in
+  addition), `iconv`, `intl`, `mbstring`, `opcache`, `pdo` with the driver of your database (`pdo_mysql`,
+  `pdo_pgsql`, or `pdo_sqlite` and `sqlite3`), `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter`, `xsl` and
+  `zip`; `apcu` for the 2.5 generation's configuration as shipped; `date.timezone` set. The complete list per line,
+  with the reason for each extension, is in [chapter 2](book/02-requirements.md).
+- **A database**: MySQL or MariaDB with `utf8mb4`, PostgreSQL, or SQLite ([chapter 7](book/07-databases.md)).
+- **Composer 2**, **Node.js** at the version above and **Yarn 1** (or npm).
+- **A web server**: Exponential Velocity (recommended), or Apache or nginx with PHP-FPM
+  ([chapter 6](book/06-serving-the-site.md)).
 
-### PHP Version
+## 3. Create the database
 
-- **PHP 8.1+** (8.5 branch strongly recommended)
-- **Memory Limit:** Minimum 464MB (set in php.ini)
-- **Timezone:** date.timezone must be set in php.ini or .htaccess
-  - See: http://php.net/manual/en/timezones.php
-
-### Database Server
-
-- **MySQL 5.7+ / MariaDB 10.2+** (UTF-8 required) - Recommended
-- **PostgreSQL 12+**
-- **SQLite 3** (development only)
-
-**Database Encoding:** UTF-8 (utf8mb4) is required for proper multilingual support.
-
-### Composer
-
-- **Version 2.x** (latest recommended)
-
-### Node.js & npm
-
-- **Node.js 18.x or 20.x** (LTS recommended)
-- **npm 9.x+** or **yarn 1.x**
-
-### Required PHP Extensions
-
-Core Extensions (mandatory):
-- ctype
-- date
-- dom
-- fileinfo
-- filter
-- hash
-- iconv
-- intl
-- json
-- mbstring
-- openssl
-- pcre
-- pdo
-- pdo_mysql (or pdo_pgsql, pdo_sqlite)
-- phar
-- session
-- simplexml
-- tokenizer
-- xml
-- xmlreader
-- xmlwriter
-- zlib
-
-Strongly Recommended (critical for production):
-- **curl** - HTTP integrations, repository calls, external services
-- **gd** or **imagick** - Image variations & thumbnails (required for image handling)
-- **opcache** - Performance optimization
-- **APCu** - Performance optimization (caching)
-- **zip** - Composer + package handling
-
-Legacy Bridge / Search (if using advanced features):
-- pcntl (optional, useful for indexing workers)
-- posix (optional)
-
----
-
-## Installation Steps
-
-### 1. Create Database
-
-#### For MySQL/MariaDB
+MySQL or MariaDB:
 
 ```sql
-CREATE DATABASE exponential_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
-CREATE USER 'exponential_user'@'localhost' IDENTIFIED BY 'secure_password';
-GRANT ALL PRIVILEGES ON exponential_db.* TO 'exponential_user'@'localhost';
-FLUSH PRIVILEGES;
+CREATE DATABASE nexus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+CREATE USER 'nexus'@'localhost' IDENTIFIED BY 'change-me';
+GRANT ALL PRIVILEGES ON nexus.* TO 'nexus'@'localhost';
 ```
 
-#### For PostgreSQL
+PostgreSQL (make the application user the owner; on PostgreSQL 15 and later a plain `GRANT` on the database does not
+allow it to create tables):
 
-```sql
-CREATE DATABASE exponential_db ENCODING 'UTF8';
-CREATE USER exponential_user WITH PASSWORD 'secure_password';
-GRANT ALL PRIVILEGES ON DATABASE exponential_db TO exponential_user;
+```bash
+sudo -u postgres psql -c "CREATE USER nexus WITH PASSWORD 'change-me';"
+sudo -u postgres psql -c "CREATE DATABASE nexus OWNER nexus ENCODING 'UTF8';"
 ```
 
-### 2. Clone the Repository
+SQLite needs no server; the file is named in the configuration ([chapter 7](book/07-databases.md)).
 
-```shell
-git clone https://github.com/se7enxweb/exponential-platform-nexus.git
-cd exponential-platform-nexus
+## 4. Get the code
+
+```bash
+git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x
+cd nexus
+git checkout 1.3.0.5            # the newest tag of the line: git tag -l --sort=version:refname
+composer install
 ```
 
-Or for a specific branch:
+Run Composer with the same PHP version the site will use. The Composer scripts publish assets and, on the lines with
+the legacy kernel, install it into `ezpublish_legacy/` and link the project's legacy files into it. Details and the
+`composer create-project` alternative: [chapter 3](book/03-getting-the-code.md).
 
-```shell
-git clone -b 1.0.0.x https://github.com/se7enxweb/exponential-platform-nexus.git
-cd exponential-platform-nexus
-```
+## 5. Install
 
-### 3. Install Node.js & npm (if not already installed)
+### The 2.5 generation (`master`)
 
-#### Using nvm (recommended)
+1. Edit `app/config/parameters.yml` (created from `parameters.yml.dist` by `composer install`): the `env(DATABASE_*)`
+   values and `env(SYMFONY_SECRET)`. Generate the secret with `openssl rand -hex 32`; the shipped placeholder is public.
+2. Install the demo content:
 
-```shell
-# Install nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-# Reload shell configuration (or restart terminal)
-source ~/.bashrc  # or ~/.zshrc for zsh
-
-# Install Node.js 20 LTS
-nvm install 20
-nvm use 20
-
-# Verify installation
-node -v  # Should print v20.x.x
-npm -v   # Should print 10.x.x
-```
-
-#### Installing Yarn (optional - npm works fine)
-
-```shell
-npm install --global yarn
-```
-
-### 4. Install PHP Dependencies (Composer)
-
-```shell
-composer install --keep-vcs --ignore-platform-reqs
-```
-
-**Note:** The `--ignore-platform-reqs` flag is currently required due to ongoing package definition updates across repositories. This will be removed in future releases.
-
-### 5. Configure Database Connection
-
-Edit `app/config/parameters.yml` and update the database credentials:
-
-```yaml
-parameters:
-    env(SYMFONY_SECRET): your_random_secret_key_here
-    env(DATABASE_DRIVER): pdo_mysql
-    env(DATABASE_HOST): 127.0.0.1
-    env(DATABASE_PORT): 3306
-    env(DATABASE_NAME): exponential_db
-    env(DATABASE_USER): exponential_user
-    env(DATABASE_PASSWORD): 'secure_password'
-    env(DATABASE_CHARSET): utf8mb4
-    env(DATABASE_COLLATION): utf8mb4_unicode_520_ci
-    env(DATABASE_VERSION): mariadb-10.2.26
-```
-
-**Important:** Generate a secure random string for `SYMFONY_SECRET`:
-```shell
-php -r "echo bin2hex(random_bytes(32));"
-```
-
-### 6. Install Database Content
-
-Use the built-in console installer. It runs the schema + content SQL from the
-[`se7enxweb/cjw-exponential-media-site-data`](https://github.com/se7enxweb/cjw-exponential-media-site-data)
-Composer package installed automatically with step 4.
-
-```shell
-php bin/console ezplatform:install cjw-exponential-media
-```
-
-This installs the full JAC Example project with content, content classes, sections,
-languages (ger-DE + eng-GB), and all required configuration.
-
-**Default Admin Credentials:**
-- Username: `admin`
-- Password: `publish`
-
-**⚠️ IMPORTANT:** Change the admin password immediately after installation!
-
-#### Available installer types
-
-| Type | Description |
-|------|-------------|
-| `cjw-exponential-media` | **Default.** Full JAC Example site with demo content |
-| `exponential-oss` | Minimal clean schema only, no content |
-
-#### SQLite (Development Only)
-
-For local development without MySQL, update `app/config/parameters.yml`:
-
-```yaml
-    env(DATABASE_DRIVER): pdo_sqlite
-```
-
-The SQLite database file is created automatically at `var/data_dev.db`.
-Then run the installer the same way:
-
-```shell
-php bin/console ezplatform:install cjw-exponential-media
-```
-
-### 7. Install Node Dependencies & Build Frontend Assets
-
-This step is **CRITICAL** and often forgotten, causing 500 errors.
-
-```shell
-# Install npm packages
-npm install
-
-# Build production assets
-npm run build:prod
-```
-
-Or using Yarn:
-
-```shell
-yarn install
-yarn build:prod
-```
-
-**Available build commands:**
-- `npm run build:prod` - Production build (minified, optimized)
-- `npm run build:dev` - Development build (readable, with source maps)
-- `npm run watch` - Watch mode (auto-rebuild on changes)
-
-**Why this matters:** The webpack build compiles frontend assets (JavaScript, CSS) and creates entrypoints like `photoswipe-init` that are required by the application. Missing assets will cause HTTP 500 errors with messages like:
-```
-EntrypointNotFoundException: Could not find the entry "photoswipe-init"
-```
-
-### 8. Create Required Symlinks
-
-These symlinks are required because the `ezpublish_legacy` directory is managed by Composer and gets replaced during updates.
-
-#### Install ezpublish_legacy extension symlink
-
-```shell
-cd ezpublish_legacy/extension/
-ln -s ../../../src/AppBundle/ezpublish_legacy/extension/app .
-cd ../../
-```
-
-#### Install storage directory symlink
-
-```shell
-cd ezpublish_legacy/var/site/
-mv storage storage-empty 2>/dev/null || true
-ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage .
-cd ../../../
-```
-
-#### Install app bundle public assets symlink
-
-```shell
-cd web/bundles/
-ln -s ../../src/AppBundle/Resources/public app
-cd ../../
-```
-
-### 9. Set Proper File Permissions
-
-```shell
-# For Apache/Nginx running as www-data (Debian/Ubuntu)
-sudo chown -R www-data:www-data .
-sudo chmod -R 755 .
-sudo chmod -R 775 var/ ezpublish_legacy/var/
-
-# For development (your user + www-data group)
-sudo chown -R $USER:www-data .
-sudo chmod -R 755 .
-sudo chmod -R 775 var/ ezpublish_legacy/var/
-```
-
-**For production:** Ensure cache and log directories are writable:
-```shell
-sudo chmod -R 775 var/cache var/logs ezpublish_legacy/var/
-```
-
-### 10. Clear Symfony Cache
-
-```shell
-# Development environment
-php bin/console cache:clear --env=dev
-
-# Production environment  
-php bin/console cache:clear --env=prod
-```
-
-**Best Practice:** Always use `sudo` when running console commands to prevent permission issues:
-```shell
-sudo php bin/console cache:clear --env=prod
-```
-
----
-
-## Post-Installation Configuration
-
-### Configure Siteaccess
-
-Review and customize the siteaccess configuration in:
-- `app/config/ezplatform_siteaccess.yml`
-
-You may want to modify:
-- **Host matching:** Map domain names to siteaccesses
-- **Design:** Configure which design is used per siteaccess
-- **Languages:** Set available languages per siteaccess
-
-**Recommended:** Use at least 2 hosts:
-1. Public site (e.g., `www.example.com`)
-2. Admin interface (e.g., `admin.example.com`)
-
-Example configuration:
-
-```yaml
-ezpublish:
-    siteaccess:
-        list: [site, admin]
-        groups:
-            site_group: [site]
-            admin_group: [admin]
-        default_siteaccess: site
-        match:
-            Map\Host:
-                www.example.com: site
-                admin.example.com: admin
-```
-
-### Configure Virtual Host
-
-#### Apache Example
-
-```apache
-<VirtualHost *:80>
-    ServerName example.com
-    ServerAlias www.example.com
-    DocumentRoot /var/www/exponential-platform-nexus/web
-
-    <Directory /var/www/exponential-platform-nexus/web>
-        Options FollowSymlinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/exponential_error.log
-    CustomLog ${APACHE_LOG_DIR}/exponential_access.log combined
-</VirtualHost>
-```
-
-#### Nginx Example
-
-```nginx
-server {
-    listen 80;
-    server_name example.com www.example.com;
-    root /var/www/exponential-platform-nexus/web;
-
-    location / {
-        try_files $uri /app.php$is_args$args;
-    }
-
-    location ~ ^/app\.php(/|$) {
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param HTTPS off;
-        internal;
-    }
-
-    location ~ \.php$ {
-        return 404;
-    }
-
-    error_log /var/log/nginx/exponential_error.log;
-    access_log /var/log/nginx/exponential_access.log;
-}
-```
-
-### Access the Site
-
-1. **Frontend:** http://your-domain.com
-2. **Admin:** http://your-domain.com/admin (or configured admin siteaccess)
-
-**Default Login:**
-- Username: `admin`
-- Password: `publish`
-
----
-
-## Troubleshooting
-
-### HTTP 500 Error: "Could not find the entry 'photoswipe-init'"
-
-**Cause:** Frontend assets were not built after installation or code update.
-
-**Solution:**
-```shell
-npm run build:prod
-# or
-npx encore production
-```
-
-### HTTP 500 Error: Database Connection Failed
-
-**Cause:** Incorrect database credentials in `app/config/parameters.yml`
-
-**Solution:**
-1. Verify database credentials
-2. Test connection: `mysql -u username -p database_name`
-3. Ensure database exists and user has proper permissions
-4. Clear cache: `php bin/console cache:clear`
-
-### HTTP 500 Error: "Unable to create the store directory"
-
-**Cause:** Permission issues with cache directory.
-
-**Solution:**
-```shell
-sudo chown -R www-data:www-data var/
-sudo chmod -R 775 var/cache var/logs
-php bin/console cache:clear --env=prod
-```
-
-### Images Not Displaying
-
-**Cause:** Missing symlinks or incorrect permissions.
-
-**Solution:**
-1. Verify symlinks exist (see Step 8)
-2. Check permissions:
-   ```shell
-   sudo chown -R www-data:www-data ezpublish_legacy/var/site/storage
-   sudo chmod -R 755 ezpublish_legacy/var/site/storage
+   ```bash
+   php bin/console ezplatform:install cjw-exponential-media
    ```
 
-### npm Build Errors: "NODE_OPTIONS not allowed"
+   `cjw-exponential-media` installs the CJW demo ("JAC Example", German and English) from the package
+   `se7enxweb/cjw-exponential-media-site-data`. The kernel also offers `exponential-oss`, a clean repository without
+   demo content. The `1.0.0.x` branch uses other types ([chapter 4](book/04-installing.md)).
+3. Build the site theme (Webpack 4; the npm scripts set the OpenSSL option current Node.js needs):
 
-**Cause:** Old package.json scripts using `NODE_OPTIONS=--openssl-legacy-provider` which is not allowed in Node.js >= 16.17/18.9.
+   ```bash
+   npm install
+   npm run build:prod      # or: yarn install && yarn build:prod
+   ```
 
-**Solution:** The package.json has been fixed. Use:
-```shell
-npm run build:prod
-```
+4. Link the project's legacy files into the legacy kernel, which Composer replaces on every update:
 
-If still getting errors, bypass npm scripts:
-```shell
-npx encore production
-```
+   ```bash
+   ln -s ../../src/AppBundle/ezpublish_legacy/extension/app ezpublish_legacy/extension/app
+   mv ezpublish_legacy/var/site/storage ezpublish_legacy/var/site/storage-empty
+   ln -s ../../../src/AppBundle/ezpublish_legacy/var/site/storage ezpublish_legacy/var/site/storage
+   ln -s ../../src/AppBundle/Resources/public web/bundles/app
+   ```
 
-### Webpack Build Warnings: "Deprecation Warning [function-units]"
+   A link that already exists was made by a Composer script; leave it. Repeat the storage link after every
+   `composer update` that updates `se7enxweb/exponential`.
+5. Make `var/`, `web/var/` and `ezpublish_legacy/var/` writable for the web server's user, and clear the cache as that
+   user (not as root):
 
-**Cause:** SASS deprecation warnings (non-critical).
+   ```bash
+   sudo setfacl -R  -m u:www-data:rwX -m u:$(whoami):rwX var web/var ezpublish_legacy/var
+   sudo setfacl -dR -m u:www-data:rwX -m u:$(whoami):rwX var web/var ezpublish_legacy/var
+   sudo -u www-data php bin/console cache:clear --env=prod
+   ```
 
-**Solution:** These are warnings, not errors. The build will complete successfully. They can be safely ignored for now.
+6. Replace the demo host names in `app/config/ezplatform_siteaccess.yml` (`Map\Host`) and `app/config/http_cache.yml`
+   with yours. The siteaccesses are `de` (default), `en`, `admin`, `ngadminui` and `legacy_admin`.
 
-### After Composer Update: Site Broken
+The document root is `web/` and the front controller `web/app.php`. Full walk-through: [chapter 4](book/04-installing.md).
 
-**Cause:** Composer updates erase the `ezpublish_legacy` directory, breaking symlinks.
+### 1.1.0.x, 1.2.0.x and 1.3.0.x
 
-**Solution:** Recreate symlinks after every `composer update`:
-```shell
-# Run the symlink commands from Step 8 again
-cd ezpublish_legacy/extension/
-ln -s ../../../src/AppBundle/ezpublish_legacy/extension/app .
-# ... etc
-```
+1. Create `.env.local` with at least:
 
-### Checking Error Logs
+   ```dotenv
+   APP_ENV=prod
+   APP_SECRET=<output of: openssl rand -hex 32>
+   DATABASE_URL="mysql://nexus:change-me@127.0.0.1:3306/nexus?serverVersion=8.0&charset=utf8mb4"
+   JWT_PASSPHRASE=<another random value>
+   ```
 
-**Symfony Logs:**
-```shell
-tail -100 var/logs/dev.log
-tail -100 var/logs/prod.log
-```
+   The shipped `.env` sets `APP_ENV=dev` and placeholder secrets (an empty `APP_SECRET` on 1.3.0.x). On SQLite,
+   `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"` and
+   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)).
+2. Install the demo content:
 
-**Web Server Logs:**
-```shell
-# Apache
-tail -100 /var/log/apache2/error.log
+   ```bash
+   php bin/console exponential:install exponential-media --no-interaction
+   ```
 
-# Nginx
-tail -100 /var/log/nginx/error.log
-```
+3. Build and generate:
 
----
+   ```bash
+   nvm use                                         # Node.js from .nvmrc
+   yarn install
+   yarn build:prod                                 # the site theme
+   php bin/console assets:install --symlink --relative public
+   yarn ez                                         # admin assets on 1.1.0.x; 1.2.0.x and 1.3.0.x: composer ibexa-assets
+   php bin/console lexik:jwt:generate-keypair
+   php bin/console ibexa:graphql:generate-schema
+   php bin/console cache:clear
+   ```
 
-## Development Workflow
+4. On 1.3.0.x, check that Composer's recipes did not remove the Netgen Layouts bundles:
+   `git diff config/bundles.php config/routes/` must show no removed `NetgenLayouts*` lines.
+5. Make `var/` and `public/var/` writable for the web server's user, as above.
 
-### After Pulling Code Changes
+The document root is `public/`. The siteaccesses are `fh_eng` (default), `bold_eng`, `bold_ger` and the admin
+siteaccess `adminui` (`/adminui/`); 1.1.0.x and 1.2.0.x also have `ngadminui` and `legacy_admin`. Full walk-through
+per line: [chapter 4](book/04-installing.md).
 
-Always run these commands after pulling updates:
+## 6. Serve the site
 
-```shell
-# 1. Update PHP dependencies
-composer install
+- **Exponential Velocity**, the recommended way: one process that serves HTTP and HTTPS and runs PHP itself
+  ([chapter 6](book/06-serving-the-site.md)).
+- **Apache or nginx with PHP-FPM**: examples in [doc/apache2](apache2/) and [doc/nginx](nginx/); `netgen-site*` for
+  the 2.5 generation (`web/`), `media-site*` for the later lines (`public/`). Adapt them as chapter 6 describes.
 
-# 2. Update Node dependencies (if package.json changed)
-npm install
+For a quick look on a development machine, `symfony server:start` serves `public/` on the later lines.
 
-# 3. Rebuild frontend assets
-npm run build:prod
+## 7. First login and the next steps
 
-# 4. Clear cache
-sudo php bin/console cache:clear --env=prod
+- Sign in to the administration interface as `admin` with the password the project README gives for the demo data,
+  and **change it at once**.
+- Before going live: production environment, real secrets, admin access restricted, trusted proxies, HTTP cache
+  rules, security headers ([chapter 14](book/14-security-hardening.md) and its checklist).
+- Cron, workers, caches, backups: [chapter 10](book/10-operations.md).
 
-# 5. Recreate symlinks (if composer updated ezpublish_legacy)
-# See Step 8 above
-```
+## 8. When something goes wrong
 
-### Watch Mode for Development
+| Symptom | Where to look |
+|---|---|
+| Composer refuses the PHP version | Run Composer with the site's PHP; [chapter 13.2](book/13-troubleshooting.md#132-composer-and-dependencies) |
+| `EntrypointNotFoundException ... "photoswipe-init"` | The site theme was not built; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
+| `ERR_OSSL_EVP_UNSUPPORTED` during the build (2.5 generation) | Use the npm scripts, which set the OpenSSL option; [chapter 13.3](book/13-troubleshooting.md#133-front-end-build) |
+| `Unable to create the store directory` | `var/` not writable for the web server; [chapter 13.8](book/13-troubleshooting.md#138-files-and-permissions) |
+| `Container extension "netgen_layouts" is not registered` (1.3.0.x) | Restore `config/bundles.php`; [chapter 13.6](book/13-troubleshooting.md#136-netgen-layouts) |
+| Images missing after `composer update` (2.5 generation) | Recreate the storage link of step 4; [chapter 13.2](book/13-troubleshooting.md#132-composer-and-dependencies) |
+| Anything else | The log: `var/logs/prod.log` (2.5 generation) or `var/log/prod.log`; then [chapter 13](book/13-troubleshooting.md) |
 
-For frontend development with auto-rebuild:
+## 9. More
 
-```shell
-npm run watch
-```
-
-This watches for changes in:
-- `src/AppBundle/Resources/es6/*.js`
-- `src/AppBundle/Resources/sass/**/*.scss`
-
----
-
-## Additional Resources
-
-- **Documentation:** [doc/](.)
-- **Issue Tracker:** https://github.com/se7enxweb/exponential-platform-nexus/issues
-- **Discussions:** https://github.com/se7enxweb/exponential-platform-nexus/discussions
-
----
-
-## License
-
-See LICENSE.md for license information.
+- [The book](book/README.md): every chapter, and which ones you need
+- [Upgrading between lines](book/11-upgrading-between-lines.md), [migrating a site into Nexus](book/12-migrating-into.md)
+- Issues: <https://github.com/se7enxweb/exponential-platform-nexus/issues>; security problems privately, as
+  [SECURITY.md](../SECURITY.md) says
+- License: [LICENSE.md](../LICENSE.md)
