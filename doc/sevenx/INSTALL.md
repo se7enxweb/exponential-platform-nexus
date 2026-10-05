@@ -940,8 +940,9 @@ php bin/console ibexa:reindex --content-ids=<id>,<id>              # selected co
 
 ## 13. Image Variations
 
-Image variations are generated on demand by Liip Imagine. Configuration lives in
-`config/packages/ezpublish.yaml` under `ezpublish.system.<siteaccess>.image_variations`.
+Image variations are generated on demand by Liip Imagine. The project defines them in
+`config/app/packages/image.yaml`, under `ezpublish.system.default.image_variations` (a siteaccess or group
+can override them under `ezpublish.system.<siteaccess>.image_variations`).
 
 ### Clear generated variation cache
 
