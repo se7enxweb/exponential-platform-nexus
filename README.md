@@ -124,7 +124,7 @@ Read [Reseting the admin password in eZ publish](https://ezpedia.se7enx.com/en/s
 
 # Issue tracker
 
-Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platfom-nexus/issues](https://github.com/se7enxweb/exponential-platfom-nexus/issues)
+Submitting bugs, improvements and stories is possible on [https://github.com/se7enxweb/exponential-platform-nexus/issues](https://github.com/se7enxweb/exponential-platform-nexus/issues)
 
 If you discover a [security issue](SECURITY.md), please responsibly report such issues via email to security@exponential.earth
 
