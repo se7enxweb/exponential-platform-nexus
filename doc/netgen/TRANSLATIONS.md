@@ -1,7 +1,7 @@
 Edit translations from admin
 =============================
 
-Thanks to the [Prime Translations Bundle](https://github.com/primedigital/prime-translations-bundle) (based on the [LexikTranslationBundle](https://github.com/lexik/LexikTranslationBundle)) it is possible to manipulate Symfony translations through the admin interface.
+Thanks to the [Prime Translations Bundle](https://github.com/netgenswiss/prime-translations-bundle) (based on the [LexikTranslationBundle](https://github.com/lexik/LexikTranslationBundle)) it is possible to manipulate Symfony translations through the admin interface.
 
 Configuration
 -------------
@@ -11,7 +11,7 @@ Configuration can be found in the main `app/config/config.yml` file:
 ```yaml
 lexik_translation:
     fallback_locale: [en]
-    managed_locales: [en]
+    managed_locales: [de, en]
 
     base_layout: "@PrimeTranslations/pagelayout.html.twig"
     grid_input_type: text
@@ -20,7 +20,7 @@ lexik_translation:
         type: orm
 ```
 
-The most important is to configure locales that you want to manage with this bundle. For all other configuration options, check bundle's [GitHub repository](https://github.com/primedigital/prime-translations-bundle).
+The most important is to configure locales that you want to manage with this bundle; this branch manages German and English (`de`, `en`). For all other configuration options, check bundle's [GitHub repository](https://github.com/netgenswiss/prime-translations-bundle).
 
 Import existing translations
 ----------------------------
