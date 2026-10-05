@@ -65,8 +65,8 @@ installation has in `node_modules/`.
 | | 1.0.0.x (and `master`) | 1.1.0.x | 1.2.0.x | 1.3.0.x | 1.3.0.x reference install |
 |---|---|---|---|---|---|
 | Base | eZ Platform 2.5, Symfony 3.4 | eZ Platform 3.3, Symfony 5.4 | Ibexa OSS 4.6, Symfony 5.4 | Ibexa v5, Symfony 7.4 | |
-| `.nvmrc` | none | `v18` | `v18` | `v22` | `v22` |
-| `engines.node` in `package.json` | not set | `^18 \|\| ^20` | `^18` | `^22` | Node.js 22.22.2 installed |
+| `.nvmrc` | `v22` on `master`, `v20` on the `1.0.0.x` branch (both added 5 October 2026) | `v18` | `v18` | `v22` | `v22` |
+| `engines.node` in `package.json` | not set (the `1.0.0.x` branch lists the npm package `node` `^25.6.1` as a dependency, which is not a version check) | `^18 \|\| ^20` | `^18` | `^22` | Node.js 22.22.2 installed |
 | Yarn | 1.x | 1.x | 1.x | 1.x | 1.22.22 |
 | Lock file in git | `package-lock.json` | none | none | `yarn.lock` | `yarn.lock` |
 | `@symfony/webpack-encore` | `^0.27.0` (webpack 4) | `^3.0.0` (webpack 5) | `^3.0.0` (webpack 5) | `^5.1.0` (webpack `^5.99.7`) | 5.3.1, webpack 5.106.2 |
@@ -95,16 +95,29 @@ On a build machine:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 . ~/.nvm/nvm.sh
-nvm install          # reads .nvmrc: 18 on 1.1.0.x and 1.2.0.x, 22 on 1.3.0.x
+nvm install          # reads .nvmrc: 22 on master, 20 on the 1.0.0.x branch, 18 on 1.1.0.x and 1.2.0.x, 22 on 1.3.0.x
 nvm use
 corepack enable      # provides the yarn 1.22.x command
 node --version
 yarn --version
 ```
 
-The 1.0.0.x line has no `.nvmrc`; install a version explicitly (section 9.4.5 explains which). The `Makefile` targets
-(`make assets`, `make assets-prod`, `make assets-watch`) run `nvm use || nvm install $(cat .nvmrc)` first, so they
-work only on lines that carry an `.nvmrc`.
+The 1.0.0.x line carries an `.nvmrc` since 5 October 2026 (`v22` on `master`, commit `c3e3eabc0`; `v20` on the
+`1.0.0.x` branch, commit `85c15885e`); a project created from an earlier tag has none, so install a version explicitly
+there (section 9.4.5 explains which). The `Makefile` targets (`make assets`, `make assets-prod`, `make assets-watch`,
+`make ibexa-assets`) run `nvm use || nvm install $$(cat .nvmrc)` first. Up to the same day every line's `Makefile`
+wrote `$(cat .nvmrc)` with a single `$`, which `make` reads as an empty variable, so the `nvm install` fallback ran
+without a version; the branches escape it now. On an older checkout, run `nvm install` yourself before `make assets`
+(it reads `.nvmrc` on its own):
+
+```bash
+nvm install && nvm use      # Now using node v22.x (npm v10.x), or the version .nvmrc names
+make assets-prod APP_ENV=prod
+```
+
+What can go wrong: `nvm` is a shell function, so the `Makefile` sources `${NVM_DIR}/nvm.sh` first; with `NVM_DIR`
+unset (nvm installed for another user, or a CI image without it) the target stops with "No such file or directory".
+Export `NVM_DIR` or run the `yarn` commands of 9.4.1 directly.
 
 Operating-system packages work too, provided the major version matches. Node.js is a build tool here: nothing in the
 running site calls it, and a server that receives built files (section 9.10) does not need it.
@@ -234,9 +247,9 @@ same commits removed the direct `webpack` dependency, silenced Dart Sass depreca
 assets under `web/assets/app/`.
 
 The commit messages describe this as a compatibility shim on Node.js 25: the build works, a `sass-loader` version
-warning remains, and the real fix is a move to Encore 5 and webpack 5. The upstream `doc/INSTALL.md` on `master`
-still recommends `nvm install 20`; both work with the flag. Because 1.0.0.x has no lock on `engines`, nothing stops
-an older or newer Node.js; prefer an LTS release.
+warning remains, and the real fix is a move to Encore 5 and webpack 5. The `.nvmrc` files name 22 (`master`) and 20
+(the `1.0.0.x` branch); both work with the flag. Because neither branch sets `engines`, nothing stops an older or
+newer Node.js; prefer the version in `.nvmrc`, or another LTS release.
 
 Two more 1.0.0.x specifics:
 
@@ -255,8 +268,8 @@ whenever the bundles change.
 
 | Line | Command | Configuration | Output |
 |---|---|---|---|
-| 1.0.0.x | `composer ezplatform-assets` (runs `bazinga:js-translation:dump web/assets --merge-domains` and `yarn ezplatform`); also part of the `symfony-scripts` run by `composer install` | `webpack.config.ezplatform.js` -> `ez.webpack.config.js` + `ez.webpack.custom.configs.js` | `web/assets/ezplatform/build/` |
-| 1.1.0.x | `yarn ez` (`encore production --config=webpack.config.ez.js`) | `webpack.config.ez.js` -> `ez.webpack.config.js` + `ez.webpack.custom.configs.js` | `public/assets/ezplatform/build/`, `public/assets/richtext/build/` |
+| 1.0.0.x | `composer ezplatform-assets` (runs `bazinga:js-translation:dump web/assets --merge-domains` and `yarn ezplatform`), or `make ibexa-assets`, which calls it since 5 October 2026; also part of the `symfony-scripts` run by `composer install` | `webpack.config.ezplatform.js` -> `ez.webpack.config.js` + `ez.webpack.custom.configs.js` | `web/assets/ezplatform/build/` |
+| 1.1.0.x | `bazinga:js-translation:dump public/assets --merge-domains`, then `yarn ez` (`encore production --config=webpack.config.ez.js`); `make ibexa-assets` runs both since 5 October 2026 (commit `e17a13f77`; before, it called a Composer script this line does not have) | `webpack.config.ez.js` -> `ez.webpack.config.js` + `ez.webpack.custom.configs.js` | `public/assets/ezplatform/build/`, `public/assets/richtext/build/` |
 | 1.2.0.x | `composer ibexa-assets` (translations dump and `yarn ibexa`) | `webpack.config.ibexa.js` -> `ibexa.webpack.config.js` + `ibexa.webpack.custom.configs.js` | `public/assets/ibexa/build/`, `public/assets/richtext/build/` |
 | 1.3.0.x | `composer ibexa-assets`, or `make ibexa-assets` | `webpack.config.js` + `@ibexa/frontend-config` + `var/encore/*.js` | `public/assets/ibexa/build/`, `richtext/`, `react/`, `react-dom/` |
 
@@ -299,6 +312,20 @@ it is part of `symfony-scripts` (with `web` as the target). Run it by hand after
 installation has 22 such links, among them `netgenlayouts`, `netgenlayoutsui`, `netgencontentbrowserui`,
 `netgenlayoutsstandard`, `ibexaadminui` and `ibexafieldtyperichtext`. The web server must follow symlinks in the
 document root.
+
+**Under Exponential Velocity the links answer 403.** Velocity refuses any file whose real path, after the links are
+followed, lies outside the document root (since `v0.0.4.25`; `Q.webserver.followSymlinks` turns that off), and every
+link above points into `vendor/` or `src/`. Install the bundle assets as copies instead, and repeat it after every
+Composer run, because the Composer scripts put the links back:
+
+```bash
+php bin/console assets:install public --env=prod          # web on 1.0.0.x; no --symlink: hard copies
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8080/bundles/netgenlayouts/css/style.css   # 200, not 403
+```
+
+The path in the second command is an example; take any file under `public/bundles/`. On the lines with the legacy
+kernel the legacy design, extension and storage directories are links too; [chapter 14.11](14-security-hardening.md#1411-exponential-velocity)
+explains when to turn link following on instead.
 
 The lines that keep Exponential Platform Legacy (1.0.0.x to 1.2.0.x) also run
 `ezpublish:legacy:assets_install --symlink --relative` and `ezpublish:legacybundles:install_extensions --relative`
@@ -506,9 +533,13 @@ php bin/console cache:clear --env=prod          # writes var/encore/ on 1.3.0.x
 composer ibexa-assets                           # 1.2.0.x and 1.3.0.x; see 9.5 for the others
 
 # on the server, after the files arrive
-php bin/console assets:install --symlink --relative public --env=prod
+php bin/console assets:install --symlink --relative public --env=prod   # Apache, nginx
+# php bin/console assets:install public --env=prod                    # Exponential Velocity: copies (9.6)
 php bin/console cache:clear --env=prod
 ```
+
+Under Velocity, reload the server after the cache clear so the persistent workers load the new container
+([chapter 10.12.2](10-operations.md#10122-with-exponential-velocity)).
 
 `--frozen-lockfile` needs a `yarn.lock`, which only 1.3.0.x commits; on the other lines commit one first or use
 `yarn install`. With WebpackEncoreBundle's cache switched on (`webpack_encore.cache: true` in `prod`, commented out on
@@ -535,6 +566,7 @@ ownership afterwards. Chapter [10. Operations](10-operations.md) covers cache cl
 | 1.3.0.x administration build includes nothing from a new bundle | `var/encore/*.js` written before the bundle was installed | `cache:clear`, then `composer ibexa-assets` |
 | `yarn encore dev` on 1.3.0.x does not build the site | `webpack.config.js` is the administration build there | `yarn build:dev` |
 | `/bundles/...` returns 404 | `assets:install` not run, or symlinks not followed | `assets:install --symlink --relative public`; allow symlinks |
+| `/bundles/...` (or legacy `/design/`, `/var/.../storage/`) returns 403 under Exponential Velocity | the file is a link that leaves the document root, which Velocity refuses | `assets:install public` (copies), or `followSymlinks` for the legacy lines (9.6, [14.11](14-security-hardening.md#1411-exponential-velocity)) |
 | Changed template not visible in `prod` | Twig cache | `cache:clear --env=prod` (and purge the HTTP cache, chapter 10) |
 | New theme directory ignored | themes are scanned at container build | `cache:clear` |
 | Hundreds of Sass deprecation warnings | Dart Sass on Bootstrap's `@import` | harmless; 1.0.0.x and 1.3.0.x already silence them |
@@ -547,7 +579,7 @@ ownership afterwards. Chapter [10. Operations](10-operations.md) covers cache cl
 - [ ] The build that the environment reads exists: `public/assets/app/build/entrypoints.json` for `prod`.
 - [ ] The administration assets are built (`public/assets/ibexa/build/` or `ezplatform/build/`) and translations
       dumped.
-- [ ] `assets:install --symlink --relative` ran and `public/bundles/` resolves.
+- [ ] `assets:install --symlink --relative` ran (copies without `--symlink` under Velocity) and `public/bundles/` resolves.
 - [ ] `ngsite:symlink:project` linked the root files (`public/.htaccess` where Apache is used).
 - [ ] Template changes are in a theme or in `templates/bundles/`, never in `vendor/`.
 - [ ] New view rules and block view types are in `config/app/prepends/` or `config/packages/`, followed by
@@ -591,7 +623,7 @@ External:
   [`assets:install` and the asset component](https://symfony.com/doc/current/components/asset.html)
 - webpack: <https://webpack.js.org/concepts/>
 - Node.js: <https://nodejs.org/en/about/previous-releases>; nvm: <https://github.com/nvm-sh/nvm>;
-  corepack: <https://nodejs.org/api/corepack.html>
+  corepack: <https://github.com/nodejs/corepack>
 - Yarn 1: <https://classic.yarnpkg.com/en/docs/> and [`engines`](https://classic.yarnpkg.com/en/docs/package-json#toc-engines);
   Yarn: <https://yarnpkg.com>
 - Sass: [`@import` deprecation](https://sass-lang.com/documentation/breaking-changes/import/)
