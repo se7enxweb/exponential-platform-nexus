@@ -708,43 +708,36 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=<random-64-char-hex-string>
 ```
 
+The connection is configured by **`DATABASE_URL` only** (`config/packages/doctrine.yaml`:
+`url: '%env(resolve:DATABASE_URL)%'`). Separate `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`,
+`DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` or `DATABASE_VERSION` variables are not read on this line;
+put the server version into the URL as `serverVersion`. `DATABASE_CHARSET` and `DATABASE_COLLATION` are read
+(by `config/packages/ibexa_doctrine_schema.yaml`, for the tables the installer creates). The shipped `.env` sets a
+PostgreSQL `DATABASE_URL`; override it in `.env.local`.
+
 ### MySQL / MariaDB
 
 ```bash
-DATABASE_DRIVER=pdo_mysql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=3306
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="mysql://your_db_user:your_db_password@127.0.0.1:3306/your_db_name?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
+# MySQL 8: ...?serverVersion=8.0.32&charset=utf8mb4
 DATABASE_CHARSET=utf8mb4
 DATABASE_COLLATION=utf8mb4_unicode_520_ci
-DATABASE_VERSION=mariadb-10.6.0    # e.g. mariadb-10.6.0 or 8.0 for MySQL
-
-# Or use a full DSN (takes precedence over the vars above):
-# DATABASE_URL="mysql://user:pass@127.0.0.1:3306/dbname?serverVersion=8.0&charset=utf8mb4"
 ```
 
 ### PostgreSQL (alternative to MySQL)
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="postgresql://your_db_user:your_db_password@127.0.0.1:5432/your_db_name?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
 ```
 
 ### SQLite (zero-config — dev / testing)
 
-SQLite is the **default database for this project**. The `.db` file is created
-automatically when you run `exponential:install`. No database server is required.
+SQLite needs no database server. The `.db` file is created automatically when you run
+`exponential:install`. The shipped `.env` points `DATABASE_URL` at PostgreSQL, so set SQLite in `.env.local`:
 
 ```bash
-# In .env.local — this is the default already set in .env:
+# In .env.local:
 DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
 
 # Required for SQLite — the doctrine transport requires a second DB connection
@@ -828,10 +821,12 @@ CREATE DATABASE your_db_name
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_520_ci;
 
-GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost'
-  IDENTIFIED BY 'your_db_password';
-FLUSH PRIVILEGES;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost';
 ```
+
+(MySQL 8.0 removed `GRANT ... IDENTIFIED BY`; create the user first, then grant. `FLUSH PRIVILEGES` is not
+needed after `CREATE USER` and `GRANT`.)
 
 Then run the installer:
 
@@ -842,10 +837,13 @@ php bin/console exponential:install exponential-media --no-interaction
 ### 6b. PostgreSQL
 
 ```bash
-psql -U postgres -c "CREATE DATABASE your_db_name ENCODING 'UTF8';"
 psql -U postgres -c "CREATE USER your_db_user WITH PASSWORD 'your_db_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE your_db_name TO your_db_user;"
+psql -U postgres -c "CREATE DATABASE your_db_name OWNER your_db_user ENCODING 'UTF8';"
 ```
+
+Make the application user the **owner** of the database. From PostgreSQL 15 on, ordinary users can no longer
+create tables in the `public` schema of a database they do not own, so `GRANT ALL PRIVILEGES ON DATABASE` alone
+is not enough for the installer.
 
 Then run the installer:
 
@@ -873,8 +871,8 @@ DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
 MESSENGER_TRANSPORT_DSN=sync://
 ```
 
-Remove or comment out any `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`,
-`DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` lines.
+Only `DATABASE_URL` selects the database on this line; any `DATABASE_DRIVER`, `DATABASE_HOST`,
+`DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER` or `DATABASE_PASSWORD` lines are not read and can be removed.
 
 #### Step 3 — Run the install command
 
@@ -1820,9 +1818,8 @@ Create the target database first:
 CREATE DATABASE your_db_name
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_520_ci;
-GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost'
-  IDENTIFIED BY 'your_db_password';
-FLUSH PRIVILEGES;
+CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+GRANT ALL PRIVILEGES ON your_db_name.* TO 'your_db_user'@'localhost';
 ```
 
 Then convert using [sqlite3-to-mysql](https://github.com/techouse/sqlite3-to-mysql) (MIT, Python):
@@ -1843,16 +1840,10 @@ sqlite3mysql \
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_mysql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=3306
-DATABASE_NAME=your_db_name
-DATABASE_USER=your_db_user
-DATABASE_PASSWORD=your_db_password
+DATABASE_URL="mysql://your_db_user:your_db_password@127.0.0.1:3306/your_db_name?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
 DATABASE_CHARSET=utf8mb4
 DATABASE_COLLATION=utf8mb4_unicode_520_ci
-DATABASE_VERSION=mariadb-10.6.0   # or MySQL version e.g. 8.0
-# Remove DATABASE_URL=sqlite:// and MESSENGER_TRANSPORT_DSN=sync://
+# Remove the sqlite:// DATABASE_URL and MESSENGER_TRANSPORT_DSN=sync://
 ```
 
 ---
@@ -1878,15 +1869,9 @@ pgloader /tmp/sqlite_to_pg.load
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=exponential
-DATABASE_USER=pg_user
-DATABASE_PASSWORD=pg_pass
+DATABASE_URL="postgresql://pg_user:pg_pass@127.0.0.1:5432/exponential?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
-# Remove DATABASE_URL=sqlite:// and MESSENGER_TRANSPORT_DSN=sync://
+# Remove the sqlite:// DATABASE_URL and MESSENGER_TRANSPORT_DSN=sync://
 ```
 
 ---
@@ -1924,14 +1909,8 @@ pgloader /tmp/mysql_to_pg.load
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_pgsql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5432
-DATABASE_NAME=exponential
-DATABASE_USER=pg_user
-DATABASE_PASSWORD=pg_pass
+DATABASE_URL="postgresql://pg_user:pg_pass@127.0.0.1:5432/exponential?serverVersion=16&charset=utf8"
 DATABASE_CHARSET=utf8
-DATABASE_VERSION=16
 ```
 
 ---
@@ -1986,15 +1965,9 @@ done
 #### After migrating — update `.env.local`
 
 ```bash
-DATABASE_DRIVER=pdo_mysql
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=3306
-DATABASE_NAME=target_db
-DATABASE_USER=db_user
-DATABASE_PASSWORD=db_pass
+DATABASE_URL="mysql://db_user:db_pass@127.0.0.1:3306/target_db?serverVersion=10.6.0-MariaDB&charset=utf8mb4"
 DATABASE_CHARSET=utf8mb4
 DATABASE_COLLATION=utf8mb4_unicode_520_ci
-DATABASE_VERSION=mariadb-10.6.0
 ```
 
 ---
