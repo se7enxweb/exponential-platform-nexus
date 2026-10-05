@@ -13,17 +13,17 @@
 
 ---
 
-> **Console Command Prefix Convention**
+> **Console Command Prefixes**
 >
-> Commands in this distribution use the `exponential:` prefix where available.
-> The `ibexa:*` prefix remains as a deprecated alias for migrated commands.
+> This project adds two `exponential:` commands of its own (`src/RepositoryInstaller/Command/`):
+> `exponential:install`, the installer with the `exponential-media` type, and `exponential:reindex`,
+> a thin proxy that runs `ibexa:reindex` and accepts only `--siteaccess`. The legacy bridge adds
+> `exponential:legacy:script` (alias `ezpublish:legacy:script`). They are separate commands, not
+> aliases: `ibexa:install` and `ibexa:reindex` exist unchanged beside them and are **not** deprecated.
 >
-> | Preferred — use this | Deprecated (functional) |
-> |---|---|
-> | `exponential:*` | `ibexa:*` |
->
-> Commands not yet migrated retain their `ibexa:*` name (e.g. `ibexa:cron:run`,
-> `ibexa:graphql:generate-schema`).
+> Every other platform command keeps its `ibexa:*` name (e.g. `ibexa:cron:run`,
+> `ibexa:graphql:generate-schema`, `ibexa:reindex`); the old `ezplatform:*` names of many of them
+> still work as deprecated aliases.
 
 ---
 
@@ -1008,16 +1008,19 @@ The GraphQL endpoint is at `/graphql`. The GraphiQL browser UI is at
 php bin/console exponential:reindex
 ```
 
-### Incremental reindex
+`exponential:reindex` accepts only `--siteaccess`. For the options below, call `ibexa:reindex`
+(the command it delegates to) directly.
+
+### Smaller batches
 
 ```bash
-php bin/console exponential:reindex --iteration-count=100
+php bin/console ibexa:reindex --iteration-count=100
 ```
 
 ### Reindex a specific content type
 
 ```bash
-php bin/console exponential:reindex --content-type=article
+php bin/console ibexa:reindex --content-type=article
 ```
 
 ---
@@ -1816,15 +1819,14 @@ php bin/console doctrine:database:create                           # create the 
 ```bash
 # Install — initial database setup (run ONCE on a fresh install)
 php bin/console exponential:install exponential-media --no-interaction
-# Alternate install types:
-php bin/console exponential:install exponential-oss --no-interaction
+# Alternate install type (clean repository, no demo content; the argument's default):
 php bin/console exponential:install ibexa-oss --no-interaction
 
-# Search index
+# Search index (exponential:reindex accepts only --siteaccess; the options are ibexa:reindex's)
 php bin/console exponential:reindex                                # full reindex
-php bin/console exponential:reindex --iteration-count=100         # batched
-php bin/console exponential:reindex --content-type=article        # one content type
-php bin/console exponential:reindex --subtree=45                  # one subtree
+php bin/console ibexa:reindex --iteration-count=100               # batched
+php bin/console ibexa:reindex --content-type=article              # one content type
+php bin/console ibexa:reindex --subtree=45                        # one subtree
 php -d memory_limit=-1 bin/console exponential:reindex --env=prod # production (no limit)
 
 # Cron
