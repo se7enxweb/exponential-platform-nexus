@@ -42,7 +42,7 @@ The sections below explain each row.
 Three things follow from the table:
 
 1. **The 2.5 generation needs `--ignore-platform-reqs`.** Its `composer.json` accepts current PHP, but the install
-   guides of the line (`doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release) say the flag is still required "due to ongoing package definition updates across
+   guides of the line (`doc/INSTALL.md` in the releases `1.0.0.9` and `v2.5.0.6`) say the flag is still required "due to ongoing package definition updates across
    repositories": some dependencies of the Symfony 3.4 stack declare older PHP limits than the versions 7x has made them
    work on. The flag makes Composer skip the PHP and extension checks entirely, so you have to check them yourself
    ([2.3](#23-php-extensions)).
@@ -75,7 +75,7 @@ example `/opt/plesk/php/8.5/bin/php bin/console`.
 
 | Setting | Value | Why |
 |---|---|---|
-| `memory_limit` | 2.5 generation: at least 464M (the install guides of `1.0.0.x` and `v2.5.0.6`); 1.1.0.x to 1.3.0.x: at least 256M, 512M recommended | the container compilation and the installers load large configuration and SQL files. The Composer scripts of the 2.5 generation already run the console with `-d memory_limit=2000M`. |
+| `memory_limit` | 2.5 generation: at least 464M (the install guides released with `1.0.0.9` and `v2.5.0.6`); 1.1.0.x to 1.3.0.x: at least 256M, 512M recommended | the container compilation and the installers load large configuration and SQL files. The Composer scripts of the 2.5 generation already run the console with `-d memory_limit=2000M`. |
 | `date.timezone` | set, for example `Europe/Berlin` or `UTC` | required by every line's guide ([list of time zones](https://www.php.net/manual/en/timezones.php)) |
 | `max_execution_time` | 120 or more for the web, 300 or more (or unlimited) for the command line | the 7x guides; long imports and reindexing run on the command line |
 | `opcache.enable` | `1` in production | performance |
@@ -114,7 +114,7 @@ Plus the PDO driver of your database:
 | SQLite | `pdo_sqlite` and `sqlite3` |
 
 The 2.5 generation declares no extensions in `composer.json` (and is installed with `--ignore-platform-reqs`, which
-would skip them anyway). Its install guide (`v2.5.0.6`, and with the same list `1.0.0.x`) names these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
+would skip them anyway). Its install guide (`v2.5.0.6`, and with the same list `1.0.0.9`) names these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
 `hash`, `iconv`, `intl`, `json`, `mbstring`, `openssl`, `pcre`, `pdo`, `pdo_mysql` (or `pdo_pgsql`, `pdo_sqlite`),
 `phar`, `session`, `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter` and `zlib`; and `curl`, `gd` or `imagick`,
 `opcache`, `apcu` and `zip` as strongly recommended. Add `xsl`: the legacy kernel's XML text and the RichText field
@@ -190,8 +190,8 @@ the production server ([chapter 9](09-frontend-and-themes.md)).
 
 | Line | Node.js | Where it is declared | Yarn | Build tool |
 |---|---|---|---|---|
-| 2.5 (`master`) | 22 (`.nvmrc`, added 2026-10-05); the scripts of `package.json` set `NODE_OPTIONS=--openssl-legacy-provider`, which lets the old webpack 4 build run on current Node.js (7x built the assets on Node.js 25) | `.nvmrc`: `v22`; no `engines`. The `v2.5.0.6` release has no `.nvmrc`, its guide says Node.js 18 or 20, and its scripts do **not** set the OpenSSL option | 1.x; npm works for the site build | `@symfony/webpack-encore ^0.27.0` (webpack 4) |
-| 1.0.0.x | 20 (`nvm install 20` in `doc/INSTALL.md`) | `.nvmrc`: `v20` (added 2026-10-05, in no release yet); no `engines`. The scripts set the OpenSSL option, as on `master` | 1.x | as 2.5 |
+| 2.5 (`master`) | 22 (`.nvmrc`, added 2026-10-05, released in `v2.5.0.7`); the scripts of `package.json` set `NODE_OPTIONS=--openssl-legacy-provider`, which lets the old webpack 4 build run on current Node.js (7x built the assets on Node.js 25) | `.nvmrc`: `v22`; no `engines`. The `v2.5.0.6` release has no `.nvmrc`, its guide says Node.js 18 or 20, and its scripts do **not** set the OpenSSL option | 1.x; npm works for the site build | `@symfony/webpack-encore ^0.27.0` (webpack 4) |
+| 1.0.0.x | 20 (`nvm install 20` in the guide released with `1.0.0.9`) | `.nvmrc`: `v20` (added 2026-10-05, released in `1.0.0.11`); no `engines`. The scripts set the OpenSSL option, as on `master` | 1.x | as 2.5 |
 | 1.1.0.x | 18 or 20 | `"engines": {"node": "^18 \|\| ^20"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
 | 1.2.0.x | 18 | `"engines": {"node": "^18"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
 | 1.3.0.x | 22 | `"engines": {"node": "^22"}`, `.nvmrc`: `v22` | 1.22 via corepack | Webpack Encore with `@ibexa/frontend-config` |
@@ -221,7 +221,7 @@ Notes:
 
 ```bash
 # install nvm once, see https://github.com/nvm-sh/nvm
-nvm install          # reads .nvmrc; on a release without one (v2.5.0.6, 1.0.0.x tags): nvm install 20
+nvm install          # reads .nvmrc; on a release without one (v2.5.0.6 and older, 1.0.0.10 and older): nvm install 20
 nvm use
 corepack enable      # makes the yarn command available
 node -v && yarn -v
@@ -307,9 +307,10 @@ on the lines that have one) by the content you expect: uploaded images and their
 
 In this repository:
 
-- The project README and the 7x guide of each line: `README.md`, `doc/sevenx/INSTALL.md` (1.1.0.x to 1.3.0.x),
-  `doc/INSTALL.md` on `1.0.0.x` and in the `v2.5.0.6` release (`git show v2.5.0.6:doc/INSTALL.md`). On `master`,
-  [doc/INSTALL.md](../INSTALL.md) is the short guide into this book.
+- The project README and the 7x guide of each line: `README.md`, `doc/sevenx/INSTALL.md` (1.1.0.x to 1.3.0.x), and
+  the older guides `doc/INSTALL.md` of the releases `1.0.0.9`, `v2.5.0.6`, `v1.1.0.7` and `v1.2.0.0`
+  (`git show 1.0.0.9:doc/INSTALL.md`). Since 5 October 2026, [doc/INSTALL.md](../INSTALL.md) is the short guide into
+  this book on every branch.
 - `.nvmrc`, `package.json` and `Makefile` of the branch you install; `composer.json` of `se7enxweb/exponential` for the
   legacy kernel's PHP constraint ([Packagist](https://packagist.org/packages/se7enxweb/exponential)).
 - [doc/netgen/INSTALL.md](../netgen/INSTALL.md) and [doc/netgen/FRONTEND.md](../netgen/FRONTEND.md) (upstream notes).

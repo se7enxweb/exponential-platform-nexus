@@ -125,7 +125,7 @@ project's own directory:
 | 3 | `config/app/packages/*.yaml` | the project's per-bundle configuration: siteaccesses, images, templates, Content Browser |
 | 4 | `config/app/services.yaml`, `config/app/services/**/*.yaml` | the project's services |
 | 5 | `config/app/app.yaml` | project parameters |
-| 6 | `config/app/app_legacy.yaml` (1.2.0.x; 1.1.0.x since 5 October 2026) | ImageMagick settings for the legacy kernel |
+| 6 | `config/app/app_legacy.yaml` (1.2.0.x; 1.1.0.x since `v1.1.0.8`) | ImageMagick settings for the legacy kernel |
 | 7 | `config/app/server/<SERVER_ENVIRONMENT>.yaml` | per-server values: location IDs, domains, matchers |
 | 8 | `config/app/prepends/<extension>/*.yaml` | prepended to that extension's configuration by `App\DependencyInjection\AppExtension` |
 | routes | `config/routes/*.yaml`, `config/app/routes/*.yaml`, `config/app/routes.yaml` | routing |
@@ -176,8 +176,8 @@ defaults to on in `dev` and off otherwise. The committed `.env` sets `APP_ENV=de
 `APP_ENV=prod` in `.env.local` or in the server's environment.
 
 On these lines `APP_HTTP_CACHE` decides whether the Symfony reverse proxy (`AppCache`) runs in front of the kernel.
-On the branch heads since 5 October 2026 `public/index.php` reads it (true: on; unset, empty or `0`: off); the
-releases `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` ignore it and never run the proxy
+Since 5 October 2026 (the branch heads and the releases `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`) `public/index.php` reads it (true:
+on; unset, empty or `0`: off); the releases `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` and older ignore it and never run the proxy
 ([chapter 10.4](10-operations.md#104-http-cache-and-purging)).
 
 **1.0.0.x.** `web/app.php` reads `SYMFONY_ENV` (default `prod`), `SYMFONY_DEBUG` (default on in `dev`) and
@@ -193,7 +193,8 @@ putenv('SYMFONY_SECRET=' . 'a-long-random-value');
 ```
 
 Up to the releases `v2.5.0.6` and `1.0.0.10` `web/app.php` also switched to `dev` for any request whose host name
-contains `dev.`. The branches removed that on 5 October 2026 (commits `dddc937de` and `4598c1942`); see
+contains `dev.`. The branches removed that on 5 October 2026 (commits `dddc937de` and `4598c1942`, released in
+`v2.5.0.7` and `1.0.0.11`); see
 [chapter 14.4](14-security-hardening.md#144-debug-mode-and-the-environment) if your installation still has it.
 
 `bin/console` on 1.0.0.x uses `--env`, else `SYMFONY_ENV`, else **`dev`**, so a production host must pass
@@ -211,13 +212,13 @@ the contact form addresses and the siteaccess matchers.
 |---|---|---|---|
 | 1.0.0.x | parameter `server_environment` in `parameters.yml` (default `dev` in `parameters.yml.dist`) | `app/config/server/<name>.yml` and what it imports | `dev` |
 | 1.1.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`, `prod` |
-| 1.2.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` on the branch head since 5 October 2026 |
-| 1.3.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` on the branch head since 5 October 2026 |
+| 1.2.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` since `v1.2.0.1` |
+| 1.3.0.x | `SERVER_ENVIRONMENT` | `config/app/server/<name>.yaml` | `dev`; `prod` since `1.3.0.6` |
 
 The committed `.env` of 1.1.0.x, 1.2.0.x and 1.3.0.x sets `SERVER_ENVIRONMENT=dev`. `src/Kernel.php` imports
 `config/app/server/<SERVER_ENVIRONMENT>.yaml` on every boot, so the name must have a file.
 
-**1.2.0.x and 1.3.0.x, branch heads.** Since 5 October 2026 (commits `cb7e181b8` and `88c4a4b35`) both ship
+**1.2.0.x and 1.3.0.x, since `v1.2.0.1` and `1.3.0.6`.** Since 5 October 2026 (commits `cb7e181b8` and `88c4a4b35`) both ship
 `config/app/server/prod.yaml`, which the Deployer example `deploy/files/.env.local.prod` selects. It defines the
 same parameters as `dev.yaml`, with the location IDs of the demo content, but takes the values that differ per site
 from the environment, with harmless defaults, and sets no demo tracking code:
@@ -246,7 +247,7 @@ echo 'SERVER_ENVIRONMENT=prod' >> .env.local
 
 The 1.1.0.x `prod` server file reads `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO` and `GTM_CODE` from the environment. Up
 to `v1.1.0.7` none of the four is defined in the committed `.env`, and selecting `prod` stops the container build with
-an "environment variable not found" error. On the `1.1.0.x` branch since 5 October 2026 (commit `db8cc46ea`) `.env`
+an "environment variable not found" error. Since `v1.1.0.8` (commit `db8cc46ea`, 5 October 2026) `.env`
 gives each a default (`localhost` for `APP_DOMAIN`, empty for the mail addresses and the Tag Manager ID, which leaves
 the snippet out); either way, set real values in `.env.local`:
 
@@ -283,8 +284,8 @@ when present, is read instead of parsing the `.env` files on every request.
 ### 8.3.2 Variable reference
 
 The variables of the committed `.env` on 1.3.0.x, grouped by what they configure. 1.1.0.x and 1.2.0.x have the same
-set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`; the `1.1.0.x` branch also defines
-`APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO`, `GTM_CODE` and `TEST_DOMAIN` since 5 October 2026.
+set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`; 1.1.0.x also defines
+`APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO`, `GTM_CODE` and `TEST_DOMAIN` since `v1.1.0.8`.
 
 | Variable | Configures | Shipped value or note |
 |---|---|---|
@@ -294,15 +295,15 @@ set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`; the `1.
 | `DEFAULT_URI` (1.3.0.x) | base URL for URLs generated on the console | `http://localhost` |
 | `DATABASE_URL` | the Doctrine connection, see [chapter 7](07-databases.md) | a PostgreSQL example; commented SQLite and MySQL examples |
 | `DATABASE_CHARSET`, `DATABASE_COLLATION` | table options for the schema builder (`ibexa_doctrine_schema.yaml`) | `utf8mb4`, `utf8mb4_unicode_520_ci` |
-| `DATABASE_VERSION` | server version hint | `mariadb-10.3.0`; not read by `doctrine.yaml` on 1.3.0.x, which takes the version from `DATABASE_URL` |
+| `DATABASE_VERSION` | server version hint | `mariadb-10.3.0`; read by nothing in `config/` on 1.1.0.x to 1.3.0.x: the version comes from `serverVersion` in `DATABASE_URL` |
 | `SEARCH_ENGINE` | repository search engine | `legacy` (or `solr`) |
 | `SOLR_DSN`, `SOLR_CORE` | Solr endpoint | `http://localhost:8983/solr`, `collection1` |
 | `CACHE_POOL`, `CACHE_DSN`, `CACHE_NAMESPACE` | the repository's cache pool | `cache.tagaware.filesystem`, `localhost`, `ibexa` |
 | `HTTPCACHE_PURGE_TYPE` | `local` (Symfony proxy) or `varnish` | commented; defaults to `local` |
 | `HTTPCACHE_DEFAULT_TTL` | default TTL of content responses | `86400` |
 | `HTTPCACHE_PURGE_SERVER`, `HTTPCACHE_VARNISH_INVALIDATE_TOKEN` | where purges go | `http://localhost:80`, empty |
-| `TRUSTED_PROXIES` | proxies whose `X-Forwarded-*` headers are trusted (`framework.trusted_proxies`) | `127.0.0.1`; read on the branch heads since 5 October 2026, not read at all by the releases ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
-| `APP_HTTP_CACHE` | wraps the kernel in the Symfony reverse proxy (`AppCache`) | not in `.env` (off); read by `public/index.php` on the branch heads since 5 October 2026, ignored by the releases |
+| `TRUSTED_PROXIES` | proxies whose `X-Forwarded-*` headers are trusted (`framework.trusted_proxies`) | `127.0.0.1`; read since 5 October 2026 (branch heads, `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`), not read at all by the older releases ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
+| `APP_HTTP_CACHE` | wraps the kernel in the Symfony reverse proxy (`AppCache`) | not in `.env` (off); read by `public/index.php` since 5 October 2026 (branch heads, `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`), ignored by the older releases |
 | `SESSION_HANDLER_ID`, `SESSION_SAVE_PATH` | session storage | native files under `var/sessions/<env>` |
 | `MAILER_DSN` | Symfony Mailer transport | `null://null` (mail discarded) |
 | `MESSENGER_TRANSPORT_DSN` | Messenger transport | `doctrine://default?auto_setup=0` |
@@ -315,8 +316,8 @@ set plus `MAILER_URL` and `IMAGEMAGICK_PATH`, and without `DEFAULT_URI`; the `1.
 | `IBEXA_EDITION` | edition name shown by system information | `oss` |
 
 Some parameters read variables that the committed `.env` does not define: `app.testing.site_domain` reads
-`TEST_DOMAIN` (in `config/app/app.yaml`; defined in `.env` only on the `1.1.0.x` branch), and the 1.1.0.x `prod`
-server file reads the four variables named in [8.2.2](#822-the-server-environment) (defined only on the branch head).
+`TEST_DOMAIN` (in `config/app/app.yaml`; defined in `.env` only on 1.1.0.x since `v1.1.0.8`), and the 1.1.0.x `prod`
+server file reads the four variables named in [8.2.2](#822-the-server-environment) (defined since `v1.1.0.8`).
 Symfony resolves an environment variable only when a service actually uses it, so a missing one surfaces as an error
 the first time that service is built, not at install time. To list what the container reads and where each value
 comes from:
@@ -347,8 +348,8 @@ MAILER_DSN=smtp://mail.example.com:587
 JWT_PASSPHRASE=another-random-value
 ```
 
-`SERVER_ENVIRONMENT=prod` needs a `prod` server file ([8.2.2](#822-the-server-environment)). On the 1.2.0.x and
-1.3.0.x branch heads it ships and reads four more variables; add them to the file above:
+`SERVER_ENVIRONMENT=prod` needs a `prod` server file ([8.2.2](#822-the-server-environment)). Since `v1.2.0.1` and
+`1.3.0.6` it ships and reads four more variables; add them to the file above:
 
 ```dotenv
 SITE_DOMAIN=www.example.com
@@ -539,7 +540,7 @@ What each line ships:
   `AppCache` reads the `Map\Host` list to find the siteaccess of a host and never makes a response of an
   administration siteaccess public. On the releases up to `v2.5.0.6` and `1.0.0.10` that class read its settings from
   the wrong directory and used built-in demo host names instead, and rewrote private responses to public; the
-  branches fixed both on 5 October 2026 ([chapter 14.7](14-security-hardening.md#147-http-cache-safety)). Replace the
+  branches fixed both on 5 October 2026, released in `v2.5.0.7` and `1.0.0.11` ([chapter 14.7](14-security-hardening.md#147-http-cache-safety)). Replace the
   demo host names with yours either way.
 
 ### 8.5.4 Designs and the theme fallback
@@ -775,7 +776,7 @@ image handling on 1.1.0.x and 1.2.0.x, by `config/app/app_legacy.yaml`, which re
 | Line | `app_legacy.yaml` loaded | Parameter names in it |
 |---|---|---|
 | 1.1.0.x, `v1.1.0.7` and older | no (the kernel does not import it, so the file has no effect) | `ibexa.image.imagemagick.*`, which nothing on this line reads |
-| 1.1.0.x branch since 5 October 2026 (commit `e8c19aee4`) | yes | `ezpublish.image.imagemagick.enabled`, `ezpublish.image.imagemagick.executable_path`, the names the 3.3 legacy bridge reads |
+| 1.1.0.x since `v1.1.0.8` (commit `e8c19aee4`, 5 October 2026) | yes | `ezpublish.image.imagemagick.enabled`, `ezpublish.image.imagemagick.executable_path`, the names the 3.3 legacy bridge reads |
 | 1.2.0.x | yes | `ibexa.image.imagemagick.enabled`, `ibexa.image.imagemagick.executable_path` |
 
 Check the result with `php bin/console debug:container --parameters | grep imagemagick`.
@@ -908,7 +909,7 @@ detailed errors; a production site sets `APP_ENV=prod`.
 - [ ] `languages` of the administration siteaccess include every language content is translated into.
 - [ ] `SEARCH_ENGINE`, `CACHE_POOL` and the purge settings are what this server provides.
 - [ ] `TRUSTED_PROXIES` lists exactly the proxies in front of PHP, and your `framework` configuration reads it
-      (branch heads do; releases need the block of [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
+      (since `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6` it does; older releases need the block of [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
 - [ ] `APP_HTTP_CACHE` is on only when no Varnish is in front (1.1.0.x and later); `SYMFONY_HTTP_CACHE=0` with Varnish
       on 1.0.0.x.
 - [ ] On the legacy lines, no credentials are in committed `injected_settings`.

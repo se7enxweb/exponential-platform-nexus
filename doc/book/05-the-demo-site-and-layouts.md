@@ -365,7 +365,7 @@ The 2.5 line (`master`) installs the CJW content instead, with `cjw-exponential-
 
 The root of the CJW site is location 168, "JAC Example" (`/1/2/168/`), and the start page `startseite` is a child of
 it. Check that `ngsite.default.locations.tree_root.id` is `168` in `app/config/parameters.yml`: both branches ship
-that value now (`master` since 2026-10-05; it shipped 2 before), and the release `v2.5.0.6` does not define the
+that value since 2026-10-05 (released in `v2.5.0.7` and `1.0.0.11`; `master` shipped 2 before), and the release `v2.5.0.6` does not define the
 parameter at all
 ([chapter 4](04-installing.md#step-1-database-settings-in-parametersyml)). The Layouts concepts of this chapter apply
 unchanged.

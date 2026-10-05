@@ -39,7 +39,7 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 
 | | 1.0.0.x (the 2.5 generation) | 1.1.0.x | 1.2.0.x | 1.3.0.x |
 |---|---|---|---|---|
-| Branches and release tags | `master`: `v2.5.0.0` to `v2.5.0.6`, `1.0.0.8` and `1.0.0.10`; branch `1.0.0.x`: `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7` and `1.0.0.9` | `1.1.0.x`: `v1.1.0.0` to `v1.1.0.7` | `1.2.0.x`: `v1.2.0.0` | `1.3.0.x`: `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` |
+| Branches and release tags | `master`: `v2.5.0.0` to `v2.5.0.7`, `1.0.0.8` and `1.0.0.10`; branch `1.0.0.x`: `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9` and `1.0.0.11` | `1.1.0.x`: `v1.1.0.0` to `v1.1.0.8` | `1.2.0.x`: `v1.2.0.0`, `v1.2.0.1` | `1.3.0.x`: `1.3.0.0.0`, `1.3.0.1` to `1.3.0.6` |
 | Platform | eZ Platform 2.5 (`se7enxweb/ezpublish-kernel ~7.5.40`) | Platform 3.3 (`se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3`) | Ibexa OSS 4.6 (`se7enxweb/oss ~4.6.0`) | Platform v5 (`se7enxweb/exponential-platform-dxp`, locked kernel `se7enxweb/exponential-platform-dxp-core v5.0.7`) |
 | Symfony | 3.4 (`se7enxweb/symfony v3.4.55`) | 5.4 | 5.4 | 7.4 |
 | PHP (`composer.json`) | `^7.1.3 \|\| ... \|\| ^8.6`; in practice 8.1 or newer, because the legacy kernel requires `^8.1` | `^8.0` | `>=8.2` | `>=8.4` |
@@ -57,8 +57,9 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 Two warnings about the tag list. First, the repository also carries the tags of the upstream Netgen media site it was
 forked from (`1.0.0` to `3.1.6`, without a fourth position): those are not Nexus releases. Second, the 2.5
 generation has two branches that share their history up to early 2026: `master`, which carries the `v2.5.0.x` tags
-and the tags `1.0.0.8` and `1.0.0.10`, and the branch `1.0.0.x` with the older `1.0.0.x` tags and `1.0.0.9`. Because
-Composer orders `1.0.0.10` after `1.0.0.9`, a constraint such as `~1.0.0.9` installs master code. Both run the same
+and the tags `1.0.0.8` and `1.0.0.10`, and the branch `1.0.0.x` with the older `1.0.0.x` tags, `1.0.0.9` and
+`1.0.0.11`. Composer orders them as one series, so a constraint such as `~1.0.0.9` installed master code (`1.0.0.10`)
+until `1.0.0.11` was tagged on 5 October 2026, and installs the `1.0.0.x` branch since; pin an exact version. Both run the same
 Symfony 3.4 stack, kernel and legacy kernel; they differ in the demo content and its installer type
 ([chapter 4](04-installing.md)). In this chapter "1.0.0.x" means that generation, whichever of the two branches you
 run. List the releases before choosing a target:
@@ -82,7 +83,7 @@ Every line is a separate project skeleton, so the work has the same shape each t
    ```bash
    git clone -b 1.1.0.x https://github.com/se7enxweb/exponential-platform-nexus.git site-next
    cd site-next
-   git checkout v1.1.0.7            # the newest tag of the target line
+   git checkout v1.1.0.8            # the newest tag of the target line
    ```
 
 3. **Carry over your own work**: your bundles and controllers, templates, translations, front-end sources,
@@ -163,9 +164,9 @@ change at once.
 | `app/config/*.yml` | `config/packages/*.yaml`, project configuration under `config/app/` |
 | `app/config/parameters.yml` (from `parameters.yml.dist`), values as `env(...)` parameters | `.env`, overridden by `.env.local` and real environment variables |
 | `SYMFONY_ENV`, `SYMFONY_DEBUG`, `SYMFONY_SECRET` | `APP_ENV`, `APP_DEBUG`, `APP_SECRET` |
-| `SYMFONY_TRUSTED_PROXIES`, read by `web/app.php` | `TRUSTED_PROXIES`, read by `framework.trusted_proxies` in `config/packages/ezpublish.yaml` (branch head since 2026-10-05; add it yourself on `v1.1.0.7`, [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
-| `SYMFONY_HTTP_CACHE` (on by default outside `dev`), the project's `app/AppCache.php` | `APP_HTTP_CACHE` (off by default; read by `public/index.php` on the branch head only), the platform's `AppCache` |
-| `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_NAME`, ... | `DATABASE_URL` (plus `DATABASE_CHARSET`, `DATABASE_COLLATION`, `DATABASE_VERSION`) |
+| `SYMFONY_TRUSTED_PROXIES`, read by `web/app.php` | `TRUSTED_PROXIES`, read by `framework.trusted_proxies` in `config/packages/ezpublish.yaml` (since `v1.1.0.8`, 2026-10-05; add it yourself on `v1.1.0.7`, [chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)) |
+| `SYMFONY_HTTP_CACHE` (on by default outside `dev`), the project's `app/AppCache.php` | `APP_HTTP_CACHE` (off by default; read by `public/index.php` since `v1.1.0.8`), the platform's `AppCache` |
+| `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_NAME`, ... | `DATABASE_URL` with `serverVersion` (plus `DATABASE_CHARSET`, `DATABASE_COLLATION`; `DATABASE_VERSION` is in `.env` but nothing reads it) |
 | `web/` document root, front controller `web/app.php` | `public/`, front controller `public/index.php` (Symfony Runtime) |
 | `src/AppBundle/` (`AppBundle\`), templates in `src/AppBundle/Resources/views/` | `src/` (`App\`), templates in `templates/` |
 | Front-end sources in `src/AppBundle/Resources/es6` and `sass` | `assets/` |
@@ -250,7 +251,7 @@ to the location the 1.1.0.x project uses for them (the `ngsite:symlink:legacy` a
 
 The site theme moves from `src/AppBundle/Resources/` to `assets/`, Webpack 4 with Encore 0.27 to the 1.1.0.x
 toolchain, and Node.js to version 18 or 20 (`.nvmrc` says `v18`). The admin interface assets are built with the
-translation dump and `yarn ez` (`webpack.config.ez.js`), which `make ibexa-assets` runs on the branch head. See
+translation dump and `yarn ez` (`webpack.config.ez.js`), which `make ibexa-assets` runs since `v1.1.0.8`. See
 [chapter 9](09-frontend-and-themes.md).
 
 ## 11.5 From 1.1.0.x to 1.2.0.x: Platform 3.3 to Ibexa OSS 4.6
@@ -299,7 +300,7 @@ of the se7enxweb core fork that renames them is not what this line installs. Bot
 `ezplatform:*` keep working on both lines; scripts that use other `exponential:*` kernel commands written on 1.1.0.x
 need the `ibexa:` name on 1.2.0.x ([chapter 10.1](10-operations.md#101-the-operators-map-per-line)).
 
-The trusted proxy setting moves with the `framework:` block: on the 1.1.0.x branch head it is in
+The trusted proxy setting moves with the `framework:` block: on 1.1.0.x (since `v1.1.0.8`) it is in
 `config/packages/ezpublish.yaml`, on 1.2.0.x in `config/packages/framework.yaml`; keep `TRUSTED_PROXIES` in
 `.env.local` and check that the target's file reads it ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
 
@@ -549,11 +550,12 @@ replaces that directory, so anything placed there by hand (rather than by the `n
 `ezpublish:legacybundles:install_extensions` scripts) is lost. Platform patch releases may carry SQL of their own;
 read the release notes of the forks for the versions you pass.
 
-**Fixes that are on a branch but not yet in a tag.** `composer update` brings the forks' fixes, but files of the
-project itself (`web/app.php`, `app/AppCache.php`, `public/index.php`, `config/`, `Makefile`, `deploy/`) change only
-when you merge. On 5 October 2026 every branch received such fixes that no release contains yet (the security ones
-are listed in [chapter 14](14-security-hardening.md), the operational ones in [chapter 10](10-operations.md)). To
-see what your project lacks compared with the head of its line, and to take one file:
+**Fixes in the project's own files.** `composer update` brings the forks' fixes, but files of the project itself
+(`web/app.php`, `app/AppCache.php`, `public/index.php`, `config/`, `Makefile`, `deploy/`) change only when you merge.
+On 5 October 2026 every branch received such fixes, released the same day as `v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`,
+`v1.2.0.1` and `1.3.0.6` (the security ones are listed in [chapter 14](14-security-hardening.md), the operational
+ones in [chapter 10](10-operations.md)). A project created from an older tag does not get them by `composer update`.
+To see what your project lacks compared with the newest release or the head of its line, and to take one file:
 
 ```bash
 git fetch origin

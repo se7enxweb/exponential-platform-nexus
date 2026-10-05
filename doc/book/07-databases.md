@@ -181,11 +181,12 @@ The `DATABASE_*` variables that are still present in `.env` on these lines do di
 | `DATABASE_URL` | `config/packages/doctrine.yaml` | the connection itself |
 | `DATABASE_CHARSET` | `ibexa_doctrine_schema.yaml` (`ez_doctrine_schema.yaml` on 1.1.0.x) | table charset when the installer creates tables |
 | `DATABASE_COLLATION` | the same file | table collation, MySQL and MariaDB only |
-| `DATABASE_VERSION` | nothing in `config/` on 1.3.0.x | none; put `serverVersion` into the URL instead |
+| `DATABASE_VERSION` | nothing in `config/` on 1.1.0.x, 1.2.0.x and 1.3.0.x | none; put `serverVersion` into the URL instead |
 
-`doc/sevenx/INSTALL.md` on 1.3.0.x shows a block of `DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`,
-`DATABASE_NAME`, `DATABASE_USER` and `DATABASE_PASSWORD` variables "or a full DSN (takes precedence)". On 1.3.0.x
-nothing in `config/` reads those six variables; only `DATABASE_URL` sets the connection.
+`doc/sevenx/INSTALL.md` of 1.1.0.x to 1.3.0.x showed, up to `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5`, a block of
+`DATABASE_DRIVER`, `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME`, `DATABASE_USER` and `DATABASE_PASSWORD`
+variables "or a full DSN (takes precedence)". On these lines nothing in `config/` reads those six variables; only
+`DATABASE_URL` sets the connection. The guides of the releases of 5 October 2026 write `DATABASE_URL`.
 
 ### 7.2.3 The DATABASE_URL format
 
@@ -387,7 +388,7 @@ Read in `InstallPlatformCommand` and `CoreInstaller` of the core package on the 
    administrator password.
 8. Clears the repository cache pool and runs `exponential:reindex`, unless you pass `--skip-indexing`.
 
-**Step 5 depends on the core version.** Up to core `v5.0.7`, the version the lock file of `1.3.0.5` and of the branch
+**Step 5 depends on the core version.** Up to core `v5.0.7`, the version the lock file of `1.3.0.6` (as of `1.3.0.5`) and of the branch
 pins and the one the v5 reference installation runs, step 5 looks only for `vendor/netgen/layouts-core/...`, while
 this line installs the fork as `vendor/se7enxweb/layouts-core` (which `replace`s `netgen/layouts-core`). The step is
 then skipped without a message, no `nglayouts_*` table is created, and loading the `exponential-media` data, which
@@ -461,8 +462,9 @@ GRANT ALL PRIVILEGES ON nexus.* TO 'nexus'@'localhost';
 ```
 
 On MySQL 8.0 and later, create the user and grant privileges in two statements as above. The single statement
-`GRANT ... IDENTIFIED BY '...'` that `doc/sevenx/INSTALL.md` on 1.3.0.x shows was removed in MySQL 8.0 and fails
-there; MariaDB still accepts it.
+`GRANT ... IDENTIFIED BY '...'` that `doc/sevenx/INSTALL.md` of 1.1.0.x to 1.3.0.x showed up to `v1.1.0.7`,
+`v1.2.0.0` and `1.3.0.5` was removed in MySQL 8.0 and fails there; MariaDB still accepts it. The guides of the
+releases of 2026-10-05 use the two statements.
 
 Then point the line at it:
 
@@ -508,8 +510,9 @@ CREATE DATABASE nexus OWNER nexus ENCODING 'UTF8';
 
 Making the application user the **owner** of the database (rather than only granting `ALL PRIVILEGES ON DATABASE`)
 matters on PostgreSQL 15 and later, where ordinary users can no longer create tables in the `public` schema of a
-database they do not own. The `GRANT ALL PRIVILEGES ON DATABASE` form that `doc/INSTALL.md` and
-`doc/sevenx/INSTALL.md` show is not enough there on its own.
+database they do not own. The `GRANT ALL PRIVILEGES ON DATABASE` form that the older `doc/INSTALL.md` and
+`doc/sevenx/INSTALL.md` showed (up to `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5`) is not enough there on its own; the
+guides of the releases of 2026-10-05 create the database with the application user as its owner.
 
 ```dotenv
 DATABASE_URL="postgresql://nexus:CHANGE_ME@127.0.0.1:5432/nexus?serverVersion=16&charset=utf8"
@@ -630,7 +633,7 @@ reading the 1.0.0.x files:
   ```
 
   Up to the release `1.0.0.9` the comments in both files claimed a `DATABASE_PATH` environment variable would work;
-  the branch corrected them on 2026-10-05.
+  the branch corrected them on 2026-10-05 (released in `1.0.0.11`).
 - On `master`, `config.yml` has no `path:` line and no `database_path` parameter, although the install guide
   released with `v2.5.0.6` says the file is created at `var/data_dev.db`. Use the 1.0.0.x configuration for SQLite.
 
@@ -734,8 +737,8 @@ Whichever way you choose:
 
 In this repository (`master`):
 
-- [doc/INSTALL.md](../INSTALL.md): the short installation guide (on `1.0.0.x` and in `v2.5.0.6`, `doc/INSTALL.md` is
-  the line's own guide, with sections on creating the database and SQLite)
+- [doc/INSTALL.md](../INSTALL.md): the short installation guide (in the releases `1.0.0.9` and `v2.5.0.6`,
+  `doc/INSTALL.md` is the line's own guide, with sections on creating the database and SQLite)
 - [app/config/config.yml](../../app/config/config.yml), [app/config/default_parameters.yml](../../app/config/default_parameters.yml),
   [app/config/parameters.yml.dist](../../app/config/parameters.yml.dist): the Symfony 3.4 connection
 - [app/config/env/generic.php](../../app/config/env/generic.php) (DFS variables),

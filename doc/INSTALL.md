@@ -9,7 +9,7 @@ the options and says what can go wrong. For a production site, read the book's c
 
 | Line | Branch | Platform | Symfony | PHP | Legacy kernel | Node.js |
 |---|---|---|---|---|---|---|
-| 2.5 generation (1.0.0.x) | `master` (this branch), also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 on `master`, 20 on `1.0.0.x` (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
+| 2.5 generation (1.0.0.x) | `master`, also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 on `master`, 20 on `1.0.0.x` (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
 | 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 18 or 20 |
 | 1.2.0.x | `1.2.0.x` | Ibexa OSS 4.6 | 5.4 | 8.2 or newer | yes | 18 |
 | 1.3.0.x | `1.3.0.x` | Platform v5 | 7.4 | 8.4 or newer | no | 22 |
@@ -55,7 +55,7 @@ SQLite needs no server; the file is named in the configuration ([chapter 7](book
 ```bash
 git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x, 1.0.0.x
 cd nexus
-git checkout 1.3.0.5            # the newest tag of the line: git tag -l '1.3.0.*' --sort=version:refname
+git checkout 1.3.0.6            # the newest tag of the line: git tag -l '1.3.0.*' --sort=version:refname
 composer install                # the 2.5 generation: composer install --keep-vcs --ignore-platform-reqs
 ```
 
@@ -63,14 +63,13 @@ Always name the branch: a clone without `-b` gives `master`, the 2.5 generation.
 version the site will use. The Composer scripts publish assets and, on the lines with the legacy kernel, install it
 into `ezpublish_legacy/` and link the project's legacy files into it.
 
-The branches carry fixes of 2026-10-05 that no release has yet (`v2.5.0.7` and the next tag of each line are
-upcoming): the `dev.` host switch and the cache handling of `AppCache` on the 2.5 generation, trusted proxies and the
-Symfony HTTP cache proxy on 1.1.0.x to 1.3.0.x. For a public site, stay on the branch tip (skip the `git checkout`
-of the tag) until the next release, or read [chapter 1](book/01-introduction.md#fixed-on-the-branches-not-yet-released)
-for what each release lacks.
+The releases of 2026-10-05 (`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1`, `1.3.0.6`) carry fixes that matter for a
+public site: the `dev.` host switch and the cache handling of `AppCache` on the 2.5 generation, trusted proxies and
+the Symfony HTTP cache proxy on 1.1.0.x to 1.3.0.x. Install from one of them or newer, not from an older tag;
+[chapter 1](book/01-introduction.md#the-fixes-of-5-october-2026) lists what the older releases lack.
 
 With `composer create-project` instead of a clone, **always give a version**
-(`se7enxweb/exponential-platform-nexus:1.3.0.5`, `:v1.2.0.0`, `:v1.1.0.7`, `:1.0.0.9`, `:v2.5.0.6`): without one,
+(`se7enxweb/exponential-platform-nexus:1.3.0.6`, `:v1.2.0.1`, `:v1.1.0.8`, `:1.0.0.11`, `:v2.5.0.7`): without one,
 Composer installs the upstream Media Site 3.1.6, which Packagist lists under the same name. Details:
 [chapter 3](book/03-getting-the-code.md).
 
@@ -80,8 +79,8 @@ Composer installs the upstream Media Site 3.1.6, which Packagist lists under the
 
 1. Edit `app/config/parameters.yml` (created from `parameters.yml.dist` by `composer install`): the `env(DATABASE_*)`
    values and `env(SYMFONY_SECRET)`. Generate the secret with `openssl rand -hex 32`; the shipped placeholder is public.
-   Check that `ngsite.default.locations.tree_root.id` is `168`, the root of the CJW content: `master` ships 168 since
-   2026-10-05 (2 before), and `v2.5.0.6` does not define it at all
+   Check that `ngsite.default.locations.tree_root.id` is `168`, the root of the CJW content: `master` and `v2.5.0.7` ship
+   168 (an older `master` shipped 2), and `v2.5.0.6` does not define it at all
    ([chapter 4](book/04-installing.md#step-1-database-settings-in-parametersyml)).
 2. Install the demo content:
 
@@ -140,7 +139,7 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    ```
 
    The shipped `.env` sets `APP_ENV=dev` and placeholder secrets (an empty `APP_SECRET` on 1.3.0.x). Set `APP_ENV`
-   here before installing, so that the console and the web server agree (on 1.3.0.5 the linked `public/.htaccess`
+   here before installing, so that the console and the web server agree (since 1.3.0.5 the linked `public/.htaccess`
    forces `prod` for web requests). On SQLite,
    `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"` and
    `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On 1.1.0.x and 1.2.0.x the

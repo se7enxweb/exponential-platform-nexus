@@ -79,11 +79,11 @@ release tag; [chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-v
 
 | Line | Branch | Release tags | Platform generation (upstream) | Symfony | PHP (`composer.json`) | Exponential legacy kernel |
 |---|---|---|---|---|---|---|
-| **2.5** | `master` (default branch) | `v2.5.0.0` to `v2.5.0.6`, also `1.0.0.8` and `1.0.0.10` | 2.5 (eZ Platform 2.5 LTS): `se7enxweb/ezpublish-kernel ~7.5.40` | 3.4: `se7enxweb/symfony v3.4.55` | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ... \|\| ^8.6` (`v2.5.0.0` and `v2.5.0.1`: `^7.1.3 \|\| ^8.1 \|\| ^8.2`); in practice 8.1 or newer, see below | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` |
-| **1.0.0.x** | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9` | as 2.5 | 3.4 | as 2.5 | yes, as 2.5 |
-| **1.1.0.x** | `1.1.0.x` | `v1.1.0.0` to `v1.1.0.7` | 3.3 (eZ Platform 3.3): `se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3` | 5.4 (`symfony/framework-bundle 5.4.*`) | `^8.0` | yes: `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` |
-| **1.2.0.x** | `1.2.0.x` | `v1.2.0.0` | 4.6 (Ibexa OSS 4.6): `se7enxweb/oss ~4.6.0` | 5.4 | `>=8.2` | yes: `se7enxweb/site-legacy-bundle v2.0.0` pulls `se7enxweb/ibexa-legacy-bridge 4.x` and `se7enxweb/exponential` |
-| **1.3.0.x** | `1.3.0.x` | `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` (the newest release) | 5 (Ibexa OSS 5.0): `se7enxweb/exponential-platform-dxp dev-master` | 7.4 (`symfony/framework-bundle 7.4.*`) | `>=8.4` | no |
+| **2.5** | `master` (default branch) | `v2.5.0.0` to `v2.5.0.7`, also `1.0.0.8` and `1.0.0.10` | 2.5 (eZ Platform 2.5 LTS): `se7enxweb/ezpublish-kernel ~7.5.40` | 3.4: `se7enxweb/symfony v3.4.55` | `^7.1.3 \|\| ^7.2 \|\| ^7.4 \|\| ^8.0 \|\| ... \|\| ^8.6` (`v2.5.0.0` and `v2.5.0.1`: `^7.1.3 \|\| ^8.1 \|\| ^8.2`); in practice 8.1 or newer, see below | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` |
+| **1.0.0.x** | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9`, `1.0.0.11` | as 2.5 | 3.4 | as 2.5 | yes, as 2.5 |
+| **1.1.0.x** | `1.1.0.x` | `v1.1.0.0` to `v1.1.0.8` | 3.3 (eZ Platform 3.3): `se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3` | 5.4 (`symfony/framework-bundle 5.4.*`) | `^8.0` | yes: `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` |
+| **1.2.0.x** | `1.2.0.x` | `v1.2.0.0`, `v1.2.0.1` | 4.6 (Ibexa OSS 4.6): `se7enxweb/oss ~4.6.0` | 5.4 | `>=8.2` | yes: `se7enxweb/site-legacy-bundle v2.0.0` pulls `se7enxweb/ibexa-legacy-bridge 4.x` and `se7enxweb/exponential` |
+| **1.3.0.x** | `1.3.0.x` | `1.3.0.0.0`, `1.3.0.1` to `1.3.0.6` (the newest release) | 5 (Ibexa OSS 5.0): `se7enxweb/exponential-platform-dxp dev-master` | 7.4 (`symfony/framework-bundle 7.4.*`) | `>=8.4` | no |
 
 How to read the table:
 
@@ -93,8 +93,9 @@ How to read the table:
   `1.0.0.x` installs the Netgen demo content from `netgen/media-site-data ~1.8.1`, ships SQL dumps of the CJW content
   in the repository and adds an SQLite installer type (since `1.0.0.6`). Both run the same Symfony 3.4 stack, the same
   kernel and the same legacy kernel. The four-part `1.0.0.y` tags do not all sit on one branch: `1.0.0.8` and
-  `1.0.0.10` were cut from `master`, `1.0.0.9` from `1.0.0.x`. A Composer constraint such as `~1.0.0.7` therefore ends
-  on `1.0.0.10`, which is `master` code with the CJW demo package, not the `1.0.0.x` branch
+  `1.0.0.10` were cut from `master`, `1.0.0.9` and `1.0.0.11` from `1.0.0.x`. A Composer constraint such as
+  `~1.0.0.7` now ends on `1.0.0.11`, the `1.0.0.x` branch; up to 5 October 2026 it ended on `1.0.0.10`, which is
+  `master` code with the CJW demo package. `1.0.0.11` skips the number `1.0.0.10`, which was already taken
   ([chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-versions)).
 - **The PHP column is what Composer checks, not what was tested.** The 2.5 generation declares every PHP version up
   to 8.6, but the legacy kernel it installs (`se7enxweb/exponential`) requires PHP 8.1, so 8.1 is the real minimum.
@@ -115,6 +116,11 @@ How to read the table:
 
 | Release | Date | What it brought (from the GitHub release notes) |
 |---|---|---|
+| `1.3.0.6` | 2026-10-05 | the fixes of 5 October 2026 (below), the package name and GPL licence in `composer.json`, this book |
+| `v1.2.0.1` | 2026-10-05 | the fixes of 5 October 2026, `make reindex` and `make graphql-schema` with the `ibexa:` command names, the package name and GPL licence in `composer.json`, this book |
+| `v1.1.0.8` | 2026-10-05 | the fixes of 5 October 2026, the Bold Agency tree root 386, this book |
+| `1.0.0.11` (from `1.0.0.x`) | 2026-10-05 | the fixes of 5 October 2026, this book; the number follows `1.0.0.10`, a tag cut from `master` |
+| `v2.5.0.7` | 2026-10-05 | the fixes of 5 October 2026, the tree root 168 in `parameters.yml.dist`, one `Map\Host` entry per host, this book |
 | `1.3.0.5` | 2026-08-03 | production defaults in the root `.htaccess` (`APP_ENV=prod`, `APP_DEBUG 0`), the configuration resolver exposed as a public service for `prod`, `config/reference.php` |
 | `1.3.0.4` | 2026-08-03 | a default configuration fix for the JWT token settings |
 | `v2.5.0.6` | 2026-07-04 | `netgen/media-site-data` (about 180 MB) moved from `require` to `suggest` |
@@ -129,12 +135,13 @@ How to read the table:
 The release notes of `v1.2.0.0` call the line "Symfony 6.4 LTS, PHP 8.1+"; its `composer.json` requires
 `symfony/framework-bundle 5.4.*` and PHP `>=8.2`, which is what Composer enforces and what this book uses.
 
-### Fixed on the branches, not yet released
+### The fixes of 5 October 2026
 
-On 2026-10-05 every branch received fixes that no release tag contains yet. They will reach Composer users with the
-next release of each line: `v2.5.0.7` on `master` and the next tag of `1.0.0.x`, `1.1.0.x`, `1.2.0.x` and
-`1.3.0.x`. Until those tags exist, they are **upcoming**; a site installed from `v2.5.0.6`, `1.0.0.9`, `v1.1.0.7`,
-`v1.2.0.0` or `1.3.0.5` does not have them, and a clone of the branch does. The ones that change what you do:
+On 2026-10-05 every branch received fixes, released the same day as `v2.5.0.7` (`master`), `1.0.0.11`, `v1.1.0.8`,
+`v1.2.0.1` and `1.3.0.6`. A site installed from those releases or newer, or from a clone of a branch, has them; a site
+installed from `v2.5.0.6`, `1.0.0.10`, `1.0.0.9`, `v1.1.0.7`, `v1.2.0.0` or `1.3.0.5` and older does not. Where the book
+says "branch heads" and "releases" for one of these fixes, the branch heads and the releases of 5 October 2026 behave
+the same, and "the releases" means the older tags. The ones that change what you do:
 
 | Fix | Lines | Where the book covers it |
 |---|---|---|
@@ -146,7 +153,11 @@ next release of each line: `v2.5.0.7` on `master` and the next tag of `1.0.0.x`,
 | `.nvmrc` on the 2.5 generation (`v22` on `master`, `v20` on `1.0.0.x`), and the `Makefile` passes its version to `nvm install` | all | [2.5](02-requirements.md#25-nodejs-and-yarn) |
 | `make clear-all-cache` empties the configured cache pools; `make ibexa-assets` builds the admin assets | all | [chapter 10](10-operations.md) |
 | `make reindex` calls `exponential:reindex`; `public/index_cluster.php` works without a legacy root | 1.3.0.x | [6.2](06-serving-the-site.md#62-how-a-request-reaches-the-application-per-line) |
-| The front-end root location defaults to 168, the root of the CJW content | 1.0.0.x | [4.4](04-installing.md#44-the-100x-branch) |
+| The front-end root location defaults to 168, the root of the CJW content | 2.5, 1.0.0.x | [4.3](04-installing.md#43-the-25-line-master-v250x), [4.4](04-installing.md#44-the-100x-branch) |
+| The Bold Agency site starts at its own root, location 386, not at the content root | 1.1.0.x | [4.5](04-installing.md#45-the-110x-line) |
+| `make reindex` and `make graphql-schema` call `ibexa:reindex` and `ibexa:graphql:generate-schema` | 1.2.0.x | [chapter 10](10-operations.md#10125-the-makefile) |
+| `composer.json` names the package `se7enxweb/exponential-platform-nexus` under `GPL-2.0-or-later` | 1.2.0.x, 1.3.0.x | [chapter 3](03-getting-the-code.md#32-composer-create-project) |
+| The install guides (`doc/sevenx/INSTALL.md`), the nginx, Apache and Varnish examples name the commands, siteaccesses and variables the code has; `doc/INSTALL.md` is the short guide and this book is on every branch | all | [6.11](06-serving-the-site.md#611-known-inaccuracies-in-the-older-server-documents) |
 | `.gitignore` ignores `.env.local`, `.env.*.local` and `.env.php` | 2.5, 1.0.0.x, 1.1.0.x | [chapter 14](14-security-hardening.md) |
 
 One fix lives in a dependency rather than in this repository: `se7enxweb/exponential-platform-dxp-core` `v5.0.9`

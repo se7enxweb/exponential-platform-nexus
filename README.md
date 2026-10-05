@@ -117,9 +117,10 @@ Read [doc/INSTALL.md](doc/INSTALL.md) or go to [exponential.doc.exponential.eart
   [upgrading between lines](doc/book/11-upgrading-between-lines.md),
   [migrating a site into Nexus](doc/book/12-migrating-into.md), [troubleshooting](doc/book/13-troubleshooting.md) and
   [security hardening](doc/book/14-security-hardening.md).
-- Before going live, read [chapter 14](doc/book/14-security-hardening.md): several fixes made to the branches on
-  5 October 2026 (the `dev` host switch and the cache header rewriting of the 2.5 generation, trusted proxies and the
-  HTTP cache switch of the newer lines) are in no release tag yet, and the chapter says how to check and take them.
+- Before going live, read [chapter 14](doc/book/14-security-hardening.md): the releases of 5 October 2026
+  (`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1`, `1.3.0.6`) fix the `dev` host switch and the cache header rewriting
+  of the 2.5 generation and wire trusted proxies and the HTTP cache switch of the newer lines; the chapter says how to
+  check an installation made from an older tag and how to take the fixes.
 - Examples and notes: [Apache](doc/apache2/), [nginx](doc/nginx/), [Varnish](doc/varnish/varnish.md),
   [logrotate](doc/logrotate/), the [Netgen Media Site notes](doc/netgen/) carried over from upstream, and
   [UPGRADE.md](UPGRADE.md).

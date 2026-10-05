@@ -15,11 +15,11 @@ default branch is `master`. The release lines and their tags:
 
 | Line | Branch | Tags in git | Versions Packagist offers | Newest release |
 |---|---|---|---|---|
-| 2.5 | `master` | `v2.5.0.0` to `v2.5.0.6`, `1.0.0.8`, `1.0.0.10` | the same, and `dev-master` | `v2.5.0.6` (2026-07-04); `v2.5.0.7` upcoming |
-| 1.0.0.x | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9` | `1.0.0.4` to `1.0.0.7`, `1.0.0.9`, `1.0.0.x-dev` | `1.0.0.9` (2026-07-04) |
-| 1.1.0.x | `1.1.0.x` | `v1.1.0.0` to `v1.1.0.7` | the same, `1.1.0.x-dev` | `v1.1.0.7` (2026-04-20) |
-| 1.2.0.x | `1.2.0.x` | `v1.2.0.0` | the same, `1.2.0.x-dev` | `v1.2.0.0` (2026-04-20) |
-| 1.3.0.x | `1.3.0.x` | `1.3.0.0.0`, `1.3.0.1` to `1.3.0.5` | `1.3.0.1` to `1.3.0.5`, `1.3.0.x-dev` | `1.3.0.5` (2026-08-03) |
+| 2.5 | `master` | `v2.5.0.0` to `v2.5.0.7`, `1.0.0.8`, `1.0.0.10` | the same, and `dev-master` | `v2.5.0.7` (2026-10-05) |
+| 1.0.0.x | `1.0.0.x` | `v1.0.0.0.1` to `v1.0.0.0.3`, `1.0.0.4` to `1.0.0.7`, `1.0.0.9`, `1.0.0.11` | `1.0.0.4` to `1.0.0.7`, `1.0.0.9`, `1.0.0.11`, `1.0.0.x-dev` | `1.0.0.11` (2026-10-05) |
+| 1.1.0.x | `1.1.0.x` | `v1.1.0.0` to `v1.1.0.8` | the same, `1.1.0.x-dev` | `v1.1.0.8` (2026-10-05) |
+| 1.2.0.x | `1.2.0.x` | `v1.2.0.0`, `v1.2.0.1` | the same, `1.2.0.x-dev` | `v1.2.0.1` (2026-10-05) |
+| 1.3.0.x | `1.3.0.x` | `1.3.0.0.0`, `1.3.0.1` to `1.3.0.6` | `1.3.0.1` to `1.3.0.6`, `1.3.0.x-dev` | `1.3.0.6` (2026-10-05) |
 
 The "Versions Packagist offers" column was read from the metadata Composer downloads
 (`https://repo.packagist.org/p2/se7enxweb/exponential-platform-nexus.json` and its `~dev` companion) on 2026-10-05.
@@ -33,28 +33,30 @@ Things to know before you pick a version:
   under the Nexus name. Composer picks the highest stable version when none is given, and that is `3.1.6`, the
   upstream Media Site on `ibexa/oss ~4.5.0`. So `composer create-project se7enxweb/exponential-platform-nexus`
   without `:<version>` installs **upstream Media Site 3.1.6**, and `composer require` with `*` or `^3.0` does the same.
-  A Nexus version always has four numbers (`1.3.0.5`, `v2.5.0.6`); always name one.
+  A Nexus version always has four numbers (`1.3.0.6`, `v2.5.0.7`); always name one.
 - **The `1.0.0.y` tags are split between two branches.** `1.0.0.8` and `1.0.0.10` were cut from `master` (the CJW demo
-  package `se7enxweb/cjw-exponential-media-site-data`), `1.0.0.4` to `1.0.0.7` and `1.0.0.9` from `1.0.0.x` (the
-  Netgen demo `netgen/media-site-data`, the SQL dumps, the SQLite installer). Composer sorts them as one series, so a
-  floating constraint crosses branches: `~1.0.0.4` (`>=1.0.0.4 <1.0.1.0`) resolves to `1.0.0.10`, that is `master`
-  code. To stay on the `1.0.0.x` branch, pin an exact version (`1.0.0.9`).
+  package `se7enxweb/cjw-exponential-media-site-data`), `1.0.0.4` to `1.0.0.7`, `1.0.0.9` and `1.0.0.11` from
+  `1.0.0.x` (the Netgen demo `netgen/media-site-data`, the SQL dumps, the SQLite installer). The `1.0.0.x` release of
+  5 October 2026 is therefore `1.0.0.11`: `1.0.0.10` was already taken by the `master` tag. Composer sorts them as one
+  series, so a floating constraint crosses branches: `~1.0.0.4` (`>=1.0.0.4 <1.0.1.0`) resolves to `1.0.0.11` today,
+  and resolved to `1.0.0.10`, `master` code, before. Pin an exact version (`1.0.0.11`) to know which branch you get.
 - **Use `~`, never `^`, with a Nexus version.** The caret allows everything below the next major version, and the
   upstream tags live there: `^1.0.0.4` and `^1.3.0.5` both mean `<2.0.0`, which the upstream `1.12.2` satisfies and
   outranks, so Composer installs upstream Media Site 1.12.2. The tilde on a four-part version only floats the last
   number: `~1.3.0.5` is `>=1.3.0.5 <1.3.1.0`.
 - **Five-part tags are not on Packagist.** Composer versions have at most four numbers, so `v1.0.0.0.1` to
   `v1.0.0.0.3` and `1.3.0.0.0` exist only in git. The 1.0.0.x guide's command
-  `composer create-project se7enxweb/exponential-platform-nexus:v1.0.0.0.3` therefore cannot resolve; use `1.0.0.9`
+  `composer create-project se7enxweb/exponential-platform-nexus:v1.0.0.0.3` therefore cannot resolve; use `1.0.0.11`
   or a git checkout of the tag.
-- **The branches move ahead of the tags.** All five branches have commits after their newest tag: on 2026-10-05 each
-  received the fixes listed in [chapter 1](01-introduction.md#fixed-on-the-branches-not-yet-released) (the
+- **The branches move ahead of the tags.** A branch can have commits after its newest tag. On 2026-10-05 each branch
+  received the fixes listed in [chapter 1](01-introduction.md#the-fixes-of-5-october-2026) (the
   environment switch and the cache handling of `web/app.php` and `AppCache` on the 2.5 generation, trusted proxies and
-  the HTTP cache proxy on 1.1.0.x to 1.3.0.x, `.nvmrc` and Makefile fixes everywhere). A branch is what you clone to
-  work on Nexus itself or to get a fix before its release; a tag is what you install a site from.
+  the HTTP cache proxy on 1.1.0.x to 1.3.0.x, `.nvmrc` and Makefile fixes everywhere), and the same day's releases
+  contain them. A branch is what you clone to work on Nexus itself or to get a fix before its release; a tag is what
+  you install a site from.
 - **`dev-master` and `1.0.0.x-dev`.** `master`'s `composer.json` declares the branch alias `dev-master` →
   `1.0.0.x-dev`, which is also the version name of the real `1.0.0.x` branch. Packagist resolves `1.0.0.x-dev` to the
-  `1.0.0.x` branch (commit `4246d1244` on 2026-10-05). Ask for `dev-master` when you mean `master`, and after any
+  `1.0.0.x` branch (its tip). Ask for `dev-master` when you mean `master`, and after any
   install from a branch check which commit you got: `composer show se7enxweb/exponential-platform-nexus` in a project
   that requires it, or `git rev-parse HEAD` in a clone.
 - **Check what is current.** The tables of this book were taken from the repository on the day it was written. List
@@ -71,11 +73,11 @@ plain ones, its last lines are the 2.5 series, not the newest tag of your line; 
 (`| grep 'tags/1.3.0'`):
 
 ```text
-450750c735a8...	refs/tags/v2.5.0.5
 461810fd2b3a...	refs/tags/v2.5.0.6
+<commit>...	refs/tags/v2.5.0.7
 ```
 
-To see which branch a tag belongs to in a clone, ask git: `git branch -r --contains 1.0.0.9` prints
+To see which branch a tag belongs to in a clone, ask git: `git branch -r --contains 1.0.0.11` prints
 `origin/1.0.0.x`, and the same for `1.0.0.10` prints `origin/master`.
 
 ## 3.2 composer create-project
@@ -89,8 +91,8 @@ How to check, right after the command, that you got the line you meant:
 
 ```bash
 cd nexus
-composer show --self | head -2        # name: se7enxweb/exponential-platform-nexus (2.5, 1.0.0.x, 1.1.0.x),
-                                       # __root__ (1.2.0.x, 1.3.0.x: their composer.json has no name);
+composer show --self | head -2        # name: se7enxweb/exponential-platform-nexus; __root__ on v1.2.0.0 and
+                                       # 1.3.0.5 or older (their composer.json has no name);
                                        # netgen/media-site means you installed upstream
 ls web/app.php 2>/dev/null && echo "2.5 generation" || ls public/index.php
 php bin/console --version              # Symfony 3.4, 5.4 or 7.4
@@ -99,15 +101,15 @@ php bin/console --version              # Symfony 3.4, 5.4 or 7.4
 ### 1.3.0.x
 
 ```bash
-composer create-project se7enxweb/exponential-platform-nexus:1.3.0.5 nexus
+composer create-project se7enxweb/exponential-platform-nexus:1.3.0.6 nexus
 cd nexus
 ```
 
 To follow the line instead of a fixed release, use a constraint that floats the last number:
-`se7enxweb/exponential-platform-nexus:~1.3.0.5` (meaning `>=1.3.0.5 <1.3.1.0`). Never `^1.3.0.5`, which reaches the
+`se7enxweb/exponential-platform-nexus:~1.3.0.6` (meaning `>=1.3.0.6 <1.3.1.0`). Never `^1.3.0.6`, which reaches the
 upstream `1.12.2` (section 3.1).
 
-The lock file of `1.3.0.5` pins `se7enxweb/exponential-platform-dxp-core` at `v5.0.7`, whose installer does not find
+The lock file of `1.3.0.6` (and of `1.3.0.5`) pins `se7enxweb/exponential-platform-dxp-core` at `v5.0.7`, whose installer does not find
 the Netgen Layouts schema of the `se7enxweb/layouts-core` fork; `v5.0.9` (2026-10-05) fixes that. Update that one
 package before you run the installer ([chapter 4](04-installing.md#47-the-130x-line)):
 
@@ -118,36 +120,36 @@ composer update se7enxweb/exponential-platform-dxp-core
 ### 1.2.0.x
 
 ```bash
-composer create-project se7enxweb/exponential-platform-nexus:v1.2.0.0 nexus
+composer create-project se7enxweb/exponential-platform-nexus:v1.2.0.1 nexus
 ```
 
 ### 1.1.0.x
 
 ```bash
-composer create-project se7enxweb/exponential-platform-nexus:v1.1.0.7 nexus
+composer create-project se7enxweb/exponential-platform-nexus:v1.1.0.8 nexus
 ```
 
-The line's own `doc/INSTALL.md` uses the constraint `~1.1.0.1`, which resolves to the newest `v1.1.0.x`.
+The line's older guide (`doc/INSTALL.md` of `v1.1.0.7`) uses the constraint `~1.1.0.1`, which resolves to the newest
+`v1.1.0.x`.
 
 ### 2.5 (master)
 
 ```bash
-composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-nexus:v2.5.0.6 nexus
+composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-nexus:v2.5.0.7 nexus
 ```
 
-`v2.5.0.6` predates the fixes of 2026-10-05 (chapter 1): its `web/app.php` still switches to `dev` for host names
-containing `dev.`, its `AppCache` can make private pages public, and its build scripts lack the OpenSSL option current
-Node.js needs. Until `v2.5.0.7` is tagged, a production site on this line is better installed from the `master`
-branch (section 3.3), or must apply those changes itself
-([chapter 6](06-serving-the-site.md#62-how-a-request-reaches-the-application-per-line)).
+`v2.5.0.6` and older predate the fixes of 2026-10-05 (chapter 1): their `web/app.php` still switches to `dev` for host
+names containing `dev.`, their `AppCache` can make private pages public, and their build scripts lack the OpenSSL
+option current Node.js needs. Install `v2.5.0.7` or newer; a site that runs an older release must apply those changes
+itself ([chapter 6](06-serving-the-site.md#62-how-a-request-reaches-the-application-per-line)).
 
 ### 1.0.0.x
 
 ```bash
-composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-nexus:1.0.0.9 nexus
+composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-nexus:1.0.0.11 nexus
 ```
 
-`1.0.0.9` is the newest tag cut from the `1.0.0.x` branch; `1.0.0.10` is newer by number but is `master` code.
+`1.0.0.11` is the newest tag cut from the `1.0.0.x` branch; `1.0.0.10`, between it and `1.0.0.9`, is `master` code.
 
 Notes on the commands:
 
@@ -171,7 +173,7 @@ Notes on the commands:
 ## 3.3 git clone and composer install
 
 Clone the repository when you want to work on Nexus itself, follow a branch between releases (for example to get the
-fixes of 2026-10-05 before their release), or install a five-part tag that Packagist does not offer.
+fixes of a branch before their release), or install a five-part tag that Packagist does not offer.
 
 **A clone without `-b` checks out `master`, the 2.5 generation**, whatever line you had in mind. Name the branch in
 the clone command:
@@ -180,7 +182,7 @@ the clone command:
 git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or 1.2.0.x, 1.1.0.x, 1.0.0.x, master
 cd nexus
 git branch --show-current     # prints 1.3.0.x
-# or a release: git checkout 1.3.0.5
+# or a release: git checkout 1.3.0.6
 composer install              # the 2.5 generation: composer install --keep-vcs --ignore-platform-reqs
 ```
 
@@ -191,8 +193,8 @@ first or, simpler, start from a fresh clone.
 
 | Line | Checkout | Install command (from the line's guide) |
 |---|---|---|
-| 2.5 | `master` (or `git checkout v2.5.0.6`) | `composer install --keep-vcs --ignore-platform-reqs` |
-| 1.0.0.x | `1.0.0.x` (or a tag, for example `v1.0.0.0.3`) | `composer install --keep-vcs --ignore-platform-reqs` |
+| 2.5 | `master` (or `git checkout v2.5.0.7`) | `composer install --keep-vcs --ignore-platform-reqs` |
+| 1.0.0.x | `1.0.0.x` (or a tag, for example `1.0.0.11`) | `composer install --keep-vcs --ignore-platform-reqs` |
 | 1.1.0.x | `1.1.0.x` | `composer install` |
 | 1.2.0.x | `1.2.0.x` | `composer install` |
 | 1.3.0.x | `1.3.0.x` | `composer install` |
@@ -226,7 +228,7 @@ Versions resolved by the lock files that are committed: on 1.2.0.x `netgen/layou
 `se7enxweb/site-bundle 3.0.6`, `symfony/http-kernel v5.4.51`; on 1.3.0.x `se7enxweb/exponential-platform-dxp-core
 v5.0.7`, `se7enxweb/layouts-core dev-master`, `netgen/layouts-ui 2.0.0`, `netgen/ibexa-site-api 7.0.0`,
 `netgen/tagsbundle 6.0.2`, `netgen/media-site-data 4.0.0`, `symfony/http-kernel v7.4.8`. The 1.3.0.x lock has not
-moved since `1.3.0.3`: `1.3.0.3`, `1.3.0.4`, `1.3.0.5` and the branch tip lock the same core, `v5.0.7`, while
+moved since `1.3.0.3` except for the content hash: `1.3.0.3` to `1.3.0.6` and the branch tip lock the same core, `v5.0.7`, while
 Packagist already offers `v5.0.9`.
 
 ### Forks replace upstream packages

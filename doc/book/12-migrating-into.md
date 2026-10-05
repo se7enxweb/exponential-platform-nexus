@@ -195,7 +195,7 @@ A Nexus line brings a demo site. When you migrate, you want its code and package
 ```bash
 git clone -b 1.2.0.x https://github.com/se7enxweb/exponential-platform-nexus.git site
 cd site
-git checkout v1.2.0.0
+git checkout v1.2.0.1
 composer install
 ```
 

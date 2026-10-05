@@ -216,15 +216,15 @@ the **purge type**:
 Like `CACHE_POOL`, the purge type is set at container build time; clear the Symfony cache after changing it. Other
 variables: `HTTPCACHE_DEFAULT_TTL` (default `86400` seconds, the `default_ttl` of content responses) and
 `TRUSTED_PROXIES` (`127.0.0.1` in the shipped `.env`), which must list Varnish and any load balancer so that the
-client address and `https` are recognised. The framework configuration reads `TRUSTED_PROXIES` on the branch heads
-since 5 October 2026; on the releases nothing reads it until you add the setting
+client address and `https` are recognised. The framework configuration reads `TRUSTED_PROXIES` since 5 October 2026
+(the branch heads and `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`); on older releases nothing reads it until you add the setting
 ([chapter 14.6](14-security-hardening.md#146-behind-a-proxy-trusted-proxies)).
 
 ### 10.4.2 The local proxy per line
 
 - **1.0.0.x.** `web/app.php` wraps the kernel in `AppCache` unless `SYMFONY_HTTP_CACHE` is set to `0`; in any
   environment but `dev` it is on by default. The project's `app/AppCache.php` extends the platform's class and
-  adjusts `Cache-Control` after the response is built. On the branches since 5 October 2026 it never makes a private
+  adjusts `Cache-Control` after the response is built. Since 5 October 2026 (the branches, `v2.5.0.7` and `1.0.0.11`) it never makes a private
   or personal response public, keeps the administration siteaccesses, Layouts, GraphQL, the Content Browser, the REST
   API and the user pages out of the shared cache whatever the configuration says, and reads
   `app/config/http_cache.yml` (host names, siteaccesses and URL patterns that stay uncached) plus the
@@ -232,7 +232,7 @@ since 5 October 2026; on the releases nothing reads it until you add the setting
   names**: the shipped file names the project's demonstration hosts. The class of the releases up to `v2.5.0.6` and
   `1.0.0.10` rewrote private responses to public and never read that file; [chapter 14.7](14-security-hardening.md#147-http-cache-safety)
   says how to tell which one you have and how to replace it. With Varnish in front, set `SYMFONY_HTTP_CACHE=0`.
-- **1.1.0.x, 1.2.0.x and 1.3.0.x, branch heads.** Since 5 October 2026 (commits `7f8d95f29` on `1.1.0.x`,
+- **1.1.0.x, 1.2.0.x and 1.3.0.x, branch heads and `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`.** Since 5 October 2026 (commits `7f8d95f29` on `1.1.0.x`,
   `c5e6aca42` on `1.2.0.x`, `ac3f43a74` on `1.3.0.x`) `public/index.php` wraps the kernel in the platform's
   `AppCache` and enables HTTP method override when `APP_HTTP_CACHE` is true. It stays off when the variable is unset,
   empty or `0`, which is the shipped state. Turn it on for a site without Varnish:
@@ -247,12 +247,12 @@ since 5 October 2026; on the releases nothing reads it until you add the setting
   from `var/cache/<env>/http_cache/` without rendering; with debug on, the `X-Symfony-Cache` response header shows
   `fresh` or `stale` (it is not sent with debug off). Leave it off when Varnish does the caching: two caches in a
   row purge only the inner one.
-- **1.1.0.x to 1.3.0.x, releases** (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` and older). `public/index.php` is the plain
+- **1.1.0.x to 1.3.0.x, older releases** (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` and older). `public/index.php` is the plain
   Symfony Runtime front controller and ignores `APP_HTTP_CACHE`. With `HTTPCACHE_PURGE_TYPE=local` and no Varnish
   there is no reverse proxy in front of PHP at all: responses carry cache headers, browsers honour them, and purges
   go to a store that serves nothing. This is safe, but every page is rendered by PHP. Put Varnish in front
-  (chapter [6](06-serving-the-site.md)), or take `public/index.php` from the branch of your line. The `README.md` of
-  these lines lists "Symfony HttpCache (default)"; on the releases that is not what the front controller does.
+  (chapter [6](06-serving-the-site.md)), or take `public/index.php` from a newer release of your line. The `README.md`
+  of these lines lists "Symfony HttpCache (default)"; on the older releases that is not what the front controller does.
 
 ### 10.4.3 Varnish
 
@@ -288,7 +288,7 @@ With the local proxy, the store lives in the Symfony cache directory (`%kernel.c
 `var/cache/<env>/http_cache/`), so `cache:clear` empties it as well.
 
 The command `fos:httpcache:invalidate:path / --all` quoted in the `README.md` and `doc/sevenx/INSTALL.md` of the
-1.1.0.x to 1.3.0.x lines does not exist in that form: `invalidate:path` takes only paths, and has no `--all` option.
+1.1.0.x to 1.3.0.x lines up to `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` (corrected since) does not exist in that form: `invalidate:path` takes only paths, and has no `--all` option.
 With Varnish, a ban by host (`varnishadm "ban req.http.host ~ www.example.com"`, the Deployer task `varnish:ban`) is
 the blunt alternative.
 
@@ -443,18 +443,20 @@ The shipped helpers and their names, as of 5 October 2026:
 
 | Helper | `master`, `1.0.0.x` | `1.1.0.x` | `1.2.0.x` | `1.3.0.x` |
 |---|---|---|---|---|
-| `make reindex` | `ezplatform:reindex` | `ezplatform:reindex` (deprecated alias, prints a warning) | `ezplatform:reindex` (deprecated alias) | `exponential:reindex` (since commit `1635061cf`; `ibexa:reindex` before, which does not exist there) |
+| `make reindex` | `ezplatform:reindex` | `ezplatform:reindex` (deprecated alias, prints a warning) | `ibexa:reindex` (since `v1.2.0.1`, commit `b81dbfcac`; the deprecated alias `ezplatform:reindex` before) | `exponential:reindex` (since `1.3.0.6`, commit `1635061cf`; `ibexa:reindex` before, which does not exist there) |
 | Deployer task `solr:reindex` | `ezplatform:reindex` | `ibexa:reindex` | `ibexa:reindex` | `exponential:reindex` (same commit) |
 | `exponential:install` runs | not applicable | `exponential:reindex` | `exponential:reindex` | `exponential:reindex` |
 
 So a release checkout of 1.3.0.x (`1.3.0.5` and older) still has the broken `make reindex` and Deployer task; call
-`php bin/console exponential:reindex` directly there, or take `Makefile` and `deploy/tasks/server.php` from the
-branch.
+`php bin/console exponential:reindex` directly there, or take `Makefile` and `deploy/tasks/server.php` from
+`1.3.0.6`.
 
-The guides of the newer lines have two errors of their own: the `doc/sevenx/INSTALL.md` of 1.1.0.x and 1.2.0.x shows
-`exponential:reindex --iteration-count=100` and `--content-type=...`, options that the project's proxy command does
-not accept (use `ibexa:reindex` for them); and the 1.3.0.x `INSTALL.md` says that `ibexa:*` remains as an alias for
-migrated commands, which is not the case for `exponential:reindex` in the reference installation.
+The guides of the newer lines had two errors of their own up to `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5`: the
+`doc/sevenx/INSTALL.md` of 1.1.0.x and 1.2.0.x showed `exponential:reindex --iteration-count=100` and
+`--content-type=...`, options that the project's proxy command does not accept (it takes only `--siteaccess`; use
+`ibexa:reindex` for them, which on 1.1.0.x has no content-type option at all); and the 1.3.0.x `INSTALL.md` said that
+`ibexa:*` remains as an alias for migrated commands, which is not the case for `exponential:reindex` in the reference
+installation. The guides of the releases of 5 October 2026 are corrected.
 
 What a full reindex prints on 1.3.0.x (read from the command's code; the progress bar counts iterations of
 `--iteration-count` items, not items):
@@ -758,7 +760,7 @@ path. `shared_dirs` contains `public/var/site/storage`, so the binary files surv
 contains `.env.local`. Deployer only resets PHP-FPM's OPcache through cachetool; add a task that runs `qbixctl graceful` when
 the site is served by Velocity, and one that runs `assets:install public` (copies) after `deploy:vendors` (chapter
 [14.11](14-security-hardening.md#1411-exponential-velocity)). The reindex task names the right command on every
-branch head; on a 1.3.0.x release it still calls `ibexa:reindex` ([10.7.2](#1072-reindexing)).
+branch head and since `1.3.0.6`; on `1.3.0.5` and older it still calls `ibexa:reindex` ([10.7.2](#1072-reindexing)).
 
 ### 10.12.5 The Makefile
 
@@ -770,17 +772,18 @@ it explicitly:
 | `vendor` | `composer install` (`--no-dev -o` with `APP_ENV=prod`) |
 | `assets`, `assets-prod`, `assets-watch` | `yarn install` and `yarn build:dev`, `build:prod` or `watch`, after `nvm use` |
 | `ibexa-assets` | the administration assets: `composer ezplatform-assets` (1.0.0.x), translation dump and `yarn ez` (1.1.0.x), `composer ibexa-assets` (1.2.0.x, 1.3.0.x) |
-| `graphql-schema` | `ezplatform:graphql:generate-schema` (1.0.0.x to 1.2.0.x), `ibexa:graphql:generate-schema` (1.3.0.x) |
+| `graphql-schema` | `ezplatform:graphql:generate-schema` (1.0.0.x, 1.1.0.x; 1.2.0.x up to `v1.2.0.0`), `ibexa:graphql:generate-schema` (1.2.0.x since `v1.2.0.1`, 1.3.0.x) |
 | `clear-cache`, `clear-all-cache` | `cache:clear`; plus `cache:pool:clear $(CACHE_POOL)` |
 | `images` | `ngsite:content:generate-image-variations` with the list in [10.8](#108-images-and-image-variations) |
 | `migrations` | `doctrine:migration:migrate --allow-no-migration` |
-| `reindex` | `ezplatform:reindex` (1.0.0.x to 1.2.0.x), `exponential:reindex` (1.3.0.x) |
+| `reindex` | `ezplatform:reindex` (1.0.0.x, 1.1.0.x; 1.2.0.x up to `v1.2.0.0`), `ibexa:reindex` (1.2.0.x since `v1.2.0.1`), `exponential:reindex` (1.3.0.x) |
 | `build` | `vendor`, `migrations`, `reindex`, assets, `ibexa-assets`, `graphql-schema`, `clear-cache` |
 | `refresh` | `git pull --rebase` (stashing local changes), then `build` |
 
-The branches fixed these targets on 5 October 2026; a checkout of an earlier release still has the old ones:
+The branches fixed these targets on 5 October 2026, released the same day in `v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`,
+`v1.2.0.1` and `1.3.0.6`; a checkout of an earlier release still has the old ones:
 
-| Target | Up to the releases | On the branch heads |
+| Target | Up to `v2.5.0.6`, `1.0.0.10`, `v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` | Since the releases of 5 October 2026 |
 |---|---|---|
 | `clear-all-cache` | clears `cache.redis`, which does not exist with the default filesystem pool | clears `cache.global_clearer`, every pool ([10.3](#103-the-persistence-cache-pool)) |
 | `reindex` (1.3.0.x) | `ibexa:reindex`, which does not exist there | `exponential:reindex` ([10.7.2](#1072-reindexing)) |

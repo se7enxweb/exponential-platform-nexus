@@ -10,9 +10,11 @@ up to date. It ends with a go-live checklist.
 
 Several of the weaknesses this chapter used to describe were fixed in the code of the branches on 5 October 2026: the
 `Host` header switch to the `dev` environment, the 2.5 generation's cache header rewriting, the unread
-`TRUSTED_PROXIES` variable and the unread `APP_HTTP_CACHE` variable. **None of those fixes is in a release tag yet**:
-the newest tags (`v2.5.0.6` and `1.0.0.10`, `v1.1.0.7`, `v1.2.0.0`, `1.3.0.5`) still behave the old way. Each section
-therefore says what the branch does now, what a release installation does, and how to tell which one you run.
+`TRUSTED_PROXIES` variable and the unread `APP_HTTP_CACHE` variable. They were released the same day in `v2.5.0.7`,
+`1.0.0.11`, `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`; the older tags (`v2.5.0.6`, `1.0.0.10` and `1.0.0.9`, `v1.1.0.7`,
+`v1.2.0.0`, `1.3.0.5` and before) still behave the old way. Each section therefore says what the current code does
+(the branch heads and those releases), what an installation from an older release does, and how to tell which one you
+run.
 
 [Previous: 13. Troubleshooting](13-troubleshooting.md) · [Contents](README.md)
 
@@ -43,8 +45,9 @@ its branches, `master` and `1.0.0.x`, unless a branch is named.
 
 ### Which code do I run?
 
-The fixes of 5 October 2026 are commits on the branch heads. To see whether your installation has one, look at the
-file itself rather than at a version number:
+The fixes of 5 October 2026 are commits on the branch heads and are part of the releases of that day. To see whether
+your installation has one, look at the file itself rather than at a version number, since a project keeps the files
+it was created from:
 
 ```bash
 grep -c "dev\." web/app.php                                  # 1.0.0.x: 0 = host switch removed
@@ -53,9 +56,9 @@ grep -n "trusted_proxies" config/packages/framework.yaml config/packages/ezpubli
 grep -c "APP_HTTP_CACHE" public/index.php                    # 1.1.0.x to 1.3.0.x: 1 or more = wired
 ```
 
-A project created from a release tag can take the fixed files from the branch of its line; they are project files,
-not vendor code (`git show origin/master:app/AppCache.php > app/AppCache.php`, and so on), and the commits are listed
-in each section.
+A project created from an older release tag can take the fixed files from the newest release of its line; they are
+project files, not vendor code (`git show v2.5.0.7:app/AppCache.php > app/AppCache.php`, and so on), and the commits
+are listed in each section.
 
 ---
 
@@ -143,12 +146,12 @@ openssl rand -hex 32
 Where to put secrets:
 
 - **1.0.0.x**: in `app/config/parameters.yml` (ignored by Git; `parameters.yml.dist` is the template), in `.env.php`
-  (ignored by Git on the branches since 5 October 2026, commit `4f0ea4964` on `master` and `4246d1244` on `1.0.0.x`;
-  check your own `.gitignore` if you started from a release), or as real environment variables of the PHP-FPM pool
+  (ignored by Git since 5 October 2026, commit `4f0ea4964` on `master` and `4246d1244` on `1.0.0.x`, released in
+  `v2.5.0.7` and `1.0.0.11`; check your own `.gitignore` if you started from an older release), or as real environment variables of the PHP-FPM pool
   (`env[SYMFONY_SECRET] = ...`), which the `env(...)` parameters read.
 - **1.1.0.x and later**: in `.env.local`, in the real environment, or in the Symfony secrets vault. `.env.local`,
   `.env.*.local`, `.env.local.php` and the production decryption key are ignored by Git on 1.2.0.x and 1.3.0.x, and
-  on the `1.1.0.x` branch since 5 October 2026 (commit `56b5ad53b`); a project created from `v1.1.0.7` or older does
+  on 1.1.0.x since `v1.1.0.8` (commit `56b5ad53b`, 5 October 2026); a project created from `v1.1.0.7` or older does
   not ignore them, so add the lines yourself:
 
   ```gitignore
@@ -220,7 +223,7 @@ curl -s -o /dev/null -w '%{http_code}\n' https://www.example.com/_profiler    # 
 console is different: `bin/console` falls back to **`dev`** when neither `--env` nor `SYMFONY_ENV` is given, so pass
 `--env=prod` or export `SYMFONY_ENV=prod` for every command on a production server.
 
-Up to the releases `v2.5.0.6` and `1.0.0.10` (and every `1.0.0.x` branch tag), `web/app.php` also contains a project
+Up to the releases `v2.5.0.6` and `1.0.0.10` (and every `1.0.0.x` branch tag up to `1.0.0.9`), `web/app.php` also contains a project
 patch that runs before the environment is read:
 
 ```php
@@ -232,9 +235,9 @@ if ( str_contains( $_SERVER['HTTP_HOST'], 'dev.' ) ) {
 
 Any request whose `Host` header contains `dev.` (also `mydev.example.com`, or a forged header sent to the server's
 address) runs in the `dev` environment with debugging on, if the web server lets that host name reach the site. The
-block was removed from both branches on 5 October 2026 (commit `dddc937de` on `master`, `4598c1942` on `1.0.0.x`). If
-`grep -n "dev\." web/app.php` still finds it in your installation, delete the five lines, or take `web/app.php` from
-the branch; until then make sure the virtual host accepts only your exact production names
+block was removed from both branches on 5 October 2026 (commit `dddc937de` on `master`, `4598c1942` on `1.0.0.x`),
+released in `v2.5.0.7` and `1.0.0.11`. If `grep -n "dev\." web/app.php` still finds it in your installation, delete
+the five lines, or take `web/app.php` from those releases; until then make sure the virtual host accepts only your exact production names
 ([14.2](#142-what-the-web-server-must-never-hand-out)).
 
 `web/app.php` and `bin/console` also load `.env.php` from the project root when that file exists, so it can
@@ -311,7 +314,7 @@ can reach the PHP server. Set it in the PHP-FPM pool or the virtual host:
 SetEnv SYMFONY_TRUSTED_PROXIES "127.0.0.1"
 ```
 
-**1.1.0.x, 1.2.0.x and 1.3.0.x, branch heads.** Since 5 October 2026 the framework configuration reads the
+**1.1.0.x, 1.2.0.x and 1.3.0.x, branch heads and `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`.** Since 5 October 2026 the framework configuration reads the
 `TRUSTED_PROXIES` variable that `.env` and the virtual host examples set (commit `98453e0d2` on `1.1.0.x`, in
 `config/packages/ezpublish.yaml`; `c330cd215` on `1.2.0.x` and `4eb6eb6dd` on `1.3.0.x`, in
 `config/packages/framework.yaml`):
@@ -334,8 +337,8 @@ TRUSTED_PROXIES=127.0.0.1,10.0.0.0/16
 the application uses for absolute URLs and for siteaccess matching.
 
 On 1.3.0.x the explicit setting replaces Symfony 7.4's default, which reads `SYMFONY_TRUSTED_PROXIES` and
-`SYMFONY_TRUSTED_HEADERS` (`%env(default::SYMFONY_TRUSTED_PROXIES)%`, as `config/reference.php` lists it). On the
-branch head those two variables therefore have no effect; use `TRUSTED_PROXIES`.
+`SYMFONY_TRUSTED_HEADERS` (`%env(default::SYMFONY_TRUSTED_PROXIES)%`, as `config/reference.php` lists it). Since
+`1.3.0.6` those two variables therefore have no effect; use `TRUSTED_PROXIES`.
 
 **Releases `v1.1.0.7`, `v1.2.0.0` and `1.3.0.5` and older.** Nothing reads `TRUSTED_PROXIES`: the front controller
 `public/index.php` uses the Symfony Runtime, and no configuration file names the variable. Add the block above
@@ -436,7 +439,7 @@ On 1.0.0.x the Symfony reverse proxy is on outside `dev` (`SYMFONY_HTTP_CACHE` u
 project's `app/AppCache.php` (loaded through the `classmap` in `composer.json`). It extends the platform's proxy and,
 after the response is built, may change its `Cache-Control` header. What it does depends on the code you have.
 
-**Branch heads since 5 October 2026** (commit `2a9c202b9` on `master`, `3fb8765dc` on `1.0.0.x`). The class never
+**Branch heads since 5 October 2026, `v2.5.0.7` and `1.0.0.11`** (commit `2a9c202b9` on `master`, `3fb8765dc` on `1.0.0.x`). The class never
 makes a private or personal response public. It leaves a response alone when any of these holds:
 
 - its `Cache-Control` is `private` (Symfony sends every response that is not declared public as private) or
@@ -457,7 +460,7 @@ Only a response that is already public and also says `no-cache`, answering an an
 `no-cache`. The settings are read once per PHP process from `app/config/`; under persistent workers (Velocity),
 reload after editing `http_cache.yml`.
 
-**Releases up to `v2.5.0.6` and `1.0.0.10`, and the `1.0.0.x` branch tags.** The older class **replaces** every
+**Releases up to `v2.5.0.6` and `1.0.0.10`, and the `1.0.0.x` branch tags up to `1.0.0.9`.** The older class **replaces** every
 `Cache-Control` that contains `private` or `no-cache` without both `public` and `s-maxage` by
 `public, max-age=3600, s-maxage=3600, must-revalidate`, unless the host, siteaccess or path is excluded or the response
 sets a cookie or a user context hash (read from the code). It looks for its settings in `config/` instead of
@@ -467,8 +470,8 @@ depends on the signed-in user or carries a form token, then leaves the server as
 decides what to store before the rewrite, but the browser, and any Varnish, CDN or company proxy in front, sees the
 public header. On such an installation:
 
-1. Take `app/AppCache.php` from the branch of your line (`git show origin/master:app/AppCache.php > app/AppCache.php`,
-   or `origin/1.0.0.x`; the two are identical), then `php bin/console cache:clear --env=prod`.
+1. Take `app/AppCache.php` from the newest release of your line (`git show v2.5.0.7:app/AppCache.php > app/AppCache.php`,
+   or `1.0.0.11`; the two are identical), then `php bin/console cache:clear --env=prod`.
 2. Or switch the class off with `SYMFONY_HTTP_CACHE=0` and use Varnish, or no proxy, instead.
 
 On both, before go-live:
@@ -487,9 +490,9 @@ On both, before go-live:
 ### 1.1.0.x to 1.3.0.x: the Symfony proxy
 
 These lines use the platform's own `AppCache` (`EzSystems\PlatformHttpCacheBundle\AppCache` on 1.1.0.x,
-`Ibexa\Bundle\HttpCache\AppCache` on 1.2.0.x and 1.3.0.x), which does not rewrite cache headers. On the branch heads
-since 5 October 2026 `public/index.php` wraps the kernel in it when `APP_HTTP_CACHE` is true (commits `7f8d95f29`,
-`c5e6aca42` and `ac3f43a74`); the releases ignore the variable and run without a proxy. Turn it on only when no
+`Ibexa\Bundle\HttpCache\AppCache` on 1.2.0.x and 1.3.0.x), which does not rewrite cache headers. Since 5 October
+2026 (the branch heads and `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`) `public/index.php` wraps the kernel in it when `APP_HTTP_CACHE` is true
+(commits `7f8d95f29`, `c5e6aca42` and `ac3f43a74`); the older releases ignore the variable and run without a proxy. Turn it on only when no
 Varnish or other caching proxy sits in front ([10.4](10-operations.md#104-http-cache-and-purging)).
 
 ### On every line

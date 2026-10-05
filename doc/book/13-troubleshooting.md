@@ -67,9 +67,10 @@ php bin/console about | grep -E 'Environment|Debug'          # what the console 
 ls -dt var/cache/*/ | head -3                                # the environments that built a cache, newest first
 ```
 
-**Which code.** Several problems below were fixed on the branches on 5 October 2026 but are in no release tag yet.
-If an entry says "releases" and "branch heads", [the check at the top of chapter 14](14-security-hardening.md#which-code-do-i-run)
-tells you which one you run.
+**Which code.** Several problems below were fixed on the branches on 5 October 2026 and released the same day in
+`v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6`; older releases still have them. If an entry says
+"releases" and "branch heads", "releases" means the older ones, and
+[the check at the top of chapter 14](14-security-hardening.md#which-code-do-i-run) tells you which code you run.
 
 ## 13.2 Composer and dependencies
 
@@ -190,7 +191,7 @@ tells you which one you run.
   Composer reporting that the command `ibexa-assets` is not defined (1.0.0.x, 1.1.0.x).
 - **Cause:** up to 5 October 2026 every line's `Makefile` wrote `$(cat .nvmrc)`, which `make` expands to nothing, and
   1.0.0.x had no `.nvmrc` (now `v22` on `master`, `v20` on the `1.0.0.x` branch); the `ibexa-assets` target of 1.0.0.x and 1.1.0.x called a Composer script those lines do
-  not have. The branch heads fixed both ([chapter 10.12.5](10-operations.md#10125-the-makefile)).
+  not have. The branch heads and the releases of 5 October 2026 fixed both ([chapter 10.12.5](10-operations.md#10125-the-makefile)).
 - **Fix:** on an older checkout, run `nvm install && nvm use` yourself first, and build the administration assets by
   hand: `composer ezplatform-assets` (1.0.0.x), or
   `php bin/console bazinga:js-translation:dump public/assets --merge-domains && yarn ez` (1.1.0.x).
@@ -270,9 +271,9 @@ tells you which one you run.
 
 ### Absolute URLs and redirects use `http://` behind a TLS proxy
 
-- **Cause:** Symfony does not trust the proxy's `X-Forwarded-Proto`. On the releases of 1.1.0.x to 1.3.0.x
-  (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5`) the `TRUSTED_PROXIES` line in `.env` is not read by any configuration. On the
-  branch heads since 5 October 2026 it is, so there the cause is a list that does not contain the proxy's address
+- **Cause:** Symfony does not trust the proxy's `X-Forwarded-Proto`. On the older releases of 1.1.0.x to 1.3.0.x
+  (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` and before) the `TRUSTED_PROXIES` line in `.env` is not read by any
+  configuration. Since `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6` (and on the branch heads) it is, so there the cause is a list that does not contain the proxy's address
   (the shipped value is `127.0.0.1`). On 1.0.0.x `SYMFONY_TRUSTED_PROXIES` is not set.
 - **Fix:** set `TRUSTED_PROXIES` (or `SYMFONY_TRUSTED_PROXIES` on 1.0.0.x) to the proxy's address and make sure the
   `framework` configuration reads it; on 1.0.0.x to 1.2.0.x also set the legacy kernel's `TrustedProxies[]`. See
@@ -398,16 +399,16 @@ tells you which one you run.
 - **Cause:** on installations made from the releases up to `v2.5.0.6` and `1.0.0.10`, `app/AppCache.php` rewrites
   private responses to `public, s-maxage=3600` unless the host, siteaccess or path is excluded, and it never reads
   `app/config/http_cache.yml`. A browser, Varnish or a CDN then caches a personal page for an hour.
-- **Fix:** take `app/AppCache.php` from the branch (`git show origin/master:app/AppCache.php > app/AppCache.php`),
+- **Fix:** update to `v2.5.0.7` or `1.0.0.11`, or take `app/AppCache.php` from them (`git show v2.5.0.7:app/AppCache.php > app/AppCache.php`),
   clear the cache, and purge the HTTP cache; or set `SYMFONY_HTTP_CACHE=0`
   ([14.7](14-security-hardening.md#147-http-cache-safety)). Check with a signed-in browser that the page's
   `Cache-Control` says `private`.
 
 ### `APP_HTTP_CACHE=1` changes nothing (1.1.0.x to 1.3.0.x)
 
-- **Cause:** the front controller of the releases (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5`) does not read the variable; only
-  the branch heads since 5 October 2026 wrap the kernel in `AppCache` when it is true.
-- **Fix:** take `public/index.php` from the branch of your line, or put Varnish in front
+- **Cause:** the front controller of the older releases (`v1.1.0.7`, `v1.2.0.0`, `1.3.0.5` and before) does not read
+  the variable; since `v1.1.0.8`, `v1.2.0.1` and `1.3.0.6` (and on the branch heads) it wraps the kernel in `AppCache` when it is true.
+- **Fix:** update to the newest release of your line or take `public/index.php` from it, or put Varnish in front
   ([10.4.2](10-operations.md#1042-the-local-proxy-per-line)). With debug on, a cached answer carries an
   `X-Symfony-Cache` header.
 

@@ -81,10 +81,10 @@ compares them package by package.
 - `example.com`, `USER`, `DATABASE` and similar are placeholders.
 - Facts are dated: the chapters were checked against the branches and tags on 5 October 2026. That day the branches
   received fixes (the `dev` host switch and the cache header rewriting of the 2.5 generation, trusted proxies, the
-  HTTP cache switch, `Makefile` targets) that no release tag contains yet. Where they matter, a chapter says what the
-  branch head does and what an installation made from a tag still does; [chapter 14](14-security-hardening.md#which-code-do-i-run)
-  shows how to tell which one you run, and [chapter 11.9](11-upgrading-between-lines.md#119-patch-updates-inside-a-line)
-  how to take such a fix.
+  HTTP cache switch, `Makefile` targets), released the same day as `v2.5.0.7`, `1.0.0.11`, `v1.1.0.8`, `v1.2.0.1` and
+  `1.3.0.6`. Where they matter, a chapter says what the current code does and what an installation made from an older
+  tag still does; [chapter 14](14-security-hardening.md#which-code-do-i-run) shows how to tell which one you run, and
+  [chapter 11.9](11-upgrading-between-lines.md#119-patch-updates-inside-a-line) how to take such a fix.
 - Product names: Exponential Platform Nexus, Exponential (the legacy kernel, version 6), Exponential Platform Legacy,
   Exponential Velocity. Older product names appear only where they identify an upstream package or the system you
   migrate from.
