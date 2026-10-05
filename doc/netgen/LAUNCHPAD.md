@@ -1,6 +1,10 @@
 Netgen Site development with eZ Launchpad and Docker
 ====================================================
 
+This page comes from the upstream Netgen Media Site. The `ez init netgen/media-site ...` command below installs
+Netgen's own media site package, not Exponential Platform Nexus, and its install types `netgen-media` and
+`netgen-media-clean` are the upstream ones. For Nexus, see the [short installation guide](../INSTALL.md).
+
 Software requirements
 ---------------------
 
