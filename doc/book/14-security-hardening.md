@@ -129,7 +129,7 @@ What each line ships, and what you must replace:
 |---|---|---|---|
 | Framework secret | `env(SYMFONY_SECRET): ThisEzPlatformTokenIsNotSoSecret_PleaseChangeIt` in `app/config/parameters.yml.dist` | `APP_SECRET=ThisTokenIsNotSoSecretChangeIt` in `.env` | `APP_SECRET=` (empty) in `.env` |
 | JWT key passphrase | not used | `JWT_PASSPHRASE=ThisTokenIsNotSoSecretChangeIt` | same |
-| Varnish purge token | none | `HTTPCACHE_VARNISH_INVALIDATE_TOKEN=` (empty) | same |
+| Varnish purge token | `HTTPCACHE_VARNISH_INVALIDATE_TOKEN` (unset; `varnish_invalidate_token` in `app/config/default_parameters.yml`) | `HTTPCACHE_VARNISH_INVALIDATE_TOKEN=` (empty) | same |
 | Database credentials | `parameters.yml` | `DATABASE_URL` (the `.env` example is a placeholder) | same |
 | Mail, reCAPTCHA, Sentry, MailerLite | `parameters.yml` | `MAILER_DSN`, `GOOGLE_RECAPTCHA_*`, `SENTRY_DSN`, `MAILER_LITE_API_KEY` | same |
 
@@ -481,7 +481,8 @@ Varnish or other caching proxy sits in front ([10.4](10-operations.md#104-http-c
 
 - **Varnish purges must be authenticated.** The shipped VCL parameters (`doc/varnish/vcl/parameters.vcl` on 1.0.0.x)
   allow purges from `127.0.0.1` and `192.168.0.0/16` (`acl invalidators`); narrow that to your application servers.
-  On 1.1.0.x and later set `HTTPCACHE_VARNISH_INVALIDATE_TOKEN` to a random value and the same value in the VCL.
+  Where an IP ACL is not possible, set `HTTPCACHE_VARNISH_INVALIDATE_TOKEN` (every line) to a random value and the
+  same value in the VCL.
 - **User context.** Pages vary by the user context hash (`X-User-Context-Hash`); never strip the `Vary` header in the
   proxy, or users with different rights share cached pages.
 - **Velocity's response cache** is a third cache layer; it is off unless configured, and must skip the platform's
