@@ -180,4 +180,4 @@ $ setfacl -dR -m u:<web-user>:rwX -m g:<web-user>:rwX var web/var ezpublish_lega
 In case `setfacl` is not available on your system, refer to [Symfony installation instructions]
 to set up the permissions correctly.
 
-[Symfony installation instructions]: https://symfony.com/doc/3.4/setup/file_permissions.html
+[Symfony installation instructions]: https://symfony.com/doc/3.x/setup/file_permissions.html
