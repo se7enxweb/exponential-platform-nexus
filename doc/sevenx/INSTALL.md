@@ -1231,8 +1231,9 @@ named `ng_*`) and cannot be combined with `--since`, `--subtree` or `--content-i
 
 ## 14. Image Variations
 
-Image variations are generated on demand by Liip Imagine. Configuration lives in
-`config/packages/ibexa.yaml` under `ibexa.system.<siteaccess>.image_variations`.
+Image variations are generated on demand by Liip Imagine. The project defines them in
+`config/app/packages/image.yaml` under `ibexa.system.default.image_variations` (a siteaccess or group can add its
+own under `ibexa.system.<siteaccess>.image_variations`).
 
 ### Clear generated variation cache
 
