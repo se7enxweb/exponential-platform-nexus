@@ -135,7 +135,7 @@ this project's initial deployment. The 7x forks are the permanent fix:
 | HTTP Cache | Symfony HttpCache (default) · Varnish 6/7 (optional) |
 | App Cache | Filesystem (default) · Redis 6+ (optional) |
 | Database | SQLite 3.35+ (dev default) · MySQL 8.0+ · MariaDB 10.3+ · PostgreSQL 14+ |
-| API | REST API v2 · GraphQL (schema auto-generated) · JWT auth |
+| API | REST API v2 · GraphQL (schema auto-generated) · JWT auth (optional, firewalls ship commented out) |
 | Admin UI | Ibexa Platform v5 Admin UI (`/adminui/`) |
 | Dependency Mgmt | Composer 2.x · Yarn 1.x |
 | Metapackage | `se7enxweb/exponential-platform-dxp` |
@@ -231,7 +231,7 @@ After install, the following URLs are live:
 |---|---|
 | `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng`, the default siteaccess; `/bold_eng/` and `/bold_ger/` for the Bold Agency site) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v5 Admin UI** (React) |
-| `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (JWT-authenticated) |
+| `https://127.0.0.1:8000/api/ibexa/v2/` | REST API v2 (session authentication; JWT firewalls ship commented out in `config/packages/security.yaml`) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (dev mode only) |
 | `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin |
@@ -253,7 +253,7 @@ installation and operations guide, including all 7x fork details.
 - Netgen Ibexa Site API (high-performance content read API, custom `twigGetAttribute`)
 - Netgen Tags field type (taxonomy/tagging)
 - RichText field type with XSL/AlloyEditor/CKEditor 5 support
-- REST API v2 (JWT-authenticated)
+- REST API v2 (session authentication; JWT can be enabled)
 - GraphQL API (auto-generated from content model)
 - Platform v5 Admin UI (React, at `/adminui/`)
 - Netgen Layouts Admin UI (at `/nglayouts/admin`)
@@ -396,7 +396,7 @@ in production.
 |---|---|
 | `https://127.0.0.1:8000/` | Public Symfony/Twig site (`fh_eng`, the default siteaccess; `/bold_eng/` and `/bold_ger/` for the Bold Agency site) |
 | `https://127.0.0.1:8000/adminui/` | **Platform v5 Admin UI** (React) — login: `admin` / `publish` |
-| `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 (requires JWT) |
+| `https://127.0.0.1:8000/api/ibexa/v2/` | REST API v2 (session authentication; JWT optional) |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/graphql/explorer` | GraphiQL browser (APP_ENV=dev only) |
 | `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin interface |

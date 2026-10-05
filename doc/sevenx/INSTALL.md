@@ -192,7 +192,7 @@ Browser Request
   public/index.php  ── Symfony Kernel (Platform v5 OSS — Symfony 7.4 LTS)
       │
       ├── URI: /adminui/**           → Platform v5 Admin UI (React)       ← siteaccess: adminui
-      ├── URI: /api/ezp/v2/**        → REST API v2 (JWT-auth)             ← siteaccess: adminui
+      ├── URI: /api/ibexa/v2/**      → REST API v2                         ← siteaccess: adminui
       ├── URI: /graphql              → GraphQL API                         ← siteaccess: adminui
       ├── URI: /nglayouts/**         → Netgen Layouts admin + app          ← siteaccess: adminui
       ├── URI: /bold_eng/**, /bold_ger/** → Bold Agency front end          ← siteaccess: bold_eng / bold_ger
@@ -677,7 +677,7 @@ All access points after install:
 |---|---|
 | `https://127.0.0.1:8000/` | Platform v5 Symfony/Twig public site |
 | `https://127.0.0.1:8000/adminui/` | **Platform v5 Admin UI** (React) |
-| `https://127.0.0.1:8000/api/ezp/v2/` | REST API v2 |
+| `https://127.0.0.1:8000/api/ibexa/v2/` | REST API v2 |
 | `https://127.0.0.1:8000/graphql` | GraphQL endpoint |
 | `https://127.0.0.1:8000/nglayouts/admin` | Netgen Layouts admin |
 | `https://127.0.0.1:8000/nglayouts/app` | Netgen Layouts app editor |
@@ -1163,8 +1163,12 @@ php bin/console bazinga:js-translation:dump public/assets --merge-domains
 
 ## 11. JWT Authentication (REST API)
 
-JWT keypairs are required for the REST API to function. They are git-ignored and must
-be generated on every fresh install:
+The REST API is served under `/api/ibexa/v2/` (`ibexa.rest.path_prefix`) and, as shipped, authenticates with the
+session (`ibexa_rest` firewall in `config/packages/security.yaml`). JSON Web Token authentication is prepared but
+off: the `ibexa_jwt_rest` and `ibexa_jwt_graphql` firewalls in `security.yaml` are commented out. To use tokens,
+uncomment them and generate the keypair that `LexikJWTAuthenticationBundle` signs with
+(`config/packages/lexik_jwt_authentication.yaml`). The key files are git-ignored, so generate them on every fresh
+install:
 
 ```bash
 php bin/console lexik:jwt:generate-keypair
