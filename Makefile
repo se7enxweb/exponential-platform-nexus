@@ -34,28 +34,28 @@ vendor: ## Run composer install
 .PHONY: ibexa-assets
 .ONESHELL:
 ibexa-assets: ## Generate the admin interface assets (translations dump and yarn ez)
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	$(PHP_RUN) bin/console bazinga:js-translation:dump public/assets --merge-domains --env=$(APP_ENV)
 	yarn ez
 
 .PHONY: assets
 .ONESHELL:
 assets: ## Build frontend assets for DEV environment
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn build:dev
 
 .PHONY: assets-prod
 .ONESHELL:
 assets-prod: ## Build frontend assets for PROD environment
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn build:prod
 
 .PHONY: assets-watch
 .ONESHELL:
 assets-watch: ## Watch frontend assets (during development)
-	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $(cat .nvmrc)
+	. ${NVM_DIR}/nvm.sh && nvm use || nvm install $$(cat .nvmrc)
 	yarn install
 	yarn watch
 
