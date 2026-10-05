@@ -395,11 +395,11 @@ read for it: to use another file, set `database_path` in `parameters.yml` (commi
 that said otherwise). `master` passes no `path:` to Doctrine. See [chapter 7](07-databases.md).
 
 **The root location of the site.** `ngsite.default.locations.tree_root.id` decides where the front end's content
-tree starts, and a wrong value shows as a 404 on the home page. The two branches ship different values:
+tree starts, and a wrong value shows as a 404 on the home page. Both branches ship 168 now:
 
 | Branch | `parameters.yml.dist` | `default_parameters.yml` | Fits |
 |---|---|---|---|
-| `master` | `2` | not set | the Content root: a clean repository; for the CJW demo check the root with the query below |
+| `master` | `168` (since commit `7c6fa6f52`; `2` before, which is the Content root above the demo) | not set | the site root "JAC Example" that `ezplatform:install cjw-exponential-media` creates (`se7enxweb/cjw-exponential-media-site-data`); use `2` with `exponential-oss` or on an empty repository |
 | `1.0.0.x` | `168` | `168` (since commit `8ac75c15c`; the two files used to disagree) | the site root of the database this branch ships (the starter SQL dump, `data/content.sql`, the `exponential-cjw` seed); use `2` after `ezplatform:install netgen-media`, whose location 168 is an article, or on an empty repository |
 
 The value in `parameters.yml` wins over both. Look the root up rather than guessing:

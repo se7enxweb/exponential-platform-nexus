@@ -227,7 +227,7 @@ configuration names locations by id. After pointing Nexus at your database, go t
 | Parameter | Lines | What it must point at |
 |---|---|---|
 | `ngsite.default.locations.site_info.id` | 1.0.0.x (`parameters.yml.dist`: `65`), 1.1.0.x (`config/app/app.yaml`: `65`) | The site info object the templates read the site name, logo and social links from |
-| `ngsite.default.locations.tree_root.id` | 1.0.0.x: `2` on `master`; `168` on the branch `1.0.0.x` (the root of its shipped data), in `parameters.yml.dist` and `default_parameters.yml` | The root of the public tree; a wrong value shows as a 404 on the home page ([chapter 8.3.4](08-configuration.md#834-100x-parameters-and-environment-variables)) |
+| `ngsite.default.locations.tree_root.id` | 2.5 and 1.0.0.x: `168`, the root of the shipped CJW data, in `parameters.yml.dist` (`master` said `2` before 2026-10-05) and, on the branch `1.0.0.x`, `default_parameters.yml` | The root of the public tree; a wrong value shows as a 404 on the home page ([chapter 8.3.4](08-configuration.md#834-100x-parameters-and-environment-variables)) |
 | `ngsite.fh_group.locations.tree_root.id`, `ngsite.bold_group.locations.tree_root.id` | 1.1.0.x to 1.3.0.x, used as `content_tree_root` per siteaccess group | The roots of the two demo designs' trees |
 | `ngsite.default.locations.ng_component_hero.id`, `...ng_component_quote.id` | 1.3.0.x (`config/app/prepends/netgen_layouts/components.yaml`) | The component containers Layouts reads |
 

@@ -80,8 +80,9 @@ Composer installs the upstream Media Site 3.1.6, which Packagist lists under the
 
 1. Edit `app/config/parameters.yml` (created from `parameters.yml.dist` by `composer install`): the `env(DATABASE_*)`
    values and `env(SYMFONY_SECRET)`. Generate the secret with `openssl rand -hex 32`; the shipped placeholder is public.
-   Set `ngsite.default.locations.tree_root.id: 168`, the root of the CJW content: `master` ships 2 and `v2.5.0.6`
-   does not define it at all ([chapter 4](book/04-installing.md#step-1-database-settings-in-parametersyml)).
+   Check that `ngsite.default.locations.tree_root.id` is `168`, the root of the CJW content: `master` ships 168 since
+   2026-10-05 (2 before), and `v2.5.0.6` does not define it at all
+   ([chapter 4](book/04-installing.md#step-1-database-settings-in-parametersyml)).
 2. Install the demo content:
 
    ```bash

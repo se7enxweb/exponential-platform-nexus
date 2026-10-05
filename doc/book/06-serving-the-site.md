@@ -825,9 +825,10 @@ Found while checking the files this chapter relies on, with the state of 2026-10
   `chmod -R 755 .` over the whole project; see section 6.9 for the narrower set of writable directories.
 - `doc/docker/README.md` and the root `.env` of `master` and `1.0.0.x` describe the upstream eZ Platform Docker
   blueprints with PHP 7.3 images, which predate this project's PHP requirements.
-- `app/config/ezplatform_siteaccess.yml` on `master` lists the host `legacy.platform.cjw.beta.se7enx.com` twice under
-  `Map\Host` (once for `en`, once for `legacy_admin`); the later entry wins. It is one of the demo host names you
-  replace anyway.
+- `app/config/ezplatform_siteaccess.yml` up to `v2.5.0.6` lists the host `legacy.platform.cjw.beta.se7enx.com`
+  twice under `Map\Host`, once for `en` and once for `legacy_admin`. Symfony 3.4's YAML parser keeps the first, so
+  the host is served by `en`. Fixed on `master` (commit `569f95143`): the host maps to `legacy_admin`, like the other
+  `legacy.*` hosts. It is one of the demo host names you replace anyway.
 
 ## 6.12 Checklist
 

@@ -120,15 +120,17 @@ Generate the secret with `openssl rand -hex 32`. The shipped placeholder
 
 **The tree root must be 168.** The CJW content puts its site, "JAC Example", at location 168 (`/1/2/168/`), and the
 public siteaccesses serve `index_page: /startseite`, a page below it. `ngsite.default.locations.tree_root.id` sets
-the front-end root of `de` and `en` and the legacy kernel's `RootNode`. What the line ships does not get this right:
+the front-end root of `de` and `en` and the legacy kernel's `RootNode`. The releases up to `v2.5.0.6` do not get this
+right:
 
 | Version | `ngsite.default.locations.tree_root.id` as shipped | Result |
 |---|---|---|
 | `v2.5.0.6` | not defined in `parameters.yml.dist` or `default_parameters.yml` | the container does not build: `You have requested a non-existent parameter "ngsite.default.locations.tree_root.id"` |
-| `master` | `2` in `parameters.yml.dist` | the site starts, but at the content root above "JAC Example"; seen from there the start page's URL alias is `jac_example/startseite`, so `index_page: /startseite` points at nothing |
+| `master` before 2026-10-05 | `2` in `parameters.yml.dist` | the site starts, but at the content root above "JAC Example"; seen from there the start page's URL alias is `jac_example/startseite`, so `index_page: /startseite` points at nothing |
+| `master` since 2026-10-05 (commit `7c6fa6f52`) | `168` in `parameters.yml.dist` | right for the CJW content |
 
-Write `168` into `app/config/parameters.yml` as above. (The `1.0.0.x` branch now ships 168,
-[4.4](#44-the-100x-branch).)
+Check that `app/config/parameters.yml` says `168`; a copy created from an older `parameters.yml.dist` keeps the `2`
+until you change it. (The `1.0.0.x` branch ships 168 as well, [4.4](#44-the-100x-branch).)
 
 ### Step 2: install the schema and the content
 
