@@ -191,6 +191,11 @@
     Slick.prototype.activateADA = function() {
         var _ = this;
 
+        // Same guard as initADA: an instance whose build was skipped has no track.
+        if (!_.$slideTrack) {
+            return;
+        }
+
         _.$slideTrack.find('.slick-active').attr({
             'aria-hidden': 'false'
         }).find('a, input, button, select').attr({
