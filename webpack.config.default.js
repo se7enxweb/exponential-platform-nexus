@@ -162,7 +162,37 @@ class CSSAssetExtractorAndRewriter {
           // Ignore copy errors
         }
       }
-      
+
+      // Copy the slick theme and leaflet assets. With css-loader url: false the
+      // compiled CSS keeps their relative URLs, which resolve to
+      // <output>/slick/ajax-loader.gif, <output>/slick/fonts/* and
+      // <output>/images/* (leaflet layers and marker icons).
+      const sassDir = path.join(__dirname, 'src/AppBundle/Resources/sass');
+      [
+        ['slick/ajax-loader.gif', 'slick'],
+        ['slick/fonts', 'slick/fonts'],
+        ['leaflet/images', 'images'],
+      ].forEach(([entry, sub]) => {
+        const src = path.join(sassDir, entry);
+        if (!fs.existsSync(src)) {
+          return;
+        }
+        try {
+          const destDir = path.join(outputPath, sub);
+          fs.mkdirSync(destDir, { recursive: true });
+          const files = fs.statSync(src).isDirectory()
+            ? fs.readdirSync(src).map(file => path.join(src, file))
+            : [src];
+          files.forEach(file => {
+            if (fs.statSync(file).isFile()) {
+              fs.copyFileSync(file, path.join(destDir, path.basename(file)));
+            }
+          });
+        } catch (e) {
+          // Ignore copy errors
+        }
+      });
+
       // Read and rewrite CSS file with proper asset paths
       let css = fs.readFileSync(cssFile, 'utf8');
       
