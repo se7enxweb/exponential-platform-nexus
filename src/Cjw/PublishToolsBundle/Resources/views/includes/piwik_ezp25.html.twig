@@ -13,10 +13,10 @@
 
     {% set piwik_settings = piwik %}
 
-    {# If there are indeed `piwik_settings` defined now, we're going to render
-       the JavaScript block, which takes care of the rest. #}
-    {% if ( piwik_settings and piwik_settings.tracking_id is not null ) %}
-        <script type="text/javascript">
+    {# The cookie helpers are always defined: the cookie consent handlers
+       (onAccept/onRevoke) call document.Cookie.setCookie whether or not a
+       tracking id is configured. #}
+    <script type="text/javascript">
             {# Cookie functionalities – BEGIN #}
             document.Cookie = document.Cookie || {};
 
@@ -49,6 +49,12 @@
                 };
             }
             {# Cookie functionalities – END #}
+    </script>
+
+    {# If there are indeed `piwik_settings` defined now, we're going to render
+       the JavaScript block, which takes care of the rest. #}
+    {% if ( piwik_settings and piwik_settings.tracking_id is not null ) %}
+        <script type="text/javascript">
 
             var pkBaseURL   = ( ( 'https:' === document.location.protocol ) ? "{{ 'https://' ~ piwik_settings.tracking_url ~ '/' }}" : "{{ 'http://' ~ piwik_settings.tracking_url ~ '/' }}" ),
                 trackingId  = {{ piwik_settings.tracking_id }},
