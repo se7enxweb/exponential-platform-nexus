@@ -1,0 +1,31 @@
+{#
+    Overrides the preview template of netgen/layouts-ezplatform-site-api 1.4, which links the
+    content with path(content). Symfony 5.4 takes only a route name there, so the Layouts editor
+    answered 500 for every block that previews a content item (the component blocks).
+    ez_path() generates the URL alias of a Site API content item.
+#}
+{% if content.hasField('image') and not content.fields.image.empty %}
+    {% set image_alias = ng_image_alias(content.fields.image, 'nglayouts_app_preview') %}
+
+    {% if image_alias and image_alias.uri is not null %}
+        <div class="image">
+            <img src="{{ asset(image_alias.uri) }}" />
+        </div>
+    {% endif %}
+{% endif %}
+
+<div class="name">
+    {% if nglayouts_item is defined %}
+        <p><a href="{{ nglayouts_item_path(nglayouts_item) }}" target="_blank" rel="noopener noreferrer">{{ content.name }}</a></p>
+    {% else %}
+        <p><a href="{{ ez_path(content) }}" target="_blank" rel="noopener noreferrer">{{ content.name }}</a></p>
+    {% endif %}
+</div>
+
+<div class="value-type">
+    {% if nglayouts_item is defined %}
+        <p>{{ nglayouts_value_type_name(nglayouts_item) }} ({{ content.innerContent.contentType.name }})</p>
+    {% else %}
+        <p>{{ content.innerContent.contentType.name }}</p>
+    {% endif %}
+</div>
