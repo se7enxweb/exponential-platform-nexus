@@ -51,7 +51,7 @@
         "se7enxweb/admin-ui-bundle": "^4.0",
         "netgen/ibexa-site-api": "^6.1.2",
         "netgen/ibexa-search-extra": "^3.2.1",
-        "netgen/information-collection-bundle": "^3.0@alpha",
+        "se7enxweb/information-collection-bundle": "^3.0.1",
         "netgen/ibexa-fieldtype-enhanced-link": "^1.1.2",
         "netgen/ibexa-admin-ui-extra": "^1.3.0",
         "netgen/toolbar": "^1.0",

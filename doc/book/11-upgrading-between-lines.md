@@ -52,7 +52,7 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 | Site bundle | `se7enxweb/site-bundle ^1.7.4` | `se7enxweb/site-bundle ~2.1.5.1` | `se7enxweb/site-bundle ~3.0.6` | `se7enxweb/site-bundle 5.0.x-dev` |
 | Demo data package | `master`: `se7enxweb/cjw-exponential-media-site-data ^1.0`; branch `1.0.0.x`: `netgen/media-site-data ~1.8.1` | `se7enxweb/media-site-data ~2.2.5.2` | `netgen/media-site-data ^3.3` | `netgen/media-site-data ^4.0` |
 | Migration bundle | `se7enxweb/ezmigrationbundle ^5.9.4` | `se7enxweb/ezmigrationbundle ^6.0` | `tanoconsulting/ibexa-migration-bundle` (locked 1.0.5) | `mrk-te/ibexa-migration-bundle2` (locked 3.0.0) |
-| Information collection | `netgen/information-collection-bundle ^1.9` | `se7enxweb/information-collection-bundle ^2.0` | `netgen/information-collection-bundle ^3.0@alpha` | `netgen/information-collection-bundle ^4.0@alpha` |
+| Information collection | `netgen/information-collection-bundle ^1.9` | `se7enxweb/information-collection-bundle ^2.0` | `se7enxweb/information-collection-bundle ^3.0.1` | `netgen/information-collection-bundle ^4.0@alpha` |
 
 Two warnings about the tag list. First, the repository also carries the tags of the upstream Netgen media site it was
 forked from (`1.0.0` to `3.1.6`, without a fourth position): those are not Nexus releases. Second, the 2.5
@@ -270,7 +270,7 @@ service names and the Netgen Layouts integration packages.
 | `se7enxweb/site-bundle ~2.1.5.1`, `se7enxweb/admin-ui-bundle ^3.0` | `se7enxweb/site-bundle ~3.0.6`, `se7enxweb/admin-ui-bundle ^4.0` |
 | `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` | `se7enxweb/site-legacy-bundle v2.0.0` (locks `se7enxweb/ibexa-legacy-bridge 4.x-dev`) |
 | `se7enxweb/ezmigrationbundle ^6.0` | `tanoconsulting/ibexa-migration-bundle` |
-| `se7enxweb/information-collection-bundle ^2.0` | `netgen/information-collection-bundle ^3.0@alpha` (no stable release for 4.x exists) |
+| `se7enxweb/information-collection-bundle ^2.0` | `se7enxweb/information-collection-bundle ^3.0.1` (the fork of `netgen/information-collection-bundle` 3.x, which it replaces; PhpSpreadsheet 5.x on PHP 8.2 to 8.5) |
 | | new: `netgen/ibexa-fieldtype-enhanced-link`, `netgen/ibexa-admin-ui-extra`, `netgen/toolbar`, `netgen/ibexa-scheduled-visibility` |
 
 ### Configuration renames
@@ -388,7 +388,7 @@ The last step changes the Symfony major version twice (5.4 to 7.4), renames ever
 | `netgen/tagsbundle` 5.x | `netgen/tagsbundle` 6.x |
 | `se7enxweb/site-bundle ~3.0.6` | `se7enxweb/site-bundle 5.0.x-dev` |
 | `tanoconsulting/ibexa-migration-bundle` | `mrk-te/ibexa-migration-bundle2` (`Kaliop\IbexaMigrationBundle\KaliopMigrationBundle`) |
-| `netgen/information-collection-bundle ^3.0@alpha` | `^4.0@alpha` |
+| `se7enxweb/information-collection-bundle ^3.0.1` | `netgen/information-collection-bundle ^4.0@alpha` |
 | `netgen/ibexa-fieldtype-enhanced-link ^1.1.2`, `netgen/ibexa-admin-ui-extra ^1.3.0`, `netgen/toolbar ^1.0`, `netgen/ibexa-scheduled-visibility ^1.0` | `^2.0` each |
 | `se7enxweb/site-legacy-bundle v2.0.0`, `se7enxweb/admin-ui-bundle ^4.0` | removed |
 
