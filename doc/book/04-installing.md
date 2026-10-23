@@ -555,7 +555,7 @@ type-hints a concrete CSRF token manager), and the head of its `5.0.x` branch fi
 `v5.0.10` still carry SQLite and PostgreSQL demo data in which every line break is stored as a backslash and an
 `n`: the image and rich text XML does not parse, the admin user cannot sign in, and the reindex fails. `v5.0.11`
 regenerates that data and makes `exponential:reindex` (and with it the install) fail when an indexing process fails.
-From `1.3.0.7` the lock file carries both fixes, and this step is not needed.
+From `1.3.0.8` the lock file carries both fixes, and this step is not needed. (`1.3.0.7` was tagged before its lock file was updated: it still needs this step.)
 
 (The behaviour of `v5.0.7` was read from its code, not reproduced for the book. If you cannot update, create the
 Layouts tables with the Layouts migrations, [chapter 7](07-databases.md#75-migrations), before you run the install.)

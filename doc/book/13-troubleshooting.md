@@ -316,10 +316,10 @@ ls -dt var/cache/*/ | head -3                                # the environments 
   ```
 
   A project made with `composer create-project` and never put under git has no `HEAD` to restore from. Take the
-  two files from the release you installed instead (here `1.3.0.7`):
+  two files from the release you installed instead (here `1.3.0.8`):
 
   ```bash
-  V=1.3.0.7
+  V=1.3.0.8
   curl -fsSL -o config/bundles.php https://raw.githubusercontent.com/se7enxweb/exponential-platform-nexus/$V/config/bundles.php
   curl -fsSL -o config/routes/netgen_layouts.yaml https://raw.githubusercontent.com/se7enxweb/exponential-platform-nexus/$V/config/routes/netgen_layouts.yaml
   php bin/console cache:clear

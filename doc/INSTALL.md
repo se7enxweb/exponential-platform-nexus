@@ -152,7 +152,7 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    create the Netgen Layouts tables (`v5.0.9` does), and its SQLite and PostgreSQL demo data store `\n` instead of
    line breaks, which breaks the images, the rich text, the sign-in of the admin user and the reindex (`v5.0.11`
    fixes it). The locked `se7enxweb/site-bundle` answers every page with an error 500 (fixed on its `5.0.x` branch).
-   From 1.3.0.7 the lock file carries the fixed versions ([chapter 4](book/04-installing.md#47-the-130x-line)).
+   From 1.3.0.8 the lock file carries the fixed versions (1.3.0.7 was tagged before its lock file was updated and still needs this step) ([chapter 4](book/04-installing.md#47-the-130x-line)).
 
    ```bash
    composer update se7enxweb/exponential-platform-dxp-core se7enxweb/site-bundle   # 1.3.0.6 and older only

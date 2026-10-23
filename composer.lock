@@ -11049,16 +11049,16 @@
         },
         {
             "name": "se7enxweb/exponential-platform-dxp-core",
-            "version": "v5.0.10",
+            "version": "v5.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/core.git",
-                "reference": "c619f8be03914580bb15f005f3365a1cc4ceb053"
+                "reference": "1adb2bac8c22e61c5dbccf7bdbf4bdc3439adb83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/core/zipball/c619f8be03914580bb15f005f3365a1cc4ceb053",
-                "reference": "c619f8be03914580bb15f005f3365a1cc4ceb053",
+                "url": "https://api.github.com/repos/se7enxweb/core/zipball/1adb2bac8c22e61c5dbccf7bdbf4bdc3439adb83",
+                "reference": "1adb2bac8c22e61c5dbccf7bdbf4bdc3439adb83",
                 "shasum": ""
             },
             "require": {
@@ -11176,7 +11176,7 @@
             "description": "7x Exponential Platform DXP (Stable; Open Source) core. Provides the Content Repository, its APIs, and the application's Symfony framework integration.",
             "homepage": "https://se7enx.com",
             "support": {
-                "source": "https://github.com/se7enxweb/core/tree/v5.0.10"
+                "source": "https://github.com/se7enxweb/core/tree/v5.0.11"
             },
             "funding": [
                 {
@@ -11204,7 +11204,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-23T12:37:16+00:00"
+            "time": "2026-10-23T14:01:54+00:00"
         },
         {
             "name": "se7enxweb/fieldtype-richtext",
@@ -11328,12 +11328,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/layouts-core.git",
-                "reference": "3ec0262b2d2c06054a1a7c618173246afb33d8f5"
+                "reference": "36ea036dc1368b78f01d1ad728f4b433eb1bd421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/layouts-core/zipball/3ec0262b2d2c06054a1a7c618173246afb33d8f5",
-                "reference": "3ec0262b2d2c06054a1a7c618173246afb33d8f5",
+                "url": "https://api.github.com/repos/se7enxweb/layouts-core/zipball/36ea036dc1368b78f01d1ad728f4b433eb1bd421",
+                "reference": "36ea036dc1368b78f01d1ad728f4b433eb1bd421",
                 "shasum": ""
             },
             "require": {
@@ -11444,9 +11444,9 @@
             ],
             "description": "Netgen Layouts core fork with PHP 8.4 private(set) Twig accessor compatibility.",
             "support": {
-                "source": "https://github.com/se7enxweb/layouts-core/tree/2.0.0-se7enx.1"
+                "source": "https://github.com/se7enxweb/layouts-core/tree/master"
             },
-            "time": "2026-04-20T00:39:15+00:00"
+            "time": "2026-10-23T13:44:29+00:00"
         },
         {
             "name": "se7enxweb/site-bundle",
