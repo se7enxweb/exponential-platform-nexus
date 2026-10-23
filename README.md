@@ -115,7 +115,7 @@ repository and is composed using the `se7enxweb/oss` Composer metapackage.
 | CMS Core | eZ Platform 3.3 Open Source Edition |
 | ORM / DBAL | Doctrine ORM + DBAL 3.x |
 | Template Engine | Twig 3.x |
-| Frontend Build | Webpack Encore + Yarn 1.x + **Node.js 18 or 20** |
+| Frontend Build | Webpack Encore + Yarn 1.x + **Node.js 20** |
 | Page Builder | Netgen Layouts 1.4.x |
 | Search | Legacy search (default) · Solr 8.x (optional) |
 | HTTP Cache | Symfony HttpCache (default) · Varnish 6/7 (optional) |
@@ -134,8 +134,8 @@ repository and is composed using the `se7enxweb/oss` Composer metapackage.
 - PHP extensions: `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv`,
   `pdo_sqlite` or `pdo_mysql` or `pdo_pgsql`
 - **Composer 2.x**
-- **Node.js 18 or 20** (via [nvm](https://github.com/nvm-sh/nvm) recommended)
-- **Yarn 1.22.x** (via corepack after `nvm use 18` or `nvm use 20`)
+- **Node.js 20** (via [nvm](https://github.com/nvm-sh/nvm) recommended)
+- **Yarn 1.22.x** (via corepack after `nvm use 20`)
 - A web server: Apache 2.4 or Nginx 1.18+ (or Symfony CLI for development)
 - A database: SQLite 3.35+ (dev), MySQL 8.0+, MariaDB 10.3+, or PostgreSQL 14+
 
@@ -145,7 +145,7 @@ repository and is composed using the `se7enxweb/oss` Composer metapackage.
 |---|---|---|
 | PHP | 8.0 | 8.5 |
 | Composer | 2.x | latest 2.x |
-| Node.js | **18** | **18 LTS or 20 LTS** (via nvm) |
+| Node.js | **20** | **20 LTS** (via nvm) |
 | Yarn | 1.x | 1.22.22 (corepack) |
 | MySQL | 8.0 | 8.0+ (utf8mb4) |
 | MariaDB | 10.3 | 10.6+ |
@@ -181,8 +181,8 @@ php bin/console exponential:install exponential-media --no-interaction
 chmod 660 var/data_dev.db
 chown $USER:www-data var/data_dev.db   # replace www-data with your FPM user
 
-# 6. Activate Node.js 18 (or 20)
-source ~/.nvm/nvm.sh && nvm use 18
+# 6. Activate Node.js 20
+source ~/.nvm/nvm.sh && nvm use 20
 corepack enable
 
 # 7. Install Node dependencies
@@ -241,7 +241,7 @@ installation and operations guide.
 - Netgen Admin UI (at `/ngadminui/`)
 - Legacy eZ Publish Admin UI (at `/legacy_admin/`)
 - Netgen Layouts Admin UI (at `/adminui/nglayouts/admin`)
-- Webpack Encore frontend build pipeline (Node.js 18 or 20, Yarn 1.x)
+- Webpack Encore frontend build pipeline (Node.js 20, Yarn 1.x)
 - SQLite zero-config database (default for development)
 - MySQL 8.0+ / MariaDB 10.3+ / PostgreSQL 14+ for production
 - Multi-siteaccess support
@@ -266,14 +266,14 @@ git checkout 1.1.0.x
 See [doc/sevenx/INSTALL.md](doc/sevenx/INSTALL.md) for the complete installation and
 operations guide covering:
 
-- Requirements (PHP 8.0+, Node.js 18/20, etc.)
+- Requirements (PHP 8.0+, Node.js 20, etc.)
 - Environment configuration (`.env.local` reference)
 - Database setup (SQLite, MySQL/MariaDB, PostgreSQL)
 - The `se7enxweb/site-bundle` 2.x fork — what it does and why
 - SQLite composite PK workaround (`fixSqliteCompositePrimaryKeys()`)
 - Web server setup (Apache 2.4, Nginx, Symfony CLI)
 - File & directory permissions
-- Frontend asset build (Webpack Encore / Yarn — **Node.js 18 or 20 required**)
+- Frontend asset build (Webpack Encore / Yarn — **Node.js 20 required**)
 - Admin UI asset build (`yarn ez`)
 - GraphQL schema generation
 - Search index initialisation
@@ -322,11 +322,11 @@ php bin/console doctrine:migration:status                         # migration st
 php bin/console doctrine:schema:validate                          # validate schema
 ```
 
-### Frontend / Asset Build (Node.js 18 or 20 required)
+### Frontend / Asset Build (Node.js 20 required)
 
 ```bash
-# Always activate Node.js 18 (or 20) first
-source ~/.nvm/nvm.sh && nvm use 18
+# Always activate Node.js 20 first
+source ~/.nvm/nvm.sh && nvm use 20
 corepack enable
 
 # Site frontend

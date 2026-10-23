@@ -432,7 +432,7 @@ SQLite also writes a journal file next to the database, which is why the directo
 ### Step 4: assets, keys, schema, cache
 
 ```bash
-nvm use                                   # .nvmrc: v18
+nvm use                                   # .nvmrc: v20
 corepack enable
 yarn install
 yarn build:prod                           # the site's CSS and JavaScript

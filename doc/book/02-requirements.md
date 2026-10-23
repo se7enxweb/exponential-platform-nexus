@@ -17,7 +17,7 @@ repository's own guides say something different, the chapter follows the code an
 | PHP extensions | see [2.3](#23-php-extensions); APCu is used by the shipped configuration | `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv` and a PDO driver | as 1.1.0.x | as 1.1.0.x |
 | Database | MySQL 5.7+ or MariaDB 10.2+ (utf8mb4); PostgreSQL per the guide; SQLite 3 on 1.0.0.x only | MySQL 8.0+, MariaDB 10.3+, PostgreSQL 14+ or SQLite 3.35+ | as 1.1.0.x | as 1.1.0.x |
 | Composer | 2.x | 2.x | 2.x | 2.x |
-| Node.js | `master`: 22 (`.nvmrc`); `1.0.0.x`: 20 (`.nvmrc`, the guide); both builds need the OpenSSL legacy provider on Node.js 17 and later | 18 or 20 (`engines`), `.nvmrc`: 18 | 18 (`engines`, `.nvmrc`) | 22 (`engines`, `.nvmrc`) |
+| Node.js | `master`: 22 (`.nvmrc`); `1.0.0.x`: 20 (`.nvmrc`, the guide); both builds need the OpenSSL legacy provider on Node.js 17 and later | 20 (`engines`, `.nvmrc`; Node.js 18 no longer installs the dependencies) | 18 (`engines`, `.nvmrc`) | 22 (`engines`, `.nvmrc`) |
 | Yarn | 1.x, needed by `composer install` itself | 1.22 | 1.22 | 1.22 |
 | Web server | Apache 2.4 or nginx with PHP-FPM; PHP's built-in server for development | Apache 2.4 or nginx 1.18+ with PHP-FPM; Symfony CLI for development | as 1.1.0.x | as 1.1.0.x |
 | Document root | `web/` | `public/` | `public/` | `public/` |
@@ -192,7 +192,7 @@ the production server ([chapter 9](09-frontend-and-themes.md)).
 |---|---|---|---|---|
 | 2.5 (`master`) | 22 (`.nvmrc`, added 2026-10-05, released in `v2.5.0.7`); the scripts of `package.json` set `NODE_OPTIONS=--openssl-legacy-provider`, which lets the old webpack 4 build run on current Node.js (7x built the assets on Node.js 25) | `.nvmrc`: `v22`; no `engines`. The `v2.5.0.6` release has no `.nvmrc`, its guide says Node.js 18 or 20, and its scripts do **not** set the OpenSSL option | 1.x; npm works for the site build | `@symfony/webpack-encore ^0.27.0` (webpack 4) |
 | 1.0.0.x | 20 (`nvm install 20` in the guide released with `1.0.0.9`) | `.nvmrc`: `v20` (added 2026-10-05, released in `1.0.0.11`); no `engines`. The scripts set the OpenSSL option, as on `master` | 1.x | as 2.5 |
-| 1.1.0.x | 18 or 20 | `"engines": {"node": "^18 \|\| ^20"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
+| 1.1.0.x | 20 | `"engines": {"node": "^20"}`, `.nvmrc`: `v20` (Node.js 18 stopped working: a dependency now requires 20 or newer) | 1.22 via corepack | Webpack Encore |
 | 1.2.0.x | 18 | `"engines": {"node": "^18"}`, `.nvmrc`: `v18` | 1.22 via corepack | Webpack Encore |
 | 1.3.0.x | 22 | `"engines": {"node": "^22"}`, `.nvmrc`: `v22` | 1.22 via corepack | Webpack Encore with `@ibexa/frontend-config` |
 

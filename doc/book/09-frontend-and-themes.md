@@ -65,8 +65,8 @@ installation has in `node_modules/`.
 | | 1.0.0.x (and `master`) | 1.1.0.x | 1.2.0.x | 1.3.0.x | 1.3.0.x reference install |
 |---|---|---|---|---|---|
 | Base | eZ Platform 2.5, Symfony 3.4 | eZ Platform 3.3, Symfony 5.4 | Ibexa OSS 4.6, Symfony 5.4 | Ibexa v5, Symfony 7.4 | |
-| `.nvmrc` | `v22` on `master`, `v20` on the `1.0.0.x` branch (both added 5 October 2026) | `v18` | `v18` | `v22` | `v22` |
-| `engines.node` in `package.json` | not set (the `1.0.0.x` branch lists the npm package `node` `^25.6.1` as a dependency, which is not a version check) | `^18 \|\| ^20` | `^18` | `^22` | Node.js 22.22.2 installed |
+| `.nvmrc` | `v22` on `master`, `v20` on the `1.0.0.x` branch (both added 5 October 2026) | `v20` | `v18` | `v22` | `v22` |
+| `engines.node` in `package.json` | not set (the `1.0.0.x` branch lists the npm package `node` `^25.6.1` as a dependency, which is not a version check) | `^20` | `^18` | `^22` | Node.js 22.22.2 installed |
 | Yarn | 1.x | 1.x | 1.x | 1.x | 1.22.22 |
 | Lock file in git | `package-lock.json` | none | none | `yarn.lock` | `yarn.lock` |
 | `@symfony/webpack-encore` | `^0.27.0` (webpack 4) | `^3.0.0` (webpack 5) | `^3.0.0` (webpack 5) | `^5.1.0` (webpack `^5.99.7`) | 5.3.1, webpack 5.106.2 |

@@ -101,19 +101,19 @@ The SQLite database file (`var/data_dev.db` in dev, `var/data.db` in prod) must 
 
 ### Node.js & Yarn
 
-- [Node.js](https://nodejs.org/en/download/) **18 or 20** — managed via
+- [Node.js](https://nodejs.org/en/download/) **20** — managed via
   [nvm](https://github.com/nvm-sh/nvm) (strongly recommended)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install) **1.22.x** — activated via
-  [corepack](https://github.com/nodejs/corepack) `enable` after `nvm use 18` or `nvm use 20`
+  [corepack](https://github.com/nodejs/corepack) `enable` after `nvm use 20`
 
-Installing nvm + Node.js 18:
+Installing nvm + Node.js 20:
 
 ```bash
 # Universal installer — Linux, macOS, BSD, WSL
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 source ~/.nvm/nvm.sh      # or restart your shell
-nvm install 18
-nvm use 18
+nvm install 20
+nvm use 20
 corepack enable            # activates Yarn 1.22.x
 ```
 
@@ -144,7 +144,7 @@ sudo mv composer.phar /usr/local/bin/composer
 |---|---|---|
 | PHP | 8.0 | 8.5 |
 | Composer | 2.x | latest 2.x |
-| Node.js | **18** | **18 LTS or 20 LTS** (via nvm) |
+| Node.js | **20** | **20 LTS** (via nvm) |
 | Yarn | 1.x | 1.22.22 (corepack) |
 | MySQL | 8.0 | 8.0+ (utf8mb4) |
 | MariaDB | 10.3 | 10.6+ |
@@ -220,7 +220,7 @@ project-root/
 │   ├── mysql/media_data.sql        Demo seed data (MySQL)
 │   └── postgresql/media_data.sql   Demo seed data (PostgreSQL)
 ├── composer.json                   Declares se7enxweb/oss ~3.3.0
-├── package.json                    Declares Node.js 18 or 20 engine requirement
+├── package.json                    Declares Node.js 20 engine requirement
 └── webpack.config.js               Webpack Encore config (ez + project builds)
 ```
 
@@ -378,10 +378,10 @@ See [Section 6](#6-database-setup).
 
 See [Section 8](#8-file--directory-permissions).
 
-#### Step 5 — Build frontend assets (Node.js 18 or 20 required)
+#### Step 5 — Build frontend assets (Node.js 20 required)
 
 ```bash
-source ~/.nvm/nvm.sh && nvm use 18    # REQUIRED — do not skip this
+source ~/.nvm/nvm.sh && nvm use 20    # REQUIRED — do not skip this
 corepack enable
 yarn install
 yarn build:prod
@@ -816,10 +816,10 @@ chmod -R 775 var/ public/var/
 
 ## 9. Frontend Assets (Site CSS/JS)
 
-The project uses Webpack Encore + Yarn. **Node.js 18 or 20 is required.**
+The project uses Webpack Encore + Yarn. **Node.js 20 is required.**
 
 ```bash
-source ~/.nvm/nvm.sh && nvm use 18    # REQUIRED
+source ~/.nvm/nvm.sh && nvm use 20    # REQUIRED
 corepack enable                        # activates Yarn 1.22.x
 ```
 
@@ -878,7 +878,7 @@ configuration files needed by `webpack.config.ez.js`.
 ### Build Admin UI assets — production
 
 ```bash
-nvm use 18 && yarn ez   # builds eZ/Ibexa admin UI assets
+nvm use 20 && yarn ez   # builds eZ/Ibexa admin UI assets
 ```
 
 ### What changes require an Admin UI asset rebuild
@@ -1048,7 +1048,7 @@ php bin/console doctrine:migration:migrate --allow-no-migration --env=prod
 php bin/console assets:install --symlink --relative public --env=prod
 
 # 5. Rebuild eZ Platform Admin UI assets (if admin-ui bundle updated)
-source ~/.nvm/nvm.sh && nvm use 18 && yarn ez   # builds eZ/Ibexa admin UI assets
+source ~/.nvm/nvm.sh && nvm use 20 && yarn ez   # builds eZ/Ibexa admin UI assets
 
 # 6. Rebuild frontend site assets (if theme/JS/CSS changed)
 yarn build:prod
@@ -1213,8 +1213,8 @@ chmod -R a+rX var/cache/
 
 ```bash
 # Ensure correct Node version:
-source ~/.nvm/nvm.sh && nvm use 18
-node -v    # must show 18.x.x
+source ~/.nvm/nvm.sh && nvm use 20
+node -v    # must show 20.x.x
 
 # Clear and reinstall:
 rm -rf node_modules
@@ -1637,7 +1637,7 @@ php bin/console debug:config ezpublish                             # dump eZ con
 
 ```bash
 # Node version management — REQUIRED FIRST
-source ~/.nvm/nvm.sh && nvm use 18    # activate Node.js 18 (or nvm use 20)
+source ~/.nvm/nvm.sh && nvm use 20    # activate Node.js 20
 corepack enable                        # activates Yarn 1.22.x
 
 # Dependencies

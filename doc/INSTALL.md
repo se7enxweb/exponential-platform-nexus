@@ -13,7 +13,7 @@ the options and says what can go wrong. For a production site, read the book's c
 | Line | Branch | Platform | Symfony | PHP | Legacy kernel | Node.js |
 |---|---|---|---|---|---|---|
 | 2.5 generation (1.0.0.x) | `master`, also `1.0.0.x` | eZ Platform 2.5 | 3.4 | 8.1 or newer | yes | 22 on `master`, 20 on `1.0.0.x` (`.nvmrc`); the scripts set `NODE_OPTIONS=--openssl-legacy-provider` |
-| 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 18 or 20 |
+| 1.1.0.x | `1.1.0.x` | Platform 3.3 | 5.4 | 8.0 or newer | yes | 20 |
 | 1.2.0.x | `1.2.0.x` | Ibexa OSS 4.6 | 5.4 | 8.2 or newer | yes | 18 |
 | 1.3.0.x | `1.3.0.x` | Platform v5 | 7.4 | 8.4 or newer | no | 22 |
 

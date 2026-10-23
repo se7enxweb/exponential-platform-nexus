@@ -43,7 +43,7 @@ the branch named, on 5 October 2026. Old product names appear only where they na
 | Platform | eZ Platform 2.5 (`se7enxweb/ezpublish-kernel ~7.5.40`) | Platform 3.3 (`se7enxweb/oss ~3.3.0`, `se7enxweb/ezplatform-kernel ~1.3`) | Ibexa OSS 4.6 (`se7enxweb/oss ~4.6.0`) | Platform v5 (`se7enxweb/exponential-platform-dxp`, locked kernel `se7enxweb/exponential-platform-dxp-core v5.0.7`) |
 | Symfony | 3.4 (`se7enxweb/symfony v3.4.55`) | 5.4 | 5.4 | 7.4 |
 | PHP (`composer.json`) | `^7.1.3 \|\| ... \|\| ^8.6`; in practice 8.1 or newer, because the legacy kernel requires `^8.1` | `^8.0` | `>=8.2` | `>=8.4` |
-| Node.js | `.nvmrc` (added 2026-10-05): `v22` on `master`, `v20` on the branch `1.0.0.x`; no `engines`; Webpack 4 with `NODE_OPTIONS=--openssl-legacy-provider` in every script | `.nvmrc` `v18`, `engines` `^18 \|\| ^20` | `.nvmrc` `v18`, `engines` `^18` | `.nvmrc` `v22`, `engines` `^22` |
+| Node.js | `.nvmrc` (added 2026-10-05): `v22` on `master`, `v20` on the branch `1.0.0.x`; no `engines`; Webpack 4 with `NODE_OPTIONS=--openssl-legacy-provider` in every script | `.nvmrc` `v20`, `engines` `^20` | `.nvmrc` `v18`, `engines` `^18` | `.nvmrc` `v22`, `engines` `^22` |
 | Project layout | `app/`, `src/AppBundle/`, `web/` | `config/`, `src/` (`App\`), `templates/`, `public/` | as 1.1 | as 1.1 |
 | Legacy kernel | yes: `se7enxweb/exponential ^6.0.12`, `se7enxweb/legacy-bridge ^2.1` | yes: `se7enxweb/legacy-bridge ^3.0`, `se7enxweb/site-legacy-bundle ^2.0` | yes: `se7enxweb/site-legacy-bundle v2.0.0`, which locks `se7enxweb/ibexa-legacy-bridge 4.x-dev` and `se7enxweb/exponential dev-main`; the legacy bundle is registered in `config/bundles.php` | **no** |
 | Netgen Layouts | 1.4 (`se7enxweb/layouts-ezplatform ^1.4.11`) | 1.4 (`netgen/layouts-ezplatform ~1.4.0`) | 1.4 (`netgen/layouts-ibexa ~1.4.0`, locked `layouts-core 1.4.13`) | 2.0 (`netgen/layouts-ibexa ~2.0.0`, locked fork `se7enxweb/layouts-core`) |
@@ -250,7 +250,7 @@ to the location the 1.1.0.x project uses for them (the `ngsite:symlink:legacy` a
 ### Front end
 
 The site theme moves from `src/AppBundle/Resources/` to `assets/`, Webpack 4 with Encore 0.27 to the 1.1.0.x
-toolchain, and Node.js to version 18 or 20 (`.nvmrc` says `v18`). The admin interface assets are built with the
+toolchain, and Node.js to version 20 (`.nvmrc` says `v20`). The admin interface assets are built with the
 translation dump and `yarn ez` (`webpack.config.ez.js`), which `make ibexa-assets` runs since `v1.1.0.8`. See
 [chapter 9](09-frontend-and-themes.md).
 
