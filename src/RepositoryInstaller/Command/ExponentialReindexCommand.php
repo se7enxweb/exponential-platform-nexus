@@ -26,7 +26,13 @@ final class ExponentialReindexCommand extends Command
         $this
             ->setName('exponential:reindex')
             ->setDescription('Re-indexes the search engine (delegates to ibexa:reindex).')
-            ->addOption('siteaccess', null, InputOption::VALUE_OPTIONAL, 'SiteAccess to use');
+            ->addOption('siteaccess', null, InputOption::VALUE_OPTIONAL, 'SiteAccess to use')
+            ->addOption(
+                'processes',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Passed on to ibexa:reindex: number of child processes, "auto", or "1" for a single process',
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,6 +48,9 @@ final class ExponentialReindexCommand extends Command
         $args = ['command' => 'ibexa:reindex'];
         if ($siteaccess = $input->getOption('siteaccess')) {
             $args['--siteaccess'] = $siteaccess;
+        }
+        if (null !== ($processes = $input->getOption('processes'))) {
+            $args['--processes'] = $processes;
         }
 
         $childInput = new ArrayInput($args);

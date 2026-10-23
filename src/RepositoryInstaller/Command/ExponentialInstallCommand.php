@@ -188,6 +188,12 @@ final class ExponentialInstallCommand extends Command
             $command .= \sprintf(' --siteaccess=%s', $siteaccess);
         }
 
+        // SQLite allows one writer at a time: the parallel child processes ibexa:reindex starts
+        // by default fail with "database is locked" and leave most content unindexed.
+        if ($this->connection->getDatabasePlatform() instanceof SqlitePlatform) {
+            $command .= ' --processes=1';
+        }
+
         $this->executeCommand($output, $command);
     }
 
