@@ -1,7 +1,6 @@
 const bundles = require('./var/encore/ez.config.js');
 const eZConfigManager = require('./ez.webpack.config.manager.js');
 const configManagers = require('./var/encore/ez.config.manager.js');
-const configSetups = require('./var/encore/ez.config.setup.js');
 const path = require('path');
 
 module.exports = (Encore) => {
@@ -18,12 +17,6 @@ module.exports = (Encore) => {
         .enableSassLoader()
         .enableReactPreset()
         .enableSingleRuntimeChunk();
-
-    configSetups.forEach((configSetupPath) => {
-        const setupConfig = require(configSetupPath);
-
-        setupConfig(Encore);
-    });
 
     bundles.forEach((configPath) => {
         const addEntries = require(configPath);
