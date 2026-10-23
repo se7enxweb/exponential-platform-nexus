@@ -63,7 +63,7 @@
         "prettier": "^2.5.0",
         "raw-loader": "^4.0.1",
         "regenerator-runtime": "^0.13.2",
-        "sass": "^1.63.4",
+        "sass": "~1.99.0",
         "sass-lint": "^1.12.1",
         "sass-loader": "^13.0.0",
         "style-loader": "^2.0.0",
@@ -77,6 +77,9 @@
         "photoswipe": "^5.3.4",
         "popper.js": "^1.15.0",
         "swiper": "^11.0.2"
+    },
+    "resolutions": {
+        "@types/minimatch": "5.1.2"
     },
     "engines": {
         "node": "^18"
