@@ -315,7 +315,19 @@ ls -dt var/cache/*/ | head -3                                # the environments 
   php bin/console cache:clear
   ```
 
-  Check `git diff config/` after every Composer run that touches a `layouts-*` package.
+  A project made with `composer create-project` and never put under git has no `HEAD` to restore from. Take the
+  two files from the release you installed instead (here `1.3.0.7`):
+
+  ```bash
+  V=1.3.0.7
+  curl -fsSL -o config/bundles.php https://raw.githubusercontent.com/se7enxweb/exponential-platform-nexus/$V/config/bundles.php
+  curl -fsSL -o config/routes/netgen_layouts.yaml https://raw.githubusercontent.com/se7enxweb/exponential-platform-nexus/$V/config/routes/netgen_layouts.yaml
+  php bin/console cache:clear
+  ```
+
+  Check after every Composer run that touches a `layouts-*` package: `grep -cE 'NetgenLayouts(Admin)?Bundle::class'
+  config/bundles.php` must print 2 and `config/routes/netgen_layouts.yaml` must exist (or `git diff config/` in a
+  clone).
 
 ### `Route "nglayouts_app" not found` (1.3.0.x)
 

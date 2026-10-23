@@ -148,11 +148,14 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On 1.1.0.x and 1.2.0.x the
    `exponential-media` type ships its extra schema for SQLite only; on MySQL or PostgreSQL use SQLite for the demo or
    the `netgen-media` type ([chapter 4](book/04-installing.md#45-the-110x-line)).
-2. Install the demo content. On 1.3.0.x update the core package first: the locked `v5.0.7` does not create the Netgen
-   Layouts tables, `v5.0.9` does ([chapter 4](book/04-installing.md#47-the-130x-line)).
+2. Install the demo content. On 1.3.0.6 and older, update two packages first. The locked core `v5.0.7` does not
+   create the Netgen Layouts tables (`v5.0.9` does), and its SQLite and PostgreSQL demo data store `\n` instead of
+   line breaks, which breaks the images, the rich text, the sign-in of the admin user and the reindex (`v5.0.11`
+   fixes it). The locked `se7enxweb/site-bundle` answers every page with an error 500 (fixed on its `5.0.x` branch).
+   From 1.3.0.7 the lock file carries the fixed versions ([chapter 4](book/04-installing.md#47-the-130x-line)).
 
    ```bash
-   composer update se7enxweb/exponential-platform-dxp-core      # 1.3.0.x only
+   composer update se7enxweb/exponential-platform-dxp-core se7enxweb/site-bundle   # 1.3.0.6 and older only
    php bin/console exponential:install exponential-media --no-interaction
    ```
 
@@ -169,8 +172,17 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    php bin/console cache:clear
    ```
 
-4. On 1.3.0.x, check that Composer's recipes did not remove the Netgen Layouts bundles:
-   `git diff config/bundles.php config/routes/` must show no removed `NetgenLayouts*` lines.
+4. On 1.3.0.x, check that Composer's recipes did not remove the Netgen Layouts bundles. A project made with
+   `composer create-project` has no `.git`, so check the files themselves:
+
+   ```bash
+   grep -cE 'NetgenLayouts(Admin)?Bundle::class' config/bundles.php     # must print 2
+   ls config/routes/netgen_layouts.yaml                                 # must exist
+   ```
+
+   In a clone, `git diff config/bundles.php config/routes/` must show no removed `NetgenLayouts*` lines. To be able to
+   use `git diff` after later Composer runs, put a new `create-project` directory under version control at once:
+   `git init && git add -A && git commit -m "Initial import"`.
 5. Make `var/` and `public/var/` writable for the web server's user, as above.
 
 The document root is `public/`. The siteaccesses are `fh_eng` (default), `bold_eng`, `bold_ger` and the admin

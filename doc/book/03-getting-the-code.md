@@ -247,10 +247,15 @@ recipe and remove `NetgenLayoutsBundle`, `NetgenLayoutsAdminBundle` and `config/
 of the line calls this "the single most common source of breakage". After any Composer run on 1.3.0.x, check:
 
 ```bash
-git diff --stat config/bundles.php config/routes/
+grep -cE 'NetgenLayouts(Admin)?Bundle::class' config/bundles.php     # must print 2
+ls config/routes/netgen_layouts.yaml                                 # must exist
+git diff --stat config/bundles.php config/routes/                    # in a clone, or after git init
 ```
 
-and restore the files from git if those entries disappeared ([chapter 13](13-troubleshooting.md)).
+and restore the files if those entries disappeared ([chapter 13](13-troubleshooting.md)). A directory made with
+`composer create-project` has no `.git`, so `git diff` has nothing to compare against there. Put it under version
+control right after the command (`git init && git add -A && git commit -m "Initial import"`), and the `git diff`
+check and the restore from git work as in a clone.
 
 ## 3.5 What Composer runs after installing
 

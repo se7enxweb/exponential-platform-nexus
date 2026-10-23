@@ -546,9 +546,16 @@ PostgreSQL equivalent). `v5.0.9`, released on 2026-10-05, looks in both places a
 that one package before the first install:
 
 ```bash
-composer update se7enxweb/exponential-platform-dxp-core
-composer show se7enxweb/exponential-platform-dxp-core | grep -E '^versions'    # versions : * v5.0.9
+composer update se7enxweb/exponential-platform-dxp-core se7enxweb/site-bundle
+composer show se7enxweb/exponential-platform-dxp-core | grep -E '^versions'    # versions : * v5.0.11
 ```
+
+Name `se7enxweb/site-bundle` too: the commit the lock of `1.3.0.6` pins answers every page with an error 500 (it
+type-hints a concrete CSRF token manager), and the head of its `5.0.x` branch fixes that. Core `v5.0.9` and
+`v5.0.10` still carry SQLite and PostgreSQL demo data in which every line break is stored as a backslash and an
+`n`: the image and rich text XML does not parse, the admin user cannot sign in, and the reindex fails. `v5.0.11`
+regenerates that data and makes `exponential:reindex` (and with it the install) fail when an indexing process fails.
+From `1.3.0.7` the lock file carries both fixes, and this step is not needed.
 
 (The behaviour of `v5.0.7` was read from its code, not reproduced for the book. If you cannot update, create the
 Layouts tables with the Layouts migrations, [chapter 7](07-databases.md#75-migrations), before you run the install.)
@@ -690,6 +697,8 @@ It takes a few minutes. Run it as the PHP-FPM user, because it writes into `publ
 | `Unable to find file ".../config/app/server/prod.yaml"` (or similar) | `SERVER_ENVIRONMENT` names a file that does not exist: the releases `v1.2.0.0` and `1.3.0.5` ship only `dev` (`v1.2.0.1` and `1.3.0.6` have `prod`), and any other name needs its own file | keep `SERVER_ENVIRONMENT=dev`, take `prod.yaml` from the branch, or copy `config/app/server/dev.yaml` and `dev/` to your own name and adapt the IDs and domains |
 | `Environment variable not found: "APP_DOMAIN"` (1.1.0.x) | `SERVER_ENVIRONMENT=prod` with the `.env` of `v1.1.0.7` | define `APP_DOMAIN`, `MAIL_FROM`, `MAIL_TO`, `GTM_CODE` and `TEST_DOMAIN` in `.env.local` |
 | `no such table: nglayouts_...` during `exponential:install` (1.3.0.x) | the locked core `v5.0.7` did not create the Layouts tables | `composer update se7enxweb/exponential-platform-dxp-core`, then install again ([4.7](#47-the-130x-line)) |
+| Every page answers 500 on 1.3.0.6 (`SetCsrfEnabledEventListener`) | the locked `se7enxweb/site-bundle` commit type-hints a concrete CSRF token manager | `composer update se7enxweb/site-bundle` ([4.7](#47-the-130x-line)) |
+| SQLite or PostgreSQL: images and rich text broken, admin cannot sign in, the reindex children fail | core `v5.0.10` or older stores `\n` instead of line breaks in the demo data | core `v5.0.11` or newer, then install again |
 | Bold Agency (`bold_eng`) shows the whole content tree (1.1.0.x) | the server files set its tree root to 2 | set `ngsite.bold_group.locations.tree_root.id: 386` |
 | The 2.5 site answers `404` at `/` or the container reports a non-existent `tree_root.id` parameter | the tree root is 2 or not defined | `ngsite.default.locations.tree_root.id: 168` in `app/config/parameters.yml` ([4.3](#43-the-25-line-master-v250x)) |
 | `attempt to write a readonly database` | the SQLite file or `var/` belongs to the user who ran the install | give `var/` and the file to the PHP-FPM user |
@@ -715,8 +724,8 @@ empty.
   (PostgreSQL); nothing to do for SQLite.
 - [ ] `parameters.yml` (2.5 generation: the `env(DATABASE_*)` values, the tree root 168 for the CJW content) or
   `.env.local` (newer lines: `DATABASE_URL`, `APP_ENV`) has your values and a new secret.
-- [ ] On 1.3.0.x, `se7enxweb/exponential-platform-dxp-core` is `v5.0.9` or newer before the install, and the
-  `nglayouts_*` tables exist after it.
+- [ ] On 1.3.0.x, `se7enxweb/exponential-platform-dxp-core` is `v5.0.11` or newer before the install (`v5.0.9` on
+  MySQL), and the `nglayouts_*` tables exist after it.
 - [ ] The install command finished without an error and the search index was built.
 - [ ] On the 2.5 generation the legacy symlinks exist.
 - [ ] Site assets and admin assets are built; on 1.1.0.x to 1.3.0.x the JWT keys and the GraphQL schema exist.
