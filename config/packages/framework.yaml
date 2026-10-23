@@ -6,7 +6,9 @@ framework:
     # read from the TRUSTED_PROXIES environment variable that .env and the vhost examples set
     # (comma separated IPs or CIDR ranges). Unset or empty trusts none. X-Forwarded-Host stays
     # untrusted, as in the Platform front controllers this setting replaces.
-    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
+    # The string: prefix keeps the value a string: on Symfony 5.4 the default: processor alone
+    # may return an array, which the trusted_proxies node does not accept.
+    trusted_proxies: '%env(string:default::TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
 
     csrf_protection: true
