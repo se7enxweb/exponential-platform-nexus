@@ -9,6 +9,7 @@ use App\DependencyInjection\CompilerPass;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -35,6 +36,8 @@ final class Kernel extends BaseKernel
     {
         $container->addCompilerPass(new CompilerPass\XslRegisterPass());
         $container->addCompilerPass(new CompilerPass\ExponentialInstallerTagPass());
+        // after NetgenLayoutsEzPlatformSiteApiBundle's own pass, which sets the Site API 3 name
+        $container->addCompilerPass(new CompilerPass\LayoutsSiteApiContentViewParameterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -10);
     }
 
     public function boot()
