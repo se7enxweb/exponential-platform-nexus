@@ -62,6 +62,11 @@ git checkout 1.3.0.6            # the newest tag of the line: git tag -l '1.3.0.
 composer install                # the 2.5 generation: composer install --keep-vcs --ignore-platform-reqs
 ```
 
+**PHP 8.0 on the 1.1.0.x line.** The line installs on PHP 8.0, but every Twig 3 release that still supports PHP 8.0
+has published security advisories, and Composer 2.10 or later refuses to install a package with advisories. On PHP
+8.0 run Composer with `COMPOSER_NO_SECURITY_BLOCKING=1` (for example `COMPOSER_NO_SECURITY_BLOCKING=1 composer
+install`); you then run Twig with those advisories. PHP 8.1 or later installs without the switch and is recommended.
+
 Always name the branch: a clone without `-b` gives `master`, the 2.5 generation. Run Composer with the same PHP
 version the site will use. The Composer scripts publish assets and, on the lines with the legacy kernel, install it
 into `ezpublish_legacy/` and link the project's legacy files into it.
