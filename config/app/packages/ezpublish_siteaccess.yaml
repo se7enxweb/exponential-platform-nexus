@@ -48,6 +48,12 @@ ezpublish:
             content:
                 tree_root:
                     location_id: '%ngsite.fh_group.locations.tree_root.id%'
+            # site-bundle 2.x names site_info only for the default scope; each site group
+            # needs its own, or every site shows the menus and branding of the default one
+            ng_site_api:
+                named_objects:
+                    locations:
+                        site_info: '%ngsite.fh_group.locations.site_info.id%'
             session:
                 name: eZSESSID
         bold_group:
@@ -58,6 +64,10 @@ ezpublish:
             content:
                 tree_root:
                     location_id: '%ngsite.bold_group.locations.tree_root.id%'
+            ng_site_api:
+                named_objects:
+                    locations:
+                        site_info: '%ngsite.bold_group.locations.site_info.id%'
             session:
                 name: eZSESSID
         fh_eng:
