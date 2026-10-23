@@ -27,7 +27,6 @@ netgen_site_legacy:
                 site.ini:
                     ExtensionSettings/ActiveExtensions:
                         - app
-                        - nglayouts
                         - ezplatformsearch
                         - ezrichtext
                         - ngadminui
@@ -47,7 +46,6 @@ netgen_site_legacy:
                         - ezgmaplocation
                         - ezdemo
                         - ezoe
-                        - ngremotemedia
 
             injected_settings:
                 content.ini:
