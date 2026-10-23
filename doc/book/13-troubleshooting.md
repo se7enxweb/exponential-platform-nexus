@@ -82,6 +82,20 @@ ls -dt var/cache/*/ | head -3                                # the environments 
   on Plesk, for example). Use `--ignore-platform-reqs` only to get past a package that declares a narrower range than
   it really supports, never to install a line on a PHP version below its floor: the code then fails at run time.
 
+### `Invalid type for path "framework.trusted_proxies"` (1.1.0.x, `v1.1.0.8`)
+
+- **Cause:** the release `v1.1.0.8` reads `'%env(default::TRUSTED_PROXIES)%'`; Symfony 5.4 accepts only a scalar
+  there, and the Composer scripts stop at the first console command.
+- **Fix:** in `config/packages/ezpublish.yaml` write `trusted_proxies: '%env(string:default::TRUSTED_PROXIES)%'`, then
+  run `composer install` again. Releases after `v1.1.0.8` ship that line.
+
+### `phpoffice/phpspreadsheet ... require php >=7.4.0 <8.5.0` on PHP 8.5 (1.1.0.x)
+
+- **Cause:** `se7enxweb/information-collection-bundle` up to `v2.0.3` allows only `phpoffice/phpspreadsheet ^1.14`,
+  whose releases without known advisories stop below PHP 8.5.
+- **Fix:** `se7enxweb/information-collection-bundle` `v2.0.4` or newer also allows the 2.x to 5.x releases. Until it
+  is installed, run Composer with PHP 8.4 or older.
+
 ### `Class "..." not found` after `composer update`
 
 - **Cause:** a stale class map or a stale container in `var/cache/`.
@@ -168,12 +182,12 @@ ls -dt var/cache/*/ | head -3                                # the environments 
 
 ### `The engine "node" is incompatible with this module` (1.1.0.x to 1.3.0.x)
 
-- **Cause:** `package.json` declares `engines`: `^18 || ^20` (1.1.0.x), `^18` (1.2.0.x), `^22` (1.3.0.x), and Yarn
+- **Cause:** `package.json` declares `engines`: `^20` (1.1.0.x), `^18` (1.2.0.x), `^22` (1.3.0.x), and Yarn
   enforces it.
 - **Fix:** use the version in `.nvmrc`:
 
   ```bash
-  nvm install && nvm use       # reads .nvmrc: v22 on master, v20 on the 1.0.0.x branch, v18 on 1.1.0.x and 1.2.0.x, v22 on 1.3.0.x
+  nvm install && nvm use       # reads .nvmrc: v22 on master, v20 on the 1.0.0.x branch, v20 on 1.1.0.x, v18 on 1.2.0.x, v22 on 1.3.0.x
   node --version
   ```
 
