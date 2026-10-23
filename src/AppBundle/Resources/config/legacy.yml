@@ -86,7 +86,6 @@ netgen_site_legacy:
                         - nglayouts
                         - ezplatformsearch
                         - ezrichtext
-                        - jactools
                         - ngadminui
                         - ngsymfonytools
                         - ngsite
@@ -105,13 +104,9 @@ netgen_site_legacy:
                         - ezdemo
                         - ezoe
                         - ezie
-                        - jac_admin
-                        - cjw_newsletter
-                        - cjw_osm_proxy
-                        - jac_piwik
-                        - jacmultihandler
-                        - cjw_pdfjs
-                        - cjw_tmv_veranstdb
+                        # Project extensions of the JAC Example site that are not part of this distribution;
+                        # add them back here when they are installed: jactools, jac_admin, cjw_newsletter,
+                        # cjw_osm_proxy, jac_piwik, jacmultihandler, cjw_pdfjs, cjw_tmv_veranstdb.
 
             injected_settings:
                 ezoe_attributes.ini:
