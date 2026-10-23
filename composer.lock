@@ -11049,16 +11049,16 @@
         },
         {
             "name": "se7enxweb/exponential-platform-dxp-core",
-            "version": "v5.0.7",
+            "version": "v5.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/core.git",
-                "reference": "fe5874343d6651405cc6d4848f042406a27cf6ad"
+                "reference": "c619f8be03914580bb15f005f3365a1cc4ceb053"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/core/zipball/fe5874343d6651405cc6d4848f042406a27cf6ad",
-                "reference": "fe5874343d6651405cc6d4848f042406a27cf6ad",
+                "url": "https://api.github.com/repos/se7enxweb/core/zipball/c619f8be03914580bb15f005f3365a1cc4ceb053",
+                "reference": "c619f8be03914580bb15f005f3365a1cc4ceb053",
                 "shasum": ""
             },
             "require": {
@@ -11176,7 +11176,7 @@
             "description": "7x Exponential Platform DXP (Stable; Open Source) core. Provides the Content Repository, its APIs, and the application's Symfony framework integration.",
             "homepage": "https://se7enx.com",
             "support": {
-                "source": "https://github.com/se7enxweb/core/tree/v5.0.7"
+                "source": "https://github.com/se7enxweb/core/tree/v5.0.10"
             },
             "funding": [
                 {
@@ -11204,7 +11204,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-04-20T01:45:55+00:00"
+            "time": "2026-10-23T12:37:16+00:00"
         },
         {
             "name": "se7enxweb/fieldtype-richtext",
@@ -11454,12 +11454,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/site-bundle.git",
-                "reference": "a825b54c8c9329bedfff9ff1728680dcbd6d85c6"
+                "reference": "1d114d833174aa9fe132616f877ec7979394befb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/site-bundle/zipball/a825b54c8c9329bedfff9ff1728680dcbd6d85c6",
-                "reference": "a825b54c8c9329bedfff9ff1728680dcbd6d85c6",
+                "url": "https://api.github.com/repos/se7enxweb/site-bundle/zipball/1d114d833174aa9fe132616f877ec7979394befb",
+                "reference": "1d114d833174aa9fe132616f877ec7979394befb",
                 "shasum": ""
             },
             "require": {
@@ -11487,6 +11487,9 @@
             },
             "conflict": {
                 "netgen/layouts-ibexa": "<2.0"
+            },
+            "replace": {
+                "netgen/site-bundle": "*"
             },
             "require-dev": {
                 "netgen/layouts-ibexa": "^2.0",
@@ -11530,7 +11533,7 @@
                 "site-bundle"
             ],
             "support": {
-                "source": "https://github.com/se7enxweb/site-bundle/tree/v5.0.2"
+                "source": "https://github.com/se7enxweb/site-bundle/tree/5.0.x"
             },
             "funding": [
                 {
@@ -11558,7 +11561,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-04-14T06:31:31+00:00"
+            "time": "2026-04-20T03:33:49+00:00"
         },
         {
             "name": "se7enxweb/system-info",
