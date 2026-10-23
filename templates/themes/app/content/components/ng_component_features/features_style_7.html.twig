@@ -2,7 +2,7 @@
 {# location \Netgen\IbexaSiteApi\API\Values\Location #}
 
 {% import "themes/app/content/macros/links.html.twig" as links %}
-{% set actions = not content.fields.link_1.empty or not content.fields.link_2.empty %}
+{% set actions = (content.hasField('link_1') and not content.fields.link_1.empty) or (content.hasField('link_2') and not content.fields.link_2.empty) %}
 
 {% block content %}
     <article class="view-component view-component-features features-style-7">
@@ -18,7 +18,7 @@
                 </div>
                 {% if actions %}
                     <div class="actions">
-                        {% if not content.fields.link_1.empty %}
+                        {% if (content.hasField('link_1') and not content.fields.link_1.empty) %}
                             {{ ng_render_field(
                                 content.fields.link_1, {
                                     parameters: {
@@ -27,7 +27,7 @@
                                 }
                             ) }}
                         {% endif %}
-                        {% if not content.fields.link_2.empty %}
+                        {% if (content.hasField('link_2') and not content.fields.link_2.empty) %}
                             {{ ng_render_field(
                                 content.fields.link_2, {
                                     parameters: {
@@ -49,7 +49,7 @@
                             <div class="view-type view-type-zigzag vl9">
                                 {% if item.image is defined and not item.image.empty %}
                                     <figure class="image">
-                                        {{ links.item_image_link(item.link, item.image, "i770") }}
+                                        {{ links.item_image_link(item.link|default(null), item.image, "i770") }}
                                     </figure>
                                 {% endif %}
                                 <div class="article-content">
@@ -58,7 +58,7 @@
                                             <span class="eyebrow-title">{{ item.highlight_title.value.text }}</span>
                                         {% endif %}
                                         {% if item.title is defined and not item.title.empty %}
-                                            <h3 class="title">{{ links.item_content_link(item.link, item.title.value.text) }}</h3>
+                                            <h3 class="title">{{ links.item_content_link(item.link|default(null), item.title.value.text) }}</h3>
                                         {% endif %}
                                     </header>
                                     {% if item.description is defined and not item.description.empty %}

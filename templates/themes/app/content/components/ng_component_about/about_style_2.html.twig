@@ -44,7 +44,7 @@
             {% endif %}
 
             <div class="actions">
-                {% if not content.fields.link_1.empty %}
+                {% if (content.hasField('link_1') and not content.fields.link_1.empty) %}
                     {{ ng_render_field(
                         content.fields.link_1, {
                             parameters: {
@@ -54,7 +54,7 @@
                     ) }}
                 {% endif %}
 
-                {% if not content.fields.link_2.empty %}
+                {% if (content.hasField('link_2') and not content.fields.link_2.empty) %}
                     {{ ng_render_field(
                         content.fields.link_2, {
                             parameters: {

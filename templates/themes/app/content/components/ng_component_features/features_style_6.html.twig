@@ -4,7 +4,7 @@
 {% import "themes/app/content/macros/links.html.twig" as links %}
 
 {% set grid_class = "features-grid-col-" ~  block.parameter('number_of_columns').value|default(3) %}
-{% set actions = not content.fields.link_1.empty or not content.fields.link_2.empty %}
+{% set actions = (content.hasField('link_1') and not content.fields.link_1.empty) or (content.hasField('link_2') and not content.fields.link_2.empty) %}
 
 {% block content %}
     <article class="view-component view-component-features features-style-6">
@@ -20,7 +20,7 @@
                 </div>
                 {% if actions %}
                     <div class="actions">
-                        {% if not content.fields.link_1.empty %}
+                        {% if (content.hasField('link_1') and not content.fields.link_1.empty) %}
                             {{ ng_render_field(
                                 content.fields.link_1, {
                                     parameters: {
@@ -29,7 +29,7 @@
                                 }
                             ) }}
                         {% endif %}
-                        {% if not content.fields.link_2.empty %}
+                        {% if (content.hasField('link_2') and not content.fields.link_2.empty) %}
                             {{ ng_render_field(
                                 content.fields.link_2, {
                                     parameters: {
@@ -50,12 +50,12 @@
                         <div class="features-grid-item">
                             {% if item.image is defined and not item.image.empty %}
                                 <div class="item-image">
-                                    {{ links.item_image_link(item.link, item.image, "i480") }}
+                                    {{ links.item_image_link(item.link|default(null), item.image, "i480") }}
                                 </div>
                             {% endif %}
                             <div class="item-content">
                                 {% if item.title is defined and not item.title.empty %}
-                                    <h3 class="item-title">{{ links.item_content_link(item.link, item.title.value.text) }}</h3>
+                                    <h3 class="item-title">{{ links.item_content_link(item.link|default(null), item.title.value.text) }}</h3>
                                 {% endif %}
                                 {% if item.description is defined and not item.description.empty %}
                                     <div class="item-description">

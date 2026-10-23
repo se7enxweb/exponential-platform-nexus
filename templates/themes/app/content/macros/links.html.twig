@@ -88,12 +88,12 @@
     {% endif %}
 
     {% set open_in_new_tab = false %}
-    {% if link.value.isTargetLinkInNewTab %}
+    {% if link is not null and link.value.isTargetLinkInNewTab %}
         {% set open_in_new_tab = true %}
     {% endif %}
 
 
-    {% if link.value.suffix is not null %}
+    {% if link is not null and link.value.suffix is not null %}
         {% set url = url ~ link.value.suffix %}
     {% endif %}
 
@@ -123,10 +123,10 @@
     {% endif %}
 
     {% set open_in_new_tab = false %}
-    {% if link.value.isTargetLinkInNewTab %}
+    {% if link is not null and link.value.isTargetLinkInNewTab %}
         {% set open_in_new_tab = true %}
     {% endif %}
-    {% if link.value.suffix is not null %}
+    {% if link is not null and link.value.suffix is not null %}
         {% set url = url ~ link.value.suffix %}
     {% endif %}
     {% set lazy_loading = lazy_loading ?? ezplatform.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}

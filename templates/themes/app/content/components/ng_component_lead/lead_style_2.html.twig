@@ -27,7 +27,7 @@
             {% endif %}
         </div>
         <div class="col-lg-5 offset-lg-1 mt-5 mt-lg-0">
-            {% if not content.fields.link_1.empty %}
+            {% if (content.hasField('link_1') and not content.fields.link_1.empty) %}
                 {% if content.fields.link_1.value.isTargetEmbed %}
                     <div class="embedded-form">
                 {% else %}

@@ -25,7 +25,7 @@
             </div>
         {% endif %}
 
-        {% if not content.fields.link_1.empty %}
+        {% if (content.hasField('link_1') and not content.fields.link_1.empty) %}
             {% if content.fields.link_1.value.isTargetEmbed %}
                 <div class="embedded-form">
             {% else %}
