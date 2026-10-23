@@ -88,6 +88,9 @@
         { "type": "vcs", "url": "https://github.com/netgen/NovaeZSEOBundle.git" }
     ],
     "config": {
+        "platform": {
+            "php": "8.2.0"
+        },
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "ibexa/post-install": true,
