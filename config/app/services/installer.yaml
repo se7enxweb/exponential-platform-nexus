@@ -16,6 +16,8 @@ services:
 
     # --- ExponentialReindexCommand ---
     App\Command\ExponentialReindexCommand:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
         tags:
             - { name: console.command }
 
