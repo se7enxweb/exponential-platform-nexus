@@ -325,6 +325,12 @@ framework:
     trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
 ```
 
+On 1.1.0.x the line reads `'%env(string:default::TRUSTED_PROXIES)%'`. Symfony 5.4 declares `trusted_proxies` as a
+scalar and the `default:` processor alone may return an array, so with the plain form `v1.1.0.8` stops in
+`composer install` with `Invalid type for path "framework.trusted_proxies"`; the `string:` processor keeps the
+meaning (unset or empty trusts none). On a `v1.1.0.8` copy, change that line in `config/packages/ezpublish.yaml` and
+run `composer install` again.
+
 The value is a comma-separated list of addresses and CIDR ranges; unset or empty trusts no proxy. The shipped `.env`
 says `TRUSTED_PROXIES=127.0.0.1`, so a proxy on the same machine (Varnish, nginx in front of Apache) is trusted out of
 the box. Set your own list in `.env.local` or the server environment:
