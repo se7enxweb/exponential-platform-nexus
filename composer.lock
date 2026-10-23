@@ -10856,16 +10856,16 @@
         },
         {
             "name": "se7enxweb/admin-ui-bundle",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/NetgenAdminUIBundle.git",
-                "reference": "33a682c6373110cb775f2f4fa30db7bf8ad47923"
+                "reference": "cb9a4bad336be72c52444dfeb067509d48afc70b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/NetgenAdminUIBundle/zipball/33a682c6373110cb775f2f4fa30db7bf8ad47923",
-                "reference": "33a682c6373110cb775f2f4fa30db7bf8ad47923",
+                "url": "https://api.github.com/repos/se7enxweb/NetgenAdminUIBundle/zipball/cb9a4bad336be72c52444dfeb067509d48afc70b",
+                "reference": "cb9a4bad336be72c52444dfeb067509d48afc70b",
                 "shasum": ""
             },
             "require": {
@@ -10919,7 +10919,7 @@
                 "netgen"
             ],
             "support": {
-                "source": "https://github.com/se7enxweb/NetgenAdminUIBundle/tree/v4.0.0"
+                "source": "https://github.com/se7enxweb/NetgenAdminUIBundle/tree/v4.0.1"
             },
             "funding": [
                 {
@@ -10947,7 +10947,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-03-17T05:16:45+00:00"
+            "time": "2026-10-23T20:20:55+00:00"
         },
         {
             "name": "se7enxweb/bccie",
@@ -12802,12 +12802,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/ibexa-legacy-bridge.git",
-                "reference": "e6ba76f428ac2d78721d4df069381d03d446e185"
+                "reference": "c6407e9f250782f54c50bb0e54f864d94c6300bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/ibexa-legacy-bridge/zipball/e6ba76f428ac2d78721d4df069381d03d446e185",
-                "reference": "e6ba76f428ac2d78721d4df069381d03d446e185",
+                "url": "https://api.github.com/repos/se7enxweb/ibexa-legacy-bridge/zipball/c6407e9f250782f54c50bb0e54f864d94c6300bb",
+                "reference": "c6407e9f250782f54c50bb0e54f864d94c6300bb",
                 "shasum": ""
             },
             "require": {
@@ -12889,7 +12889,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-04-20T02:20:52+00:00"
+            "time": "2026-10-23T19:16:25+00:00"
         },
         {
             "name": "se7enxweb/mediata-ezpage-fieldtype-bundle",
