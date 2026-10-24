@@ -332,9 +332,9 @@ CREATE TABLE IF NOT EXISTS `eztags_attribute_link` (
 
 CREATE TABLE IF NOT EXISTS `eztags_keyword` (
   `keyword_id` integer NOT NULL DEFAULT 0,
-  `locale` varchar(20) NOT NULL DEFAULT '',
   `language_id` bigint NOT NULL DEFAULT 0,
   `keyword` varchar(255) NOT NULL DEFAULT '',
+  `locale` varchar(20) NOT NULL DEFAULT '',
   `status` integer NOT NULL DEFAULT 0,
   PRIMARY KEY (`keyword_id`, `locale`)
 );
