@@ -195,20 +195,47 @@ class ExponentialMediaInstaller extends CoreInstaller
     /**
      * The schema and data files describe the legacy kernel they were made with. Adds the tables
      * and columns the installed legacy kernel's own schema (share/db_schema.dba) has on top of
-     * them, for the database engine in use. Runs after the data, whose INSERT statements carry
-     * no column lists, so the added columns come last and take their defaults.
+     * them, then those of the active legacy extensions that ship one (ezstarrating, ezmbpaex: the
+     * legacy admin queried ezx_mbpaex on every sign-in), for the database engine in use. Runs after
+     * the data, whose INSERT statements carry no column lists, so the added columns come last and
+     * take their defaults.
      */
     private function completeLegacyKernelSchema(): void
     {
-        $completer = new LegacyKernelSchemaCompleter(
-            $this->db,
-            $this->projectDir . '/ezpublish_legacy/share/db_schema.dba'
-        );
-        $queries = $completer->complete();
+        $legacyDir = $this->projectDir . '/ezpublish_legacy';
+        $schemas = [$legacyDir . '/share/db_schema.dba'];
+        foreach ($this->activeLegacyExtensions() as $extension) {
+            $file = $legacyDir . '/extension/' . $extension . '/share/db_schema.dba';
+            if (\is_file($file)) {
+                $schemas[] = $file;
+            }
+        }
+
+        $count = 0;
+        foreach ($schemas as $schemaFile) {
+            $count += \count((new LegacyKernelSchemaCompleter($this->db, $schemaFile))->complete());
+        }
         $this->output->writeln(\sprintf(
             '<info>Completed the schema with the installed legacy kernel\'s tables and columns: <comment>%d</comment> statement(s)</info>',
-            \count($queries)
+            $count
         ));
+    }
+
+    /**
+     * The ActiveExtensions[] of the project's global legacy override (as installed, else as shipped).
+     *
+     * @return string[]
+     */
+    private function activeLegacyExtensions(): array
+    {
+        foreach (['/ezpublish_legacy/settings/override/site.ini.append.php', '/src/install/ezpublish_legacy/settings/override/site.ini.append.php'] as $path) {
+            $content = @\file_get_contents($this->projectDir . $path);
+            if (\is_string($content) && \preg_match_all('/^\s*ActiveExtensions\[\]\s*=\s*([A-Za-z0-9_]+)\s*$/m', $content, $m)) {
+                return \array_values(\array_unique($m[1]));
+            }
+        }
+
+        return [];
     }
 
     public function importBinaries(): void
