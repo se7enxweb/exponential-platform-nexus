@@ -189,6 +189,26 @@ class ExponentialMediaInstaller extends CoreInstaller
     public function importData(): void
     {
         $this->runQueriesFromFile($this->getKernelSQLFileForDBMS('media_data.sql'));
+        $this->completeLegacyKernelSchema();
+    }
+
+    /**
+     * The schema and data files describe the legacy kernel they were made with. Adds the tables
+     * and columns the installed legacy kernel's own schema (share/db_schema.dba) has on top of
+     * them, for the database engine in use. Runs after the data, whose INSERT statements carry
+     * no column lists, so the added columns come last and take their defaults.
+     */
+    private function completeLegacyKernelSchema(): void
+    {
+        $completer = new LegacyKernelSchemaCompleter(
+            $this->db,
+            $this->projectDir . '/ezpublish_legacy/share/db_schema.dba'
+        );
+        $queries = $completer->complete();
+        $this->output->writeln(\sprintf(
+            '<info>Completed the schema with the installed legacy kernel\'s tables and columns: <comment>%d</comment> statement(s)</info>',
+            \count($queries)
+        ));
     }
 
     public function importBinaries(): void
