@@ -26,8 +26,6 @@ use Symfony\Component\Finder\Finder;
  */
 class ExponentialMediaInstaller extends CoreInstaller
 {
-    private const LEGACY_KERNEL_SCHEMA = '/ezpublish_legacy/share/db_schema.dba';
-
     private string $projectDir = '';
 
     private string $storagePath = 'public/var/site/storage';
@@ -76,18 +74,16 @@ class ExponentialMediaInstaller extends CoreInstaller
     /**
      * The schema and data files describe the legacy kernel they were made with. Adds the tables
      * and columns the installed legacy kernel's own schema (share/db_schema.dba) has on top of
-     * them, for the database engine in use. Runs after the data, whose INSERT statements carry
-     * no column lists, so the added columns come last and take their defaults.
+     * them, then those of the active legacy extensions that ship one, for the database engine in
+     * use, and gives tables keyed by a part of the legacy key that key (see the completer). Runs
+     * after the data, whose INSERT statements carry no column lists, so the added columns come
+     * last and take their defaults.
      */
     private function completeLegacyKernelSchema(): void
     {
-        $completer = new LegacyKernelSchemaCompleter(
-            $this->db,
-            $this->projectDir . self::LEGACY_KERNEL_SCHEMA,
-        );
-        $queries = $completer->complete();
+        $queries = LegacyKernelSchemaCompleter::completeProject($this->db, $this->projectDir);
         $this->output->writeln(\sprintf(
-            '<info>Completed the schema with the installed legacy kernel\'s tables and columns: <comment>%d</comment> statement(s)</info>',
+            '<info>Completed the schema with the installed legacy kernel\'s tables, columns and keys: <comment>%d</comment> statement(s)</info>',
             \count($queries),
         ));
     }

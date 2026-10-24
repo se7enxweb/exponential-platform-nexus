@@ -1,4 +1,12 @@
 services:
+    # The schema completion of exponential:install, on an existing database
+    App\RepositoryInstaller\Command\LegacySchemaCompleteCommand:
+        arguments:
+            $connection: '@ibexa.persistence.connection'
+            $projectDir: '%kernel.project_dir%'
+        tags:
+            - { name: console.command }
+
     App\RepositoryInstaller\Command\ExponentialReindexCommand:
         tags:
             - { name: console.command }
