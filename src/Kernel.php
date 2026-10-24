@@ -36,6 +36,7 @@ final class Kernel extends BaseKernel
     {
         $container->addCompilerPass(new CompilerPass\XslRegisterPass());
         $container->addCompilerPass(new CompilerPass\ExponentialInstallerTagPass());
+        $container->addCompilerPass(new CompilerPass\PlatformCommandNamesPass());
         // after NetgenLayoutsEzPlatformSiteApiBundle's own pass, which sets the Site API 3 name
         $container->addCompilerPass(new CompilerPass\LayoutsSiteApiContentViewParameterPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, -10);
     }
