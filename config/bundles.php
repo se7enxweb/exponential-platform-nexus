@@ -86,5 +86,6 @@ return [
     Novactive\Bundle\eZSEOBundle\NovaeZSEOBundle::class => ['all' => true],
     Netgen\Bundle\AdminUIBundle\NetgenAdminUIBundle::class => ['all' => true],
     Netgen\Bundle\SiteLegacyBundle\NetgenSiteLegacyBundle::class => ['all' => true],
+    Netgen\Bundle\RichTextDataTypeBundle\NetgenRichTextDataTypeBundle::class => ['all' => true],
     Netgen\TagsBundle\NetgenTagsBundle::class => ['all' => true],
 ];
