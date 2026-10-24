@@ -12,6 +12,27 @@ if (!is_file(dirname(__DIR__).'/vendor/autoload_runtime.php')) {
     throw new LogicException('Symfony Runtime is missing. Try running "composer require symfony/runtime".');
 }
 
+// Building this project's container, installing the demo content and generating the GraphQL schema
+// need more than PHP's default CLI memory_limit of 128M ("Allowed memory size ... exhausted", also in
+// the Composer scripts, which run this console). A lower limit is raised to 1G; a higher one or -1 stays.
+$memoryLimit = trim((string) ini_get('memory_limit'));
+if ('-1' !== $memoryLimit && '' !== $memoryLimit) {
+    $memoryBytes = (int) $memoryLimit;
+    switch (strtolower(substr($memoryLimit, -1))) {
+        case 'g':
+            $memoryBytes *= 1024;
+            // no break
+        case 'm':
+            $memoryBytes *= 1024;
+            // no break
+        case 'k':
+            $memoryBytes *= 1024;
+    }
+    if ($memoryBytes < 1024 * 1024 * 1024) {
+        ini_set('memory_limit', '1G');
+    }
+}
+
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {

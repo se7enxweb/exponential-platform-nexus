@@ -66,6 +66,14 @@ composer install                # the 2.5 generation: composer install --keep-vc
 has published security advisories, and Composer 2.10 or later refuses to install a package with advisories. On PHP
 8.0 run Composer with `COMPOSER_NO_SECURITY_BLOCKING=1` (for example `COMPOSER_NO_SECURITY_BLOCKING=1 composer
 install`); you then run Twig with those advisories. PHP 8.1 or later installs without the switch and is recommended.
+Install `v1.1.0.11` or newer on PHP 8.0: older tags resolve upstream packages that need PHP 8.1.
+
+**Memory.** The container build, the demo install and the GraphQL schema need more than PHP's default CLI
+`memory_limit` of 128M. Composer raises its own limit, and since `v1.1.0.11` the 1.1.0.x line's `bin/console`
+raises a lower limit to 1G, so the Composer scripts and every console step below run with the default php.ini.
+On older tags, or on the other lines, give the commands the memory yourself:
+`COMPOSER_MEMORY_LIMIT=-1 composer install` (the Composer scripts inherit it) and
+`php -d memory_limit=-1 bin/console …` for the console steps.
 
 Always name the branch: a clone without `-b` gives `master`, the 2.5 generation. Run Composer with the same PHP
 version the site will use. The Composer scripts publish assets and, on the lines with the legacy kernel, install it
