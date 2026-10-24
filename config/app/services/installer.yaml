@@ -21,6 +21,14 @@ services:
         tags:
             - { name: console.command }
 
+    # --- LegacySchemaCompleteCommand (the schema completion of exponential:install, on an existing database) ---
+    App\Command\LegacySchemaCompleteCommand:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+            $projectDir: '%kernel.project_dir%'
+        tags:
+            - { name: console.command }
+
     # --- ExponentialMediaInstaller ---
     exponential_installer.media:
         class: App\Installer\ExponentialMediaInstaller

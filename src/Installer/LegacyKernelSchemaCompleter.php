@@ -22,7 +22,18 @@ use Doctrine\DBAL\Schema\Table;
  * expbookmark_folder and ezcontentbrowsebookmark.folder_id (Exponential 6.0.15) on every legacy
  * admin page. The kernel's share/db_schema.dba is the generic schema its own installers use for
  * every database engine. Missing tables are created with their keys and indexes; on existing
- * tables missing columns are added with the indexes over them. Nothing that exists is changed.
+ * tables missing columns are added with the indexes over them.
+ *
+ * One thing that exists is changed: a primary key that is only part of the legacy kernel's key.
+ * The legacy kernel keeps a row per version (or status) under the same id, for example
+ * ezworkflow (id, version) and ezcontentobject_attribute (id, version). Keyed by the id alone,
+ * a new version either fails to insert or, on SQLite with INSERT OR REPLACE, deletes the row of
+ * the version before it: an edit in the legacy admin lost the published content. Such a table
+ * gets the legacy key, its rows kept (on SQLite Doctrine rebuilds the table and copies them),
+ * and its serial column loses AUTOINCREMENT, which SQLite allows on a one-column key only (the
+ * kernel then numbers new rows itself). Rows lost before the repair cannot be brought back.
+ *
+ * Run on an existing database by bin/console exponential:legacy:complete-schema.
  */
 final class LegacyKernelSchemaCompleter
 {
@@ -30,6 +41,49 @@ final class LegacyKernelSchemaCompleter
         private Connection $db,
         private string $schemaFile,
     ) {
+    }
+
+    /**
+     * Completes the database with the schema of the project's legacy kernel, then with those of
+     * the active legacy extensions that ship one (ezstarrating, ezmbpaex: the legacy admin queried
+     * ezx_mbpaex on every sign-in).
+     *
+     * @return string[] the SQL statements that were executed
+     */
+    public static function completeProject(Connection $db, string $projectDir): array
+    {
+        $legacyDir = $projectDir . '/ezpublish_legacy';
+        $schemas = [$legacyDir . '/share/db_schema.dba'];
+        foreach (self::activeLegacyExtensions($projectDir) as $extension) {
+            $file = $legacyDir . '/extension/' . $extension . '/share/db_schema.dba';
+            if (\is_file($file)) {
+                $schemas[] = $file;
+            }
+        }
+
+        $queries = [];
+        foreach ($schemas as $schemaFile) {
+            $queries = array_merge($queries, (new self($db, $schemaFile))->complete());
+        }
+
+        return $queries;
+    }
+
+    /**
+     * The ActiveExtensions[] of the project's global legacy override (as installed, else as shipped).
+     *
+     * @return string[]
+     */
+    private static function activeLegacyExtensions(string $projectDir): array
+    {
+        foreach (['/ezpublish_legacy/settings/override/site.ini.append.php', '/src/install/ezpublish_legacy/settings/override/site.ini.append.php'] as $path) {
+            $content = @\file_get_contents($projectDir . $path);
+            if (\is_string($content) && \preg_match_all('/^\s*ActiveExtensions\[\]\s*=\s*([A-Za-z0-9_]+)\s*$/m', $content, $m)) {
+                return \array_values(\array_unique($m[1]));
+            }
+        }
+
+        return [];
     }
 
     /**
@@ -98,10 +152,13 @@ final class LegacyKernelSchemaCompleter
         foreach ($tableDefinition['indexes'] ?? [] as $indexName => $index) {
             $this->addIndex($table, (string) $indexName, $index);
         }
+        $this->keepSerialColumnsOutOfCompositeKey($table);
     }
 
     private function completeTable(Table $table, array $tableDefinition): void
     {
+        $this->completePrimaryKey($table, $tableDefinition);
+
         $added = [];
         foreach ($tableDefinition['fields'] as $fieldName => $field) {
             if (!$table->hasColumn((string) $fieldName)) {
@@ -117,6 +174,48 @@ final class LegacyKernelSchemaCompleter
             if ($index['type'] !== 'primary' && !$table->hasIndex((string) $indexName) && array_intersect($fields, $added) !== []) {
                 $this->addIndex($table, (string) $indexName, $index);
             }
+        }
+    }
+
+    /**
+     * Gives the table the legacy primary key when its own key is a strict part of it (or missing),
+     * for example (id) where the legacy kernel keys the table by (id, version).
+     */
+    private function completePrimaryKey(Table $table, array $tableDefinition): void
+    {
+        $legacy = [];
+        foreach ($tableDefinition['indexes'] ?? [] as $index) {
+            if (($index['type'] ?? '') === 'primary') {
+                $legacy = $this->indexFields($index);
+            }
+        }
+        if ($legacy === [] || array_diff($legacy, array_map('strval', array_keys($table->getColumns()))) !== []) {
+            return;
+        }
+        $legacyLower = array_map('strtolower', $legacy);
+        $current = $table->getPrimaryKey() !== null ? array_map('strtolower', $table->getPrimaryKey()->getColumns()) : [];
+        if (\count($current) >= \count($legacyLower) || array_diff($current, $legacyLower) !== []) {
+            return;
+        }
+
+        $table->dropPrimaryKey();
+        $table->setPrimaryKey($legacy);
+        $this->keepSerialColumnsOutOfCompositeKey($table);
+    }
+
+    /**
+     * SQLite numbers only a single INTEGER PRIMARY KEY; Doctrine turns an AUTOINCREMENT column into
+     * that key and drops the rest of a composite key. A serial column of a composite key is a plain
+     * NOT NULL integer: the legacy kernel and the Platform give it the next value themselves.
+     */
+    private function keepSerialColumnsOutOfCompositeKey(Table $table): void
+    {
+        $primary = $table->getPrimaryKey();
+        if ($primary === null || \count($primary->getColumns()) < 2) {
+            return;
+        }
+        foreach ($primary->getColumns() as $column) {
+            $table->getColumn($column)->setAutoincrement(false)->setNotnull(true);
         }
     }
 

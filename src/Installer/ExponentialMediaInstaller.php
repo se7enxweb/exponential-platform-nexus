@@ -202,40 +202,11 @@ class ExponentialMediaInstaller extends CoreInstaller
      */
     private function completeLegacyKernelSchema(): void
     {
-        $legacyDir = $this->projectDir . '/ezpublish_legacy';
-        $schemas = [$legacyDir . '/share/db_schema.dba'];
-        foreach ($this->activeLegacyExtensions() as $extension) {
-            $file = $legacyDir . '/extension/' . $extension . '/share/db_schema.dba';
-            if (\is_file($file)) {
-                $schemas[] = $file;
-            }
-        }
-
-        $count = 0;
-        foreach ($schemas as $schemaFile) {
-            $count += \count((new LegacyKernelSchemaCompleter($this->db, $schemaFile))->complete());
-        }
+        $count = \count(LegacyKernelSchemaCompleter::completeProject($this->db, $this->projectDir));
         $this->output->writeln(\sprintf(
-            '<info>Completed the schema with the installed legacy kernel\'s tables and columns: <comment>%d</comment> statement(s)</info>',
+            '<info>Completed the schema with the installed legacy kernel\'s tables, columns and keys: <comment>%d</comment> statement(s)</info>',
             $count
         ));
-    }
-
-    /**
-     * The ActiveExtensions[] of the project's global legacy override (as installed, else as shipped).
-     *
-     * @return string[]
-     */
-    private function activeLegacyExtensions(): array
-    {
-        foreach (['/ezpublish_legacy/settings/override/site.ini.append.php', '/src/install/ezpublish_legacy/settings/override/site.ini.append.php'] as $path) {
-            $content = @\file_get_contents($this->projectDir . $path);
-            if (\is_string($content) && \preg_match_all('/^\s*ActiveExtensions\[\]\s*=\s*([A-Za-z0-9_]+)\s*$/m', $content, $m)) {
-                return \array_values(\array_unique($m[1]));
-            }
-        }
-
-        return [];
     }
 
     public function importBinaries(): void
