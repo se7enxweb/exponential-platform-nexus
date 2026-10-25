@@ -397,18 +397,25 @@ What the command does, in order (from `src/Command/ExponentialInstallCommand.php
    `SQLite detected — skipping doctrine:database:create (... will be created automatically).`;
 3. asks `Running this command will delete data in all eZ Platform generated tables. Continue?` when tables exist
    (`--no-interaction` answers yes);
-4. creates the platform schema, then runs `data/sqlite/media_schema.sql` (Layouts, Tags and other extra tables);
+4. creates the platform schema, then runs `data/<engine>/media_schema.sql` (Layouts, Tags and other extra tables;
+   `sqlite`, and since `v1.1.0.13` `mysql` for MySQL and MariaDB);
 5. on SQLite, recreates `ezcontentobject_attribute`, `ezcontentclass` and `ezcontentclass_attribute` with their
    composite primary key `(id, version)`, which Doctrine's SQLite schema loses; without this every second draft fails
    with `UNIQUE constraint failed: ezcontentobject_attribute.id`;
 6. loads `data/<engine>/media_data.sql` and copies the demo images to `public/var/site/storage`;
 7. clears the persistence cache and runs `exponential:reindex` (skip it with `--skip-indexing`).
 
-**What can go wrong on MySQL and PostgreSQL.** Step 4 asks for `data/<engine>/media_schema.sql`, and the branch ships
-that file only for SQLite (`data/sqlite/media_schema.sql`). Read from the code, the installer then stops with
-`DBMS-specific file for mysql database platform does not exist or is not readable`. This was not run for the book;
-if you meet it, either install on SQLite, or use the Netgen installer of this line, which reads the MySQL dump of
-`se7enxweb/media-site-data`:
+**MySQL and MariaDB.** Since `v1.1.0.13` the line ships `data/mysql/media_schema.sql`, and `data/mysql/media_data.sql`
+holds the same rows as the SQLite data. Up to `v1.1.0.12` the installer stopped on MySQL and MariaDB with
+`DBMS-specific file for mysql database platform does not exist or is not readable`, and the MySQL data could not have
+loaded anyway: it was dumped from a database of the next platform generation, so it gave `ezcontentclassgroup` a
+seventh value (`is_system`) and locked 25 empty tables this schema does not have (`ibexa_setting`, `ibexa_token`,
+`ezinfocollection` and others). On an older tag, install on SQLite or update to `v1.1.0.13`. With MariaDB, put its
+version in the URL (`serverVersion=mariadb-10.5.29`).
+
+**PostgreSQL.** The line ships no `data/postgresql/media_schema.sql`; the installer stops with the message above
+(`... for postgresql database platform ...`). Install the demo on SQLite, MySQL or MariaDB, or use the Netgen installer
+of this line, which reads the MySQL dump of `se7enxweb/media-site-data`:
 
 ```bash
 php bin/console ibexa:install netgen-media          # or netgen-media-clean; MySQL and MariaDB only

@@ -158,9 +158,10 @@ The document root is `web/` and the front controller `web/app.php`. Full walk-th
    here before installing, so that the console and the web server agree (since 1.3.0.5 the linked `public/.htaccess`
    forces `prod` for web requests). On SQLite,
    `DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"` and
-   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On 1.1.0.x and 1.2.0.x the
-   `exponential-media` type ships its extra schema for SQLite only; on MySQL or PostgreSQL use SQLite for the demo or
-   the `netgen-media` type ([chapter 4](book/04-installing.md#45-the-110x-line)).
+   `MESSENGER_TRANSPORT_DSN=sync://` ([chapter 7](book/07-databases.md)). On MariaDB give its version, for example
+   `serverVersion=mariadb-10.5.29`. On 1.1.0.x the `exponential-media` type installs on SQLite, MySQL and MariaDB
+   (since `v1.1.0.13`); on 1.2.0.x it ships its extra schema for SQLite only. On PostgreSQL, and on MySQL with 1.2.0.x,
+   use SQLite for the demo or the `netgen-media` type ([chapter 4](book/04-installing.md#45-the-110x-line)).
 2. Install the demo content. On 1.3.0.x update the core package first: the locked `v5.0.7` does not create the Netgen
    Layouts tables, `v5.0.9` does ([chapter 4](book/04-installing.md#47-the-130x-line)).
 
