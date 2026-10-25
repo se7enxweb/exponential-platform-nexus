@@ -60,7 +60,7 @@ support it (see above).
 git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git nexus   # or master, 1.1.0.x, 1.2.0.x, 1.0.0.x
 cd nexus
 git checkout 1.3.0.6            # the newest tag of the line: git tag -l '1.3.0.*' --sort=version:refname
-composer install                # the 2.5 generation: composer install --ignore-platform-reqs
+composer install                # the 2.5 generation: composer install --ignore-platform-req=php+
 ```
 
 Always name the branch: a clone without `-b` gives `master`, the 2.5 generation. Run Composer with the same PHP

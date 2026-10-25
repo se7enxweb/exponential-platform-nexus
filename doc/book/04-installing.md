@@ -153,7 +153,7 @@ What can go wrong:
 - **`netgen-media` is registered but has no data.** Since `v2.5.0.6` the data package `netgen/media-site-data`
   (about 180 MB) is only suggested, so the type exists while its SQL and images do not, and the installer fails when
   it reads them. Install the package first if you want the Netgen demo instead:
-  `composer require --ignore-platform-reqs netgen/media-site-data:~1.8.1`. The Netgen demo's root is location 2, so
+  `composer require --ignore-platform-req=php+ netgen/media-site-data:~1.8.1`. The Netgen demo's root is location 2, so
   set `ngsite.default.locations.tree_root.id: 2` for it.
 - **SQLite.** The guide describes `pdo_sqlite` for development, but on `master` the SQLite file path is not wired into
   `app/config/config.yml` (it is on `1.0.0.x`, [4.4](#44-the-100x-branch)), and the CJW data files are MySQL dumps.

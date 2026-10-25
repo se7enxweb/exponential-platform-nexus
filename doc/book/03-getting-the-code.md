@@ -135,7 +135,7 @@ The line's older guide (`doc/INSTALL.md` of `v1.1.0.7`) uses the constraint `~1.
 ### 2.5 (master)
 
 ```bash
-composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-nexus:v2.5.0.7 nexus
+composer create-project --ignore-platform-req=php+ se7enxweb/exponential-platform-nexus:v2.5.0.8 nexus
 ```
 
 `v2.5.0.6` and older predate the fixes of 2026-10-05 (chapter 1): their `web/app.php` still switches to `dev` for host
@@ -153,8 +153,10 @@ composer create-project --ignore-platform-reqs se7enxweb/exponential-platform-ne
 
 Notes on the commands:
 
-- **`--ignore-platform-reqs` on the 2.5 generation** is what the line's guide requires ([chapter 2](02-requirements.md#versions)).
-  It disables every PHP and extension check; run `composer check-platform-reqs` afterwards and read what it reports.
+- **`--ignore-platform-req=php+` on the 2.5 generation** is what the line's guide requires ([chapter 2](02-requirements.md#versions)).
+  It ignores only the upper PHP limits that some Symfony 3.4 dependencies declare; the lower limits and the extension
+  checks still apply. Releases up to `v2.5.0.7` and the 1.0.0.x line were documented with `--ignore-platform-reqs`,
+  which disables every PHP and extension check.
 - **`--keep-vcs`** keeps the `.git` directory of the release. Use it when you want to follow the upstream branch with
   `git pull` later. It is an option of `create-project` only: `composer install` refuses it (`The "--keep-vcs" option
   does not exist.`), and a clone has its `.git` directory anyway.
@@ -184,7 +186,7 @@ git clone -b 1.3.0.x https://github.com/se7enxweb/exponential-platform-nexus.git
 cd nexus
 git branch --show-current     # prints 1.3.0.x
 # or a release: git checkout 1.3.0.6
-composer install              # the 2.5 generation: composer install --ignore-platform-reqs
+composer install              # the 2.5 generation: composer install --ignore-platform-req=php+
 ```
 
 If you already cloned without `-b`, `git checkout 1.3.0.x` before the first `composer install` is enough. After a
@@ -194,7 +196,7 @@ first or, simpler, start from a fresh clone.
 
 | Line | Checkout | Install command (from the line's guide) |
 |---|---|---|
-| 2.5 | `master` (or `git checkout v2.5.0.7`) | `composer install --ignore-platform-reqs` |
+| 2.5 | `master` (or `git checkout v2.5.0.8`) | `composer install --ignore-platform-req=php+` |
 | 1.0.0.x | `1.0.0.x` (or a tag, for example `1.0.0.11`) | `composer install --ignore-platform-reqs` |
 | 1.1.0.x | `1.1.0.x` | `composer install` |
 | 1.2.0.x | `1.2.0.x` | `composer install` |

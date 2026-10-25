@@ -79,8 +79,9 @@ ls -dt var/cache/*/ | head -3                                # the environments 
 - **Cause:** each line has its own PHP floor: 1.0.0.x in practice 8.1 (the legacy kernel requires `^8.1`), 1.1.0.x
   8.0, 1.2.0.x 8.2, 1.3.0.x 8.4. Composer checks the PHP that runs Composer, which may not be the PHP of the web server.
 - **Fix:** run Composer with the same PHP binary as the site (`/opt/plesk/php/8.4/bin/php /usr/local/bin/composer install`
-  on Plesk, for example). Use `--ignore-platform-reqs` only to get past a package that declares a narrower range than
-  it really supports, never to install a line on a PHP version below its floor: the code then fails at run time.
+  on Plesk, for example). Use `--ignore-platform-req=php+` to get past a package that declares a lower upper PHP
+  limit than it really supports; it keeps every lower limit. Avoid `--ignore-platform-reqs`: it also lets Composer
+  install a line, or a package release, on a PHP version below its floor, and the code then fails at run time.
 
 ### `Class "..." not found` after `composer update`
 

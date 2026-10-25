@@ -99,8 +99,8 @@ How to read the table:
   ([chapter 3](03-getting-the-code.md#31-branches-tags-and-packagist-versions)).
 - **The PHP column is what Composer checks, not what was tested.** The 2.5 generation declares every PHP version up
   to 8.6, but the legacy kernel it installs (`se7enxweb/exponential`) requires PHP 8.1, so 8.1 is the real minimum.
-  The install guide of the line still tells you to run Composer with `--ignore-platform-reqs`, because some
-  dependencies of the Symfony 3.4 stack declare older limits. The README of `master` now says "PHP 8.1 or newer"
+  The install guide of the line tells you to run Composer with `--ignore-platform-req=php+`, because some
+  dependencies of the Symfony 3.4 stack declare older upper PHP limits; the option ignores only those upper limits. The README of `master` now says "PHP 8.1 or newer"
   (the README released with `v2.5.0.6` said "PHP 8.3 -> 8.5"). The 7x guides of the newer lines recommend PHP 8.5
   and say the lines were tested on PHP 8.5.5. [Chapter 2](02-requirements.md#22-php) has the detail.
 - **The legacy kernel goes away with the 5 generation.** The 2.5, 3.3 and 4.6 lines install the Exponential 6 kernel

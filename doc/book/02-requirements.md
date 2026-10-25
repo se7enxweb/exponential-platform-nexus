@@ -13,7 +13,7 @@ repository's own guides say something different, the chapter follows the code an
 
 | Requirement | 2.5 (`master`) and 1.0.0.x | 1.1.0.x | 1.2.0.x | 1.3.0.x |
 |---|---|---|---|---|
-| PHP | 8.1 or later (the legacy kernel's minimum; `composer.json` alone accepts 7.1.3 to 8.6); Composer run with `--ignore-platform-reqs` | 8.0 or later; 8.5 recommended | 8.2 or later; 8.5 recommended | 8.4 or later; 8.5 recommended |
+| PHP | 8.1 or later (the legacy kernel's minimum; `composer.json` alone accepts 7.1.3 to 8.6); Composer run with `--ignore-platform-req=php+` (the 1.0.0.x guides: `--ignore-platform-reqs`) | 8.0 or later; 8.5 recommended | 8.2 or later; 8.5 recommended | 8.4 or later; 8.5 recommended |
 | PHP extensions | see [2.3](#23-php-extensions); APCu is used when it is loaded | `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv` and a PDO driver | as 1.1.0.x | as 1.1.0.x |
 | Database | MySQL 5.7+ or MariaDB 10.2+ (utf8mb4); PostgreSQL per the guide; SQLite 3 on 1.0.0.x only | MySQL 8.0+, MariaDB 10.3+, PostgreSQL 14+ or SQLite 3.35+ | as 1.1.0.x | as 1.1.0.x |
 | Composer | 2.x | 2.x | 2.x | 2.x |
@@ -41,15 +41,15 @@ The sections below explain each row.
 
 Three things follow from the table:
 
-1. **The 2.5 generation needs `--ignore-platform-reqs`.** Its `composer.json` accepts current PHP, but the install
-   guides of the line (`doc/INSTALL.md` in the releases `1.0.0.9` and `v2.5.0.6`) say the flag is still required "due to ongoing package definition updates across
-   repositories": some dependencies of the Symfony 3.4 stack declare older PHP limits than the versions 7x has made them
-   work on. The flag makes Composer skip the PHP and extension checks entirely, so you have to check them yourself
-   ([2.3](#23-php-extensions)).
+1. **The 2.5 generation needs `--ignore-platform-req=php+`.** Its `composer.json` accepts current PHP, but some
+   dependencies of the Symfony 3.4 stack declare older upper PHP limits than the versions 7x has made them work on.
+   `--ignore-platform-req=php+` ignores only those upper limits: a package release that needs a newer PHP than the
+   one running Composer is still refused. The guides of the releases up to `v2.5.0.7` (and of 1.0.0.x) used
+   `--ignore-platform-reqs`, which skips every PHP and extension check, so Composer could install, for example,
+   PhpSpreadsheet 5.10 (PHP 8.2) on PHP 8.1. Check the extensions yourself ([2.3](#23-php-extensions)) either way.
 2. **Use the newest PHP the line accepts.** 7x tests the 1.1.0.x, 1.2.0.x and 1.3.0.x lines on PHP 8.5 and runs the
    reference installation of 1.3.0.x on PHP 8.5. On the 2.5 generation the floor is PHP 8.1, set by the legacy
-   kernel; because `--ignore-platform-reqs` hides that check, nothing stops an installation on PHP 8.0, which the
-   kernel does not support. Prefer 8.3 to 8.5, the versions the 7x READMEs name.
+   kernel. Prefer 8.3 to 8.5, the versions the 7x READMEs name.
 3. **1.3.0.x refuses anything older than 8.4.** Its 7x forks (`se7enxweb/layouts-core`, `se7enxweb/fieldtype-richtext`,
    `se7enxweb/site-bundle`) exist because upstream packages broke under PHP 8.4 and Twig 3.24, and they rely on PHP 8.4
    language features.
@@ -113,8 +113,8 @@ Plus the PDO driver of your database:
 | PostgreSQL | `pdo_pgsql` |
 | SQLite | `pdo_sqlite` and `sqlite3` |
 
-The 2.5 generation declares no extensions in `composer.json` (and is installed with `--ignore-platform-reqs`, which
-would skip them anyway). Its install guide (`v2.5.0.6`, and with the same list `1.0.0.9`) names these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
+The 2.5 generation declares no extensions in `composer.json` (the releases up to `v2.5.0.7` were installed with
+`--ignore-platform-reqs`, which skipped them anyway). Its install guide (`v2.5.0.6`, and with the same list `1.0.0.9`) names these as mandatory: `ctype`, `date`, `dom`, `fileinfo`, `filter`,
 `hash`, `iconv`, `intl`, `json`, `mbstring`, `openssl`, `pcre`, `pdo`, `pdo_mysql` (or `pdo_pgsql`, `pdo_sqlite`),
 `phar`, `session`, `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter` and `zlib`; and `curl`, `gd` or `imagick`,
 `opcache`, `apcu` and `zip` as strongly recommended. Add `xsl`: the legacy kernel's XML text and the RichText field
@@ -150,7 +150,7 @@ composer check-platform-reqs                        # after an install: what com
 ```
 
 `composer check-platform-reqs` reads the lock file, so it also reports extensions that dependencies (not only the
-project) require. It is the quickest way to find what `--ignore-platform-reqs` hid on the 2.5 generation. Each line
+project) require. It is the quickest way to find what `--ignore-platform-reqs` hid on an installation made with it. Each line
 names a requirement, the version found and a verdict; what needs action is every line that does not end in
 `success`. Two such lines, in the shape Composer prints them (the package names depend on your lock file):
 

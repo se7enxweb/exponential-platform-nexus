@@ -20,7 +20,7 @@ git clone https://github.com/your-username/exponential-platform-nexus.git;
 2. Install the project dependencies.
 
 ```bash
-composer install --ignore-platform-reqs;
+composer install --ignore-platform-req=php+;
 ```
 
 3. Set up the development environment.
