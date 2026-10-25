@@ -20,7 +20,7 @@ front-end build needs the bundles that Composer installed, and the cache must be
 | 3. Install schema and demo content | creates the tables, loads content, layouts, tags, users | `ezplatform:install cjw-exponential-media` | `ezplatform:install netgen-media` or `exponential-cjw`, or the SQL dumps | `exponential:install exponential-media` | `exponential:install exponential-media` | `exponential:install exponential-media` |
 | 4. Link files kept outside `vendor/` | the legacy directory is replaced on updates | manual symlinks | manual symlinks | automatic (Composer scripts) | automatic | not needed |
 | 5. Front-end assets | CSS and JavaScript of the site | `yarn build:prod` (also run by Composer) | as 2.5 | `yarn build:prod` | `yarn build:prod` | `yarn build:prod` |
-| 6. Admin assets | the administration interface's JavaScript | `composer ezplatform-assets` | as 2.5 | `yarn ez` | `composer ibexa-assets` | `composer ibexa-assets` |
+| 6. Admin assets | the administration interface's JavaScript | run by `composer install` (`composer ezplatform-assets` rebuilds) | as 2.5 | `yarn ez` | `composer ibexa-assets` | `composer ibexa-assets` |
 | | (`make ibexa-assets` runs the right one on every line) | | | | | |
 | 7. JWT keys | the REST API signs tokens with them | not used | not used | `lexik:jwt:generate-keypair` | same | same |
 | 8. GraphQL schema | the admin interface and the `/graphql` endpoint | `ezplatform:graphql:generate-schema` | same | `ibexa:graphql:generate-schema` | same | same |
@@ -185,8 +185,9 @@ Node.js releases with OpenSSL 3. The `package.json` of `v2.5.0.6` does not: ther
 same applies to the `yarn install` and asset build that `composer install` runs. If the build is skipped, the site
 fails with HTTP 500 and
 `EntrypointNotFoundException: Could not find the entry "photoswipe-init"`: the templates ask for an entry point that
-was never built. The administration's assets are built by `composer ezplatform-assets` (it dumps the JavaScript
-translations and runs `yarn ezplatform`).
+was never built. The administration's assets are built by `composer install` too (its scripts run `yarn ezplatform`
+after the site build); `composer ezplatform-assets` rebuilds them on their own (it dumps the JavaScript translations
+and runs `yarn ezplatform`). Without them `/admin` answers 500 with "Could not find the entrypoints file from Webpack".
 
 ### Step 4: the symlinks into the legacy kernel
 

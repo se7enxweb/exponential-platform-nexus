@@ -23,9 +23,12 @@ Details: [chapter 1](book/01-introduction.md), [chapter 2](book/02-requirements.
 - **PHP** at the version of your line, with at least `ctype`, `curl`, `dom`, `fileinfo`, `gd` (or `imagick` in
   addition), `iconv`, `intl`, `mbstring`, `opcache`, `pdo` with the driver of your database (`pdo_mysql`,
   `pdo_pgsql`, or `pdo_sqlite` and `sqlite3`), `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter`, `xsl` and
-  `zip`; `apcu` recommended (the 2.5 generation falls back to an array cache without it); `date.timezone` set. The complete list per line,
-  with the reason for each extension, is in [chapter 2](book/02-requirements.md).
-- **A database**: MySQL or MariaDB with `utf8mb4`, PostgreSQL, or SQLite ([chapter 7](book/07-databases.md)).
+  `zip`; `apcu` recommended (the 2.5 generation falls back to an array cache without it); `date.timezone` set.
+  The complete list per line, with the reason for each extension, is in [chapter 2](book/02-requirements.md).
+- **A database**: MySQL or MariaDB with `utf8mb4`, PostgreSQL, or SQLite ([chapter 7](book/07-databases.md)). The 2.5
+  generation on `master` installs on MySQL or MariaDB only: its demo data are MySQL dumps and its configuration has no
+  SQLite file path ([chapter 4](book/04-installing.md#41-overview-the-same-steps-on-every-line)). For SQLite on that
+  platform generation use the `1.0.0.x` branch ([chapter 7.8.4](book/07-databases.md#784-sqlite-on-100x)).
 - **Composer 2**, **Node.js** at the version above and **Yarn 1** (or npm).
 - **A web server**: Exponential Velocity (recommended), or Apache or nginx with PHP-FPM
   ([chapter 6](book/06-serving-the-site.md)).
@@ -48,7 +51,8 @@ sudo -u postgres psql -c "CREATE USER nexus WITH PASSWORD 'change-me';"
 sudo -u postgres psql -c "CREATE DATABASE nexus OWNER nexus ENCODING 'UTF8';"
 ```
 
-SQLite needs no server; the file is named in the configuration ([chapter 7](book/07-databases.md)).
+SQLite needs no server; the file is named in the configuration ([chapter 7](book/07-databases.md)). `master` does not
+support it (see above).
 
 ## 4. Get the code
 
