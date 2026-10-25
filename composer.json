@@ -90,7 +90,6 @@
         "symfony/assetic-bundle": "^2.8.2",
         "symfony/monolog-bundle": "^3.6.0",
         "symfony/swiftmailer-bundle": "^3.3.1",
-        "symfony/thanks": "^1.4.1",
         "symfony/webpack-encore-bundle": "^1.8.0",
         "twig/extensions": "^1.5.4",
         "se7enxweb/twig": "^2.16.5",
@@ -213,7 +212,6 @@
             "se7enxweb/ezpublish-legacy-installer": true,
             "se7enxweb/exponential-legacy-installer": true,
             "netgen/git-hooks": true,
-            "symfony/thanks": true,
             "*": false
         },
         "policy": {
