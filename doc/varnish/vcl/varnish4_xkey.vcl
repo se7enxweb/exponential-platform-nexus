@@ -119,11 +119,10 @@ sub vcl_backend_response {
     // Make Varnish keep all objects for up to 1 hour beyond their TTL, see vcl_hit for Request logic on this
     set beresp.grace = 1h;
 
-    // Compressing the content
+    // Compressing the content. Never add application/json or application/vnd.ez.api here: compressing
+    // responses that carry user data next to request-reflected input allows a BREACH attack (PKSA-wtj8-672s-hw2j).
     if (beresp.http.Content-Type ~ "application/javascript"
-        || beresp.http.Content-Type ~ "application/json"
         || beresp.http.Content-Type ~ "application/vnd.ms-fontobject"
-        || beresp.http.Content-Type ~ "application/vnd.ez.api"
         || beresp.http.Content-Type ~ "application/x-font-ttf"
         || beresp.http.Content-Type ~ "image/svg+xml"
         || beresp.http.Content-Type ~ "text/css"
