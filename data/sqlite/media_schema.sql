@@ -492,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `ezenumobjectvalue` (
 ,  `contentobject_attribute_version` integer NOT NULL DEFAULT '0'
 ,  `text` NOT NULL DEFAULT ''
 ,  `enumid` integer NOT NULL DEFAULT '0'
-,  PRIMARY KEY (`contentobject_attribute_id`,`contentobject_attribute_version`,`text`)
+,  PRIMARY KEY (`contentobject_attribute_id`,`contentobject_attribute_version`,`enumid`)
 );
 
 CREATE TABLE IF NOT EXISTS `ezenumvalue` (
