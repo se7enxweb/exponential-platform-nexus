@@ -19,7 +19,7 @@
             "AppBundle\\": "src/AppBundle/",
             "Sevenx\\": "src/Sevenx/",
             "Cjw\\": "src/Cjw/",
-            "CJW\\CJWConfigProcessor\\": "vendor/cjw-network/cjw-config-processor/"
+            "CJW\\CJWConfigProcessor\\": "vendor/se7enxweb/cjw-config-processor/"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -74,7 +74,7 @@
         "se7enxweb/layouts-remote-media": "^1.1",
         "laminas/laminas-zendframework-bridge": "^1.1",
         "se7enxweb/ezmigrationbundle": "^5.9.4",
-        "cjw-network/cjw-config-processor": "~2.1",
+        "se7enxweb/cjw-config-processor": "^2.1.1",
         "monolog/monolog": "^1.27.1",
         "guzzlehttp/psr7": "^2.12.3",
         "sentry/sentry-symfony": "^4.4",
