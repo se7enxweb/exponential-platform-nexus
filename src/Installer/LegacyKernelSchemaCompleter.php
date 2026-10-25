@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace App\Installer;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
@@ -30,8 +31,11 @@ use Doctrine\DBAL\Schema\Table;
  * a new version either fails to insert or, on SQLite with INSERT OR REPLACE, deletes the row of
  * the version before it: an edit in the legacy admin lost the published content. Such a table
  * gets the legacy key, its rows kept (on SQLite Doctrine rebuilds the table and copies them),
- * and its serial column loses AUTOINCREMENT, which SQLite allows on a one-column key only (the
- * kernel then numbers new rows itself). Rows lost before the repair cannot be brought back.
+ * and on SQLite its serial column loses AUTOINCREMENT, which SQLite allows on a one-column key
+ * only (the kernel then numbers new rows itself). Rows lost before the repair cannot be brought
+ * back. On MySQL and MariaDB the legacy kernel inserts new rows without the serial column and
+ * lets the database number them, so there every serial column of the legacy schema keeps, or
+ * gets back, its AUTO_INCREMENT.
  *
  * Run on an existing database by bin/console exponential:legacy:complete-schema.
  */
@@ -129,6 +133,56 @@ final class LegacyKernelSchemaCompleter
             $this->db->executeStatement($query);
         }
 
+        if (!$platform instanceof SqlitePlatform) {
+            $queries = array_merge($queries, $this->restoreSerialColumns($definition));
+        }
+
+        return $queries;
+    }
+
+    /**
+     * Gives every serial column of the legacy schema AUTO_INCREMENT where the database lacks it
+     * (not on SQLite). Changing a primary key over a serial column makes Doctrine drop the column's
+     * AUTO_INCREMENT before it drops the key, and a database completed by an earlier version of this
+     * class lost it on the composite keys; without it the legacy kernel's inserts all get the id 0,
+     * so the second new object of a class fails with "Duplicate entry '0-1' for key 'PRIMARY'".
+     *
+     * @return string[] the SQL statements that were executed
+     */
+    private function restoreSerialColumns(array $definition): array
+    {
+        $schemaManager = $this->db->getSchemaManager();
+        $tables = [];
+        foreach ($definition as $tableName => $tableDefinition) {
+            if (!\is_string($tableName) || $tableName[0] === '_' || !isset($tableDefinition['fields'])) {
+                continue;
+            }
+            foreach ($tableDefinition['fields'] as $fieldName => $field) {
+                if (($field['type'] ?? '') === 'auto_increment' && $schemaManager->tablesExist([$tableName])) {
+                    $tables[$tableName][] = (string) $fieldName;
+                }
+            }
+        }
+        $current = [];
+        foreach (array_keys($tables) as $tableName) {
+            $current[] = $schemaManager->listTableDetails($tableName);
+        }
+        $current = new Schema($current);
+        $target = clone $current;
+        foreach ($tables as $tableName => $columns) {
+            $table = $target->getTable($tableName);
+            foreach ($columns as $column) {
+                if ($table->hasColumn($column) && !$table->getColumn($column)->getAutoincrement()) {
+                    // an AUTO_INCREMENT column takes no default (MySQL: "Invalid default value")
+                    $table->getColumn($column)->setAutoincrement(true)->setNotnull(true)->setDefault(null);
+                }
+            }
+        }
+        $queries = (new Comparator())->compare($current, $target)->toSaveSql($this->db->getDatabasePlatform());
+        foreach ($queries as $query) {
+            $this->db->executeStatement($query);
+        }
+
         return $queries;
     }
 
@@ -207,9 +261,14 @@ final class LegacyKernelSchemaCompleter
      * SQLite numbers only a single INTEGER PRIMARY KEY; Doctrine turns an AUTOINCREMENT column into
      * that key and drops the rest of a composite key. A serial column of a composite key is a plain
      * NOT NULL integer: the legacy kernel and the Platform give it the next value themselves.
+     * Other engines keep AUTO_INCREMENT on the first column of a composite key, and the legacy
+     * kernel relies on it there (it inserts new attribute rows without an id).
      */
     private function keepSerialColumnsOutOfCompositeKey(Table $table): void
     {
+        if (!$this->db->getDatabasePlatform() instanceof SqlitePlatform) {
+            return;
+        }
         $primary = $table->getPrimaryKey();
         if ($primary === null || \count($primary->getColumns()) < 2) {
             return;
