@@ -60,7 +60,7 @@
         "netgen/site-generator-bundle": "~1.5.1",
         "se7enxweb/site-legacy-bundle": "^1.4.5",
         "netgen/site-installer-bundle": "^1.3",
-        "netgen/information-collection-bundle": "^1.9",
+        "se7enxweb/information-collection-bundle": "^1.9.6",
         "se7enxweb/remote-media-bundle": "^1.1.23",
         "netgen/ezplatform-site-api": "^3.7",
         "netgen/ezplatform-search-extra": "^1.16",
