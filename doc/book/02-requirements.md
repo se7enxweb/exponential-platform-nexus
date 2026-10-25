@@ -14,7 +14,7 @@ repository's own guides say something different, the chapter follows the code an
 | Requirement | 2.5 (`master`) and 1.0.0.x | 1.1.0.x | 1.2.0.x | 1.3.0.x |
 |---|---|---|---|---|
 | PHP | 8.1 or later (the legacy kernel's minimum; `composer.json` alone accepts 7.1.3 to 8.6); Composer run with `--ignore-platform-reqs` | 8.0 or later; 8.5 recommended | 8.2 or later; 8.5 recommended | 8.4 or later; 8.5 recommended |
-| PHP extensions | see [2.3](#23-php-extensions); APCu is used by the shipped configuration | `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv` and a PDO driver | as 1.1.0.x | as 1.1.0.x |
+| PHP extensions | see [2.3](#23-php-extensions); APCu is used when it is loaded | `gd`, `curl`, `json`, `xsl`, `xml`, `intl`, `mbstring`, `ctype`, `iconv` and a PDO driver | as 1.1.0.x | as 1.1.0.x |
 | Database | MySQL 5.7+ or MariaDB 10.2+ (utf8mb4); PostgreSQL per the guide; SQLite 3 on 1.0.0.x only | MySQL 8.0+, MariaDB 10.3+, PostgreSQL 14+ or SQLite 3.35+ | as 1.1.0.x | as 1.1.0.x |
 | Composer | 2.x | 2.x | 2.x | 2.x |
 | Node.js | `master`: 22 (`.nvmrc`); `1.0.0.x`: 20 (`.nvmrc`, the guide); both builds need the OpenSSL legacy provider on Node.js 17 and later | 18 or 20 (`engines`), `.nvmrc`: 18 | 18 (`engines`, `.nvmrc`) | 22 (`engines`, `.nvmrc`) |
@@ -122,18 +122,19 @@ type need it.
 
 ### APCu on the 2.5 generation
 
-The shipped `app/config/config.yml` of the 2.5 generation loads `cache_pool/cache.apcu.yml` and marks the APCu cache
-pool "ACTIVE"; Doctrine's caches are configured with `type: apcu` as well. Without the `apcu` extension the
-application does not start with that configuration. Install APCu ([installation](https://www.php.net/manual/en/apcu.installation.php))
-or switch the cache pool in `app/config/config.yml` to `cache_pool/cache.tagaware.filesystem.yml` or Redis
-([chapter 8](08-configuration.md)).
+The shipped `app/config/config.yml` of the 2.5 generation loads `cache_pool/cache.apcu.yml` and uses APCu for
+Doctrine's metadata, query and result caches (the parameter `doctrine_orm_cache_type`, `apcu` in
+`app/config/default_parameters.yml`). APCu is recommended, not required: when the `apcu` extension is not loaded,
+`app/config/env/generic.php` sets `doctrine_orm_cache_type` to `array`, so the console and the site still start, with
+caches that last one request. Install APCu ([installation](https://www.php.net/manual/en/apcu.installation.php)) for
+the speed; the Plesk PHP packages, for example, ship without it.
 
 ### Recommended
 
 | Extension | Why |
 |---|---|
 | `opcache` | compiled PHP is cached; essential in production |
-| `apcu` | a fast local cache; required by the 2.5 configuration as shipped |
+| `apcu` | a fast local cache; the 2.5 generation uses it for the Doctrine caches when it is loaded |
 | `imagick` | better image conversion than `gd` for large images |
 | `redis` | when Redis is the application cache or session store (`CACHE_POOL=cache.redis`) |
 | `zip` | Composer unpacks archives faster with it |

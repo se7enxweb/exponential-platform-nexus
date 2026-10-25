@@ -5,6 +5,13 @@
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader;
 
+// The Doctrine ORM caches use APCu (doctrine_orm_cache_type in default_parameters.yml). Without the
+// extension Doctrine's ApcuCache calls apcu_fetch() and every console command and page stops, so
+// fall back to the in-request array cache.
+if (!extension_loaded('apcu')) {
+    $container->setParameter('doctrine_orm_cache_type', 'array');
+}
+
 if ($dfsNfsPath = getenv('DFS_NFS_PATH')) {
     $container->setParameter('dfs_nfs_path', $dfsNfsPath);
 

@@ -23,7 +23,7 @@ Details: [chapter 1](book/01-introduction.md), [chapter 2](book/02-requirements.
 - **PHP** at the version of your line, with at least `ctype`, `curl`, `dom`, `fileinfo`, `gd` (or `imagick` in
   addition), `iconv`, `intl`, `mbstring`, `opcache`, `pdo` with the driver of your database (`pdo_mysql`,
   `pdo_pgsql`, or `pdo_sqlite` and `sqlite3`), `simplexml`, `tokenizer`, `xml`, `xmlreader`, `xmlwriter`, `xsl` and
-  `zip`; `apcu` for the 2.5 generation's configuration as shipped; `date.timezone` set. The complete list per line,
+  `zip`; `apcu` recommended (the 2.5 generation falls back to an array cache without it); `date.timezone` set. The complete list per line,
   with the reason for each extension, is in [chapter 2](book/02-requirements.md).
 - **A database**: MySQL or MariaDB with `utf8mb4`, PostgreSQL, or SQLite ([chapter 7](book/07-databases.md)).
 - **Composer 2**, **Node.js** at the version above and **Yarn 1** (or npm).

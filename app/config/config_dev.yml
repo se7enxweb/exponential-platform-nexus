@@ -14,20 +14,20 @@ web_profiler:
 
 doctrine:
     orm:
-        # APCu Cache Configuration (ACTIVE)
+        # APCu Cache Configuration (ACTIVE; doctrine_orm_cache_type, "array" when APCu is not installed)
         # Fast local in-process caching - optimal for development
         metadata_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
         query_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
         result_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
         second_level_cache:
             enabled: true
             region_lifetime: 3600
             region_lock_lifetime: 60
             region_cache_driver:
-                type: apcu
+                type: '%doctrine_orm_cache_type%'
             regions:
                 default_region:
                     type: default

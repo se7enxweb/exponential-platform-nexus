@@ -54,14 +54,14 @@ doctrine:
         second_level_cache:
             enabled: true
 
-        # APCu Cache Configuration (ACTIVE)
+        # APCu Cache Configuration (ACTIVE; doctrine_orm_cache_type, "array" when APCu is not installed)
         # Fast local in-process caching for single server deployments
         metadata_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
         query_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
         result_cache_driver:
-            type: apcu
+            type: '%doctrine_orm_cache_type%'
 
         # Redis Cache Configuration (COMMENTED OUT)
         # Uncomment below to use Redis instead (useful for distributed/clustered setups)
