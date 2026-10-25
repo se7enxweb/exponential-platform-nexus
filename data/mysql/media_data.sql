@@ -420,15 +420,6 @@ INSERT INTO `ezcontent_language` VALUES (4,0,'ger-DE','German (Germany)');
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezcontentbrowsebookmark`
---
-
-LOCK TABLES `ezcontentbrowsebookmark` WRITE;
-/*!40000 ALTER TABLE `ezcontentbrowsebookmark` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezcontentbrowsebookmark` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezcontentclass`
 --
 
@@ -931,15 +922,6 @@ INSERT INTO `ezcontentclass_attribute` VALUES (1393,0,1,'content',104,NULL,NULL,
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezcontentclass_attribute_ml`
---
-
-LOCK TABLES `ezcontentclass_attribute_ml` WRITE;
-/*!40000 ALTER TABLE `ezcontentclass_attribute_ml` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezcontentclass_attribute_ml` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezcontentclass_classgroup`
 --
 
@@ -1033,10 +1015,10 @@ UNLOCK TABLES;
 
 LOCK TABLES `ezcontentclassgroup` WRITE;
 /*!40000 ALTER TABLE `ezcontentclassgroup` DISABLE KEYS */;
-INSERT INTO `ezcontentclassgroup` VALUES (1,1031216928,14,1033922106,14,'Netgen',0);
-INSERT INTO `ezcontentclassgroup` VALUES (2,1031216941,14,1033922113,14,'Media',0);
-INSERT INTO `ezcontentclassgroup` VALUES (3,1032009743,14,1033922120,14,'Users',0);
-INSERT INTO `ezcontentclassgroup` VALUES (4,1667819116,14,1667819116,14,'Netgen Components',0);
+INSERT INTO `ezcontentclassgroup` VALUES (1,1031216928,14,1033922106,14,'Netgen');
+INSERT INTO `ezcontentclassgroup` VALUES (2,1031216941,14,1033922113,14,'Media');
+INSERT INTO `ezcontentclassgroup` VALUES (3,1032009743,14,1033922120,14,'Users');
+INSERT INTO `ezcontentclassgroup` VALUES (4,1667819116,14,1667819116,14,'Netgen Components');
 /*!40000 ALTER TABLE `ezcontentclassgroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5841,15 +5823,6 @@ INSERT INTO `ezcontentobject_name` VALUES (779,9,'eng-GB',3,'Lead Component Test
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezcontentobject_trash`
---
-
-LOCK TABLES `ezcontentobject_trash` WRITE;
-/*!40000 ALTER TABLE `ezcontentobject_trash` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezcontentobject_trash` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezcontentobject_tree`
 --
 
@@ -6449,24 +6422,6 @@ INSERT INTO `ezcontentobject_version` VALUES (3874,434,1744371717,14,4,6,1744371
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezdfsfile`
---
-
-LOCK TABLES `ezdfsfile` WRITE;
-/*!40000 ALTER TABLE `ezdfsfile` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezdfsfile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezgmaplocation`
---
-
-LOCK TABLES `ezgmaplocation` WRITE;
-/*!40000 ALTER TABLE `ezgmaplocation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezgmaplocation` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezimagefile`
 --
 
@@ -6787,42 +6742,6 @@ INSERT INTO `ezimagefile` VALUES (315,21070,'var/site/storage/images/7/7/9/5/597
 INSERT INTO `ezimagefile` VALUES (317,21082,'var/site/storage/images/9/8/9/5/5989-2-eng-GB/dd4ef6e18adb-ben-den-engelsen-YUu9UAcOKZ4-unsplash-1-1-.jpeg');
 INSERT INTO `ezimagefile` VALUES (319,21094,'var/site/storage/images/1/0/0/6/6001-7-eng-GB/871376a016b7-jake-nackos-IF9TK5Uy-KI-unsplash-1-.jpg');
 /*!40000 ALTER TABLE `ezimagefile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezinfocollection`
---
-
-LOCK TABLES `ezinfocollection` WRITE;
-/*!40000 ALTER TABLE `ezinfocollection` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezinfocollection` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezinfocollection_attribute`
---
-
-LOCK TABLES `ezinfocollection_attribute` WRITE;
-/*!40000 ALTER TABLE `ezinfocollection_attribute` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezinfocollection_attribute` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezkeyword`
---
-
-LOCK TABLES `ezkeyword` WRITE;
-/*!40000 ALTER TABLE `ezkeyword` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezkeyword` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezkeyword_attribute_link`
---
-
-LOCK TABLES `ezkeyword_attribute_link` WRITE;
-/*!40000 ALTER TABLE `ezkeyword_attribute_link` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezkeyword_attribute_link` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -7236,24 +7155,6 @@ INSERT INTO `eznode_assignment` VALUES (5048,778,2,0,1,2,549,'67ff02bd1c63d1da91
 UNLOCK TABLES;
 
 --
--- Dumping data for table `eznotification`
---
-
-LOCK TABLES `eznotification` WRITE;
-/*!40000 ALTER TABLE `eznotification` DISABLE KEYS */;
-/*!40000 ALTER TABLE `eznotification` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezpackage`
---
-
-LOCK TABLES `ezpackage` WRITE;
-/*!40000 ALTER TABLE `ezpackage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezpackage` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezpolicy`
 --
 
@@ -7464,24 +7365,6 @@ INSERT INTO `ezrole` VALUES (5,0,'Member','0',0);
 INSERT INTO `ezrole` VALUES (6,0,'Landing page editor',NULL,0);
 INSERT INTO `ezrole` VALUES (8,0,'Basic landing page editor',NULL,0);
 /*!40000 ALTER TABLE `ezrole` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezsearch_object_word_link`
---
-
-LOCK TABLES `ezsearch_object_word_link` WRITE;
-/*!40000 ALTER TABLE `ezsearch_object_word_link` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezsearch_object_word_link` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezsearch_word`
---
-
-LOCK TABLES `ezsearch_word` WRITE;
-/*!40000 ALTER TABLE `ezsearch_word` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezsearch_word` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -9595,15 +9478,6 @@ INSERT INTO `ezurl_object_link` VALUES (17565,8,370);
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezurlalias`
---
-
-LOCK TABLES `ezurlalias` WRITE;
-/*!40000 ALTER TABLE `ezurlalias` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezurlalias` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezurlalias_ml`
 --
 
@@ -10471,15 +10345,6 @@ INSERT INTO `ezurlalias_ml_incr` VALUES (486);
 UNLOCK TABLES;
 
 --
--- Dumping data for table `ezurlwildcard`
---
-
-LOCK TABLES `ezurlwildcard` WRITE;
-/*!40000 ALTER TABLE `ezurlwildcard` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezurlwildcard` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `ezuser`
 --
 
@@ -10488,15 +10353,6 @@ LOCK TABLES `ezuser` WRITE;
 INSERT INTO `ezuser` VALUES (10,'nospam@ez.no','anonymous','$2y$10$35gOSQs6JK4u4whyERaeUuVeQBi2TUBIZIfP7HEj7sfz.MxvTuOeC',7,NULL);
 INSERT INTO `ezuser` VALUES (14,'info@netgen.io','admin','$2y$10$FDn9NPwzhq85cLLxfD5Wu.L3SL3Z/LNCvhkltJUV0wcJj7ciJg2oy',7,NULL);
 /*!40000 ALTER TABLE `ezuser` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ezuser_accountkey`
---
-
-LOCK TABLES `ezuser_accountkey` WRITE;
-/*!40000 ALTER TABLE `ezuser_accountkey` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ezuser_accountkey` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -10532,51 +10388,6 @@ LOCK TABLES `ezuser_setting` WRITE;
 INSERT INTO `ezuser_setting` VALUES (10,1,1000);
 INSERT INTO `ezuser_setting` VALUES (14,1,10);
 /*!40000 ALTER TABLE `ezuser_setting` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ibexa_setting`
---
-
-LOCK TABLES `ibexa_setting` WRITE;
-/*!40000 ALTER TABLE `ibexa_setting` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ibexa_setting` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ibexa_token`
---
-
-LOCK TABLES `ibexa_token` WRITE;
-/*!40000 ALTER TABLE `ibexa_token` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ibexa_token` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ibexa_token_type`
---
-
-LOCK TABLES `ibexa_token_type` WRITE;
-/*!40000 ALTER TABLE `ibexa_token_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ibexa_token_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ibexa_user_invitations`
---
-
-LOCK TABLES `ibexa_user_invitations` WRITE;
-/*!40000 ALTER TABLE `ibexa_user_invitations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ibexa_user_invitations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `ibexa_user_invitations_assignments`
---
-
-LOCK TABLES `ibexa_user_invitations_assignments` WRITE;
-/*!40000 ALTER TABLE `ibexa_user_invitations_assignments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ibexa_user_invitations_assignments` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -11549,15 +11360,6 @@ INSERT INTO `nglayouts_collection_query_translation` VALUES (102,1,'en_GB','{\"u
 UNLOCK TABLES;
 
 --
--- Dumping data for table `nglayouts_collection_slot`
---
-
-LOCK TABLES `nglayouts_collection_slot` WRITE;
-/*!40000 ALTER TABLE `nglayouts_collection_slot` DISABLE KEYS */;
-/*!40000 ALTER TABLE `nglayouts_collection_slot` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `nglayouts_collection_translation`
 --
 
@@ -11788,15 +11590,6 @@ INSERT INTO `nglayouts_rule_condition_rule` VALUES (15,1,36,1);
 UNLOCK TABLES;
 
 --
--- Dumping data for table `nglayouts_rule_condition_rule_group`
---
-
-LOCK TABLES `nglayouts_rule_condition_rule_group` WRITE;
-/*!40000 ALTER TABLE `nglayouts_rule_condition_rule_group` DISABLE KEYS */;
-/*!40000 ALTER TABLE `nglayouts_rule_condition_rule_group` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `nglayouts_rule_data`
 --
 
@@ -11981,15 +11774,6 @@ INSERT INTO `nglayouts_zone` VALUES ('pre_footer',51,1,747,NULL,NULL);
 INSERT INTO `nglayouts_zone` VALUES ('pre_footer',53,1,798,NULL,NULL);
 INSERT INTO `nglayouts_zone` VALUES ('right',23,1,313,NULL,NULL);
 /*!40000 ALTER TABLE `nglayouts_zone` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `nguser_setting`
---
-
-LOCK TABLES `nguser_setting` WRITE;
-/*!40000 ALTER TABLE `nguser_setting` DISABLE KEYS */;
-/*!40000 ALTER TABLE `nguser_setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -12289,15 +12073,6 @@ INSERT INTO `novaseo_meta` VALUES (18885,'twitter:description','',1);
 INSERT INTO `novaseo_meta` VALUES (18885,'twitter:image','',1);
 INSERT INTO `novaseo_meta` VALUES (18885,'twitter:title','',1);
 /*!40000 ALTER TABLE `novaseo_meta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `novaseo_redirect_import_history`
---
-
-LOCK TABLES `novaseo_redirect_import_history` WRITE;
-/*!40000 ALTER TABLE `novaseo_redirect_import_history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `novaseo_redirect_import_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
