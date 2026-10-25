@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97b1d54f58c8fa67df53feb818087c80",
+    "content-hash": "115c6566d3852fb792ecae11881ec0ad",
     "packages": [
         {
             "name": "babdev/pagerfanta-bundle",
@@ -10414,16 +10414,16 @@
         },
         {
             "name": "se7enxweb/admin-ui-bundle",
-            "version": "v4.0.2",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/NetgenAdminUIBundle.git",
-                "reference": "8ad373ed825fe32afbad613e29db14e942039b5a"
+                "reference": "873c9b5c892d9ac5392be225aa269a5d2885cb4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/NetgenAdminUIBundle/zipball/8ad373ed825fe32afbad613e29db14e942039b5a",
-                "reference": "8ad373ed825fe32afbad613e29db14e942039b5a",
+                "url": "https://api.github.com/repos/se7enxweb/NetgenAdminUIBundle/zipball/873c9b5c892d9ac5392be225aa269a5d2885cb4c",
+                "reference": "873c9b5c892d9ac5392be225aa269a5d2885cb4c",
                 "shasum": ""
             },
             "require": {
@@ -10477,7 +10477,7 @@
                 "netgen"
             ],
             "support": {
-                "source": "https://github.com/se7enxweb/NetgenAdminUIBundle/tree/v4.0.2"
+                "source": "https://github.com/se7enxweb/NetgenAdminUIBundle/tree/v4.0.3"
             },
             "funding": [
                 {
@@ -10505,7 +10505,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-24T08:02:47+00:00"
+            "time": "2026-10-25T05:22:13+00:00"
         },
         {
             "name": "se7enxweb/bccie",
@@ -16137,16 +16137,16 @@
         },
         {
             "name": "se7enxweb/site-legacy-bundle",
-            "version": "v2.0.0",
+            "version": "v2.0.0-p1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/se7enxweb/site-legacy-bundle.git",
-                "reference": "46a04681a44dc0e48ce761c1b0aeef54c50f165b"
+                "reference": "13396e175884b299b6aa91e43b1e4a68e782e8b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/se7enxweb/site-legacy-bundle/zipball/46a04681a44dc0e48ce761c1b0aeef54c50f165b",
-                "reference": "46a04681a44dc0e48ce761c1b0aeef54c50f165b",
+                "url": "https://api.github.com/repos/se7enxweb/site-legacy-bundle/zipball/13396e175884b299b6aa91e43b1e4a68e782e8b7",
+                "reference": "13396e175884b299b6aa91e43b1e4a68e782e8b7",
                 "shasum": ""
             },
             "require": {
@@ -16192,7 +16192,7 @@
             ],
             "description": "7x Netgen Site Legacy Bundle is an Exponential Platform / Ibexa OSS bundle that implements common features that are used by Netgen to implement websites. This bundle acts as a glue between new and legacy kernels.",
             "support": {
-                "source": "https://github.com/se7enxweb/site-legacy-bundle/tree/v2.0.0"
+                "source": "https://github.com/se7enxweb/site-legacy-bundle/tree/v2.0.0-p1"
             },
             "funding": [
                 {
@@ -16220,7 +16220,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-03-17T05:41:56+00:00"
+            "time": "2026-10-25T05:25:28+00:00"
         },
         {
             "name": "se7enxweb/sqliimport",
