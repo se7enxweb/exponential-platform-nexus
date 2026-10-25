@@ -171,7 +171,7 @@
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "@php -d memory_limit=2000M bin/console cache:clear --no-warmup",
-            "@php -d memory_limit=2000M bin/console assets:install --symlink --relative",
+            "@php -d memory_limit=2000M bin/console assets:install web --symlink --relative",
             "@php -d memory_limit=2000M bin/console ezpublish:legacy:assets_install --symlink --relative",
             "@php -d memory_limit=2000M bin/console ezpublish:legacybundles:install_extensions --relative",
             "@php -d memory_limit=2000M bin/console ngsite:symlink:project",
