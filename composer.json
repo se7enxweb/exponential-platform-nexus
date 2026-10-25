@@ -58,7 +58,8 @@
         "netgen/layouts-ibexa": "~2.0.0",
         "netgen/layouts-ibexa-site-api": "~2.0.0",
         "netgen/layouts-ibexa-relation-list-query": "^2.0",
-        "netgen/layouts-ibexa-tags-query": "^2.0"
+        "netgen/layouts-ibexa-tags-query": "^2.0",
+        "se7enxweb/tagsbundle": "~6.0.3"
     },
     "require-dev": {
         "symfony/debug-bundle": "7.4.*",
