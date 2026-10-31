@@ -50,10 +50,10 @@
         "se7enxweb/ezpublish-kernel": "~7.5.40",
         "se7enxweb/exponential": "^6.0.12",
         "se7enxweb/legacy-bridge": "^2.1",
-        "se7enxweb/repository-forms": "v2.5.20",
+        "se7enxweb/repository-forms": "~2.5.21",
         "se7enxweb/richtext-datatype-bundle": "^2.0.1",
         "se7enxweb/symfony": "^3.4.58",
-        "se7enxweb/symfony-tools": "1.0.6",
+        "se7enxweb/symfony-tools": "^1.0.7",
         "se7enxweb/symfony-cache": "3.4.48",
         "netgen/ezplatformsearch": "v1.2.3",
         "se7enxweb/cjw-exponential-media-site-data": "^1.0",
@@ -109,10 +109,10 @@
         "netgen/birthday-bundle": "^1.3",
         "netgen/enhanced-selection-bundle": "^3.4",
         "netgen/siteaccess-routes-bundle": "^1.1",
-        "netgen/content-browser": "^1.4",
+        "se7enxweb/content-browser": "^1.4.2@stable",
         "netgen/content-browser-ui": "^1.4",
         "doctrine/migrations": "^2.3.1",
-        "netgen/layouts-core": "^1.4",
+        "se7enxweb/layouts-core": "^1.4.14",
         "netgen/layouts-ui": "^1.4",
         "se7enxweb/content-browser-ezplatform": "^1.4",
         "lexik/translation-bundle": "^4.0",
@@ -151,7 +151,7 @@
         "phpstan/phpstan-symfony": "^1.2",
         "phpstan/phpstan-doctrine": "^1.3",
         "liuggio/fastest": "^1.6.0",
-        "cweagans/composer-patches": "^2.0"
+        "cweagans/composer-patches": "^1.7 || ^2.0"
     },
     "suggest": {
         "netgen/media-site-data": "Netgen Media Site default data (~180MB). Only needed if using netgen-media installer type instead of cjw-exponential-media."

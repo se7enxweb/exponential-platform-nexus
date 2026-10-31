@@ -135,7 +135,7 @@ The line's older guide (`doc/INSTALL.md` of `v1.1.0.7`) uses the constraint `~1.
 ### 2.5 (master)
 
 ```bash
-composer create-project --ignore-platform-req=php+ se7enxweb/exponential-platform-nexus:v2.5.0.8 nexus
+composer create-project --ignore-platform-req=php+ se7enxweb/exponential-platform-nexus:v2.5.0.9 nexus
 ```
 
 `v2.5.0.6` and older predate the fixes of 2026-10-05 (chapter 1): their `web/app.php` still switches to `dev` for host
@@ -196,7 +196,7 @@ first or, simpler, start from a fresh clone.
 
 | Line | Checkout | Install command (from the line's guide) |
 |---|---|---|
-| 2.5 | `master` (or `git checkout v2.5.0.8`) | `composer install --ignore-platform-req=php+` |
+| 2.5 | `master` (or `git checkout v2.5.0.9`) | `composer install --ignore-platform-req=php+` |
 | 1.0.0.x | `1.0.0.x` (or a tag, for example `1.0.0.11`) | `composer install --ignore-platform-reqs` |
 | 1.1.0.x | `1.1.0.x` | `composer install` |
 | 1.2.0.x | `1.2.0.x` | `composer install` |
